@@ -124,7 +124,7 @@ async function captureEdge() {
     await size(760, 812);
     await retry(() => evaluate('!!document.querySelector(".navbar-more:not([data-hidden]) button")'), 'overflow trigger at tablet width');
     await evaluate('document.querySelector(".navbar-more button").click()');
-    await retry(() => evaluate('!!document.querySelector(".navbar-more .popover-panel a[href=\"#/frameworks\"]")'), 'overflow screenshot links');
+    await retry(() => evaluate(`!!document.querySelector('.navbar-more .popover-panel a[href="#/frameworks"]')`), 'overflow screenshot links');
     await screenshot('navbar-overflow');
     await evaluate('document.activeElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }))');
     await size(1440, 900);

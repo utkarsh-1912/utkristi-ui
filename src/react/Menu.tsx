@@ -1,7 +1,8 @@
-import { cloneElement, forwardRef, isValidElement, useEffect, useRef, useState, type HTMLAttributes,
+import { cloneElement, forwardRef, isValidElement, useCallback, useEffect, useRef, useState, type HTMLAttributes,
   type KeyboardEvent, type MouseEvent, type ReactElement, type ReactNode } from 'react';
 import { assignRef, cx, type CSSVariables } from './utils/cx.js';
 import { navigationIndex } from './utils/focus.js';
+import { Portal } from './utils/Portal.js';
 import { useId } from './utils/useId.js';
 
 export type MenuItem =
@@ -36,12 +37,12 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
   const triggerId = `${id}-trigger`;
   const menuId = `${id}-menu`;
   const root = useRef<HTMLDivElement | null>(null);
-  const surface = useRef<HTMLDivElement>(null);
+  const [surface, setSurface] = useState<HTMLDivElement | null>(null);
   const returnTo = useRef<HTMLElement>();
   const [edge, setEdge] = useState<'first' | 'last'>();
   const open = edge !== undefined;
   const [point, setPoint] = useState<{ x: number; y: number }>();
-  const buttons = () => Array.from(surface.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not([aria-disabled="true"])') ?? []);
+  const buttons = useCallback(() => Array.from(surface?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not([aria-disabled="true"])') ?? []), [surface]);
 
   function close(restore = false) {
     setEdge(undefined);
@@ -49,15 +50,15 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
   }
 
   useEffect(() => {
-    if (!edge) return;
+    if (!edge || !surface) return;
     const enabled = buttons();
-    (enabled[edge === 'first' ? 0 : enabled.length - 1] ?? surface.current)?.focus();
+    (enabled[edge === 'first' ? 0 : enabled.length - 1] ?? surface)?.focus();
     function outside(event: globalThis.MouseEvent) {
-      if (event.target instanceof Node && !root.current?.contains(event.target)) setEdge(undefined);
+      if (event.target instanceof Node && !root.current?.contains(event.target) && !surface?.contains(event.target)) setEdge(undefined);
     }
     document.addEventListener('mousedown', outside);
     return () => document.removeEventListener('mousedown', outside);
-  }, [edge]);
+  }, [edge, surface, buttons]);
 
   function openContext(target: HTMLElement, x: number, y: number) {
     returnTo.current = target;
@@ -66,23 +67,28 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
   }
 
   useEffect(() => {
-    const node = surface.current;
+    const node = surface;
     if (!point || !node) return;
     const box = node.getBoundingClientRect();
     node.style.setProperty('--ut-context-x', Math.max(8, Math.min(point.x, window.innerWidth - box.width - 8)) + 'px');
     node.style.setProperty('--ut-context-y', Math.max(8, Math.min(point.y, window.innerHeight - box.height - 8)) + 'px');
-  }, [open, point]);
+  }, [point, surface]);
 
   const triggerProps: MenuTriggerProps = {
     id: triggerId, 'aria-haspopup': 'menu', 'aria-expanded': open, 'aria-controls': open ? menuId : undefined,
     onClick(event) {
+      if (context && !open) {
+        const box = event.currentTarget.getBoundingClientRect();
+        openContext(event.currentTarget, box.left, box.bottom);
+        return;
+      }
       returnTo.current = event.currentTarget;
       setEdge(open ? undefined : 'first');
     },
-    onContextMenu: context ? (event) => {
+    ...(context ? { onContextMenu(event: MouseEvent<HTMLElement>) {
       event.preventDefault();
       openContext(event.currentTarget, event.clientX, event.clientY);
-    } : undefined,
+    } } : {}),
     onKeyDown(event) {
       if (context && (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10') || ['Enter', ' '].includes(event.key))) {
         event.preventDefault();
@@ -100,7 +106,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
         const requested = event.key === 'ArrowUp' ? 'last' : 'first';
         if (edge === requested) {
           const enabled = buttons();
-          (enabled[requested === 'first' ? 0 : enabled.length - 1] ?? surface.current)?.focus();
+          (enabled[requested === 'first' ? 0 : enabled.length - 1] ?? surface)?.focus();
         } else setEdge(requested);
       }
     },
@@ -108,6 +114,10 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
 
   const renderedTrigger = typeof trigger === 'function' ? trigger(triggerProps) : isValidElement(trigger) ? cloneElement(trigger, {
     ...triggerProps,
+    onContextMenu(event) {
+      trigger.props.onContextMenu?.(event);
+      if (!event.defaultPrevented) triggerProps.onContextMenu?.(event);
+    },
     onClick(event) {
       trigger.props.onClick?.(event);
       if (!event.defaultPrevented) triggerProps.onClick(event);
@@ -118,12 +128,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
     },
   }) : null;
 
-  return <div {...props} className={cx('menu-anchor', className)} ref={(node) => {
-    root.current = node;
-    assignRef(ref, node);
-  }}>
-    {renderedTrigger}
-    {open && <div ref={surface} id={menuId} role="menu" aria-labelledby={triggerId} tabIndex={-1}
+  const panel = open ? <div ref={setSurface} id={menuId} role="menu" aria-labelledby={triggerId} tabIndex={-1}
       style={context ? { '--ut-context-x': (point?.x ?? 0) + 'px', '--ut-context-y': (point?.y ?? 0) + 'px' } as CSSVariables : undefined}
       className={cx('pop', context && 'context-surface', align === 'start' && 'pop-left', up && 'pop-up', menuClassName)}
       onKeyDown={(event) => {
@@ -165,7 +170,14 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
           {item.icon}{item.label}{item.kbd != null && <kbd className="kbd">{item.kbd}</kbd>}
         </button>;
       })}
-    </div>}
+    </div> : null;
+
+  return <div {...props} className={cx('menu-anchor', className)} ref={(node) => {
+    root.current = node;
+    assignRef(ref, node);
+  }}>
+    {renderedTrigger}
+    {context && panel ? <Portal>{panel}</Portal> : panel}
   </div>;
 });
 export const Dropdown = Menu;

@@ -1,6 +1,6 @@
 # Utkristi UI
 
-Utkristi UI packages the Night and Paper design system from Utkristi CoLabs and adds Glass, a frosted lilac theme with charcoal navigation and lime actions. It includes CSS custom properties, a Tailwind CSS 3.4 preset and plugin, a standalone stylesheet, and typed React components.
+Utkristi UI is the shared design system for the Utkristi ecosystem. It includes Night, Paper, and Glass themes, CSS custom properties, a Tailwind CSS 3.4 preset and plugin, a standalone stylesheet, and typed React components.
 
 | Night | Paper | Glass |
 | --- | --- | --- |
@@ -68,6 +68,18 @@ Menus, tabs, segmented controls, and dialogs support keyboard navigation. Dialog
 
 The standalone CSS requires `color-mix()`. Use Chrome or Edge 111+, Safari 16.2+, or Firefox 113+.
 
+## Component catalog
+
+The docs show the component catalog in Night, Paper, and Glass. Use React for stateful behavior or the CSS classes and Tailwind utilities to build native HTML compositions. Utkristi’s components have their own APIs and reuse the same theme tokens across apps.
+
+Use `Typography` with `typeface="archivo"`, `"geist"`, `"inter"`, `"manrope"`, or `"serif"` (Newsreader). Import `@utkristi/ui/fonts.css` to load the web fonts, or override the font tokens for your app. Tailwind also exposes `font-geist`, `font-inter`, `font-manrope`, and `font-serif`.
+
+## Docs and hosting
+
+Run `npm run docs` to open the documentation. Each component page includes interactive previews, copyable code, and a prop reference. The Sandbox runs editable TSX or HTML in a separate preview and lets you test any theme.
+
+Build the website with `npm ci` and `npm run docs:build`. Publish the contents of `docs/dist` with your static host. The site uses relative asset paths and hash routes, so a subdirectory works without a server rewrite. Run `npm run docs:preview` to verify the production build locally.
+
 ## Development
 
 | Command | Purpose |
@@ -79,7 +91,7 @@ The standalone CSS requires `color-mix()`. Use Chrome or Edge 111+, Safari 16.2+
 | `npm run docs` | Start the Vite documentation server |
 | `npm run docs:build` | Build the documentation |
 | `npm run docs:preview` | Preview the documentation build |
-| `npm run screenshots` | Capture all three themes in headless Edge and check Glass docs routes at 375px |
+| `npm run screenshots` | Capture all three themes in headless Edge and check every docs route at 375px in all three themes |
 
 The screenshot script uses Playwright with Chromium when Edge is unavailable. Install them in that environment before running the script.
 

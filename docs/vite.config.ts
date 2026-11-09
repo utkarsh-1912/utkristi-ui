@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import autoprefixer from 'autoprefixer';
 import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
+import { docsPlayground } from './playground-plugin';
 // @ts-expect-error The development preset is handwritten ESM.
 import preset from '../src/tailwind/preset.js';
 
@@ -12,7 +13,7 @@ const source = fileURLToPath(new URL('../src/react/', import.meta.url)).replaceA
 export default defineConfig({
   root: docs,
   base: './',
-  plugins: [react()],
+  plugins: [react(), docsPlayground(docs, source)],
   resolve: { alias: { '@utkristi/ui': `${source}index.ts` } },
   css: {
     postcss: { plugins: [tailwindcss({

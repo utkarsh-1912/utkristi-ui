@@ -4,6 +4,10 @@
   --ut-inout: cubic-bezier(.65, 0, .35, 1);
   --ut-font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
   --ut-font-text: 'Archivo', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --ut-font-geist: 'Geist', Arial, sans-serif;
+  --ut-font-inter: 'Inter', Arial, sans-serif;
+  --ut-font-manrope: 'Manrope', Arial, sans-serif;
+  --ut-font-serif: 'Newsreader', Georgia, serif;
   --ut-font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, Menlo, monospace;
   --ut-max: clamp(1320px, 90vw, 1720px);
   --ut-side: clamp(16px, 4vw, 48px);
@@ -125,6 +129,8 @@
 /* Reset optional surface treatments when nesting a Night, Paper, or system panel. */
 .dark, .light, .light-theme, [data-theme="dark"], [data-theme="light"], [data-theme="system"] {
   --ut-surface-filter: initial;
+  --ut-surface-sheen: initial;
+  --ut-canvas: initial;
   --ut-button-radius: initial;
   --ut-solid-hover: initial;
   --ut-on-solid-hover: initial;
@@ -175,7 +181,9 @@
   --ut-shadow: 0 24px 64px -32px rgba(37, 26, 51, .38);
   --ut-backdrop: rgba(30, 26, 38, .46);
   --ut-ring: color-mix(in srgb, var(--ut-accent) 20%, transparent);
-  --ut-surface-filter: blur(18px) saturate(130%);
+  --ut-surface-filter: blur(20px) saturate(125%);
+  --ut-surface-sheen: linear-gradient(153deg, rgba(255, 255, 255, .58), transparent 58%);
+  --ut-canvas: radial-gradient(ellipse at 84% 12%, rgba(179, 156, 215, .22), transparent 53%), radial-gradient(ellipse at 12% 46%, rgba(180, 215, 148, .20), transparent 53%);
   --ut-button-radius: 5px;
   --ut-navbar-bg: rgba(27, 27, 28, .94);
   --ut-navbar-ink: #FAF8FF;

@@ -4,6 +4,7 @@ import { cx } from './utils/cx.js';
 export interface TableColumn<Row> {
   key: Extract<keyof Row, string> | (string & {});
   header: ReactNode;
+  sort?: 'none' | 'ascending' | 'descending';
   render?: (row: Row) => ReactNode;
   align?: 'left' | 'center' | 'right';
   num?: boolean;
@@ -25,7 +26,7 @@ export const Table = forwardRef(function Table<Row>(
   return <div className="table-wrap">
     <table {...props} ref={ref} className={cx('table', stack && 'table-stack', className)}>
       {caption != null && <caption>{caption}</caption>}
-      <thead><tr>{columns.map((column) => <th key={column.key} scope="col" className={alignment(column)}>{column.header}</th>)}</tr></thead>
+      <thead><tr>{columns.map((column) => <th key={column.key} scope="col" aria-sort={column.sort} className={alignment(column)}>{column.header}</th>)}</tr></thead>
       <tbody>{rows.map((row, index) => <tr key={getRowKey(row, index)} tabIndex={onRowClick ? 0 : undefined}
         onClick={onRowClick ? () => onRowClick(row) : undefined}
         onKeyDown={onRowClick ? (event) => {

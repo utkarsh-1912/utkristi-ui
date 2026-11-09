@@ -1,8 +1,9 @@
-import { forwardRef, useEffect, useRef, type HTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Button } from './Button.js';
 import { Menu, type MenuItem } from './Menu.js';
 import { Modal, type ModalProps } from './Modal.js';
 import { cx } from './utils/cx.js';
+import { navigationIndex } from './utils/focus.js';
 import { useControllable } from './utils/useControllable.js';
 import { useId } from './utils/useId.js';
 
@@ -29,8 +30,26 @@ export const Sheet = forwardRef<HTMLElement, SheetProps>(function Sheet(
     backdropClassName={cx('sheet-backdrop', backdropClassName)} data-side={side} />;
 });
 
-export const Drawer = forwardRef<HTMLElement, SheetProps>(function Drawer({ side = 'bottom', className, ...props }, ref) {
-  return <Sheet {...props} ref={ref} side={side} className={cx('drawer-panel', className)} />;
+export const Drawer = forwardRef<HTMLElement, SheetProps>(function Drawer(
+  { side = 'bottom', className, handle, onClose, ...props }, ref,
+) {
+  const start = useRef<number>();
+  const vertical = side === 'bottom' || side === 'top';
+  return <Sheet {...props} ref={ref} side={side} onClose={onClose} className={cx('drawer-panel', className)}
+    handle={handle ?? (onClose && <button type="button" className="drawer-handle" aria-label="Dismiss drawer"
+      onClick={(event) => { if (event.detail === 0) onClose(); }}
+      onPointerDown={(event) => {
+        if (event.button !== 0) return;
+        start.current = vertical ? event.clientY : event.clientX;
+        event.currentTarget.setPointerCapture?.(event.pointerId);
+      }} onPointerUp={(event) => {
+        if (start.current === undefined) return;
+        const displacement = (vertical ? event.clientY : event.clientX) - start.current;
+        start.current = undefined;
+        const rtl = !vertical && getComputedStyle(event.currentTarget).direction === 'rtl';
+        const direction = side === 'top' || (side === 'start' && !rtl) || (side === 'end' && rtl) ? -1 : 1;
+        if (displacement * direction > 44 || Math.abs(displacement) < 4) onClose();
+      }} onPointerCancel={() => { start.current = undefined; }}><span aria-hidden="true" /></button>)} />;
 });
 
 export interface PopoverProps extends HTMLAttributes<HTMLDivElement> {
@@ -48,7 +67,6 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover
 
   useEffect(() => {
     if (!shown) return;
-    panel.current?.focus();
     const outside = (event: PointerEvent) => {
       if (event.target instanceof Node && !anchor.current?.contains(event.target)) setShown(false);
     };
@@ -56,7 +74,11 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover
     return () => document.removeEventListener('pointerdown', outside);
   }, [shown, setShown]);
 
-  return <div {...props} ref={ref} className={cx('popover', className)} onKeyDown={(event) => {
+  useEffect(() => { if (shown) panel.current?.focus(); }, [shown]);
+
+  // Escape bubbles from interactive controls in the non-modal panel.
+  // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+  return <div {...props} ref={ref} role="group" className={cx('popover', className)} onKeyDown={(event) => {
     onKeyDown?.(event);
     if (event.defaultPrevented || event.key !== 'Escape' || !shown) return;
     event.preventDefault();
@@ -64,7 +86,9 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover
     setShown(false);
     button.current?.focus();
   }}>
-    <div ref={anchor} className="popover-anchor">
+    <div ref={anchor} className="popover-anchor" onBlur={(event) => {
+      if (shown && !event.currentTarget.contains(event.relatedTarget)) setShown(false);
+    }}>
       <Button ref={(node) => { button.current = node; }} variant="ghost" aria-haspopup="dialog"
         aria-expanded={shown} aria-controls={shown ? id : undefined} onClick={() => setShown(!shown)}>{trigger}</Button>
       {shown && <div ref={panel} id={id} role="dialog" aria-label={label} tabIndex={-1}
@@ -91,7 +115,9 @@ export const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(function Hov
     timer.current = setTimeout(() => setOpen(hovered.current || focused.current), hovered.current || focused.current ? 180 : 120);
   }
 
-  return <div {...props} ref={ref} className={cx('hover-card', className)}
+  // Keep the preview open while focus moves between its link and content.
+  // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+  return <div {...props} ref={ref} role="group" className={cx('hover-card', className)}
     onMouseEnter={() => { hovered.current = true; schedule(); }}
     onMouseLeave={() => { hovered.current = false; schedule(); }}
     onFocus={() => { focused.current = true; schedule(); }}
@@ -115,17 +141,30 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
   { items, label, children, className, ...props }, ref,
 ) {
   return <Menu {...props} ref={ref} items={items} context className={cx('context-menu', className)}
-    trigger={(trigger) => <div {...trigger} role="group" tabIndex={0} aria-label={label} className="context-trigger"
-      onClick={undefined}>{children}</div>} />;
+    trigger={(trigger) => <button type="button" {...trigger} aria-label={label} className="context-trigger">{children}</button>} />;
 });
 
 export interface MenuGroup { id: string; label: ReactNode; items: MenuItem[] }
 export const Menubar = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement> & { menus: readonly MenuGroup[] }>(function Menubar(
   { menus, className, ...props }, ref,
 ) {
-  return <div {...props} ref={ref} className={cx('menubar', className)} role="group">
-    {menus.map(({ id, label, items }) => <Menu key={id} items={items} align="start"
-      trigger={(trigger) => <Button {...trigger} variant="plain" size="sm">{label}</Button>} />)}
+  const [current, setCurrent] = useState(0);
+  const buttons = useRef(new Map<number, HTMLElement>());
+  return <div {...props} ref={ref} className={cx('menubar', className)} role="menubar">
+    {menus.map(({ id, label, items }, index) => <Menu key={id} items={items} align="start" role="presentation"
+      trigger={(trigger) => <Button {...trigger} ref={(button) => {
+        if (button) buttons.current.set(index, button);
+        else buttons.current.delete(index);
+      }} role="menuitem" tabIndex={index === Math.min(current, menus.length - 1) ? 0 : -1} variant="plain" size="sm"
+        onFocus={() => setCurrent(index)} onKeyDown={(event) => {
+          trigger.onKeyDown(event);
+          if (event.defaultPrevented || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+          event.preventDefault();
+          const rtl = getComputedStyle(event.currentTarget).direction === 'rtl';
+          const key = rtl && event.key === 'ArrowLeft' ? 'ArrowRight' : rtl && event.key === 'ArrowRight' ? 'ArrowLeft' : event.key;
+          const next = navigationIndex(key, index, menus.length);
+          if (next !== undefined) buttons.current.get(next)?.focus();
+        }}>{label}</Button>} />)}
   </div>;
 });
 

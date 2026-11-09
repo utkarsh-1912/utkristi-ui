@@ -34,15 +34,21 @@ export const Separator = forwardRef<HTMLDivElement, DivProps & {
 export const ScrollArea = forwardRef<HTMLDivElement, DivProps & {
   orientation?: 'horizontal' | 'vertical' | 'both';
 }>(function ScrollArea({ orientation = 'vertical', className, ...props }, ref) {
-  return <div tabIndex={0} {...props} ref={ref} className={cx('scroll-area', className)} data-orientation={orientation} />;
+  // A keyboard tab stop is needed for scroll regions without interactive descendants.
+  // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+  return <div role="region" aria-label="Scrollable content" tabIndex={0} {...props} ref={ref} className={cx('scroll-area', className)} data-orientation={orientation} />;
 });
 
-export const Label = forwardRef<HTMLLabelElement, LabelHTMLAttributes<HTMLLabelElement>>(function Label({ className, ...props }, ref) {
-  return <label {...props} ref={ref} className={cx('field-label', className)} />;
+export const Label = forwardRef<HTMLLabelElement, LabelHTMLAttributes<HTMLLabelElement>>(function Label({ className, htmlFor, children, ...props }, ref) {
+  return <label {...props} ref={ref} htmlFor={htmlFor} className={cx('field-label', className)}>{children}</label>;
 });
 
-export const Marker = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(function Marker({ className, ...props }, ref) {
-  return <mark {...props} ref={ref} className={cx('marker', className)} />;
+export const Marker = forwardRef<HTMLDivElement, DivProps & {
+  variant?: 'default' | 'border' | 'separator'; icon?: ReactNode;
+}>(function Marker({ variant = 'default', icon, className, children, ...props }, ref) {
+  return <div {...props} ref={ref} className={cx('marker', className)} data-variant={variant}>
+    {icon && <span aria-hidden="true">{icon}</span>}<span>{children}</span>
+  </div>;
 });
 
 export const Item = forwardRef<HTMLDivElement, Omit<DivProps, 'title'> & {

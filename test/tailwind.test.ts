@@ -9,7 +9,7 @@ const require = createRequire(import.meta.url);
 test('published preset emits used component classes ahead of utilities', async () => {
   const preset = require('../dist/tailwind/preset.cjs');
   const result = await postcss([tailwind({
-    content: [{ raw: '<button class="btn btn-solid card p-0 font-condensed stretch-condensed bg-accent/50 light:p-2 glass:p-4">' }],
+    content: [{ raw: '<button class="btn btn-solid card p-0 font-condensed stretch-condensed bg-accent/50 light:p-2 glass:p-4 carousel carousel-viewport progress progress-fill typography type-geist font-geist">' }],
     presets: [preset],
   })]).process('@tailwind base; @tailwind components; @tailwind utilities;', { from: undefined });
   expect(result.css).toContain('.btn {');
@@ -21,6 +21,7 @@ test('published preset emits used component classes ahead of utilities', async (
   expect(result.css).toContain('calc(0.5 * 100%)');
   expect(result.css).toContain('glass\\:p-4');
   expect(result.css).toContain('[data-theme="glass"]');
+  for (const name of ['carousel', 'progress-fill', 'typography', 'font-geist']) expect(result.css).toContain('.' + name + ' {');
 });
 
 test('plugin works on its own, can skip base defaults, and respects a prefix', async () => {

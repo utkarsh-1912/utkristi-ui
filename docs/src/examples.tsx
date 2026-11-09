@@ -7,7 +7,9 @@ import {
   Textarea, ThemeSwitch, ThemeToggle, Tooltip, useToast,
 } from '@utkristi/ui';
 
-interface Example {
+import { catalog } from './catalog';
+
+export interface Example {
   name: string;
   description: string;
   preview: () => ReactNode;
@@ -40,7 +42,7 @@ function ChipPreview() {
   const [pressed, setPressed] = useState(true);
   const [removed, remove] = useState(false);
   return <div className="sample-row"><Chip mono>Design</Chip><Chip accent pressed={pressed} onClick={() => setPressed(!pressed)}>Pinned</Chip>
-    {removed ? <Button size="sm" variant="plain" onClick={() => remove(false)}>Restore</Button> : <Chip onRemove={() => remove(true)}>CoLabs</Chip>}</div>;
+    {removed ? <Button size="sm" variant="plain" onClick={() => remove(false)}>Restore</Button> : <Chip onRemove={() => remove(true)}>Utkristi</Chip>}</div>;
 }
 function ChoicePreview() {
   const group = useId();
@@ -55,6 +57,7 @@ function FooterPreview() {
 }
 
 export const examples = {
+  ...catalog,
   button: {
     name: 'Button', description: 'Pill buttons for primary, secondary, and destructive actions.',
     preview: () => <div className="sample-row"><Button iconLeft={<Plus size={16} />}>Create</Button><Button variant="ghost">Preview</Button>
@@ -252,7 +255,7 @@ export const examples = {
     jsx: '<Code lines={["npm run build", "npm test"]} />',
   },
   logo: {
-    name: 'Logo', description: 'The CoLabs mark with a configurable wordmark.',
+    name: 'Logo', description: 'The ecosystem kit’s geometric U mark with a configurable wordmark.',
     preview: () => <div className="sample-row"><Logo /><Logo compact size={24} /></div>,
     html: '<span class="brand"><span class="brand-name"><span class="brand-pre">Utkristi</span><span class="brand-co">ui</span></span></span>',
     jsx: '<Logo size={30} name="Utkristi" suffix="ui" />',
@@ -265,4 +268,4 @@ export const examples = {
   },
 } satisfies Record<string, Example>;
 
-export const componentPages = Object.entries(examples);
+export const componentPages = Object.entries(examples).sort(([, a], [, b]) => a.name.localeCompare(b.name));

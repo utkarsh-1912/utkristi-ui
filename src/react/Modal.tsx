@@ -16,19 +16,21 @@ export interface ModalProps extends Omit<HTMLAttributes<HTMLElement>, 'title' | 
   footer?: ReactNode;
   wide?: boolean;
   backdropClassName?: string;
+  handle?: ReactNode;
   dismissOnBackdrop?: boolean;
   onSubmit?: FormEventHandler<HTMLFormElement>;
   initialFocus?: RefObject<HTMLElement>;
 }
 
 const ModalContent = forwardRef<HTMLElement, Omit<ModalProps, 'open'>>(function ModalContent(
-  { onClose, title, description, label, footer, wide, onSubmit, initialFocus, backdropClassName, dismissOnBackdrop = true, className, children, ...props }, ref,
+  { onClose, title, description, label, footer, handle, wide, onSubmit, initialFocus, backdropClassName, dismissOnBackdrop = true, className, children, ...props }, ref,
 ) {
   const scope = useRef<HTMLElement | null>(null);
   const id = useId();
   useDialogFocus(scope, onClose, initialFocus);
   const setRef = (element: HTMLElement | null) => { scope.current = element; assignRef(ref, element); };
   const content = <>
+    {handle}
     <div className="modal-head">
       <div>
         {label != null && <span className="label">{label}</span>}

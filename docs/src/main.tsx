@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useRef, useState, type ReactNode } from 'react';
+import { lazy, StrictMode, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ArrowRight, ArrowUpRight, Copy, Plus } from 'lucide-react';
 import {
@@ -6,14 +6,19 @@ import {
   Shell, Slider, Stat, Stats, Tabs, ThemeProvider, ThemeSwitch, ToastProvider, useTheme, useToast,
 } from '@utkristi/ui';
 import { componentPages, examples } from './examples';
+import { FontDemo } from './catalog';
+import { api, examples as sampleSources } from 'virtual:utkristi-examples';
 import tokenCSS from '../../src/styles/tokens.css?raw';
 import './styles.css';
+
+const Playground = lazy(() => import('./Playground'));
 
 const primary = [
   { href: '#/overview', label: 'Overview' },
   { href: '#/getting-started', label: 'Install' },
   { href: '#/components/button', label: 'Components' },
   { href: '#/showcase', label: 'Showcase' },
+  { href: '#/sandbox', label: 'Sandbox' },
 ];
 const guide = [
   { href: '#/getting-started', label: 'Getting started' },
@@ -30,7 +35,7 @@ function route() {
   const [path, options] = location.hash.replace(/^#/, '').split('?');
   const requestedTheme = new URLSearchParams(options ?? location.search).get('theme');
   const theme = requestedTheme === 'dark' || requestedTheme === 'light' || requestedTheme === 'glass' ? requestedTheme : undefined;
-  return { path: path || '/overview', theme } as const;
+  return { path: path || '/overview', theme, sample: new URLSearchParams(options).get('component') ?? undefined } as const;
 }
 
 function CopyCode({ text }: { text: string }) {
@@ -63,12 +68,8 @@ function Frame({ theme, children }: { theme: PreviewTheme; children: ReactNode }
 function ComponentPage({ slug }: { slug: keyof typeof examples }) {
   const example = examples[slug];
   const Preview = example.preview;
-  const importNames = Array.from(new Set([...example.jsx.matchAll(/<([A-Z][A-Za-z]+)/g)].map((match) => match[1])
-    .filter((name) => name !== 'Plus' && name !== 'Bell')));
-  if (slug === 'toast') importNames.push('ToastProvider', 'useToast');
-  const imports = `import { ${importNames.join(', ')} } from '@utkristi/ui';`;
-  const icons = ['Plus', 'Bell'].filter((name) => example.jsx.includes(`<${name}`));
-  const reactExample = `${imports}${icons.length ? `\nimport { ${icons.join(', ')} } from 'lucide-react';` : ''}\n\n${example.jsx}`;
+  const sample = sampleSources[slug];
+  const reactExample = sample.code;
   const tailwindExample = example.html.replace(/class="([^"]+)"/, 'class="$1 p-0"');
   return <article className="doc-article">
     <PageTitle kicker="Components" title={example.name} detail={example.description} />
@@ -76,13 +77,29 @@ function ComponentPage({ slug }: { slug: keyof typeof examples }) {
       {themes.map((theme) => <Frame key={theme} theme={theme}><Preview /></Frame>)}
     </div>
     <div className="example-source">
+      <div className="doc-section-head"><div><span className="label">Implementation</span><h2>Use in your app</h2></div>
+        <Button href={`#/sandbox?component=${slug}`} variant="ghost" iconRight={<ArrowUpRight size={16} />}>Open sandbox</Button></div>
       <Tabs label="Usage examples" items={[
-        { id: 'tailwind', label: 'Tailwind', content: <><p className="muted">Use a Tailwind utility such as <Code inline>p-0</Code> to override component padding.</p><CopyCode text={tailwindExample} /></> },
-        { id: 'css', label: 'Plain CSS', content: <><p className="muted">Import <Code inline>@utkristi/ui/utkristi-ui.css</Code> before using these classes.</p><CopyCode text={example.html} /></> },
-        { id: 'react', label: 'React', content: <CopyCode text={reactExample} /> },
+        { id: 'tailwind', label: 'Tailwind', content: <><p className="muted">Use utilities such as <Code inline>p-0</Code> to override component padding. Interactive examples use the React component or your own event handlers.</p><CopyCode text={tailwindExample} /></> },
+        { id: 'css', label: 'Plain CSS', content: <><p className="muted">Import <Code inline>@utkristi/ui/utkristi-ui.css</Code> before using these classes. Use native controls or add behavior where needed.</p><CopyCode text={example.html} /></> },
+        { id: 'react', label: 'React', content: <><p className="muted">Install the kit and import its stylesheet once in your app. This example includes its data and theme providers.</p><CopyCode text={reactExample} /></> },
       ]} />
     </div>
+    <ComponentApi components={sample.components} />
   </article>;
+}
+
+function ComponentApi({ components }: { components: string[] }) {
+  return <section className="component-api" aria-label="API reference">
+    <h2>API reference</h2>
+    <p className="muted">The tables list kit-specific props. Components also forward their supported HTML attributes.</p>
+    {components.map((name) => <details key={name}>
+      <summary>{name}</summary>
+      {api[name]?.length ? <div className="table-wrap"><table className="table api-table"><thead><tr><th scope="col">Prop</th><th scope="col">Type</th><th scope="col">Required</th></tr></thead>
+        <tbody>{api[name].map((prop) => <tr key={prop.name}><th scope="row"><Code inline>{prop.name}</Code></th><td><code>{prop.type}</code>{prop.description && <p>{prop.description}</p>}</td><td>{prop.required ? "Yes" : "Optional"}</td></tr>)}</tbody>
+      </table></div> : <p className="muted">Uses standard HTML attributes and children.</p>}
+    </details>)}
+  </section>;
 }
 
 function PageTitle({ kicker, title, detail }: { kicker: string; title: ReactNode; detail: ReactNode }) {
@@ -94,8 +111,8 @@ function PageTitle({ kicker, title, detail }: { kicker: string; title: ReactNode
 }
 function Overview() {
   return <>
-    <PageTitle kicker="Utkristi CoLabs design system / 0.1.0" title={<>Utkristi <span className="faint">UI</span></>}
-      detail={<>The controls, surfaces, and typography behind <b>Utkristi CoLabs</b>, packaged for Tailwind, plain CSS, and React.</>} />
+    <PageTitle kicker="Utkristi ecosystem / UI kit" title={<>Utkristi <span className="faint">UI</span></>}
+      detail={<>A shared component library for <b>every Utkristi app</b>, packaged for Tailwind, plain CSS, and React.</>} />
     <div className="sample-row"><Button href="#/getting-started" iconRight={<ArrowRight size={17} />}>Get started</Button>
       <Button href="#/showcase" variant="ghost" iconRight={<ArrowUpRight size={16} />}>View showcase</Button>
       <Button href="#/showcase?theme=glass" variant="ghost" iconRight={<ArrowUpRight size={16} />}>Preview Glass</Button></div>
@@ -124,6 +141,9 @@ function GettingStarted() {
     <CopyCode text={`<link rel="stylesheet" href="https://unpkg.com/@utkristi/ui@0.1.0/fonts.css">\n<link rel="stylesheet" href="https://unpkg.com/@utkristi/ui@0.1.0/utkristi-ui.css">`} />
     <h2>React</h2>
     <CopyCode text={`import { Button, ThemeProvider } from '@utkristi/ui';\nimport '@utkristi/ui/utkristi-ui.css';\n\nexport function App() {\n  return <ThemeProvider><Button>New workspace</Button></ThemeProvider>;\n}`} />
+    <h2>Host the documentation</h2>
+    <p>Build the site and deploy the contents of <Code inline>docs/dist</Code> to a static host. The site uses hash routes and works under a subdirectory.</p>
+    <CopyCode text={'npm ci\nnpm run docs:build'} />
     <h2>Tailwind CSS 4</h2>
     <p>Load the preset through your JavaScript config with <Code inline>@config</Code>, or load the plugin directly with <Code inline>@plugin</Code>. Add an explicit source path for the React package.</p>
     <CopyCode text={`@import "tailwindcss";\n@plugin "@utkristi/ui/plugin";\n@source "../node_modules/@utkristi/ui/dist";`} />
@@ -200,7 +220,8 @@ function ContrastTable({ rows }: { rows: Array<{ pair: string; ratios: string[] 
 
 function Typography() {
   return <article className="doc-article">
-    <PageTitle kicker="Guide" title="Typography" detail="Archivo for condensed display and reading text. Geist Mono for labels and code." />
+    <PageTitle kicker="Guide" title="Typography" detail="Compare Archivo, Geist, Inter, Manrope, and Newsreader. Geist Mono remains available for labels and code." />
+    <FontDemo />
     <div className="type-samples">
       <div><span className="label">Display / Archivo condensed</span><p className="display display-lg">Build together</p></div>
       <div><span className="label">Lede / Archivo medium</span><p className="lede"><b>One workspace.</b> Everything your team needs to start.</p></div>
@@ -216,7 +237,7 @@ function Showcase() {
   const { resolvedTheme } = useTheme();
   return <article className="showcase" data-showcase-theme={resolvedTheme}>
     <PageTitle kicker={resolvedTheme === 'glass' ? 'Glass / Component showcase' : 'Component showcase / 0.1.0'} title={<>Build <span className="faint">together.</span></>}
-      detail={<>A workspace assembled from <b>Utkristi UI</b>, the components that power CoLabs.</>} />
+      detail={<>A workspace assembled from <b>Utkristi UI</b>, the shared kit for the Utkristi ecosystem.</>} />
     <div className="sample-row"><Button className="showcase-cta" href="#/components/button" iconLeft={<Plus size={16} />} iconRight={<ArrowUpRight size={16} />}>New workspace</Button><Button href="#/components/card" variant="ghost">Browse surfaces</Button>
       <Badge tone="ok">All systems operational</Badge></div>
     <div className="showcase-stats"><Stats>
@@ -245,19 +266,22 @@ function Showcase() {
 }
 
 function Sidebar({ path }: { path: string }) {
+  const [query, setQuery] = useState('');
+  const matches = componentPages.filter(([, item]) => item.name.toLowerCase().includes(query.trim().toLowerCase()));
   return <aside className="doc-sidebar">
+    <SearchInput aria-label="Filter components" placeholder="Filter components" value={query} onChange={(event) => setQuery(event.target.value)} />
     <nav aria-label="Documentation">
       <span className="label">Guide</span>
       {guide.map(({ href, label }) => <a key={href} href={href} aria-current={href === `#${path}` ? 'page' : undefined}>{label}</a>)}
       <span className="label">Components</span>
-      {componentPages.map(([slug, { name }]) => <a key={slug} href={`#/components/${slug}`}
+      {matches.map(([slug, { name }]) => <a key={slug} href={`#/components/${slug}`}
         aria-current={path === `/components/${slug}` ? 'page' : undefined}>{name}</a>)}
     </nav>
   </aside>;
 }
 
 function App() {
-  const [{ path, theme }, setRoute] = useState(route);
+  const [{ path, theme, sample }, setRoute] = useState(route);
   useEffect(() => {
     const update = () => { setRoute(route()); window.scrollTo(0, 0); };
     window.addEventListener('hashchange', update);
@@ -268,17 +292,18 @@ function App() {
   const pages: Record<string, ReactNode> = {
     '/overview': <Overview />, '/getting-started': <GettingStarted />, '/theming': <Theming />,
     '/tokens': <Tokens />, '/typography': <Typography />, '/showcase': <Showcase />,
+    '/sandbox': <Suspense fallback={<p className="muted">Loading sandbox…</p>}><Playground key={sample ?? 'carousel'} component={sample} /></Suspense>,
   };
   const content = component ? <ComponentPage key={component} slug={component} /> : pages[path] ?? <Overview />;
-  const standalone = path === '/overview' || path === '/showcase';
+  const standalone = path === '/overview' || path === '/showcase' || path === '/sandbox';
   return <ThemeProvider forcedTheme={theme}><ToastProvider>
     <Shell navbar={{
       brand: <a href="#/overview" aria-label="Utkristi UI overview"><Logo size={27} /></a>,
       links: primary.map((item) => ({ ...item, active: item.href === `#${path}` || (item.label === 'Components' && !!component) })),
-      strip: { left: <><Dot static /> Utkristi CoLabs design system</>, right: 'v0.1.0' },
+      strip: { left: <><Dot static /> Utkristi ecosystem UI</>, right: 'v0.1.0' },
       right: <ThemeSwitch className="nav-theme" />, sheetFoot: <ThemeSwitch />,
     }} footer={{
-      lede: <><b>Utkristi UI.</b> The CoLabs design system.</>,
+      lede: <><b>Utkristi UI.</b> The shared kit for Utkristi apps.</>,
       columns: [{ title: 'Guide', links: guide }, { title: 'Explore', links: primary }],
       word: <>Utkristi <span className="faint">UI</span></>,
       themeSwitch: <ThemeSwitch />, bottom: <><span>MIT · Utkristi UI</span><span>Version 0.1.0</span></>,

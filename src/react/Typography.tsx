@@ -1,5 +1,5 @@
 import { forwardRef, type HTMLAttributes } from 'react';
-import { cx } from './utils/cx.js';
+import { assignRef, cx } from './utils/cx.js';
 
 export type Typeface = 'archivo' | 'geist' | 'inter' | 'manrope' | 'serif';
 const fonts: Record<Typeface, string> = {
@@ -15,6 +15,6 @@ export interface TypographyProps extends HTMLAttributes<HTMLElement> {
 export const Typography = forwardRef<HTMLElement, TypographyProps>(function Typography(
   { as: Element = 'div', typeface, density = 'reading', className, ...props }, ref,
 ) {
-  return <Element {...props} ref={ref} className={cx('typography', typeface && fonts[typeface],
+  return <Element {...props} ref={(node) => assignRef(ref, node)} className={cx('typography', typeface && fonts[typeface],
     density === 'compact' && 'typography-compact', className)} />;
 });

@@ -101,14 +101,29 @@ async function captureEdge() {
     const links = await evaluate(`Array.from(document.querySelectorAll('.doc-sidebar a'), link => [link.hash.slice(1), link.textContent])`);
     const routes = [['/overview', 'Utkristi UI'], ['/showcase', 'Build together.'], ...links];
     const overflow = [];
-    for (const [path, title] of routes) {
-      await load(`${path}?theme=glass`, title);
-      await retry(() => evaluate("document.documentElement.dataset.theme === 'glass'"), "Glass theme");
-      const width = await evaluate('document.documentElement.scrollWidth');
-      if (width > 375) overflow.push(`${path} (${width}px)`);
+    for (const [theme] of themes) {
+      for (const [path, title] of routes) {
+        await load(path + '?theme=' + theme, title);
+        await retry(() => evaluate('document.documentElement.dataset.theme === ' + JSON.stringify(theme)), theme);
+        const width = await evaluate('document.documentElement.scrollWidth');
+        if (width > 375) overflow.push(path + ' (' + theme + ', ' + width + 'px)');
+      }
     }
     if (overflow.length) throw new Error(`Horizontal overflow at 375px: ${overflow.join(', ')}`);
-    process.stdout.write(`Checked ${routes.length} docs routes at 375px.\n`);
+    for (const [theme] of themes) {
+      await load('/components/carousel?theme=' + theme, 'Carousel');
+      const selector = '.theme-preview[data-theme="' + theme + '"] .carousel';
+      const frame = JSON.stringify(selector);
+      const next = JSON.stringify('[aria-label="Next slide"]');
+      await evaluate('document.querySelector(' + frame + ').querySelector(' + next + ').click()');
+      await retry(() => evaluate(`(() => {
+        const carousel = document.querySelector(${frame});
+        const viewport = carousel.querySelector(".carousel-viewport");
+        return Math.abs(viewport.scrollLeft - viewport.clientWidth) < 2 &&
+          carousel.querySelector("[role=status]").textContent.includes("Slide 2 of");
+      })()`), theme + ' carousel movement');
+    }
+    process.stdout.write(`Checked ${routes.length} docs routes in Night, Paper, and Glass at 375px.\n`);
   } finally {
     client?.close();
     browser.kill();

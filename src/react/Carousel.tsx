@@ -68,7 +68,9 @@ export const Carousel = forwardRef<HTMLElement, CarouselProps>(function Carousel
 
   return <section {...props} ref={ref} aria-roledescription="carousel" aria-label={props['aria-label'] ?? 'Carousel'}
     className={cx('carousel', vertical && 'carousel-vertical', className)}>
-    <div ref={viewport} id={id} className="carousel-viewport" tabIndex={count ? 0 : undefined} aria-label="Slides"
+    {/* A scroll viewport needs its own tab stop so arrow navigation does not intercept slide controls. */}
+    {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
+    <div role="region" ref={viewport} id={id} className="carousel-viewport" tabIndex={count ? 0 : undefined} aria-label="Slides"
       onScroll={syncScroll} onKeyDown={(event) => {
         onKeyDown?.(event);
         if (event.defaultPrevented || event.target !== event.currentTarget) return;

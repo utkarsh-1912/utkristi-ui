@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.doc-layout { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: clamp(24px, 4vw, 60px); }
+.doc-sidebar { position: sticky; top: 120px; align-self: start; max-height: calc(100vh - 140px); overflow: auto; scrollbar-width: thin; }
+.doc-sidebar nav { display: flex; flex-direction: column; }
+.doc-sidebar .label { margin: 14px 0 7px; }
+.doc-sidebar nav a { color: var(--ut-ink-2); padding: 5px 9px; border-radius: 8px; font-size: 13px; }
+.doc-sidebar nav a:hover, .doc-sidebar nav a[aria-current="page"] { background: var(--ut-tint); color: var(--ut-ink); }
+.doc-article { min-width: 0; }
+.doc-article h2 { font-weight: 600; font-size: 21px; letter-spacing: -.02em; margin-top: 32px; }
+.doc-article p { margin-block: 10px; }
+.doc-title { display: flex; flex-direction: column; gap: 20px; margin-bottom: 28px; }
+.doc-title .display { overflow-wrap: anywhere; }
+.doc-title .lede { margin: 0; }
+.theme-gallery, .overview-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.overview-grid { margin-top: 44px; }
+.theme-preview { container-type: inline-size; padding: clamp(12px, 2vw, 24px); border-radius: var(--ut-r-lg); border: 1px solid var(--ut-line); background: var(--ut-bg); color: var(--ut-ink); min-width: 0; }
+.preview-content { margin-top: 24px; min-width: 0; }
+.preview-content .navbar-inner, .preview-content .strip-inner { padding-inline: 10px; }
+.preview-content .navbar-left { gap: 14px; }
+.preview-content .navbar-links { gap: 12px; }
+.preview-content .brand-name { white-space: nowrap; }
+.preview-content .page { padding: 12px; }
+.sample-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+.sample-stack { display: grid; gap: 14px; min-width: 0; }
+.sample-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.sample-end { display: flex; justify-content: flex-end; }
+.sample-grow { flex: 1; }
+.sample-shell { min-height: 200px; }
+.sample-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.example-source { margin-top: 24px; }
+.code-example { position: relative; min-width: 0; }
+.code-example .code { padding-right: 44px; }
+.copy-code { position: absolute; top: 6px; right: 6px; background: var(--ut-raise); }
+.swatches { border-top: 1px solid var(--ut-line); }
+.swatch-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--ut-line); }
+.swatch-row > code { overflow-wrap: anywhere; justify-self: start; }
+.swatch { display: flex; align-items: center; gap: 8px; color: var(--ut-ink); background: var(--ut-bg); border: 1px solid var(--ut-line); padding: 6px; border-radius: 8px; min-width: 0; }
+.swatch > span { flex: none; width: 20px; height: 20px; border-radius: 5px; border: 1px solid var(--ut-line-2); }
+.swatch small { font-family: var(--ut-font-mono); font-size: 10px; overflow-wrap: anywhere; }
+.type-samples { display: grid; gap: 16px; }
+.type-samples > div { padding: 18px; background: var(--ut-bg-2); border: 1px solid var(--ut-line); border-radius: var(--ut-r); }
+.showcase-stats { margin-block: 36px 18px; }
+.showcase-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.showcase-grid > * { min-width: 0; }
+.showcase-pane { display: flex; height: 100%; align-items: flex-start; flex-direction: column; gap: 20px; padding: clamp(20px, 4vw, 44px); }
+.showcase-pane .btn { margin-top: auto; }
+/* The Glass demos put translucent cards over a quiet lilac and green backdrop. */
+.theme-preview[data-theme="glass"] {
+  background-image: radial-gradient(ellipse at 0 100%, #dce7ce 0%, transparent 65%),
+    radial-gradient(ellipse at 90% 0, #ddd0ef 0%, transparent 70%);
+}
+
+[data-showcase-theme="glass"] .showcase-pane {
+  isolation: isolate;
+  position: relative;
+  background: radial-gradient(ellipse at 83% 9%, #596342 0%, transparent 47%),
+    radial-gradient(ellipse at 70% 90%, #50445c 0%, transparent 54%), var(--ut-pane);
+}
+[data-showcase-theme="glass"] .showcase-pane::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: repeating-linear-gradient(125deg, transparent 0 19px, rgba(250, 248, 255, .10) 20px, transparent 21px 37px);
+  mask-image: linear-gradient(120deg, transparent 34%, #000 85%);
+}
+[data-showcase-theme="glass"] .showcase-pane .btn-solid {
+  background: var(--ut-solid);
+  color: var(--ut-on-solid);
+}
+[data-showcase-theme="glass"] .showcase-pane .btn-solid:hover { background: var(--ut-solid-hover); }
+[data-showcase-theme="glass"] .showcase-cta {
+  --ut-rail-cut: 10px;
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  color: var(--ut-on-solid);
+  padding-inline: 23px;
+}
+[data-showcase-theme="glass"] .showcase-cta::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: var(--ut-solid);
+  clip-path: polygon(var(--ut-rail-cut) 0, calc(100% - var(--ut-rail-cut)) 0, 100% 50%, calc(100% - var(--ut-rail-cut)) 100%, var(--ut-rail-cut) 100%, 0 50%);
+}
+[data-showcase-theme="glass"] .showcase-cta:hover::before { background: var(--ut-solid-hover); }
+
+@container (max-width: 380px) {
+  .preview-content .navbar-links { display: none; }
+  .preview-content .burger { display: inline-flex; }
+  .preview-content .sample-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 1260px) {
+  .theme-gallery, .overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 980px) {
+  .doc-layout { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .doc-sidebar { position: static; max-width: 100%; overflow-x: auto; }
+  .doc-sidebar nav { flex-direction: row; align-items: center; gap: 4px; white-space: nowrap; padding: 4px; }
+  .doc-sidebar .label { margin: 0 6px 0 10px; }
+}
+@media (max-width: 700px) {
+  .theme-gallery, .overview-grid, .showcase-grid { grid-template-columns: minmax(0, 1fr); }
+  .nav-theme { display: none; }
+  .swatch { flex-wrap: wrap; }
+}
+@media (max-width: 440px) {
+  .sample-grid { grid-template-columns: minmax(0, 1fr); }
+  .sample-stats .stat, .showcase-stats .stat { padding-inline: 12px; }
+}

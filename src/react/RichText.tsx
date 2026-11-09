@@ -1,0 +1,113 @@
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import { cx } from './utils/cx.js';
+
+// Renders the Markdown that AI models reply with (headings, lists, quotes, code, bold, italic,
+// inline code, links) as React elements. Never uses innerHTML, so a reply can't inject markup.
+
+const SAFE_URL = /^https?:\/\//i;
+
+// **bold**, *italic* / _italic_, `code`, [text](https://…)
+function inline(text: string, keyBase = "i"): ReactNode[] {
+    const out = [];
+    const re = /(`[^`\n]+`)|(\*\*[^*\n]+\*\*|__[^_\n]+__)|(\*[^*\s][^*\n]*\*|_[^_\s][^_\n]*_)|(\[[^\]\n]+\]\([^)\s]+\))/g;
+    let last = 0;
+    let m;
+    let n = 0;
+    while ((m = re.exec(text))) {
+        if (m.index > last) out.push(text.slice(last, m.index));
+        const tok = m[0];
+        const key = `${keyBase}-${n++}`;
+        if (m[1]) out.push(<code key={key}>{tok.slice(1, -1)}</code>);
+        else if (m[2]) out.push(<strong key={key}>{inline(tok.slice(2, -2), key)}</strong>);
+        else if (m[3]) out.push(<em key={key}>{inline(tok.slice(1, -1), key)}</em>);
+        else {
+            const [, label, url] = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(tok) ?? [];
+            out.push(SAFE_URL.test(url) ? <a key={key} href={url} target="_blank" rel="noreferrer noopener">{label}</a> : label);
+        }
+        last = m.index + tok.length;
+    }
+    if (last < text.length) out.push(text.slice(last));
+    return out;
+}
+
+type Block =
+    | { type: 'code' | 'quote' | 'p'; text: string; lang?: string }
+    | { type: 'h'; level: number; text: string }
+    | { type: 'hr' }
+    | { type: 'ol' | 'ul'; items: string[] };
+
+function blocks(src: string): Block[] {
+    const lines = String(src || "").replace(/\r\n?/g, "\n").split("\n");
+    const out: Block[] = [];
+    let i = 0;
+    const isList = (l: string) => /^\s*([-*+]|\d+[.)])\s+/.test(l);
+    const isSpecial = (l: string) => /^\s*(```|#{1,6}\s|>|([-*_])\s*\2\s*\2\s*$)/.test(l) || isList(l);
+    while (i < lines.length) {
+        const line = lines[i];
+        if (!line.trim()) { i++; continue; }
+        const fence = /^\s*```\s*([\w+#.-]*)/.exec(line);
+        if (fence) {
+            const body = [];
+            i++;
+            while (i < lines.length && !/^\s*```/.test(lines[i])) body.push(lines[i++]);
+            i++;
+            out.push({ type: "code", lang: fence[1], text: body.join("\n") });
+            continue;
+        }
+        const h = /^(#{1,6})\s+(.*)$/.exec(line.trim());
+        if (h) { out.push({ type: "h", level: Math.min(4, h[1].length + 2), text: h[2].replace(/#+\s*$/, "") }); i++; continue; }
+        if (/^\s*([-*_])\s*\1\s*\1[\s\-*_]*$/.test(line)) { out.push({ type: "hr" }); i++; continue; }
+        if (/^\s*>/.test(line)) {
+            const body = [];
+            while (i < lines.length && /^\s*>/.test(lines[i])) body.push(lines[i++].replace(/^\s*>\s?/, ""));
+            out.push({ type: "quote", text: body.join(" ") });
+            continue;
+        }
+        if (isList(line)) {
+            const ordered = /^\s*\d+[.)]/.test(line);
+            const items = [];
+            while (i < lines.length && (isList(lines[i]) || (lines[i].trim() && /^\s{2,}/.test(lines[i]) && items.length))) {
+                if (isList(lines[i])) items.push(lines[i].replace(/^\s*([-*+]|\d+[.)])\s+/, ""));
+                else items[items.length - 1] += ` ${lines[i].trim()}`; // a wrapped item
+                i++;
+            }
+            out.push({ type: ordered ? "ol" : "ul", items });
+            continue;
+        }
+        const body = [];
+        while (i < lines.length && lines[i].trim() && !isSpecial(lines[i])) body.push(lines[i++].trim());
+        if (!body.length) body.push(lines[i++].trim());
+        out.push({ type: "p", text: body.join("\n") });
+    }
+    return out;
+}
+
+export interface RichTextProps extends HTMLAttributes<HTMLDivElement> {
+    text: string;
+    onCode?: (text: string) => void;
+}
+
+export const RichText = forwardRef<HTMLDivElement, RichTextProps>(function RichText({ text, className, onCode, ...props }, ref) {
+    return (
+        <div {...props} ref={ref} className={cx("rich-text", className)}>
+            {blocks(text).map((b, k) => {
+                if (b.type === "code") {
+                    return (
+                        <div key={k} className="rich-text-codewrap">
+                            {onCode && <button type="button" className="rich-text-insert" onClick={() => onCode(b.text)} title="Add this code to the end of the editor">Insert into editor</button>}
+                            <pre className="code"><code>{b.text}</code></pre>
+                        </div>
+                    );
+                }
+                if (b.type === "h") { const H = b.level === 3 ? "h3" : "h4"; return <H key={k}>{inline(b.text, `h${k}`)}</H>; }
+                if (b.type === "hr") return <hr key={k} />;
+                if (b.type === "quote") return <blockquote key={k}>{inline(b.text, `q${k}`)}</blockquote>;
+                if (b.type === "ul" || b.type === "ol") {
+                    const L = b.type;
+                    return <L key={k}>{b.items.map((it, j) => <li key={j}>{inline(it, `l${k}-${j}`)}</li>)}</L>;
+                }
+                return <p key={k}>{inline("text" in b ? b.text : "", `p${k}`)}</p>;
+            })}
+        </div>
+    );
+});

@@ -1,0 +1,23 @@
+import { fileURLToPath } from 'node:url';
+import react from '@vitejs/plugin-react';
+import autoprefixer from 'autoprefixer';
+import tailwindcss from 'tailwindcss';
+import { defineConfig } from 'vite';
+// @ts-expect-error The development preset is handwritten ESM.
+import preset from '../src/tailwind/preset.js';
+
+const docs = fileURLToPath(new URL('.', import.meta.url)).replaceAll('\\', '/');
+const source = fileURLToPath(new URL('../src/react/', import.meta.url)).replaceAll('\\', '/');
+
+export default defineConfig({
+  root: docs,
+  base: './',
+  plugins: [react()],
+  resolve: { alias: { '@utkristi/ui': `${source}index.ts` } },
+  css: {
+    postcss: { plugins: [tailwindcss({
+      content: [`${docs}index.html`, `${docs}src/**/*.{ts,tsx}`, `${source}**/*.{ts,tsx}`],
+      presets: [preset],
+    }), autoprefixer()] },
+  },
+});

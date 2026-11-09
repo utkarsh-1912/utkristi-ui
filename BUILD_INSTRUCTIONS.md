@@ -4,6 +4,9 @@ This is a complete brief for the model that builds Utkristi UI. Read it together
 [DESIGN_TOKENS.md](DESIGN_TOKENS.md), which maps every app token and `.u-*` class to its kit name and
 is the naming contract. Don't rename anything listed there.
 
+The custom 2D/3D icon family and its colour palette have their own brief:
+[ICON_SYSTEM_INSTRUCTIONS.md](ICON_SYSTEM_INSTRUCTIONS.md).
+
 ## 0. Ground rules
 
 - **Write only here.** Write only inside `C:\Users\utkar\Downloads\utkristi-ui`.

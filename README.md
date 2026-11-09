@@ -6,6 +6,10 @@ Utkristi UI is the shared design system for the Utkristi ecosystem. It includes 
 | --- | --- | --- |
 | ![Night showcase](docs/screenshots/night.png) | ![Paper showcase](docs/screenshots/paper.png) | ![Glass showcase](docs/screenshots/glass.png) |
 
+| Mobile docs | Mobile navigation |
+| --- | --- |
+| ![Mobile Glass docs with the index and Command preview](docs/screenshots/mobile-docs.png) | ![Compact mobile navigation panel in Glass](docs/screenshots/mobile-menu.png) |
+
 ## Install
 
 ```sh
@@ -78,15 +82,19 @@ Use `Typography` with `typeface="archivo"`, `"geist"`, `"inter"`, `"manrope"`, o
 
 Run `npm run docs` to open the documentation. Each component page includes interactive previews, copyable code, and a prop reference. The Sandbox runs editable TSX or HTML in a separate preview and lets you test any theme.
 
+The Sandbox offers Fit, Phone, and Tablet preview widths. Add `ut-scrollbar` to an existing scroll container to style its native scrollbar, or use `ScrollArea` to add a keyboard-focusable scroll region. The scrollbar follows the theme and keeps system styling for touch and forced colours.
+
 Build the website with `npm ci` and `npm run docs:build`. Publish the contents of `docs/dist` with your static host. The site uses relative asset paths and hash routes, so a subdirectory works without a server rewrite. Run `npm run docs:preview` to verify the production build locally.
 
 ## Performance verification
 
-Component source and prop tables load when opened. The sandbox compiler runs in a worker. Its gzip size fell from 1,030 KB to 48 KB, while the initial docs JavaScript fell from 101 KB to 90 KB.
+Component source and prop tables load when opened. The sandbox and its compiler load separately from the main docs. With the expanded icon and component catalog, the main docs JavaScript is about 134 KB gzipped.
 
 Run `npm run docs:stress` to repeat the Edge check. The local run checked 93 routes in each theme at 375px and exercised 12 sandbox runs at 4× CPU throttling with 5,000 table rows or 60 carousel slides. Run-to-preview latency was 215 ms median and 393 ms p95 on the test machine. The editor reported invalid TSX and recovered on the next valid run.
 
 [React code splitting](https://react.dev/reference/react/lazy) · [Long tasks and main-thread work](https://web.dev/articles/optimize-long-tasks) · [Animation rendering](https://web.dev/articles/animations-guide)
+
+See the [competitive audit and implementation roadmap](docs/competitive-audit.md) for gaps across app workflows, distribution, accessibility, and performance.
 
 ## Development
 
@@ -100,7 +108,8 @@ Run `npm run docs:stress` to repeat the Edge check. The local run checked 93 rou
 | `npm run docs:build` | Build the documentation |
 | `npm run docs:preview` | Preview the documentation build |
 | `npm run docs:stress` | Run browser checks and exercise repeated sandbox runs under CPU throttling |
-| `npm run screenshots` | Capture all three themes in headless Edge and check every docs route at 375px in all three themes |
+| `npm run screenshots` | Capture all three themes in headless Edge, sweep every docs route at 375px, and check key pages from 320px to 1440px |
+| `npm run screenshots:capture` | Refresh the full showcase images and the two mobile screenshots |
 
 The screenshot script uses Playwright with Chromium when Edge is unavailable. Install them in that environment before running the script.
 

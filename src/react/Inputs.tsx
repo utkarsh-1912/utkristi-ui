@@ -1,4 +1,4 @@
-import { forwardRef, useState, type HTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
+import { forwardRef, useEffect, useRef, useState, type HTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
 import { Button } from './Button.js';
 import { Chip } from './Badge.js';
 import { Input, Select } from './Field.js';
@@ -61,26 +61,50 @@ export const InputOTP = forwardRef<HTMLInputElement, InputOTPProps>(function Inp
   </div>;
 });
 
-export interface SearchOption { value: string; label: string; keywords?: readonly string[]; disabled?: boolean }
+export interface SearchOption {
+  value: string; label: string; keywords?: readonly string[]; disabled?: boolean; group?: string;
+  icon?: ReactNode; description?: string;
+}
 interface SearchListProps extends HTMLAttributes<HTMLDivElement> {
   options: readonly SearchOption[]; label: string; placeholder?: string; emptyText?: string;
   selected?: readonly string[]; onPick: (value: string) => void; popup?: boolean; multiple?: boolean; disabled?: boolean; selectOnly?: boolean;
+  inputIcon?: ReactNode;
 }
 
 const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchList(
-  { options, label, placeholder, emptyText = 'No results.', selected = [], onPick, popup, multiple, disabled, selectOnly, className, ...props }, ref,
+  { options, label, placeholder, emptyText = 'No results.', selected = [], onPick, popup, multiple, disabled, selectOnly, className, inputIcon, ...props }, ref,
 ) {
   const id = useId();
+  const results = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [cursor, setCursor] = useState(-1);
   const visible = !popup || open;
-  const search = query.trim().toLocaleLowerCase();
-  const matches = options.filter((item) => [item.label, ...(item.keywords ?? [])].some((word) => word.toLocaleLowerCase().includes(search)));
-  const available = matches.filter((item) => !item.disabled);
-  const active = available[cursor];
+  const terms = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  const matches = options.filter((item) => {
+    const searchable = [item.label, ...(item.keywords ?? [])].join(' ').toLocaleLowerCase();
+    return terms.every((term) => searchable.includes(term));
+  });
+  const groups = new Map<string | undefined, SearchOption[]>();
+  for (const item of matches) {
+    const items = groups.get(item.group);
+    if (items) items.push(item);
+    else groups.set(item.group, [item]);
+  }
+  const available = [...groups.values()].flat().filter((item) => !item.disabled);
+  const active = available[cursor] ?? (!popup && !disabled ? available[0] : undefined);
   const selectedLabel = multiple ? '' : options.find((item) => item.value === selected[0])?.label ?? '';
   const optionId = (item: SearchOption) => `${id}-option-${options.indexOf(item)}`;
+  const activeId = visible && active ? optionId(active) : undefined;
+  useEffect(() => {
+    const list = results.current;
+    const option = activeId ? document.getElementById(activeId) : null;
+    if (!list || !option) return;
+    const bounds = list.getBoundingClientRect();
+    const item = option.getBoundingClientRect();
+    if (item.top < bounds.top) list.scrollTop += item.top - bounds.top;
+    else if (item.bottom > bounds.bottom) list.scrollTop += item.bottom - bounds.bottom;
+  }, [activeId, query]);
   function pick(value: string) {
     onPick(value);
     setQuery('');
@@ -95,16 +119,32 @@ const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchLi
       setOpen(false); setQuery(''); setCursor(-1);
       return;
     }
-    if (event.key === 'Enter' && visible && active) { event.preventDefault(); pick(active.value); return; }
+    if (event.nativeEvent.isComposing || disabled) return;
+    if (event.key === 'Enter' && visible && (active || !popup)) {
+      event.preventDefault();
+      if (active) pick(active.value);
+      return;
+    }
     if (!['ArrowDown', 'ArrowUp', ...(selectOnly ? ['Home', 'End'] : [])].includes(event.key)) return;
     event.preventDefault();
     setOpen(true);
+    const current = active ? available.indexOf(active) : -1;
     const next = event.key === 'Home' ? 0 : event.key === 'End' ? available.length - 1
-      : event.key === 'ArrowDown' ? (cursor + 1) % available.length : cursor <= 0 ? available.length - 1 : cursor - 1;
+      : event.key === 'ArrowDown' ? (current + 1) % available.length : current <= 0 ? available.length - 1 : current - 1;
     setCursor(available.length ? next : -1);
-    const item = available[next];
-    if (item) document.getElementById(optionId(item))?.scrollIntoView?.({ block: 'nearest' });
   }
+
+  const renderOption = (item: SearchOption) => <button type="button" tabIndex={-1} key={item.value} id={optionId(item)}
+    role="option" aria-disabled={(item.disabled || disabled) || undefined}
+    aria-label={item.description ? item.label : undefined} aria-describedby={item.description ? `${optionId(item)}-description` : undefined}
+    aria-selected={popup ? selected.includes(item.value) : active === item}
+    className="menu-item search-option" data-highlighted={active === item || undefined}
+    onMouseDown={(event) => event.preventDefault()} onClick={() => { if (!item.disabled && !disabled) pick(item.value); }}>
+    {item.icon && <span className="search-option-icon" aria-hidden="true">{item.icon}</span>}
+    <span className="search-option-copy"><span>{item.label}</span>
+      {item.description && <small id={`${optionId(item)}-description`} className="search-option-description">{item.description}</small>}
+    </span>{selected.includes(item.value) && <span aria-hidden="true">✓</span>}
+  </button>;
 
   return <div {...props} ref={ref} className={cx(popup ? 'combobox' : 'command', className)} onBlur={(event) => {
     props.onBlur?.(event);
@@ -117,22 +157,23 @@ const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchLi
     {selectOnly
       ? <Button variant="ghost" className="select-menu-trigger" role="combobox" aria-haspopup="listbox"
         aria-label={label} aria-expanded={visible} aria-controls={visible ? id : undefined}
-        aria-activedescendant={visible && active ? optionId(active) : undefined} disabled={disabled}
+        aria-activedescendant={activeId} disabled={disabled}
         onClick={() => setOpen(!open)} onKeyDown={handleKey}>
         <span>{selectedLabel || placeholder || 'Select an option'}</span><span aria-hidden="true">⌄</span>
       </Button>
-      : <Input role="combobox" aria-autocomplete="list" aria-label={label} aria-expanded={visible} aria-controls={visible ? id : undefined}
-        aria-activedescendant={visible && active ? optionId(active) : undefined} autoComplete="off" placeholder={placeholder} disabled={disabled}
+      : <div className={cx('search-list-input', inputIcon != null && 'search-list-input-icon')}>
+        {inputIcon != null && <span className="search-list-leading" aria-hidden="true">{inputIcon}</span>}
+        <Input role="combobox" aria-autocomplete="list" aria-label={label} aria-expanded={visible} aria-controls={visible ? id : undefined}
+        aria-activedescendant={activeId} autoComplete="off" placeholder={placeholder} disabled={disabled}
         value={popup && !open ? selectedLabel : query} onFocus={() => setOpen(true)} onClick={() => setOpen(true)}
-        onChange={(event) => { setQuery(event.target.value); setCursor(-1); setOpen(true); }} onKeyDown={handleKey} />}
-    {visible && <div className={cx('search-results', popup && 'search-results-floating')}>
+        onChange={(event) => { setQuery(event.target.value); setCursor(-1); setOpen(true); }} onKeyDown={handleKey} />
+      </div>}
+    {visible && <div ref={results} className={cx('search-results', 'ut-scrollbar', popup && 'search-results-floating')}>
       {matches.length === 0 && <p role="status" className="search-empty">{emptyText}</p>}
       <div role="listbox" id={id} aria-label={label} aria-multiselectable={multiple || undefined}>
-        {matches.map((item) => <button type="button" tabIndex={-1} key={item.value} id={optionId(item)} role="option" aria-disabled={item.disabled || undefined}
-          aria-selected={selected.includes(item.value)} className="menu-item search-option" data-highlighted={active === item || undefined}
-          onMouseDown={(event) => event.preventDefault()} onClick={() => { if (!item.disabled && !disabled) pick(item.value); }}>
-          {item.label}{selected.includes(item.value) && <span aria-hidden="true">✓</span>}
-        </button>)}
+        {[...groups].map(([group, items]) => group ? <div key={group} role="group" aria-label={group}>
+          <div aria-hidden="true" className="search-group-label">{group}</div>{items.map(renderOption)}
+        </div> : items.map(renderOption))}
       </div>
     </div>}
   </div>;

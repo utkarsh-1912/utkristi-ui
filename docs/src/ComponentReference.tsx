@@ -5,7 +5,7 @@ import { CopyCode } from './CopyCode';
 
 export default function ComponentReference({ slug, html }: { slug: string; html: string }) {
   const sample = sampleSources[slug];
-  const reactExample = sample.code;
+  const reactExample = sample?.code;
   const tailwindExample = html.replace(/class="([^"]+)"/, 'class="$1 p-0"');
   return <>
     <div className="example-source">
@@ -14,10 +14,12 @@ export default function ComponentReference({ slug, html }: { slug: string; html:
       <Tabs label="Usage examples" items={[
         { id: 'tailwind', label: 'Tailwind', content: <><p className="muted">Use utilities such as <Code inline>p-0</Code> to override component padding. Interactive examples use the React component or your own event handlers.</p><CopyCode text={tailwindExample} /></> },
         { id: 'css', label: 'Plain CSS', content: <><p className="muted">Import <Code inline>@utkristi/ui/utkristi-ui.css</Code> before using these classes. Use native controls or add behavior where needed.</p><CopyCode text={html} /></> },
-        { id: 'react', label: 'React', content: <><p className="muted">Install the kit and import its stylesheet once in your app. This example includes its data and theme providers.</p><CopyCode text={reactExample} /></> },
+        { id: 'react', label: 'React', content: reactExample
+          ? <><p className="muted">Install the kit and import its stylesheet once in your app. This example includes its data and theme providers.</p><CopyCode text={reactExample} /></>
+          : <p className="muted">The React example is temporarily unavailable. The HTML example is available in the Plain CSS tab.</p> },
       ]} />
     </div>
-    <ComponentApi components={sample.components} />
+    {sample && <ComponentApi components={sample.components} />}
   </>;
 }
 

@@ -13,6 +13,8 @@ const url = 'http://127.0.0.1:4173';
 const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
 const themes = [['dark', 'night'], ['light', 'paper'], ['glass', 'glass']];
 const viewport = { width: 1440, height: 1800 };
+const mobileViewport = { width: 390, height: 900 };
+const captureOnly = process.argv.includes('--capture-only');
 
 async function run(args) {
   const child = spawn(process.execPath, [vite, ...args], { cwd: root, stdio: 'inherit', windowsHide: true });
@@ -99,15 +101,56 @@ async function captureEdge() {
         throw error;
       }
     };
+    const fontsReady = () => evaluate('Promise.race([document.fonts.ready.then(() => true), new Promise(resolve => setTimeout(resolve, 4000))])');
+    const screenshot = async (file, fullPage = false) => {
+      const clip = fullPage ? { x: 0, y: 0, width: viewport.width, height: Math.ceil((await send('Page.getLayoutMetrics')).cssContentSize.height), scale: 1 } : undefined;
+      const { data } = await send('Page.captureScreenshot', { format: 'png', fromSurface: true, captureBeyondViewport: fullPage, clip });
+      await writeFile(join(screenshots, `${file}.png`), Buffer.from(data, 'base64'));
+    };
+    await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
     await size(viewport.width, viewport.height);
     for (const [theme, file] of themes) {
       await load(`/showcase?theme=${theme}`, 'Build together.');
       await retry(() => evaluate(`document.documentElement.dataset.theme === '${theme}'`), theme);
       await retry(() => evaluate('getComputedStyle(document.querySelector(".header-dock .navbar-links")).display === "flex"'), 'desktop dock links');
-      await evaluate('Promise.race([document.fonts.ready.then(() => true), new Promise(resolve => setTimeout(resolve, 4000))])');
-      const { data } = await send('Page.captureScreenshot', { format: 'png', fromSurface: true, captureBeyondViewport: false });
-      await writeFile(join(screenshots, `${file}.png`), Buffer.from(data, 'base64'));
+      await fontsReady();
+      await screenshot(file, true);
     }
+    await size(mobileViewport.width, mobileViewport.height);
+    await load('/components/command?theme=glass', 'Command');
+    await retry(() => evaluate('document.documentElement.dataset.theme === "glass" && !!document.querySelector(".command [role=listbox]")'), 'mobile Command example');
+    await fontsReady();
+    await screenshot('mobile-docs');
+    await evaluate('document.querySelector(".docs-navbar .burger").click()');
+    await retry(() => evaluate('!!document.querySelector(".sheet-dock [aria-current=page]")'), 'mobile navigation screenshot');
+    await screenshot('mobile-menu');
+    await evaluate(`document.querySelector('.sheet-dock [aria-label="Close menu"]').click()`);
+    process.stdout.write('Captured full showcases in Night, Paper, and Glass and both mobile views.\n');
+    if (captureOnly) return;
+    await send('Emulation.setEmulatedMedia', { features: [] });
+
+    await size(1280, 860);
+    await load('/showcase?theme=glass', 'Build together.');
+    await retry(() => evaluate('document.querySelector(".docs-navbar select").value === "glass"'), 'theme dropdown reflects preview');
+    await evaluate(`(() => {
+      const select = document.querySelector('.docs-navbar select');
+      select.value = 'light';
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    })()`);
+    await retry(() => evaluate('document.documentElement.dataset.theme === "light" && localStorage.getItem("utkristi-theme") === "light" && !location.hash.includes("theme=") && document.querySelector(".docs-footer select").value === "light"'), 'theme dropdown persists and stays in sync');
+    await evaluate(`(() => {
+      document.querySelector('.docs-navbar .navbar-search').focus();
+      document.activeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true, cancelable: true }));
+    })()`);
+    await retry(() => evaluate('document.activeElement?.getAttribute("aria-label") === "Find a component or guide"'), 'search keyboard shortcut');
+    await evaluate(`(() => {
+      const field = document.activeElement;
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(field, 'grid rows');
+      field.dispatchEvent(new Event('input', { bubbles: true }));
+    })()`);
+    await retry(() => evaluate('document.querySelector(".docs-search-dialog [aria-selected=true]")?.getAttribute("aria-label") === "Data Table"'), 'search matches multiple keywords');
+    await evaluate('document.activeElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true }))');
+    await retry(() => evaluate('document.querySelector("h1")?.textContent === "Data Table" && !document.querySelector(".docs-search-dialog")'), 'search Enter opens the result');
 
     await size(375, 812);
     await load('/showcase?theme=glass', 'Build together.');
@@ -117,10 +160,19 @@ async function captureEdge() {
     await evaluate('document.activeElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }))');
     await retry(() => evaluate('document.activeElement === document.querySelector(".header-dock .burger") && !document.querySelector(".sheet-dock")'), 'restored dock focus');
     await evaluate('document.querySelector(".header-dock .burger").click()');
+    await retry(() => evaluate('!!document.querySelector(".sheet-dock-backdrop")'), 'mobile menu backdrop');
+    await size(1024, 812);
+    await retry(() => evaluate('!document.querySelector(".sheet-dock") && getComputedStyle(document.querySelector(".docs-navbar .navbar-links")).display === "flex"'), 'menu closes when the desktop links fit');
+    await size(375, 812);
+    await evaluate('document.querySelector(".header-dock .burger").click()');
+    await retry(() => evaluate('!!document.querySelector(".sheet-dock-backdrop")'), 'mobile menu after resizing');
+    await evaluate('document.querySelector(".sheet-dock-backdrop").dispatchEvent(new MouseEvent("mousedown", { bubbles: true }))');
+    await retry(() => evaluate('!document.querySelector(".sheet-dock")'), 'backdrop dismisses the mobile menu');
+    await evaluate('document.querySelector(".header-dock .burger").click()');
     await retry(() => evaluate('!!document.querySelector(".sheet-dock .sheet-search")'), 'dock search button');
     await evaluate('document.querySelector(".sheet-dock .sheet-search").click()');
     await retry(() => evaluate('document.activeElement?.getAttribute("aria-label") === "Find a component or guide"'), 'focused docs search');
-    await evaluate('Array.from(document.querySelectorAll(".modal [role=option]")).find(item => item.textContent.trim() === "Carousel").click()');
+    await evaluate(`document.querySelector('.docs-search-dialog [role=option][aria-label="Carousel"]').click()`);
     await retry(() => evaluate('document.querySelector("h1")?.textContent.trim() === "Carousel" && !document.querySelector(".sheet-dock, .modal")'), 'docs search navigation');
     await load('/getting-started', 'Getting started');
     const links = await evaluate(`Array.from(document.querySelectorAll('.doc-sidebar a'), link => [link.hash.slice(1), link.textContent])`);
@@ -130,11 +182,53 @@ async function captureEdge() {
       for (const [path, title] of routes) {
         await load(path + '?theme=' + theme, title);
         await retry(() => evaluate('document.documentElement.dataset.theme === ' + JSON.stringify(theme)), theme);
+        if (path.startsWith('/components/')) await retry(() => evaluate('!!document.querySelector(".component-api")'), path + ' generated example');
         const width = await evaluate('document.documentElement.scrollWidth');
         if (width > 375) overflow.push(path + ' (' + theme + ', ' + width + 'px)');
       }
     }
     if (overflow.length) throw new Error(`Horizontal overflow at 375px: ${overflow.join(', ')}`);
+    const responsiveRoutes = [
+      ['/overview', 'Utkristi UI'], ['/icons', 'Icons'], ['/tokens', 'Tokens'], ['/showcase', 'Build together.'],
+      ['/components/command', 'Command'], ['/components/data-table', 'Data Table'], ['/components/file-input', 'File Input'],
+      ['/sandbox?component=command', 'Sandbox'],
+    ];
+    for (const width of [320, 390, 768, 981, 1024, 1440]) {
+      await size(width, width >= 1024 ? 900 : 740);
+      for (const [theme] of themes) {
+        for (const [path, title] of responsiveRoutes) {
+          await load(path + (path.includes('?') ? '&' : '?') + 'theme=' + theme, title);
+          const actual = await evaluate('document.documentElement.scrollWidth');
+          if (actual > width) overflow.push(`${path} (${theme}, ${actual}px at ${width}px)`);
+          const fits = await evaluate(`(() => {
+            const bar = document.querySelector('.docs-navbar');
+            const links = bar.querySelector('.navbar-links');
+            const burger = bar.querySelector('.burger');
+            const desktop = getComputedStyle(links).display !== 'none';
+            if (!desktop) return ${width} <= 980 && getComputedStyle(burger).display !== 'none';
+            const rows = new Set(Array.from(links.querySelectorAll('a'), link => Math.round(link.getBoundingClientRect().top)));
+            return ${width} > 980 && getComputedStyle(burger).display === 'none' && rows.size === 1 && links.scrollWidth <= links.clientWidth;
+          })()`);
+          if (!fits) overflow.push(`${path} (${theme}, navigation does not fit at ${width}px)`);
+        }
+      }
+    }
+    if (overflow.length) throw new Error(`Horizontal overflow: ${overflow.join(', ')}`);
+    await size(375, 812);
+    await load('/getting-started?theme=glass', 'Getting started');
+    await evaluate('document.querySelector(".doc-index-toggle").click()');
+    await retry(() => evaluate('document.querySelector(".doc-index-toggle").getAttribute("aria-expanded") === "true"'), 'open mobile docs index');
+    await evaluate(`document.querySelector('.doc-index a[href="#/components/command"]').click()`);
+    await retry(() => evaluate('document.querySelector("h1")?.textContent === "Command" && document.querySelector(".doc-index-toggle").getAttribute("aria-expanded") === "false"'), 'mobile index navigation');
+    await load('/icons?theme=glass', 'Icons');
+    await evaluate('Array.from(document.querySelectorAll(\'[aria-label="Icon style"] button\')).find(button => button.textContent.trim() === "3D").click()');
+    await retry(() => evaluate(`['dark', 'light', 'glass'].every((theme, index) => {
+      const icon = document.querySelector('.theme-preview[data-theme="' + theme + '"] .icon-3d img');
+      return icon?.getAttribute('src').includes('/' + ['night', 'paper', 'glass'][index] + '/');
+    })`), 'independent Night, Paper and Glass icon renders');
+    await send('Emulation.setEmulatedMedia', { features: [{ name: 'forced-colors', value: 'active' }] });
+    await retry(() => evaluate('getComputedStyle(document.querySelector(".icon-3d-fallback")).display !== "none"'), 'forced-colour icon fallback');
+    await send('Emulation.setEmulatedMedia', { features: [] });
     for (const [theme] of themes) {
       await load('/components/carousel?theme=' + theme, 'Carousel');
       const selector = '.theme-preview[data-theme="' + theme + '"] .carousel';
@@ -147,10 +241,23 @@ async function captureEdge() {
         return Math.abs(viewport.scrollLeft - viewport.clientWidth) < 2 &&
           carousel.querySelector("[role=status]").textContent.includes("Slide 2 of");
       })()`), theme + ' carousel movement');
+      await load('/components/data-table?theme=' + theme, 'Data Table');
+      const tablePreview = JSON.stringify('.theme-preview[data-theme="' + theme + '"]');
+      await evaluate(`document.querySelector(${tablePreview}).querySelector('[aria-label="Select Design"]').click()`);
+      await retry(() => evaluate(`(() => {
+        const preview = document.querySelector(${tablePreview});
+        return preview.querySelector('.data-table-controls input[type=checkbox]').indeterminate &&
+          preview.querySelector('[role=status]').textContent === '1 selected';
+      })()`), theme + ' table selection');
+      await evaluate(`document.querySelector(${tablePreview}).querySelector('[aria-label="Next page"]').click()`);
+      await evaluate(`document.querySelector(${tablePreview}).querySelector('.data-table-controls input[type=checkbox]').click()`);
+      await retry(() => evaluate(`document.querySelector(${tablePreview}).querySelector('[role=status]').textContent === '2 selected'`), theme + ' table page selection');
     }
     await load('/sandbox?component=carousel&theme=glass', 'Sandbox');
     const ready = () => evaluate('document.querySelector(".playground [role=status]")?.textContent === "React preview ready"');
     await retry(ready, 'initial React sandbox');
+    await evaluate('Array.from(document.querySelectorAll(".playground-devices button")).find(button => button.textContent.trim() === "Phone").click()');
+    await retry(() => evaluate('document.querySelector(".playground-stage").dataset.viewport === "phone"'), 'sandbox phone preview');
     async function setSource(source) {
       await evaluate(`(() => {
         const editor = document.querySelector("#sandbox-source");
@@ -214,6 +321,7 @@ async function captureEdge() {
     if (exceptions.length) throw new Error('Unhandled browser errors: ' + exceptions.join('\n'));
     process.stdout.write('Verified React and HTML sandbox previews.\n');
     process.stdout.write(`Checked ${routes.length} docs routes in Night, Paper, and Glass at 375px.\n`);
+    process.stdout.write(`Checked ${responsiveRoutes.length} key routes at 320, 390, 768, 981, 1024, and 1440px in all themes.\n`);
   } finally {
     client?.close();
     browser.kill();
@@ -229,13 +337,21 @@ async function capturePlaywright() {
   const { chromium } = await import('playwright');
   const browser = await chromium.launch();
   try {
-    const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+    const page = await browser.newPage({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce' });
     for (const [theme, file] of themes) {
       await page.goto(`${url}/#/showcase?theme=${theme}`);
       await page.locator(`html[data-theme="${theme}"] .showcase`).waitFor();
       await page.evaluate(() => document.fonts.ready);
-      await page.screenshot({ path: join(screenshots, `${file}.png`) });
+      await page.screenshot({ path: join(screenshots, `${file}.png`), fullPage: true });
     }
+    await page.setViewportSize(mobileViewport);
+    await page.goto(`${url}/#/components/command?theme=glass`);
+    await page.locator('html[data-theme="glass"] .command [role="listbox"]').first().waitFor();
+    await page.evaluate(() => document.fonts.ready);
+    await page.screenshot({ path: join(screenshots, 'mobile-docs.png') });
+    await page.locator('.docs-navbar .burger').click();
+    await page.locator('.sheet-dock [aria-current="page"]').waitFor();
+    await page.screenshot({ path: join(screenshots, 'mobile-menu.png') });
   } finally {
     await browser.close();
   }

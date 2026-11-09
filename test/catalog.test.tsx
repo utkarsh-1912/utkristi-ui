@@ -3,9 +3,26 @@ import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { expect, test, vi } from 'vitest';
 import {
-  Accordion, AlertDialog, Calendar, Carousel, Combobox, ContextMenu, DataTable, DatePicker,
+  Accordion, AlertDialog, Calendar, Carousel, Combobox, Command, ContextMenu, DataTable, DatePicker,
   InputOTP, Loader, Progress, Questionnaire, Resizable, SelectMenu, ToastProvider, useToast,
 } from '../src/react/index.js';
+
+test('command runs the first enabled search match with Enter and preserves grouped keyboard order', async () => {
+  const user = userEvent.setup();
+  const open = vi.fn();
+  const create = vi.fn();
+  render(<Command label="Workspace actions" options={[
+    { value: 'disabled', label: 'Open unavailable', group: 'Workspace', disabled: true, onSelect: vi.fn() },
+    { value: 'open', label: 'Open workspace', group: 'Workspace', onSelect: open },
+    { value: 'create', label: 'Create workspace', group: 'Actions', onSelect: create },
+  ]} />);
+  const field = screen.getByRole('combobox', { name: 'Workspace actions' });
+  await user.type(field, 'open{Enter}');
+  expect(open).toHaveBeenCalledOnce();
+  expect(field).toHaveFocus();
+  await user.keyboard('{ArrowDown}{Enter}');
+  expect(create).toHaveBeenCalledOnce();
+});
 
 test('carousel moves with arrows and keyboard and respects boundaries', async () => {
   const user = userEvent.setup();
@@ -132,6 +149,56 @@ test('data table sorts and filters while resetting its page and resizable suppor
   expect(separator).toHaveAttribute('aria-valuenow', '85');
 });
 
+test('row selection survives sorting and filtering while select all changes only eligible rows on the current page', async () => {
+  const user = userEvent.setup();
+  const change = vi.fn();
+  const rowClick = vi.fn();
+  render(<DataTable rows={[{ name: 'Gamma' }, { name: 'Alpha' }, { name: 'Beta' }, { name: 'Delta' }]}
+    columns={[{ key: 'name', header: 'Team', sortValue: (row) => row.name }]}
+    getRowKey={(row, index) => `${row.name}-${index}`} pageSize={2} onRowClick={rowClick}
+    selection={{ onSelectionChange: change, isRowSelectable: (row) => row.name !== 'Beta',
+      getRowCheckboxLabel: (row) => `Select ${row.name}` }} />);
+  const all = screen.getByRole('checkbox', { name: 'Select all on this page' });
+  const gamma = screen.getByRole('checkbox', { name: 'Select Gamma' });
+  gamma.focus();
+  await user.keyboard(' ');
+  expect(all).toBePartiallyChecked();
+  expect(rowClick).not.toHaveBeenCalled();
+  await user.click(screen.getByRole('button', { name: 'Team' }));
+  expect(all).not.toBeChecked();
+  expect(screen.getByRole('checkbox', { name: 'Select Beta' })).toBeDisabled();
+  await user.click(all);
+  expect(all).toBeChecked();
+  expect(change).toHaveBeenLastCalledWith(['Gamma-0', 'Alpha-1']);
+  await user.click(screen.getByRole('button', { name: 'Next page' }));
+  expect(all).toBePartiallyChecked();
+  await user.click(all);
+  expect(change).toHaveBeenLastCalledWith(['Gamma-0', 'Alpha-1', 'Delta-3']);
+  await user.click(all);
+  expect(change).toHaveBeenLastCalledWith(['Alpha-1']);
+  await user.type(screen.getByRole('searchbox'), 'Alpha');
+  expect(screen.getByRole('checkbox', { name: 'Select Alpha' })).toBeChecked();
+  await user.type(screen.getByRole('searchbox'), 'x');
+  expect(all).toBeDisabled();
+});
+
+test('controlled selection reflects the keys supplied by the app', async () => {
+  const user = userEvent.setup();
+  const change = vi.fn();
+  const rows = [{ id: 1 }, { id: 2 }];
+  const view = (keys: readonly number[]) => <DataTable rows={rows} columns={[{ key: 'id', header: 'ID' }]}
+    getRowKey={(row) => row.id} selection={{ selectedKeys: keys, onSelectionChange: change }} />;
+  const { rerender } = render(view([1]));
+  const all = screen.getByRole('checkbox', { name: 'Select all on this page' });
+  await user.click(all);
+  expect(change).toHaveBeenLastCalledWith([1, 2]);
+  expect(all).toBePartiallyChecked();
+  rerender(view([1, 2]));
+  expect(all).toBeChecked();
+  rerender(view([]));
+  expect(all).not.toBeChecked();
+});
+
 test('questionnaire validates required answers and retains them across steps', async () => {
   const user = userEvent.setup();
   const submit = vi.fn();
@@ -155,7 +222,7 @@ test('paging a sorted table with 5,000 rows does not recalculate sort keys or mo
   const sortValue = vi.fn((row: typeof rows[number]) => row.id);
   render(<DataTable rows={rows} columns={[{ key: 'name', header: 'Name', sortValue }]} getRowKey={(row) => row.id} pageSize={20} />);
   await user.click(screen.getByRole('button', { name: 'Name' }));
-  expect(sortValue).toHaveBeenCalled();
+  expect(sortValue).toHaveBeenCalledTimes(5_000);
   sortValue.mockClear();
   await user.click(screen.getByRole('button', { name: 'Next page' }));
   expect(sortValue).not.toHaveBeenCalled();

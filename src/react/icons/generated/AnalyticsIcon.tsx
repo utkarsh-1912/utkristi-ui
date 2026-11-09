@@ -1,0 +1,67 @@
+import { useId, type SVGProps } from 'react';
+
+export const AnalyticsIconData = {
+  name: "analytics",
+  plate: "M4 5h16v14H4V5Z",
+  line: "M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm4 12v-4m4 4V8m4 8v-6",
+  filled: "M4 3h16a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Zm3 9v4a1 1 0 1 0 2 0v-4a1 1 0 1 0-2 0Zm4-4v8a1 1 0 1 0 2 0V8a1 1 0 1 0-2 0Zm4 2v6a1 1 0 1 0 2 0v-6a1 1 0 1 0-2 0Z",
+  detail: "M7 12h2v4H7v-4Zm4-4h2v8h-2V8Zm4 2h2v6h-2v-6Z",
+  has3d: true,
+} as const;
+
+export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {
+  variant?: 'line' | 'filled' | 'duotone' | '2.5d';
+  size?: number;
+}
+
+export function AnalyticsIcon({ variant = 'line', size = 16, strokeWidth, ...props }: GeneratedIconProps) {
+  const uid = useId().replace(/:/g, '');
+  const sw = strokeWidth ?? (size <= 16 ? 1.75 : size <= 20 ? 1.875 : 2);
+  if (variant === 'filled') {
+    return (
+      <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" {...props}>
+        <path fillRule="evenodd" clipRule="evenodd" d={AnalyticsIconData.filled} />
+      </svg>
+    );
+  }
+  if (variant === 'duotone') {
+    return (
+      <svg viewBox="0 0 24 24" width={size} height={size} fill="none" {...props}>
+        <path className="icon-plate" fill="var(--ut-icon-tint)" d={AnalyticsIconData.plate} />
+        <path className="icon-stroke" stroke="var(--ut-icon-stroke, currentColor)" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" d={AnalyticsIconData.line} />
+      </svg>
+    );
+  }
+  if (variant === '2.5d') {
+    const faceId = `ut-face-${uid}`;
+    const shadowId = `ut-shadow-${uid}`;
+    return (
+      <svg viewBox="0 0 24 24" width={size} height={size} fill="none" {...props}>
+        <defs>
+          <linearGradient id={faceId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="var(--ut-icon-hi)" />
+            <stop offset="55%" stopColor="var(--ut-icon-base)" />
+            <stop offset="100%" stopColor="var(--ut-icon-shade)" />
+          </linearGradient>
+          <filter id={shadowId} x="-25%" y="-20%" width="150%" height="160%">
+            <feDropShadow dx="0" dy="2" stdDeviation="1.4" floodColor="var(--ut-icon-shadow, rgba(0,0,0,.35))" />
+          </filter>
+        </defs>
+        <path fill="var(--ut-icon-shadow, rgba(0,0,0,.35))" transform="translate(0 2)" filter={`url(#${shadowId})`} fillRule="evenodd" clipRule="evenodd" d={AnalyticsIconData.filled} />
+        <g className="icon-2d5-ext" fill="var(--ut-icon-shade)">
+          <path transform="translate(2.25 2.25)" fillRule="evenodd" clipRule="evenodd" d={AnalyticsIconData.filled} />
+          <path transform="translate(1.5 1.5)" fillRule="evenodd" clipRule="evenodd" d={AnalyticsIconData.filled} />
+          <path transform="translate(0.75 0.75)" fillRule="evenodd" clipRule="evenodd" d={AnalyticsIconData.filled} />
+          <path className="icon-2d5-ext-extra" transform="translate(3 3)" fillRule="evenodd" clipRule="evenodd" d={AnalyticsIconData.filled} />
+        </g>
+        <path fill={`url(#${faceId})`} stroke="var(--ut-icon-hi)" strokeOpacity={0.7} strokeWidth={0.85} fillRule="evenodd" clipRule="evenodd" d={AnalyticsIconData.filled} />
+        {AnalyticsIconData.detail && <path fill="var(--ut-icon-on)" stroke="var(--ut-icon-on)" strokeWidth={0.5} strokeLinecap="round" strokeLinejoin="round" d={AnalyticsIconData.detail} />}
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d={AnalyticsIconData.line} />
+    </svg>
+  );
+}

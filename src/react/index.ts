@@ -39,7 +39,9 @@ export * from './DataDisplay.js';
 export * from './Resizable.js';
 export * from './Conversation.js';
 export * from './Questionnaire.js';
+export * from './icons.js';
 
 export { EmptyState as Empty } from './EmptyState.js';
 export { Menu as DropdownMenu } from './Menu.js';
 
+export * from './Patterns.js';

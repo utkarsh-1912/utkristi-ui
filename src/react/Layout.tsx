@@ -36,7 +36,7 @@ export const ScrollArea = forwardRef<HTMLDivElement, DivProps & {
 }>(function ScrollArea({ orientation = 'vertical', className, ...props }, ref) {
   // A keyboard tab stop is needed for scroll regions without interactive descendants.
   // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-  return <div role="region" aria-label="Scrollable content" tabIndex={0} {...props} ref={ref} className={cx('scroll-area', className)} data-orientation={orientation} />;
+  return <div role="region" aria-label="Scrollable content" tabIndex={0} {...props} ref={ref} className={cx('scroll-area', 'ut-scrollbar', className)} data-orientation={orientation} />;
 });
 
 export const Label = forwardRef<HTMLLabelElement, LabelHTMLAttributes<HTMLLabelElement>>(function Label({ className, htmlFor, children, ...props }, ref) {

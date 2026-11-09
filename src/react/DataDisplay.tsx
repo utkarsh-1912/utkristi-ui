@@ -1,10 +1,12 @@
 import { forwardRef, useMemo, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Button } from './Button.js';
+import { Checkbox } from './Choice.js';
 import { Code } from './Code.js';
 import { SearchInput } from './Field.js';
 import { Pagination } from './Layout.js';
 import { Table, type TableColumn, type TableProps } from './Table.js';
 import { cx, type CSSVariables } from './utils/cx.js';
+import { useControllable } from './utils/useControllable.js';
 
 export interface CodeBlockProps extends HTMLAttributes<HTMLDivElement> {
   code: string; language?: string; lineNumbers?: boolean; copy?: boolean;
@@ -72,46 +74,107 @@ export interface DataColumn<Row> extends TableColumn<Row> {
   sortValue?: (row: Row) => string | number;
   filterValue?: (row: Row) => string;
 }
-export interface DataTableProps<Row> extends Omit<TableProps<Row>, 'columns'> {
-  columns: DataColumn<Row>[]; pageSize?: number; searchLabel?: string;
+
+export type DataTableRowKey = ReturnType<TableProps<unknown>['getRowKey']>;
+
+export interface DataTableSelection<Row> {
+  /** Pass stable row keys here to control selection from your app. */
+  selectedKeys?: readonly DataTableRowKey[];
+  defaultSelectedKeys?: readonly DataTableRowKey[];
+  onSelectionChange?: (keys: readonly DataTableRowKey[]) => void;
+  isRowSelectable?: (row: Row) => boolean;
+  getRowCheckboxLabel?: (row: Row, key: DataTableRowKey) => string;
+  /** Label for the checkbox that changes selection on the current page. */
+  selectPageLabel?: string;
 }
 
-export function DataTable<Row>({ columns, rows, pageSize = 10, searchLabel = 'Filter rows', className, ...props }: DataTableProps<Row>) {
+export interface DataTableProps<Row> extends Omit<TableProps<Row>, 'columns'> {
+  columns: DataColumn<Row>[]; pageSize?: number; searchLabel?: string;
+  /** Enables row and current-page selection. Use stable, unique keys from the data. */
+  selection?: DataTableSelection<Row>;
+}
+
+const noSelection: readonly DataTableRowKey[] = [];
+
+export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize = 10,
+  searchLabel = 'Filter rows', selection, className, ...props }: DataTableProps<Row>) {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState<{ key: string; descending: boolean }>();
+  const [selectedKeys, setSelectedKeys] = useControllable(selection?.selectedKeys,
+    selection?.defaultSelectedKeys ?? noSelection, selection?.onSelectionChange);
+  const selected = useMemo(() => new Set(selectedKeys), [selectedKeys]);
   const visible = useMemo(() => {
     const column = columns.find(({ key }) => key === sort?.key);
     const filter = query.trim().toLocaleLowerCase();
-    const matching = rows.filter((row) => !filter || columns.some((entry) => {
-      const value = entry.filterValue?.(row) ?? entry.sortValue?.(row) ?? row[entry.key as keyof Row];
-      return String(value ?? '').toLocaleLowerCase().includes(filter);
-    }));
     const accessor = column?.sortValue;
-    if (accessor) matching.sort((a, b) => {
-      const left = accessor(a);
-      const right = accessor(b);
-      const order = typeof left === 'number' && typeof right === 'number' ? left - right
-        : String(left).localeCompare(String(right), undefined, { numeric: true });
-      return sort?.descending ? -order : order;
+    const matching: { row: Row; index: number; sortKey?: string | number }[] = [];
+    rows.forEach((row, index) => {
+      if (!filter || columns.some((entry) => {
+        const value = entry.filterValue?.(row) ?? entry.sortValue?.(row) ?? row[entry.key as keyof Row];
+        return String(value ?? '').toLocaleLowerCase().includes(filter);
+      })) matching.push({ row, index, sortKey: accessor?.(row) });
     });
+    if (accessor) {
+      const collator = new Intl.Collator(undefined, { numeric: true });
+      matching.sort(({ sortKey: left }, { sortKey: right }) => {
+        const order = typeof left === 'number' && typeof right === 'number' ? left - right
+          : collator.compare(String(left), String(right));
+        return sort?.descending ? -order : order;
+      });
+    }
     return matching;
   }, [columns, query, rows, sort]);
   const limit = Math.max(1, Number.isFinite(pageSize) ? Math.floor(pageSize) : 10);
   const count = Math.max(1, Math.ceil(visible.length / limit));
   const current = Math.min(page, count);
-  const prepared = columns.map((entry): TableColumn<Row> => {
-    if (!entry.sortValue) return entry;
-    const state = sort?.key === entry.key ? sort.descending ? 'descending' : 'ascending' : 'none';
-    return { ...entry, sort: state, header: <button type="button" className="data-sort"
+  const pageRows = visible.slice((current - 1) * limit, current * limit).map(({ row, index }) => ({
+    row, key: getRowKey(row, index), selectable: selection ? selection.isRowSelectable?.(row) ?? true : false,
+  }));
+  const prepared = columns.map((entry): TableColumn<typeof pageRows[number]> => {
+    const cell = { ...entry, render: ({ row }: typeof pageRows[number]) => entry.render
+      ? entry.render(row) : String(row[entry.key as keyof Row] ?? '') };
+    if (!entry.sortValue) return cell;
+    const state = sort?.key === entry.key ? sort.descending ? 'descending' : 'ascending' : undefined;
+    return { ...cell, label: entry.label ?? (typeof entry.header === 'string' ? entry.header : undefined), sort: state,
+      header: <button type="button" className="data-sort"
       onClick={() => { setSort({ key: entry.key, descending: state === 'ascending' }); setPage(1); }}>
       {entry.header}<span aria-hidden="true">{state === 'ascending' ? '↑' : state === 'descending' ? '↓' : '↕'}</span>
     </button> };
   });
+  let pageCheckbox: ReactNode;
+  if (selection) {
+    const keys = pageRows.filter(({ selectable }) => selectable).map(({ key }) => key);
+    const selectedCount = keys.filter((key) => selected.has(key)).length;
+    const all = keys.length > 0 && selectedCount === keys.length;
+    const partial = selectedCount > 0 && !all;
+    const toggle = (target: readonly DataTableRowKey[], checked: boolean) => {
+      const next = new Set(selected);
+      target.forEach((key) => { if (checked) next.add(key); else next.delete(key); });
+      setSelectedKeys([...next]);
+    };
+    let key = '__selection';
+    while (columns.some((column) => column.key === key)) key += '_';
+    pageCheckbox = <Checkbox label={selection.selectPageLabel ?? 'Select all on this page'}
+      disabled={!keys.length} checked={all} indeterminate={partial} onChange={(event) => {
+        // Native activation clears the mixed state even if a controlled update is declined.
+        event.currentTarget.indeterminate = partial;
+        toggle(keys, event.currentTarget.checked);
+      }} />;
+    prepared.unshift({ key, label: '', align: 'center',
+      header: <span className="ut-sr-only">Selection</span>,
+      render: ({ row, key: rowKey, selectable }) => <Checkbox
+        aria-label={selection.getRowCheckboxLabel?.(row, rowKey) ?? `Select row ${rowKey}`}
+        checked={selected.has(rowKey)} disabled={!selectable} onClick={(event) => event.stopPropagation()}
+        onChange={(event) => toggle([rowKey], event.currentTarget.checked)} />,
+    });
+  }
+  const search = <SearchInput aria-label={searchLabel} placeholder={searchLabel} value={query}
+    onChange={(event) => { setQuery(event.target.value); setPage(1); }} />;
   return <div className={cx('data-table', className)}>
-    <SearchInput aria-label={searchLabel} placeholder={searchLabel} value={query}
-      onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
-    <Table {...props} columns={prepared} rows={visible.slice((current - 1) * limit, current * limit)} />
+    {selection ? <div className="data-table-controls">{search}{pageCheckbox}</div> : search}
+    <Table {...props} columns={prepared} rows={pageRows} getRowKey={({ key }) => `${typeof key}:${key}`}
+      onRowClick={onRowClick && (({ row }) => onRowClick(row))} />
     {visible.length === 0 && <p role="status" className="muted">No matching rows.</p>}
     {count > 1 && <Pagination page={current} totalPages={count} onPageChange={setPage} />}
   </div>;

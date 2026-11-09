@@ -1,5 +1,6 @@
-import { forwardRef } from 'react';
+import { forwardRef, type SelectHTMLAttributes } from 'react';
 import { IconButton, type IconButtonProps } from './Button.js';
+import { Select } from './Field.js';
 import { Icon } from './icons.js';
 import { Segmented, type SegmentedProps } from './Segmented.js';
 import { useTheme, type Theme } from './theme/ThemeProvider.js';
@@ -20,3 +21,20 @@ export const ThemeSwitch = forwardRef<HTMLDivElement, Omit<SegmentedProps, 'item
     return <Segmented aria-label="Theme" {...props} ref={ref} items={items} value={theme} onChange={(value) => setTheme(value as Theme)} />;
   },
 );
+
+export type ThemeSelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, 'children' | 'multiple' | 'size' | 'value' | 'defaultValue'>;
+
+export const ThemeSelect = forwardRef<HTMLSelectElement, ThemeSelectProps>(function ThemeSelect(
+  { onChange, 'aria-label': label = 'Theme', ...props }, ref,
+) {
+  const { theme, setTheme } = useTheme();
+  return <Select {...props} ref={ref} aria-label={label} value={theme} onChange={(event) => {
+    onChange?.(event);
+    if (!event.defaultPrevented) setTheme(event.target.value as Theme);
+  }}>
+    <option value="dark">Night</option>
+    <option value="light">Paper</option>
+    <option value="glass">Glass</option>
+    <option value="system">System</option>
+  </Select>;
+});

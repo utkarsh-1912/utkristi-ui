@@ -1,14 +1,15 @@
-import { lazy, StrictMode, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
+import { lazy, StrictMode, Suspense, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, ArrowUpRight, Plus, Search } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Plus } from 'lucide-react';
 import {
-  Badge, Button, Card, CardBody, CardHeader, Code, Dot, Field, IconButton, Input, Logo, SearchInput,
-  Shell, Slider, Stat, Stats, Tabs, ThemeProvider, ThemeSwitch, ToastProvider, useTheme,
+  Badge, Button, Card, CardBody, CardHeader, Code, Dot, Field, Icon, IconPalettePicker, IconPaletteProvider, IconTile, Input, Logo, SearchInput,
+  Shell, Slider, Stat, Stats, Tabs, ThemeProvider, ThemeSelect, ToastProvider, useTheme, type Theme,
 } from '@utkristi/ui';
 import { componentPages, examples } from './examples';
 import { FontDemo } from './catalog';
 import { CopyCode } from './CopyCode';
 import { DocsSearch } from './DocsSearch';
+import { IconsPage, TokensPaletteSection } from './IconsPage';
 import tokenCSS from '../../src/styles/tokens.css?raw';
 import './styles.css';
 
@@ -18,14 +19,20 @@ const ComponentReference = lazy(() => import('./ComponentReference'));
 const primary = [
   { href: '#/overview', label: 'Overview' },
   { href: '#/getting-started', label: 'Install' },
+  { href: '#/icons', label: 'Icons' },
   { href: '#/components/button', label: 'Components' },
   { href: '#/showcase', label: 'Showcase' },
   { href: '#/sandbox', label: 'Sandbox' },
 ];
+const primaryIcons = {
+  Overview: 'home', Install: 'download', Icons: 'palette', Components: 'layers', Showcase: 'ai-spark', Sandbox: 'terminal',
+} as const;
+const isMac = typeof navigator !== 'undefined' && /Mac|iP(hone|ad|od)/.test(navigator.platform);
 const guide = [
   { href: '#/getting-started', label: 'Getting started' },
   { href: '#/theming', label: 'Theming' },
   { href: '#/tokens', label: 'Tokens' },
+  { href: '#/icons', label: 'Icons' },
   { href: '#/typography', label: 'Typography' },
   { href: '#/sandbox', label: 'Sandbox' },
 ];
@@ -123,6 +130,7 @@ function Theming() {
       The <Code inline>.dark</Code>, <Code inline>.light</Code>, <Code inline>.light-theme</Code>, and <Code inline>.glass</Code> selectors are aliases.
       <Code inline>data-theme="system"</Code> follows the operating-system colour preference.</p>
     <CopyCode text={`<section data-theme="glass">\n  <button class="btn btn-solid">Glass button</button>\n</section>`} />
+    <p>Place <Code inline>{'<ThemeSelect />'}</Code> inside <Code inline>{'<ThemeProvider>'}</Code> to let people choose Night, Paper, Glass, or System and keep that preference across visits.</p>
     <h2>Avoid a theme flash</h2>
     <p>Render the result of <Code inline>themeScript()</Code> into an inline script in the document head.
       Pass the same storage key to the script and provider when you customize it.</p>
@@ -153,7 +161,9 @@ function ratio(foreground: string, background: string, canvas: string) {
   return (Math.max(...values) + .05) / (Math.min(...values) + .05);
 }
 function Tokens() {
-  const colors = Object.entries(palettes[0]).filter(([, value]) => /^(#|rgba\()/i.test(value)).map(([name]) => name);
+  const colors = Object.entries(palettes[0])
+    .filter(([name, value]) => /^(#|rgba\()/i.test(value) && !name.startsWith('hue-') && !name.startsWith('icon-'))
+    .map(([name]) => name);
   const pairs = [...['bg', 'bg-2', 'raise'].flatMap((bg) => ['ink', 'ink-2', 'ink-3'].map((fg) => [fg, bg])),
     ['on-solid', 'solid'], ['on-accent', 'accent'], ['on-bad', 'bad'], ['ok-ink', 'bg'], ['bad-ink', 'bg'], ['warn-ink', 'bg'], ['accent', 'bg'], ['mark', 'bg']];
   const rows = pairs.map(([fg, bg]) => ({
@@ -171,6 +181,7 @@ function Tokens() {
     <h2>Contrast</h2>
     <p>Ratios composite translucent colours over the theme canvas. The mark is checked as a UI colour.</p>
     <ContrastTable rows={rows} />
+    <TokensPaletteSection ratio={ratio} />
   </article>;
 }
 
@@ -224,23 +235,66 @@ function Showcase() {
       <Card><CardHeader><strong>Project setup</strong><Dot label="In progress" tone="warn" /></CardHeader><CardBody className="sample-stack">
         <examples.steps.preview /><examples.tabs.preview /><div className="sample-row"><SplitPreview /></div>
       </CardBody></Card>
+      <Card><CardHeader><strong>Custom 2D &amp; 3D icons</strong><Badge tone="accent">135 glyphs</Badge></CardHeader><CardBody className="sample-stack">
+        <div className="sample-row">
+          <Icon name="rocket" variant="3d" size={52} />
+          <Icon name="palette" variant="3d" size={52} />
+          <Icon name="ai-spark" variant="3d" size={52} />
+          <Icon name="shield" variant="3d" size={52} />
+          <IconTile name="room" hue="violet" size="md" />
+          <IconTile name="terminal" hue="teal" size="md" />
+        </div>
+        <IconPalettePicker showPreview={false} />
+      </CardBody></Card>
     </div>
   </article>;
 }
 
 function Sidebar({ path }: { path: string }) {
   const [query, setQuery] = useState('');
-  const matches = componentPages.filter(([, item]) => item.name.toLowerCase().includes(query.trim().toLowerCase()));
-  return <aside className="doc-sidebar">
-    <SearchInput aria-label="Filter components" placeholder="Filter components" value={query} onChange={(event) => setQuery(event.target.value)} />
-    <nav aria-label="Documentation">
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  const current = componentPages.find(([slug]) => path === `/components/${slug}`)?.[1].name
+    ?? guide.find(({ href }) => href === `#${path}`)?.label;
+  const filter = query.trim().toLowerCase();
+  const matches = componentPages.filter(([slug, item]) => `${slug} ${item.name}`.toLowerCase().includes(filter));
+  const close = () => { setOpen(false); setQuery(''); };
+  return <aside className="doc-sidebar" data-open={open}>
+    <Button className="doc-index-toggle" variant="ghost" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
+      <Icon name="list" /><span>Docs index{current && <small>{current}</small>}</span><Icon name="chevron-down" />
+    </Button>
+    <div className="doc-index" id={id}>
+      <div className="doc-index-search"><span className="label">Documentation</span>
+        <SearchInput aria-label="Filter components" placeholder="Filter components" value={query} onChange={(event) => setQuery(event.target.value)} />
+      </div>
+      <nav aria-label="Documentation" className="ut-scrollbar">
       <span className="label">Guide</span>
-      {guide.map(({ href, label }) => <a key={href} href={href} aria-current={href === `#${path}` ? 'page' : undefined}>{label}</a>)}
-      <span className="label">Components</span>
-      {matches.map(([slug, { name }]) => <a key={slug} href={`#/components/${slug}`}
+      {guide.map(({ href, label }) => <a key={href} href={href} onClick={close} aria-current={href === `#${path}` ? 'page' : undefined}>{label}</a>)}
+      <span className="label doc-index-count">Components <small>{matches.length}</small></span>
+      {matches.map(([slug, { name }]) => <a key={slug} href={`#/components/${slug}`} onClick={close}
         aria-current={path === `/components/${slug}` ? 'page' : undefined}>{name}</a>)}
-    </nav>
+      {!matches.length && <p className="muted doc-index-empty" role="status">No matching components.</p>}
+      </nav>
+    </div>
   </aside>;
+}
+
+function DocsThemeSelect({ previewTheme, releasePreviewTheme, className }: {
+  previewTheme?: PreviewTheme; releasePreviewTheme: () => void; className: string;
+}) {
+  const [pending, setPending] = useState<Theme>();
+  const { setTheme } = useTheme();
+  useEffect(() => {
+    if (previewTheme || !pending) return;
+    setTheme(pending);
+    setPending(undefined);
+  }, [pending, previewTheme, setTheme]);
+  return <ThemeSelect className={className} onChange={(event) => {
+    if (!previewTheme) return;
+    event.preventDefault();
+    setPending(event.currentTarget.value as Theme);
+    releasePreviewTheme();
+  }} />;
 }
 
 function App() {
@@ -250,6 +304,18 @@ function App() {
     const update = () => { setRoute(route()); window.scrollTo(0, 0); };
     window.addEventListener('hashchange', update);
     return () => window.removeEventListener('hashchange', update);
+  }, []);
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (!event.defaultPrevented && !event.isComposing && !event.repeat && !event.shiftKey &&
+        event.key.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey) && !event.altKey &&
+        !document.querySelector('[aria-modal="true"]')) {
+        event.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, []);
   useEffect(() => {
     if (path !== '/typography' && path !== '/components/typography') return;
@@ -264,30 +330,51 @@ function App() {
   const component = path.startsWith('/components/') && Object.hasOwn(examples, slug) ? slug as keyof typeof examples : undefined;
   const pages: Record<string, ReactNode> = {
     '/overview': <Overview />, '/getting-started': <GettingStarted />, '/theming': <Theming />,
-    '/tokens': <Tokens />, '/typography': <Typography />, '/showcase': <Showcase />,
+    '/tokens': <Tokens />, '/icons': <IconsPage />, '/typography': <Typography />, '/showcase': <Showcase />,
     '/sandbox': <Suspense fallback={<p className="muted">Loading sandbox…</p>}><Playground key={sample ?? 'carousel'} component={sample} /></Suspense>,
   };
   const content = component ? <ComponentPage key={component} slug={component} /> : pages[path] ?? <Overview />;
   const standalone = path === '/overview' || path === '/showcase' || path === '/sandbox';
-  return <ThemeProvider forcedTheme={theme}><ToastProvider>
-    <Shell navbar={{
+  function releasePreviewTheme() {
+    const url = new URL(location.href);
+    const [, options] = url.hash.split('?');
+    const params = new URLSearchParams(options);
+    params.delete('theme');
+    url.searchParams.delete('theme');
+    url.hash = params.size ? `${path}?${params}` : path;
+    history.replaceState(history.state, '', url);
+    setRoute(route());
+  }
+  const themeSelect = (className = 'docs-theme-select') => <DocsThemeSelect className={className}
+    previewTheme={theme} releasePreviewTheme={releasePreviewTheme} />;
+  return <ThemeProvider forcedTheme={theme}><IconPaletteProvider><ToastProvider>
+    <Shell mainClassName="docs-main" navbar={{
       variant: 'dock',
+      className: 'docs-navbar',
       brand: <a href="#/overview" aria-label="Utkristi UI overview"><Logo size={32} /></a>,
-      links: primary.map((item) => ({ ...item, active: item.href === `#${path}` || (item.label === 'Components' && !!component) })),
+      links: primary.map((item) => ({
+        ...item,
+        icon: <Icon name={primaryIcons[item.label as keyof typeof primaryIcons]} size={16} />,
+        active: item.href === `#${path}` || (item.label === 'Components' && !!component),
+      })),
       onSearch: () => setSearchOpen(true),
-      right: <><IconButton label="Search docs" onClick={() => setSearchOpen(true)}><Search size={18} /></IconButton>
-        <ThemeSwitch className="nav-theme" /></>,
-      sheetFoot: <div className="docs-sheet-theme"><span className="label">Appearance</span><ThemeSwitch /></div>,
+      searchLabel: 'Search docs',
+      searchShortcut: isMac ? '⌘K' : 'Ctrl K',
+      right: themeSelect('nav-theme docs-theme-select'),
+      sheetFoot: <div className="docs-sheet-theme"><span className="label">Appearance</span>{themeSelect()}</div>,
     }} footer={{
-      lede: <><b>Utkristi UI.</b> The shared kit for Utkristi apps.</>,
-      columns: [{ title: 'Guide', links: guide }, { title: 'Explore', links: primary }],
-      word: <>Utkristi <span className="faint">UI</span></>,
-      themeSwitch: <ThemeSwitch />, bottom: <><span>MIT · Utkristi UI</span><span>Version 0.1.0</span></>,
+      className: 'docs-footer',
+      lede: <div className="docs-footer-brand"><Logo size={32} /><p>Design and build across the Utkristi ecosystem.</p></div>,
+      cta: <Button href="#/sandbox" variant="ghost">Open sandbox <Icon name="arrow-up-right" /></Button>,
+      columns: [{ title: 'Build', links: [guide[0], guide[1], primary[3]] },
+        { title: 'Design', links: [guide[2], guide[3], guide[4]] }, { title: 'Explore', links: [primary[0], primary[4]] }],
+      themeSwitch: <div className="docs-footer-appearance"><span className="label">Appearance</span>{themeSelect()}</div>,
+      bottom: <><span>Utkristi UI · MIT license</span><span>Version 0.1.0</span></>,
     }}>
       {standalone ? content : <div className="doc-layout"><Sidebar path={path} />{content}</div>}
     </Shell>
-    {searchOpen && <DocsSearch onClose={() => setSearchOpen(false)} pages={guide} />}
-  </ToastProvider></ThemeProvider>;
+    {searchOpen && <DocsSearch onClose={() => setSearchOpen(false)} pages={[...guide, primary[0], primary[4]]} />}
+  </ToastProvider></IconPaletteProvider></ThemeProvider>;
 }
 
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);

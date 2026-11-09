@@ -15,6 +15,10 @@ function namesIn(node: ts.Node) {
 }
 
 function samples(file: string, text: string, recordName: string) {
+  const diagnostics = ts.transpileModule(text, { fileName: file, reportDiagnostics: true,
+    compilerOptions: { jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 } }).diagnostics ?? [];
+  const error = diagnostics.find((diagnostic) => diagnostic.category === ts.DiagnosticCategory.Error);
+  if (error) throw new Error(`Cannot read examples in ${file}: ${ts.flattenDiagnosticMessageText(error.messageText, '\n')}`);
   const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   const definitions = new Map<string, ts.Statement>();
   const imports: ts.ImportDeclaration[] = [];

@@ -53,11 +53,15 @@
     "./utkristi-ui.min.css": "./dist/utkristi-ui.min.css",
     "./tokens.css": "./dist/tokens.css",
     "./fonts.css": "./dist/fonts.css",
+    "./icons/*": "./dist/icons/*",
     "./package.json": "./package.json"
   },
   "scripts": {
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
-    "build": "npm run clean && npm run build:css && npm run build:tailwind && npm run build:react",
+    "icons": "node scripts/build-icons.mjs",
+    "icons:3d": "python scripts/render-3d.py",
+    "icons:formats": "python scripts/encode-icon-assets.py",
+    "build": "npm run clean && npm run icons && npm run build:css && npm run build:tailwind && npm run build:react",
     "build:css": "node scripts/build-css.mjs",
     "build:tailwind": "node scripts/build-tailwind.mjs",
     "build:react": "tsc -p tsconfig.build.json",
@@ -69,6 +73,7 @@
     "docs:build": "vite build --config docs/vite.config.ts",
     "docs:preview": "vite preview --config docs/vite.config.ts",
     "screenshots": "node scripts/screenshots.mjs",
+    "screenshots:capture": "node scripts/screenshots.mjs --capture-only",
     "docs:stress": "node scripts/screenshots.mjs --stress"
   },
   "peerDependencies": {

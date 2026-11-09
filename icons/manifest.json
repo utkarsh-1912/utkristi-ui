@@ -1,0 +1,2719 @@
+[
+  {
+    "name": "arrow-left",
+    "group": "Navigation",
+    "keywords": [
+      "back",
+      "previous",
+      "west",
+      "left",
+      "direction"
+    ],
+    "description": "Navigate backward or to the previous item.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "arrow-right",
+    "group": "Navigation",
+    "keywords": [
+      "forward",
+      "next",
+      "east",
+      "right",
+      "direction"
+    ],
+    "description": "Proceed forward or to the next item.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "arrow-up",
+    "group": "Navigation",
+    "keywords": [
+      "up",
+      "north",
+      "top",
+      "ascend"
+    ],
+    "description": "Move upward or return to top.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "arrow-down",
+    "group": "Navigation",
+    "keywords": [
+      "down",
+      "south",
+      "bottom",
+      "descend"
+    ],
+    "description": "Move downward or jump to bottom.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "arrow-up-right",
+    "group": "Navigation",
+    "keywords": [
+      "northeast",
+      "diagonal",
+      "launch",
+      "open",
+      "out"
+    ],
+    "description": "Open destination in a new context or diagonal jump.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "chevron-down",
+    "group": "Navigation",
+    "keywords": [
+      "expand",
+      "caret",
+      "open",
+      "down",
+      "select"
+    ],
+    "description": "Expand section or open dropdown menu.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "chevron-up",
+    "group": "Navigation",
+    "keywords": [
+      "collapse",
+      "caret",
+      "up",
+      "fold"
+    ],
+    "description": "Collapse section or fold disclosure.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "chevron-left",
+    "group": "Navigation",
+    "keywords": [
+      "previous",
+      "caret",
+      "left",
+      "back"
+    ],
+    "description": "Step back one page or slide.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "chevron-right",
+    "group": "Navigation",
+    "keywords": [
+      "next",
+      "caret",
+      "right",
+      "forward"
+    ],
+    "description": "Step forward one page or slide.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "menu",
+    "group": "Navigation",
+    "keywords": [
+      "hamburger",
+      "bars",
+      "navigation",
+      "drawer"
+    ],
+    "description": "Toggle primary navigation drawer or sheet.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "close",
+    "group": "Navigation",
+    "keywords": [
+      "dismiss",
+      "cancel",
+      "x",
+      "remove",
+      "clear"
+    ],
+    "description": "Dismiss dialog, sheet, toast, or active filter.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "more-horizontal",
+    "group": "Navigation",
+    "keywords": [
+      "ellipsis",
+      "dots",
+      "more",
+      "options",
+      "menu"
+    ],
+    "description": "Reveal overflow actions in a horizontal bar.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "more-vertical",
+    "group": "Navigation",
+    "keywords": [
+      "kebab",
+      "dots",
+      "more",
+      "options",
+      "menu"
+    ],
+    "description": "Reveal overflow actions in a compact vertical stack.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "home",
+    "group": "Navigation",
+    "keywords": [
+      "house",
+      "dashboard",
+      "start",
+      "main",
+      "overview"
+    ],
+    "description": "Return to the workspace home or root overview.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "external",
+    "group": "Navigation",
+    "keywords": [
+      "out",
+      "new-tab",
+      "window",
+      "link",
+      "share"
+    ],
+    "description": "Open resource in an external browser tab or window.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "plus",
+    "group": "Actions",
+    "keywords": [
+      "add",
+      "new",
+      "create",
+      "insert"
+    ],
+    "description": "Create or add a new item.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "minus",
+    "group": "Actions",
+    "keywords": [
+      "subtract",
+      "remove",
+      "less",
+      "dash"
+    ],
+    "description": "Remove item, zoom out, or indicate indeterminate state.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "check",
+    "group": "Actions",
+    "keywords": [
+      "done",
+      "tick",
+      "confirm",
+      "approve",
+      "complete"
+    ],
+    "description": "Confirm selection or mark task complete.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "search",
+    "group": "Actions",
+    "keywords": [
+      "find",
+      "magnifier",
+      "lookup",
+      "query",
+      "filter"
+    ],
+    "description": "Find items, files, or commands by query.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "filter",
+    "group": "Actions",
+    "keywords": [
+      "funnel",
+      "refine",
+      "sieve",
+      "criteria"
+    ],
+    "description": "Narrow results by criteria or attributes.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "sort",
+    "group": "Actions",
+    "keywords": [
+      "order",
+      "arrange",
+      "rank",
+      "arrows"
+    ],
+    "description": "Order rows or items ascending or descending.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "edit",
+    "group": "Actions",
+    "keywords": [
+      "pencil",
+      "write",
+      "rename",
+      "modify",
+      "compose"
+    ],
+    "description": "Modify text, rename item, or enter editing mode.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "copy",
+    "group": "Actions",
+    "keywords": [
+      "duplicate",
+      "clone",
+      "clipboard"
+    ],
+    "description": "Duplicate selection or copy snippet to clipboard.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "paste",
+    "group": "Actions",
+    "keywords": [
+      "clipboard",
+      "board",
+      "insert"
+    ],
+    "description": "Insert clipboard contents into the current view.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "trash",
+    "group": "Actions",
+    "keywords": [
+      "delete",
+      "remove",
+      "bin",
+      "garbage",
+      "destroy"
+    ],
+    "description": "Delete item or move to workspace trash.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "undo",
+    "group": "Actions",
+    "keywords": [
+      "revert",
+      "back",
+      "history",
+      "step-back"
+    ],
+    "description": "Revert the most recent change.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "redo",
+    "group": "Actions",
+    "keywords": [
+      "forward",
+      "repeat",
+      "step-forward"
+    ],
+    "description": "Reapply a previously reverted change.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "refresh",
+    "group": "Actions",
+    "keywords": [
+      "reload",
+      "sync",
+      "rotate",
+      "update"
+    ],
+    "description": "Reload data or synchronize state.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "download",
+    "group": "Actions",
+    "keywords": [
+      "export",
+      "save",
+      "fetch",
+      "down"
+    ],
+    "description": "Save file or artifact to local storage.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "upload",
+    "group": "Actions",
+    "keywords": [
+      "import",
+      "publish",
+      "send",
+      "up"
+    ],
+    "description": "Publish local files or assets to the workspace.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "share",
+    "group": "Actions",
+    "keywords": [
+      "send",
+      "distribute",
+      "nodes",
+      "network"
+    ],
+    "description": "Distribute workspace link or grant access.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "link",
+    "group": "Actions",
+    "keywords": [
+      "url",
+      "chain",
+      "hyperlink",
+      "anchor"
+    ],
+    "description": "Copy URL or connect two resources.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "pin",
+    "group": "Actions",
+    "keywords": [
+      "thumbtack",
+      "stick",
+      "keep",
+      "attach"
+    ],
+    "description": "Keep item anchored at the top of a list or board.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "star",
+    "group": "Actions",
+    "keywords": [
+      "favorite",
+      "rate",
+      "bookmark",
+      "featured"
+    ],
+    "description": "Mark item as favorite or featured.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "heart",
+    "group": "Actions",
+    "keywords": [
+      "like",
+      "love",
+      "react",
+      "appreciate"
+    ],
+    "description": "React with appreciation or save to liked items.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "bookmark",
+    "group": "Actions",
+    "keywords": [
+      "save",
+      "ribbon",
+      "read-later",
+      "flag"
+    ],
+    "description": "Save place in documentation or code for later reading.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "info",
+    "group": "Status",
+    "keywords": [
+      "information",
+      "details",
+      "about",
+      "notice"
+    ],
+    "description": "Display neutral context or helpful guidance.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "warning",
+    "group": "Status",
+    "keywords": [
+      "caution",
+      "alert",
+      "triangle",
+      "exclamation"
+    ],
+    "description": "Alert user to a potential risk or non-blocking issue.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "error",
+    "group": "Status",
+    "keywords": [
+      "danger",
+      "fail",
+      "octagon",
+      "critical",
+      "stop"
+    ],
+    "description": "Indicate a blocking failure or validation error.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "success",
+    "group": "Status",
+    "keywords": [
+      "ok",
+      "verified",
+      "passed",
+      "check-circle"
+    ],
+    "description": "Confirm completed operation or healthy check.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "help",
+    "group": "Status",
+    "keywords": [
+      "question",
+      "support",
+      "faq",
+      "assist"
+    ],
+    "description": "Open contextual documentation or support.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "lock",
+    "group": "Status",
+    "keywords": [
+      "private",
+      "secure",
+      "padlock",
+      "protected"
+    ],
+    "description": "Indicate private access or protected permission.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "unlock",
+    "group": "Status",
+    "keywords": [
+      "open",
+      "public",
+      "padlock",
+      "unprotected"
+    ],
+    "description": "Indicate public access or editable state.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "eye",
+    "group": "Status",
+    "keywords": [
+      "view",
+      "show",
+      "visible",
+      "watch",
+      "preview"
+    ],
+    "description": "Preview item or reveal hidden value.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "eye-off",
+    "group": "Status",
+    "keywords": [
+      "hide",
+      "hidden",
+      "invisible",
+      "secret"
+    ],
+    "description": "Hide sensitive value or mute preview.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "bell",
+    "group": "Status",
+    "keywords": [
+      "notification",
+      "alert",
+      "ring",
+      "inbox"
+    ],
+    "description": "View workspace notifications and mentions.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "bell-off",
+    "group": "Status",
+    "keywords": [
+      "mute",
+      "silent",
+      "dnd",
+      "quiet"
+    ],
+    "description": "Silence notifications or enable do-not-disturb.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "clock",
+    "group": "Status",
+    "keywords": [
+      "time",
+      "schedule",
+      "watch",
+      "pending",
+      "timer"
+    ],
+    "description": "Show timestamp, duration, or scheduled run.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "spinner-ring",
+    "group": "Status",
+    "keywords": [
+      "loading",
+      "progress",
+      "busy",
+      "wait"
+    ],
+    "description": "Indicate background processing or active sync.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "offline",
+    "group": "Status",
+    "keywords": [
+      "disconnected",
+      "no-wifi",
+      "local",
+      "outage"
+    ],
+    "description": "Show disconnected network or local-only mode.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "sun",
+    "group": "Theme and settings",
+    "keywords": [
+      "light",
+      "paper",
+      "day",
+      "brightness",
+      "theme"
+    ],
+    "description": "Switch to Paper (light) theme.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "moon",
+    "group": "Theme and settings",
+    "keywords": [
+      "dark",
+      "night",
+      "crescent",
+      "theme"
+    ],
+    "description": "Switch to Night (dark) theme.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "system",
+    "group": "Theme and settings",
+    "keywords": [
+      "auto",
+      "os",
+      "display",
+      "monitor",
+      "theme"
+    ],
+    "description": "Follow operating-system appearance preference.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "palette",
+    "group": "Theme and settings",
+    "keywords": [
+      "color",
+      "swatches",
+      "hue",
+      "paint",
+      "design"
+    ],
+    "description": "Choose custom accent and icon colour hues.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "settings",
+    "group": "Theme and settings",
+    "keywords": [
+      "gear",
+      "cog",
+      "preferences",
+      "options",
+      "config"
+    ],
+    "description": "Configure workspace preferences and system options.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "sliders",
+    "group": "Theme and settings",
+    "keywords": [
+      "controls",
+      "faders",
+      "equalizer",
+      "tune",
+      "adjust"
+    ],
+    "description": "Fine-tune numeric parameters and controls.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "brush",
+    "group": "Theme and settings",
+    "keywords": [
+      "paint",
+      "style",
+      "format",
+      "design",
+      "art"
+    ],
+    "description": "Apply visual styles or format surface appearance.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "glass-sparkle",
+    "group": "Theme and settings",
+    "keywords": [
+      "glass",
+      "frosted",
+      "translucent",
+      "sparkle",
+      "theme"
+    ],
+    "description": "Activate the frosted Glass surface theme.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "room",
+    "group": "Collaboration",
+    "keywords": [
+      "workspace",
+      "door",
+      "portal",
+      "studio",
+      "colabs"
+    ],
+    "description": "Enter a live collaborative CoLabs room.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "project",
+    "group": "Collaboration",
+    "keywords": [
+      "briefcase",
+      "workspace",
+      "collection",
+      "cube"
+    ],
+    "description": "Organize multi-file workspaces and deliverables.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "snippet",
+    "group": "Collaboration",
+    "keywords": [
+      "code-card",
+      "fragment",
+      "clip",
+      "template"
+    ],
+    "description": "Save or share a reusable code snippet card.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "invite",
+    "group": "Collaboration",
+    "keywords": [
+      "mail",
+      "envelope",
+      "send",
+      "member"
+    ],
+    "description": "Send a workspace or room invitation.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "people",
+    "group": "Collaboration",
+    "keywords": [
+      "team",
+      "users",
+      "members",
+      "group",
+      "collaborators"
+    ],
+    "description": "Show active collaborators and team members.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "presence-cursor",
+    "group": "Collaboration",
+    "keywords": [
+      "pointer",
+      "mouse",
+      "multiplayer",
+      "live",
+      "collaborator"
+    ],
+    "description": "Track live multiplayer pointers on the canvas.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "chat",
+    "group": "Collaboration",
+    "keywords": [
+      "message",
+      "bubble",
+      "comment",
+      "discuss",
+      "conversation"
+    ],
+    "description": "Open room discussion and message threads.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "call",
+    "group": "Collaboration",
+    "keywords": [
+      "phone",
+      "handset",
+      "voice",
+      "audio",
+      "talk"
+    ],
+    "description": "Start or join a real-time voice call.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "call-leave",
+    "group": "Collaboration",
+    "keywords": [
+      "hangup",
+      "end-call",
+      "disconnect",
+      "phone-off"
+    ],
+    "description": "Hang up and leave the active voice session.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "mic",
+    "group": "Collaboration",
+    "keywords": [
+      "microphone",
+      "voice",
+      "record",
+      "audio",
+      "speak"
+    ],
+    "description": "Enable microphone audio input.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "mic-off",
+    "group": "Collaboration",
+    "keywords": [
+      "mute",
+      "silent",
+      "microphone-off"
+    ],
+    "description": "Mute microphone audio input.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "camera",
+    "group": "Collaboration",
+    "keywords": [
+      "video",
+      "webcam",
+      "stream",
+      "meeting"
+    ],
+    "description": "Enable video camera stream.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "camera-off",
+    "group": "Collaboration",
+    "keywords": [
+      "video-off",
+      "webcam-off",
+      "hide-video"
+    ],
+    "description": "Turn off video camera stream.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "screen-share",
+    "group": "Collaboration",
+    "keywords": [
+      "present",
+      "broadcast",
+      "display",
+      "stream"
+    ],
+    "description": "Present your display or window to the room.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "whiteboard",
+    "group": "Collaboration",
+    "keywords": [
+      "canvas",
+      "draw",
+      "board",
+      "pen",
+      "sketch"
+    ],
+    "description": "Sketch diagrams and flows together on a shared board.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "ai-spark",
+    "group": "Collaboration",
+    "keywords": [
+      "ai",
+      "assistant",
+      "magic",
+      "sparkle",
+      "prompt"
+    ],
+    "description": "Invoke assistant suggestions inside a conversation.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "analytics",
+    "group": "Collaboration",
+    "keywords": [
+      "metrics",
+      "insights",
+      "pulse",
+      "stats",
+      "telemetry"
+    ],
+    "description": "Inspect room activity, velocity, and performance metrics.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "history",
+    "group": "Collaboration",
+    "keywords": [
+      "timeline",
+      "revisions",
+      "audit",
+      "past",
+      "restore"
+    ],
+    "description": "Browse timeline snapshots and revision logs.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "focus",
+    "group": "Collaboration",
+    "keywords": [
+      "target",
+      "crosshair",
+      "center",
+      "spotlight",
+      "follow"
+    ],
+    "description": "Follow a collaborator or center on active selection.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "command",
+    "group": "Collaboration",
+    "keywords": [
+      "shortcut",
+      "hotkey",
+      "cmd",
+      "palette",
+      "keyboard"
+    ],
+    "description": "Open the quick command palette.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "layers",
+    "group": "Collaboration",
+    "keywords": [
+      "stack",
+      "surfaces",
+      "planes",
+      "depth"
+    ],
+    "description": "Switch between stacked surfaces or elevation levels.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "code",
+    "group": "Code",
+    "keywords": [
+      "brackets",
+      "source",
+      "markup",
+      "developer",
+      "syntax"
+    ],
+    "description": "View or edit source code.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "terminal",
+    "group": "Code",
+    "keywords": [
+      "shell",
+      "console",
+      "cli",
+      "prompt",
+      "bash"
+    ],
+    "description": "Open interactive shell and command runner.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "run",
+    "group": "Code",
+    "keywords": [
+      "play",
+      "execute",
+      "start",
+      "launch"
+    ],
+    "description": "Execute current script, test, or sandbox build.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "stop",
+    "group": "Code",
+    "keywords": [
+      "halt",
+      "kill",
+      "abort",
+      "square"
+    ],
+    "description": "Terminate running process or build.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "bug",
+    "group": "Code",
+    "keywords": [
+      "debug",
+      "issue",
+      "defect",
+      "error",
+      "insect"
+    ],
+    "description": "Inspect runtime issue or file a defect report.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "branch",
+    "group": "Code",
+    "keywords": [
+      "git",
+      "fork",
+      "version",
+      "tree"
+    ],
+    "description": "Switch or create a version-control branch.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "commit",
+    "group": "Code",
+    "keywords": [
+      "git",
+      "node",
+      "snapshot",
+      "sha"
+    ],
+    "description": "Record a snapshot in version history.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "merge",
+    "group": "Code",
+    "keywords": [
+      "git",
+      "join",
+      "combine",
+      "integrate"
+    ],
+    "description": "Combine changes from two branches.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "pull-request",
+    "group": "Code",
+    "keywords": [
+      "pr",
+      "review",
+      "git",
+      "diff"
+    ],
+    "description": "Propose and review code changes before merging.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "github",
+    "group": "Code",
+    "keywords": [
+      "repo",
+      "git",
+      "source-control",
+      "octocat"
+    ],
+    "description": "Connect repository hosting and workflows.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "file",
+    "group": "Code",
+    "keywords": [
+      "page",
+      "sheet",
+      "blank",
+      "asset"
+    ],
+    "description": "Represent a generic workspace file.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "file-code",
+    "group": "Code",
+    "keywords": [
+      "script",
+      "tsx",
+      "css",
+      "module",
+      "source-file"
+    ],
+    "description": "Represent a source code or configuration module.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "folder",
+    "group": "Code",
+    "keywords": [
+      "directory",
+      "collection",
+      "files",
+      "path"
+    ],
+    "description": "Group files inside a directory.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "folder-open",
+    "group": "Code",
+    "keywords": [
+      "directory",
+      "expanded",
+      "open",
+      "browse"
+    ],
+    "description": "Show an expanded directory in the file tree.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "add-file",
+    "group": "Code",
+    "keywords": [
+      "new-file",
+      "create",
+      "document-plus"
+    ],
+    "description": "Create a new file in the current directory.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "add-folder",
+    "group": "Code",
+    "keywords": [
+      "new-folder",
+      "mkdir",
+      "directory-plus"
+    ],
+    "description": "Create a new folder in the workspace tree.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "save",
+    "group": "Code",
+    "keywords": [
+      "disk",
+      "floppy",
+      "store",
+      "write"
+    ],
+    "description": "Persist current changes to disk or cloud.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "database",
+    "group": "Code",
+    "keywords": [
+      "storage",
+      "sql",
+      "data",
+      "cylinder",
+      "store"
+    ],
+    "description": "Inspect structured storage, tables, and queries.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "api",
+    "group": "Code",
+    "keywords": [
+      "webhook",
+      "endpoint",
+      "plug",
+      "connect",
+      "rest"
+    ],
+    "description": "Configure endpoints, webhooks, and integrations.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "package",
+    "group": "Code",
+    "keywords": [
+      "box",
+      "cube",
+      "npm",
+      "bundle",
+      "artifact"
+    ],
+    "description": "Manage published modules, dependencies, and releases.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "calendar",
+    "group": "Content",
+    "keywords": [
+      "date",
+      "month",
+      "schedule",
+      "event",
+      "day"
+    ],
+    "description": "Pick dates, milestones, and release schedules.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "image",
+    "group": "Content",
+    "keywords": [
+      "photo",
+      "picture",
+      "media",
+      "gallery"
+    ],
+    "description": "Embed or preview visual artwork and screenshots.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "video",
+    "group": "Content",
+    "keywords": [
+      "film",
+      "movie",
+      "clip",
+      "player"
+    ],
+    "description": "Play recorded walkthroughs and media clips.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "music",
+    "group": "Content",
+    "keywords": [
+      "audio",
+      "sound",
+      "note",
+      "track"
+    ],
+    "description": "Attach audio cues or sound tracks.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "document",
+    "group": "Content",
+    "keywords": [
+      "text",
+      "article",
+      "spec",
+      "notes",
+      "doc"
+    ],
+    "description": "Write specifications, guides, and structured prose.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "table",
+    "group": "Content",
+    "keywords": [
+      "grid",
+      "spreadsheet",
+      "rows",
+      "columns",
+      "data"
+    ],
+    "description": "Display structured rows and columns.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "chart-bar",
+    "group": "Content",
+    "keywords": [
+      "bars",
+      "histogram",
+      "graph",
+      "comparison"
+    ],
+    "description": "Compare categorical quantities with vertical bars.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "chart-line",
+    "group": "Content",
+    "keywords": [
+      "trend",
+      "line-graph",
+      "series",
+      "plot"
+    ],
+    "description": "Plot trends and series over time.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "kanban",
+    "group": "Content",
+    "keywords": [
+      "board",
+      "columns",
+      "cards",
+      "tasks",
+      "sprint"
+    ],
+    "description": "Organize work items across board columns.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "list",
+    "group": "Content",
+    "keywords": [
+      "rows",
+      "bullets",
+      "lines",
+      "items"
+    ],
+    "description": "Display items in a vertical stacked list.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "grid",
+    "group": "Content",
+    "keywords": [
+      "tiles",
+      "cards",
+      "gallery",
+      "matrix"
+    ],
+    "description": "Display items in a balanced tile gallery.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "quote",
+    "group": "Content",
+    "keywords": [
+      "blockquote",
+      "citation",
+      "excerpt",
+      "speech"
+    ],
+    "description": "Highlight an excerpt or customer citation.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "user",
+    "group": "Commerce and account",
+    "keywords": [
+      "profile",
+      "account",
+      "person",
+      "avatar",
+      "member"
+    ],
+    "description": "Open personal profile or account settings.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "user-plus",
+    "group": "Commerce and account",
+    "keywords": [
+      "invite-user",
+      "add-member",
+      "seat",
+      "signup"
+    ],
+    "description": "Add a collaborator or provision a new seat.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "logout",
+    "group": "Commerce and account",
+    "keywords": [
+      "signout",
+      "exit",
+      "leave"
+    ],
+    "description": "Sign out of the current session.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "login",
+    "group": "Commerce and account",
+    "keywords": [
+      "signin",
+      "enter",
+      "auth"
+    ],
+    "description": "Authenticate into a workspace account.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "key",
+    "group": "Commerce and account",
+    "keywords": [
+      "token",
+      "secret",
+      "credential",
+      "auth",
+      "password"
+    ],
+    "description": "Manage API tokens, SSH keys, and credentials.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "shield",
+    "group": "Commerce and account",
+    "keywords": [
+      "security",
+      "protection",
+      "guard",
+      "sso",
+      "verify"
+    ],
+    "description": "Verify enterprise security, SSO, and audit policies.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "credit-card",
+    "group": "Commerce and account",
+    "keywords": [
+      "billing",
+      "payment",
+      "plan",
+      "subscription"
+    ],
+    "description": "Configure billing method and workspace subscription.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "gift",
+    "group": "Commerce and account",
+    "keywords": [
+      "reward",
+      "present",
+      "perk",
+      "bonus"
+    ],
+    "description": "Redeem workspace credits or celebrate a release.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "rocket",
+    "group": "Commerce and account",
+    "keywords": [
+      "launch",
+      "deploy",
+      "ship",
+      "startup",
+      "boost"
+    ],
+    "description": "Deploy production release or quickstart a workspace.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "trophy",
+    "group": "Commerce and account",
+    "keywords": [
+      "award",
+      "cup",
+      "winner",
+      "milestone",
+      "champion"
+    ],
+    "description": "Highlight milestone achievements and benchmarks.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "desktop",
+    "group": "Device and system",
+    "keywords": [
+      "monitor",
+      "screen",
+      "display",
+      "workstation"
+    ],
+    "description": "Preview layout at full desktop viewport width.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "laptop",
+    "group": "Device and system",
+    "keywords": [
+      "notebook",
+      "computer",
+      "macbook"
+    ],
+    "description": "Preview layout on notebook screens.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "phone",
+    "group": "Device and system",
+    "keywords": [
+      "mobile",
+      "smartphone",
+      "handheld",
+      "responsive"
+    ],
+    "description": "Test responsive layout at 375px mobile width.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "tablet",
+    "group": "Device and system",
+    "keywords": [
+      "ipad",
+      "slate",
+      "touchscreen"
+    ],
+    "description": "Preview medium-breakpoint tablet layouts.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "cloud",
+    "group": "Device and system",
+    "keywords": [
+      "sync",
+      "remote",
+      "hosted",
+      "weather",
+      "server"
+    ],
+    "description": "Indicate cloud sync, remote storage, or edge hosting.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "wifi",
+    "group": "Device and system",
+    "keywords": [
+      "network",
+      "signal",
+      "wireless",
+      "online"
+    ],
+    "description": "Show wireless connection strength.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "battery",
+    "group": "Device and system",
+    "keywords": [
+      "power",
+      "charge",
+      "energy",
+      "capacity"
+    ],
+    "description": "Display device power or resource quota.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "power",
+    "group": "Device and system",
+    "keywords": [
+      "on-off",
+      "switch",
+      "shutdown",
+      "boot"
+    ],
+    "description": "Toggle service state or restart sandbox environment.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "globe",
+    "group": "Device and system",
+    "keywords": [
+      "world",
+      "earth",
+      "international",
+      "locale",
+      "web"
+    ],
+    "description": "Select locale, region, or public domain routing.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "utkristi-mark",
+    "group": "Brand and social",
+    "keywords": [
+      "logo",
+      "brand",
+      "utkristi",
+      "mark",
+      "ecosystem"
+    ],
+    "description": "Two rising ribbons and a floating accent tile forming the Utkristi ecosystem mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "x-social",
+    "group": "Brand and social",
+    "keywords": [
+      "twitter",
+      "social",
+      "post",
+      "x"
+    ],
+    "description": "Link to X (formerly Twitter) profile in neutral ink.",
+    "styles": [
+      "line"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "linkedin",
+    "group": "Brand and social",
+    "keywords": [
+      "social",
+      "network",
+      "career",
+      "company"
+    ],
+    "description": "Link to LinkedIn company or member profile in neutral ink.",
+    "styles": [
+      "line"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "discord",
+    "group": "Brand and social",
+    "keywords": [
+      "community",
+      "chat",
+      "server",
+      "social"
+    ],
+    "description": "Join community server and developer channels in neutral ink.",
+    "styles": [
+      "line"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "youtube",
+    "group": "Brand and social",
+    "keywords": [
+      "video",
+      "channel",
+      "stream",
+      "social"
+    ],
+    "description": "Watch video tutorials and release demos in neutral ink.",
+    "styles": [
+      "line"
+    ],
+    "has3d": false,
+    "hues3d": []
+  }
+]

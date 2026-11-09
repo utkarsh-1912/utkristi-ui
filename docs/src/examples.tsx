@@ -1,5 +1,5 @@
 import { useId, useState, type ReactNode } from 'react';
-import { ArrowUpRight, Bell, Check, Copy, Ellipsis, FolderOpen, Plus, Search, Trash2 } from 'lucide-react';
+import { ArrowUpRight, Bell, Check, Copy, Ellipsis, FolderOpen, Plus, Trash2 } from 'lucide-react';
 import {
   Avatar, AvatarGroup, Badge, Button, Card, CardBody, CardHeader, Checkbox, Chip, Code, Dot, EmptyState,
   Field, Footer, IconButton, Input, Kbd, Logo, Menu, Modal, Navbar, Radio, RadioGroup, RichText, SearchInput,
@@ -24,7 +24,7 @@ const people = [
   { name: 'Mika Laurent', role: 'Maintainer', changes: 8 },
 ];
 const columns = [{ key: 'name', header: 'Name' }, { key: 'role', header: 'Role' }, { key: 'changes', header: 'Changes', num: true }];
-const links = [{ href: '#/overview', label: 'Overview', active: true }, { href: '#/showcase', label: 'Showcase' }];
+const links = [{ href: '#/overview', label: 'Overview', active: true }, { href: '#/showcase', label: 'Showcase', badge: 'New' }];
 
 function ModalPreview() {
   const [open, setOpen] = useState(false);
@@ -195,10 +195,10 @@ export const examples = {
     jsx: '<EmptyState title="No rooms" action={<Button>Create room</Button>}><p>Your rooms will appear here.</p></EmptyState>',
   },
   navbar: {
-    name: 'Navbar', description: 'Choose a full-width header or an inset dock with centered links and a mobile sheet.',
-    preview: () => <Navbar variant="dock" links={links} right={<IconButton label="Search"><Search size={17} /></IconButton>} />,
-    html: '<header class="header header-dock"><div class="navbar navbar-dock"><div class="navbar-inner"><div class="navbar-left">Utkristi UI</div><nav class="navbar-links" aria-label="Primary"><a href="#/overview" class="navbar-dock-link" aria-current="page">Overview</a></nav><div class="navbar-right"><button class="icon-btn burger" aria-label="Open menu">☰</button></div></div></div></header>',
-    jsx: '<Navbar variant="dock" links={[{ href: "/", label: "Overview", active: true }]} />',
+    name: 'Navbar', description: 'A full-width bar or inset dock with a quiet active marker, search, and a compact menu when space is limited.',
+    preview: () => <Navbar variant="dock" links={links} onSearch={() => {}} searchShortcut="⌘K" />,
+    html: '<header class="header header-dock"><div class="navbar navbar-dock"><div class="navbar-inner"><div class="navbar-left">Utkristi UI</div><nav class="navbar-links" aria-label="Primary"><a href="#/overview" class="navbar-dock-link" aria-current="page"><span class="navbar-link-label">Overview</span></a><a href="#/docs" class="navbar-dock-link"><span class="navbar-link-label">Docs</span><span class="navbar-link-badge">New</span></a></nav><div class="navbar-right"><button type="button" class="navbar-search" aria-label="Search">⌕<span class="navbar-search-text" aria-hidden="true">Search</span><kbd class="kbd navbar-search-kbd" aria-hidden="true">⌘K</kbd></button><button class="icon-btn burger" aria-label="Open menu">☰</button></div></div></div></header>',
+    jsx: '<Navbar variant="dock" links={[{ href: "/", label: "Overview", active: true }, { href: "/docs", label: "Docs", badge: "New" }]} onSearch={openSearch} searchShortcut="⌘K" />',
   },
   footer: {
     name: 'Footer', description: 'Link columns, an optional theme control, and a fitted wordmark.',

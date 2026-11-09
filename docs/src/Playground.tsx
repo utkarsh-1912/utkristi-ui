@@ -1,10 +1,10 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { Button, Select, type ResolvedTheme, useTheme } from '@utkristi/ui';
+import { Button, Icon, Select, type ResolvedTheme, useTheme } from '@utkristi/ui';
 import { componentPages, examples as previews } from './examples';
 import { examples } from 'virtual:utkristi-examples';
 import { script, styles } from 'virtual:utkristi-runtime';
 
-const policy = "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline' https://fonts.googleapis.com; img-src data: blob:; font-src data: https://fonts.gstatic.com; form-action 'none'; base-uri 'none'";
+const policy = "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline' https://fonts.googleapis.com; img-src data: blob:; media-src data: blob:; font-src data: https://fonts.gstatic.com; form-action 'none'; base-uri 'none'";
 const frameHead = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
   '<meta http-equiv="Content-Security-Policy" content="' + policy + '"><style>' +
   styles.replace(/<\/style/gi, '<\\/style') +
@@ -18,7 +18,9 @@ interface Run { token: string; source: string; theme: ResolvedTheme; markup: boo
 export default function Playground({ component }: { component?: string }) {
   const { resolvedTheme } = useTheme();
   const id = useId();
-  const slug = component && Object.hasOwn(previews, component) ? component as keyof typeof previews : 'carousel';
+  const [viewport, setViewport] = useState<'fluid' | 'phone' | 'tablet'>('fluid');
+  const slug = component && Object.hasOwn(previews, component) && Object.hasOwn(examples, component)
+    ? component as keyof typeof previews : 'carousel';
   const example = previews[slug];
   const [theme, setTheme] = useState<ResolvedTheme>(resolvedTheme);
   const [mode, setMode] = useState<'react' | 'html'>('react');
@@ -101,7 +103,7 @@ export default function Playground({ component }: { component?: string }) {
     </header>
     <div className="playground-toolbar">
       <label htmlFor={id + "-component"}>Component<Select id={id + "-component"} value={slug} onChange={(event) => {
-        window.location.hash = '/sandbox?component=' + encodeURIComponent(event.target.value);
+        window.location.hash = '/sandbox?' + new URLSearchParams({ component: event.target.value, theme });
       }}>{componentPages.map(([key, item]) => <option key={key} value={key}>{item.name}</option>)}</Select></label>
       <label htmlFor={id + "-theme"}>Theme<Select id={id + "-theme"} value={theme} onChange={(event) => {
         const next = event.target.value as ResolvedTheme;
@@ -112,9 +114,18 @@ export default function Playground({ component }: { component?: string }) {
         <option value="react">React / TSX</option><option value="html">HTML / CSS / JS</option>
       </Select></label>
     </div>
+    <div className="playground-workspace">
     <div className="playground-result">
       <div className="playground-head"><span className="label">Live preview</span>
         <a className="link" href={`#/components/${slug}`}>Component docs</a></div>
+      <div className="playground-devices" role="group" aria-label="Preview width">
+        {(['fluid', 'phone', 'tablet'] as const).map((device) => <Button key={device} size="sm" variant="quiet"
+          aria-pressed={viewport === device} onClick={() => setViewport(device)}
+          iconLeft={<Icon name={device === 'fluid' ? 'desktop' : device} />}>
+          {device === 'fluid' ? 'Fit' : device === 'phone' ? 'Phone' : 'Tablet'}
+        </Button>)}
+      </div>
+      <div className="playground-stage" data-viewport={viewport}>
       {run ? <iframe key={run.token} ref={iframe} data-preview-run={run.token} title={example.name + ' sandbox preview'} sandbox="allow-scripts"
         srcDoc={slug === 'typography' ? previewDocument.replace('</head>', specimenFonts + '</head>') : previewDocument}
         onLoad={() => {
@@ -123,6 +134,7 @@ export default function Playground({ component }: { component?: string }) {
           }, '*');
         }} /> : <p className="muted playground-loading">Preparing preview…</p>}
       {error && <div role="alert" className="playground-error">{error}</div>}
+      </div>
     </div>
     <div className="playground-editor">
       <div className="playground-head"><label className="label" htmlFor="sandbox-source">Example source</label>
@@ -138,12 +150,13 @@ export default function Playground({ component }: { component?: string }) {
           <Button size="sm" loading={busy} onClick={() => void compile(code, mode, theme)}>Run</Button>
         </div>
       </div>
-      <textarea id="sandbox-source" value={code} onChange={(event) => update(event.target.value)}
+      <textarea id="sandbox-source" className="ut-scrollbar" wrap="off" value={code} onChange={(event) => update(event.target.value)}
         onKeyDown={(event) => {
           if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
             event.preventDefault(); void compile(code, mode, theme);
           }
         }} spellCheck={false} autoCapitalize="off" autoComplete="off" />
+    </div>
     </div>
     <p className="muted" role="status">{status}</p>
     <p className="muted">React examples can import the kit, React, and the icons used in these docs. Press Ctrl or ⌘ + Enter to run.</p>

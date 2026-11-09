@@ -45,9 +45,7 @@
   align-items: center;
   gap: clamp(20px, 4cqi, 56px);
   padding: clamp(22px, 6cqi, 76px);
-  background:
-    radial-gradient(ellipse at 84% 32%, var(--ut-template-tint), transparent 62%),
-    var(--ut-bg);
+  background: var(--ut-bg);
 }
 
 .ut-enterprise-intro h2 {
@@ -124,7 +122,7 @@
   justify-content: space-between;
   gap: 9px 18px;
   padding: 14px clamp(14px, 6cqi, 76px);
-  border-block: 1px solid var(--ut-line);
+  border-block-start: 1px solid var(--ut-line);
   color: var(--ut-ink-2);
   font: .75rem var(--ut-font-mono);
 }
@@ -136,8 +134,8 @@
 }
 
 .ut-enterprise-features h3 { margin: 4px 0 0; font-size: clamp(1.2rem, 3cqi, 2rem); }
-.ut-enterprise-features > div:last-child { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.ut-enterprise-features article { padding: clamp(12px, 2cqi, 20px); border-radius: var(--ut-r-field); background: var(--ut-bg-2); }
+.ut-enterprise-features > div:last-child { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(10px, 2cqi, 22px); }
+.ut-enterprise-features article { padding-block: 14px; border-block-start: 1px solid var(--ut-line-2); }
 .ut-enterprise-features article svg { color: var(--ut-accent); }
 .ut-enterprise-features article h4 { margin: 8px 0 4px; font-size: .95rem; }
 .ut-enterprise-features article p { margin: 0; color: var(--ut-ink-2); font-size: .875rem; }

@@ -4,6 +4,8 @@ Utkristi UI is the shared design system for the Utkristi ecosystem. It includes 
 
 [Marketing overview preview](docs/screenshots/overview.png)
 
+[Navigation overflow preview](docs/screenshots/navbar-overflow.png)
+
 [Icon catalog preview](docs/screenshots/icons.png)
 
 [Sandbox editor preview](docs/screenshots/sandbox.png)

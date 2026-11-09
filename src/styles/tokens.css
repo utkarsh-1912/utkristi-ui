@@ -18,6 +18,9 @@
 
 :root, .dark, [data-theme="system"], [data-theme="dark"] {
   --ut-bg: #0B0B0A;
+  --ut-code-bg: #161A20;
+  --ut-code-bar: #20262F;
+  --ut-code-line: #394350;
   --ut-bg-2: #131311;
   --ut-bg-3: #1C1C19;
   --ut-raise: #181816;
@@ -111,6 +114,9 @@
 
 .light, .light-theme, [data-theme="light"] {
   --ut-bg: #F5F7FB;
+  --ut-code-bg: #E8EEF7;
+  --ut-code-bar: #F7F9FC;
+  --ut-code-line: #C5D0E2;
   --ut-bg-2: #FCFDFF;
   --ut-bg-3: #ECF0F7;
   --ut-raise: #FFFFFF;
@@ -205,6 +211,9 @@
 @media (prefers-color-scheme: light) {
   [data-theme="system"] {
     --ut-bg: #F5F7FB;
+    --ut-code-bg: #E8EEF7;
+    --ut-code-bar: #F7F9FC;
+    --ut-code-line: #C5D0E2;
     --ut-bg-2: #FCFDFF;
     --ut-bg-3: #ECF0F7;
     --ut-raise: #FFFFFF;
@@ -317,6 +326,9 @@
 .glass, [data-theme="glass"] {
   color-scheme: light;
   --ut-bg: #F7F4FB;
+  --ut-code-bg: #EBE4F4;
+  --ut-code-bar: #FBF7FE;
+  --ut-code-line: #CFC0E1;
   --ut-bg-2: rgba(255, 255, 255, .82);
   --ut-bg-3: #EDE8F3;
   --ut-raise: rgba(255, 255, 255, .94);

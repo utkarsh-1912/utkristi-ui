@@ -123,12 +123,13 @@ function PricingPlans() {
     <div style={{ ...actions, justifyContent: 'space-between' }}><strong>Choose your plan</strong>
       <Switch label="Bill yearly" checked={yearly} onCheckedChange={setYearly} /></div>
     <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 190px), 1fr))' }}>
-      {plans.map((plan) => <Card key={plan.name} pane={plan.name === 'Team'}>
+      {plans.map((plan) => <Card key={plan.name}>
         <CardBody style={{ ...stack, height: '100%', gridTemplateRows: 'auto auto 1fr auto' }}>
-          <div><strong>{plan.name}</strong><div>{plan.description}</div></div>
+          <div><strong>{plan.name}</strong><div className="muted">{plan.description}</div></div>
           <div><strong style={{ fontSize: 30 }}>${yearly ? plan.yearly : plan.monthly}</strong> / month</div>
           <ul style={{ margin: 0, paddingInlineStart: 18 }}>{plan.features.map((feature) => <li key={feature}>{feature}</li>)}</ul>
-          <Button block variant={plan.name === 'Team' ? 'solid' : 'ghost'} onClick={() => setSelected(plan.name)}>Choose {plan.name}</Button>
+          <Button block variant={plan.name === 'Team' ? 'solid' : 'ghost'} aria-pressed={selected === plan.name}
+            onClick={() => setSelected(plan.name)}>{selected === plan.name ? 'Selected' : `Choose ${plan.name}`}</Button>
         </CardBody>
       </Card>)}
     </div>

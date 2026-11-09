@@ -117,10 +117,16 @@ async function captureEdge() {
       await fontsReady();
       await screenshot(file, true);
     }
-    await load('/overview?theme=glass', 'Make every app feel like Utkristi.');
+    await load('/overview?theme=glass', 'A design system for Utkristi.');
     await retry(() => evaluate('document.documentElement.dataset.theme === "glass"'), 'marketing theme');
     await fontsReady();
     await screenshot('overview', true);
+    await size(760, 812);
+    await retry(() => evaluate('!!document.querySelector(".navbar-more:not([data-hidden]) button")'), 'overflow trigger at tablet width');
+    await evaluate('document.querySelector(".navbar-more button").click()');
+    await retry(() => evaluate('!!document.querySelector(".navbar-more .popover-panel a[href=\"#/frameworks\"]")'), 'overflow screenshot links');
+    await screenshot('navbar-overflow');
+    await evaluate('document.activeElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }))');
     await size(1440, 900);
     await load('/icons?theme=glass', 'Icons');
     await retry(() => evaluate('!!document.querySelector(".icons-cell")'), 'icon catalog screenshot');
@@ -283,8 +289,41 @@ async function captureEdge() {
     await retry(() => evaluate('document.querySelector(".code-example button").textContent.trim() === "Retry copy" && getSelection().toString() === "npm install @utkristi/ui"'), 'copy failure selects the source');
     await evaluate('getSelection().removeAllRanges()');
 
+    await size(760, 812);
+    await load('/overview?theme=glass', 'A design system for Utkristi.');
+    await retry(() => evaluate('!!document.querySelector(".navbar-more:not([data-hidden]) button")'), 'tablet overflow trigger');
+    await evaluate('document.querySelector(".navbar-more button").click()');
+    await retry(() => evaluate(`(() => {
+      const nav = document.querySelector('.docs-navbar .navbar-links');
+      const visible = nav.querySelectorAll('.navbar-fit-item:not([data-hidden]) a');
+      const panel = nav.querySelector('.popover-panel');
+      const brand = document.querySelector('.docs-navbar .navbar-left');
+      const first = visible[0]?.getBoundingClientRect();
+      const logo = brand.getBoundingClientRect();
+      return !!first && first.left - logo.right < 45 && Math.abs(first.top + first.height / 2 - logo.top - logo.height / 2) < 2 &&
+        getComputedStyle(nav).borderInlineStartWidth !== '0px' && document.activeElement === panel &&
+        visible.length + panel.querySelectorAll('a').length === 7;
+    })()`), 'aligned dock and complete overflow links');
+    await evaluate('document.activeElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }))');
+    await retry(() => evaluate('!document.querySelector(".navbar-more .popover-panel") && document.activeElement === document.querySelector(".navbar-more button")'), 'overflow Escape returns focus');
+    await evaluate('document.querySelector(".navbar-more button").click()');
+    await evaluate('document.querySelector(\'.navbar-more .popover-panel a[href="#/frameworks"]\').click()');
+    await retry(() => evaluate('document.querySelector("h1")?.textContent === "Frameworks" && !document.querySelector(".navbar-more .popover-panel") && !!document.querySelector(".navbar-more[data-current]")'), 'overflow link navigation and active state');
+    await size(1440, 900);
+    await retry(() => evaluate('document.querySelectorAll(".navbar-fit-item:not([data-hidden]) a").length === 7 && document.querySelector(".navbar-more").hasAttribute("data-hidden")'), 'wide dock restores all links');
+
+    for (const [theme] of themes) {
+      await load('/getting-started?theme=' + theme, 'Getting started');
+      await retry(() => evaluate(`(() => {
+        const source = document.querySelector('.code-example');
+        const page = getComputedStyle(document.body).backgroundColor;
+        const code = getComputedStyle(source.querySelector('.code')).backgroundColor;
+        return code !== page && code !== 'rgba(0, 0, 0, 0)' && code !== getComputedStyle(source).backgroundColor;
+      })()`), theme + ' code background separates from page and toolbar');
+    }
+
     await size(375, 812);
-    await load('/overview?theme=glass', 'Make every app feel like Utkristi.');
+    await load('/overview?theme=glass', 'A design system for Utkristi.');
     await retry(() => evaluate('getComputedStyle(document.querySelector(".header-dock .burger")).display !== "none"'), 'mobile dock button');
     await evaluate('(() => { const button = document.querySelector(".header-dock .burger"); button.focus(); button.click(); })()');
     await retry(() => evaluate('document.activeElement?.getAttribute("aria-label") === "Close menu" && !!document.querySelector(".sheet-dock [aria-current=page]")'), 'focused mobile dock');
@@ -340,7 +379,7 @@ async function captureEdge() {
 
     await load('/getting-started', 'Getting started');
     const links = await evaluate(`Array.from(document.querySelectorAll('.doc-sidebar a'), link => [link.hash.slice(1), link.textContent])`);
-    const routes = [['/overview', 'Make every app feel like Utkristi.'], ['/showcase', 'Build together.'], ...blocks, ...links];
+    const routes = [['/overview', 'A design system for Utkristi.'], ['/showcase', 'Build together.'], ...blocks, ...links];
     const overflow = [];
     for (const [theme] of themes) {
       for (const [path, title] of routes) {
@@ -353,7 +392,7 @@ async function captureEdge() {
     }
     if (overflow.length) throw new Error(`Horizontal overflow at 375px: ${overflow.join(', ')}`);
     const responsiveRoutes = [
-      ['/overview', 'Make every app feel like Utkristi.'], ['/icons', 'Icons'], ['/tokens', 'Tokens'], ['/showcase', 'Build together.'],
+      ['/overview', 'A design system for Utkristi.'], ['/icons', 'Icons'], ['/tokens', 'Tokens'], ['/showcase', 'Build together.'],
       ['/components/command', 'Command'], ['/components/data-table', 'Data Table'], ['/components/file-input', 'File Input'],
       ['/sandbox?component=command', 'Sandbox'], ['/blocks', 'Blocks'], ['/blocks/project-directory', 'Project directory'],
       ['/blocks/enterprise-landing', 'Enterprise landing'], ['/blocks/execution-desk', 'Execution desk'],
@@ -370,10 +409,11 @@ async function captureEdge() {
             const bar = document.querySelector('.docs-navbar');
             const links = bar.querySelector('.navbar-links');
             const burger = bar.querySelector('.burger');
-            const desktop = getComputedStyle(links).display !== 'none';
-            if (!desktop) return ${width} <= 980 && getComputedStyle(burger).display !== 'none';
-            const rows = new Set(Array.from(links.querySelectorAll('a'), link => Math.round(link.getBoundingClientRect().top)));
-            return ${width} > 980 && getComputedStyle(burger).display === 'none' && rows.size === 1 && links.scrollWidth <= links.clientWidth;
+            const desktop = bar.querySelector('.navbar-dock').clientWidth > 620;
+            if (!desktop) return getComputedStyle(links).display === 'none' && getComputedStyle(burger).display !== 'none';
+            const visible = [...links.querySelectorAll('.navbar-fit-item:not([data-hidden]) a, .navbar-more:not([data-hidden]) button')];
+            const rows = new Set(visible.map(link => Math.round(link.getBoundingClientRect().top)));
+            return getComputedStyle(burger).display === 'none' && rows.size === 1 && links.scrollWidth <= links.clientWidth;
           })()`);
           if (!fits) overflow.push(`${path} (${theme}, navigation does not fit at ${width}px)`);
         }
@@ -595,6 +635,11 @@ async function capturePlaywright() {
     await page.locator('html[data-theme="glass"] .marketing-hero').waitFor();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: join(screenshots, 'overview.png'), fullPage: true });
+    await page.setViewportSize({ width: 760, height: 812 });
+    await page.locator('.navbar-more:not([data-hidden]) button').click();
+    await page.locator('.navbar-more .popover-panel').waitFor();
+    await page.screenshot({ path: join(screenshots, 'navbar-overflow.png') });
+    await page.keyboard.press('Escape');
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(`${url}/#/icons?theme=glass`);
     await page.locator('.icons-cell').first().waitFor();

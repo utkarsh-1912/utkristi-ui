@@ -5,6 +5,7 @@ import {
 import { IconButton } from './Button.js';
 import { Icon } from './icons.js';
 import { Logo } from './Logo.js';
+import { Popover } from './Overlays.js';
 import { cx, type CSSVariables } from './utils/cx.js';
 import { useDialogFocus } from './utils/focus.js';
 import { Portal } from './utils/Portal.js';
@@ -26,6 +27,8 @@ export interface NavbarProps extends HTMLAttributes<HTMLElement> {
   brand?: ReactNode;
   /** `standard` is a full-width bar; `dock` is a floating inset bar with centered links. */
   variant?: 'standard' | 'dock';
+  /** Align dock links beside the brand and move links that do not fit into a disclosure. */
+  collapseLinks?: boolean;
   links?: NavbarLink[];
   renderLink?: RenderLink;
   right?: ReactNode;
@@ -82,17 +85,21 @@ function MobileSheet({ id, brand, links, renderLink, onSearch, searchLabel, shee
 
 export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
   { brand = <Logo size={28} />, variant = 'standard', links = [], renderLink = defaultLink, right, strip, hideOnScroll, onSearch,
-    searchLabel = 'Search', searchShortcut, sheetFoot, className, children, ...props }, ref,
+    searchLabel = 'Search', searchShortcut, sheetFoot, collapseLinks, className, children, ...props }, ref,
 ) {
   const [open, setOpen] = useState(false);
   const [away, setAway] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [indicator, setIndicator] = useState<{ x: number; w: number } | null>(null);
+  const [fit, setFit] = useState<number>();
+  const [moreOpen, setMoreOpen] = useState(false);
   const track = useRef<HTMLElement>(null);
   const bar = useRef<HTMLDivElement>(null);
   const burger = useRef<HTMLButtonElement>(null);
+  const moveFocusToMore = useRef(false);
   const id = useId();
   const dock = variant === 'dock';
+  const collapsible = dock && !!collapseLinks;
   const activeIndex = links.findIndex((link) => link.active);
 
   useEffect(() => {
@@ -143,14 +150,79 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
     return () => observer.disconnect();
   }, [activeIndex, links.length, dock]);
 
+  useIsomorphicLayoutEffect(() => {
+    const nav = track.current;
+    if (!collapsible || !nav) return;
+    const items = Array.from(nav.querySelectorAll<HTMLElement>(':scope > .navbar-fit-item'));
+    const more = nav.querySelector<HTMLElement>(':scope > .navbar-more');
+    if (!more) return;
+    const measure = () => {
+      if (!nav.clientWidth) { setMoreOpen(false); return; }
+      const style = getComputedStyle(nav);
+      const gap = parseFloat(style.columnGap) || 0;
+      const available = nav.clientWidth - (parseFloat(style.paddingInlineStart) || 0) - 1;
+      const widths = items.map((item) => item.getBoundingClientRect().width);
+      const total = widths.reduce((sum, width) => sum + width, 0) + gap * Math.max(0, widths.length - 1);
+      if (total <= available) {
+        setFit(items.length);
+        setMoreOpen(false);
+        return;
+      }
+      let remaining = available - more.getBoundingClientRect().width;
+      let visible = 0;
+      for (const width of widths) {
+        if (width + gap > remaining) break;
+        remaining -= width + gap;
+        visible++;
+      }
+      if (items.slice(visible).some((item) => item.contains(document.activeElement))) moveFocusToMore.current = true;
+      setFit(visible);
+    };
+    measure();
+    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(measure);
+    observer?.observe(nav);
+    for (const item of items) observer?.observe(item);
+    window.addEventListener('resize', measure);
+    return () => { observer?.disconnect(); window.removeEventListener('resize', measure); };
+  }, [collapsible, links]);
+
+  useIsomorphicLayoutEffect(() => {
+    if (!moveFocusToMore.current) return;
+    moveFocusToMore.current = false;
+    track.current?.querySelector<HTMLButtonElement>('.navbar-more button')?.focus();
+  }, [fit]);
+
+  const limit = fit ?? links.length;
+  const overflow = collapsible ? links.slice(limit) : [];
   const navigation = links.length ? <nav ref={track} className="navbar-links" aria-label="Primary" data-indicator={!dock && indicator ? '' : undefined}>
     {!dock && indicator && <span className="navbar-indicator" aria-hidden="true"
       style={{ '--ut-ind-x': `${indicator.x}px`, '--ut-ind-w': `${indicator.w}px` } as CSSVariables} />}
-    {links.map((link) => <Fragment key={link.href}>{renderLink(link, {
+    {links.map((link, index) => {
+      const hidden = collapsible && index >= limit;
+      const anchor = renderLink(link, {
       className: dock ? 'navbar-dock-link' : 'navbar-link',
       'aria-current': link.active ? 'page' : undefined,
+      tabIndex: hidden ? -1 : undefined,
       children: linkContent(link),
-    })}</Fragment>)}
+      });
+      return collapsible ? <span className="navbar-fit-item" key={link.href} data-hidden={hidden || undefined}
+        aria-hidden={hidden || undefined}>{anchor}</span> : <Fragment key={link.href}>{anchor}</Fragment>;
+    })}
+    {collapsible && <div className="navbar-more" data-hidden={!overflow.length || undefined}
+      aria-hidden={!overflow.length || undefined} data-current={overflow.some((link) => link.active) || undefined}>
+      <Popover label="More navigation links" open={moreOpen && !!overflow.length} onOpenChange={setMoreOpen} align="end"
+        trigger={<><Icon name="more-horizontal" size={20} /><span className="ut-sr-only">More navigation links</span></>}>
+        {overflow.map((link) => <Fragment key={link.href}>{renderLink(link, {
+          className: 'navbar-overflow-link',
+          'aria-current': link.active ? 'page' : undefined,
+          onClick: (event) => {
+            setMoreOpen(false);
+            event.currentTarget.closest('.navbar-more')?.querySelector('button')?.focus();
+          },
+          children: linkContent(link),
+        })}</Fragment>)}
+      </Popover>
+    </div>}
   </nav> : null;
 
   const search = onSearch && <button type="button" className="navbar-search" aria-label={searchLabel} onClick={onSearch}>
@@ -162,7 +234,7 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
   return <>
     <header {...props} ref={ref} className={cx('header', dock && 'header-dock', scrolled && 'is-scrolled', hideOnScroll && away && !open && 'is-away', className)}>
       {strip && <div className="strip"><div className="strip-inner"><div>{strip.left}</div><div>{strip.right}</div></div></div>}
-      <div ref={bar} className={cx('navbar', dock && 'navbar-dock')}><div className="navbar-inner">
+      <div ref={bar} className={cx('navbar', dock && 'navbar-dock')} data-collapse-links={collapsible || undefined}><div className="navbar-inner">
         <div className="navbar-left">
           {brand}
           {!dock && navigation}

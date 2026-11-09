@@ -1,9 +1,9 @@
 import { lazy, StrictMode, Suspense, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowUpRight, Plus } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import {
-  Badge, Button, Card, CardBody, CardHeader, Code, Dot, Field, Icon, IconPaletteProvider, Input, Logo, SearchInput,
-  Select, Shell, Slider, Stat, Stats, Tabs, ThemeProvider, ThemeSelect, ToastProvider, useTheme, type Theme,
+  Button, Code, Dot, Icon, IconPaletteProvider, Logo, SearchInput,
+  Select, Shell, Tabs, ThemeProvider, ThemeSelect, ToastProvider, useTheme, type Theme,
 } from '@utkristi/ui';
 import { blockPages, componentPages, examples, type Example } from './examples';
 import { blocks } from './blocks';
@@ -33,7 +33,7 @@ const primary = [
   { href: '#/frameworks', label: 'Frameworks' },
 ];
 const primaryIcons = {
-  Overview: 'home', Install: 'download', Icons: 'palette', Components: 'layers', Blocks: 'grid', Sandbox: 'terminal',
+  Overview: 'home', Install: 'download', Icons: 'palette', Components: 'layers', Blocks: 'grid', Sandbox: 'terminal', Frameworks: 'code',
 } as const;
 const showcaseLink = { href: '#/showcase', label: 'Showcase' };
 const isMac = typeof navigator !== 'undefined' && /Mac|iP(hone|ad|od)/.test(navigator.platform);
@@ -284,37 +284,19 @@ function Typography() {
   </article>;
 }
 
-const SplitPreview = examples['split-button'].preview;
-
 function Showcase() {
   const motion = useMarketingMotion();
-  const { resolvedTheme } = useTheme();
-  return <article ref={motion} className="showcase" data-showcase-theme={resolvedTheme}>
-    <PageTitle kicker={resolvedTheme === 'glass' ? 'Glass / Component showcase' : 'Component showcase / 0.1.0'} title={<>Build <span className="faint">together.</span></>}
-      detail={<>A workspace assembled from <b>Utkristi UI</b>, the shared kit for the Utkristi ecosystem.</>} />
-    <div className="sample-row"><Button className="showcase-cta" href="#/components/button" iconLeft={<Plus size={16} />} iconRight={<ArrowUpRight size={16} />}>New workspace</Button><Button href="#/components/card" variant="ghost">Browse surfaces</Button>
-      <Button href="#/blocks" variant="ghost">Explore templates</Button><Badge tone="ok">All systems operational</Badge></div>
-    <div className="showcase-stats"><Stats>
-      <Stat label="Active rooms" value="24" desc="Across three teams" /><Stat label="Members" value="86" desc="Working together" />
-      <Stat label="Sync uptime" value="99" suffix="%" desc="Last 30 days" /><Stat label="Changes" value="128" desc="This week" />
-    </Stats></div>
-    <div className="showcase-grid" data-reveal>
-      <Card><CardHeader><strong>Workspace settings</strong><Badge tone="accent">Studio</Badge></CardHeader><CardBody className="sample-stack">
-        <Field label="Workspace name" hint="Visible to everyone in your workspace"><Input defaultValue="Studio" /></Field>
-        <Field label="Find a collaborator"><SearchInput placeholder="Search names" shortcut="⌘ K" /></Field>
-        <div><span className="label">Notification volume</span><Slider label="Notification volume" defaultValue={60} marks={[0, 25, 50, 75, 100]} /></div>
-        <div className="sample-row"><Button>Save changes</Button><Button variant="ghost">Cancel</Button></div>
-      </CardBody></Card>
-      <Card pane><CardBody className="showcase-pane">
-        <span className="label">Workspace / Live</span><h2 className="display display-lg">Studio</h2>
-        <p className="muted">A shared space for the things you’re making.</p>
-        <examples.avatar.preview />
-        <Button variant="solid" iconRight={<ArrowUpRight size={16} />}>Open workspace</Button>
-      </CardBody></Card>
-      <Card><CardHeader><strong>Contributors</strong><Badge tone="count">3</Badge></CardHeader><CardBody><examples.table.preview /></CardBody></Card>
-      <Card><CardHeader><strong>Project setup</strong><Dot label="In progress" tone="warn" /></CardHeader><CardBody className="sample-stack">
-        <examples.steps.preview /><examples.tabs.preview /><div className="sample-row"><SplitPreview /></div>
-      </CardBody></Card>
+  const ProjectDirectory = blocks['project-directory'].preview;
+  return <article ref={motion} className="showcase">
+    <PageTitle kicker="Component showcase" title="Build together."
+      detail="Explore a working project directory and see how the icon library adapts to the current appearance." />
+    <div className="showcase-demos">
+      <section aria-label="Workspace example" className="showcase-workspace">
+        <div className="doc-section-head"><span className="label">Workspace example</span>
+          <a className="marketing-link" href="#/blocks/project-directory">View source <Icon name="arrow-right" /></a>
+        </div>
+        <ProjectDirectory />
+      </section>
       <Suspense fallback={<p className="muted">Loading icon tray…</p>}><ShowcaseIconTray /></Suspense>
     </div>
     <WorkflowSection />
@@ -425,6 +407,7 @@ function App() {
   return <ThemeProvider forcedTheme={theme}><IconPaletteProvider><ToastProvider>
     <Shell mainClassName="docs-main" navbar={{
       variant: 'dock',
+      collapseLinks: true,
       className: 'docs-navbar',
       brand: <a href="#/overview" aria-label="Utkristi UI overview"><Logo size={32} /></a>,
       links: primary.map((item) => ({
@@ -440,9 +423,8 @@ function App() {
     }} footer={{
       className: 'docs-footer',
       lede: <div className="docs-footer-brand"><Logo size={32} /><p>Design and build across the Utkristi ecosystem.</p></div>,
-      cta: <Button href="#/sandbox" variant="ghost">Open sandbox <Icon name="arrow-up-right" /></Button>,
-      columns: [{ title: 'Build', links: [guide[0], guide[1], primary[3]] },
-        { title: 'Design', links: [guide[2], guide[3], guide[4]] }, { title: 'Explore', links: [primary[0], primary[4], showcaseLink] }],
+      columns: [{ title: 'Build', links: [guide[0], primary[3], primary[5], primary[6]] },
+        { title: 'Design', links: [guide[1], guide[2], guide[3], guide[4]] }, { title: 'Explore', links: [primary[0], primary[4], showcaseLink] }],
       themeSwitch: <div className="docs-footer-appearance"><span className="label">Appearance</span>{themeSelect()}</div>,
       bottom: <><span>Utkristi UI · MIT license</span><span>Version 0.1.0</span></>,
     }}>

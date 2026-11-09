@@ -126,15 +126,60 @@ async function captureEdge() {
     await load('/sandbox?component=carousel&theme=glass', 'Sandbox');
     const ready = () => evaluate('document.querySelector(".playground [role=status]")?.textContent === "React preview ready"');
     await retry(ready, 'initial React sandbox');
-    const before = await evaluate('document.querySelector(".playground iframe").dataset.previewRun');
-    const edited = JSON.stringify('export default function Example() { return <p>Edited sandbox example</p>; }');
-    await evaluate(`(() => {
-      const editor = document.querySelector("#sandbox-source");
-      Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value").set.call(editor, ${edited});
-      editor.dispatchEvent(new Event("input", { bubbles: true }));
-    })()`);
-    await evaluate('Array.from(document.querySelectorAll(".playground button")).find(button => button.textContent.trim() === "Run").click()');
-    await retry(async () => (await evaluate('document.querySelector(".playground iframe").dataset.previewRun')) !== before && await ready(), 'edited React sandbox');
+    async function setSource(source) {
+      await evaluate(`(() => {
+        const editor = document.querySelector("#sandbox-source");
+        Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value").set.call(editor, ${JSON.stringify(source)});
+        editor.dispatchEvent(new Event("input", { bubbles: true }));
+      })()`);
+    }
+    async function runSource(source) {
+      await setSource(source);
+      const before = await evaluate('document.querySelector(".playground iframe")?.dataset.previewRun');
+      return evaluate(`new Promise((resolve, reject) => {
+        const start = performance.now();
+        const area = document.querySelector(".playground");
+        const observer = new MutationObserver(() => {
+          const status = area.querySelector("[role=status]")?.textContent;
+          const run = area.querySelector("iframe")?.dataset.previewRun;
+          const error = area.querySelector(".playground-error")?.textContent;
+          if (error) { finish(); reject(new Error(error)); }
+          else if (run && run !== ${JSON.stringify(before)} && status === "React preview ready") {
+            finish(); resolve(performance.now() - start);
+          }
+        });
+        function finish() { clearTimeout(timeout); observer.disconnect(); }
+        const timeout = setTimeout(() => { finish(); reject(new Error("Sandbox run timed out")); }, 8000);
+        observer.observe(area, { childList: true, subtree: true, characterData: true });
+        Array.from(area.querySelectorAll("button")).find(button => button.textContent.trim() === "Run").click();
+      })`);
+    }
+    const edited = 'export default function Example() { return <p>Edited sandbox example</p>; }';
+    await runSource(edited);
+    if (process.argv.includes('--stress')) {
+      await send('Emulation.setCPUThrottlingRate', { rate: 4 });
+      try {
+        const times = [];
+        for (let index = 0; index < 12; index++) {
+          const data = index % 2 === 0
+            ? 'import { DataTable } from "@utkristi/ui"; const rows = Array.from({ length: 5000 }, (_, id) => ({ id, name: "Workspace " + id })); export default function Example() { return <DataTable rows={rows} columns={[{ key: "name", header: "Workspace", sortValue: row => row.name }]} getRowKey={row => row.id} pageSize={20} />; }'
+            : 'import { Carousel } from "@utkristi/ui"; const slides = Array.from({ length: 60 }, (_, id) => ({ id: String(id), content: <p>Slide {id + 1}</p> })); export default function Example() { return <Carousel slides={slides} />; }';
+          times.push(await runSource(data));
+          const frames = await evaluate('document.querySelectorAll(".playground iframe").length');
+          if (frames !== 1) throw new Error('Sandbox left an extra preview frame mounted');
+        }
+        let invalid = false;
+        try { await runSource('export default function {'); }
+        catch (error) { invalid = !String(error).includes('timed out'); }
+        if (!invalid) throw new Error('The sandbox did not report invalid TSX');
+        await runSource(edited);
+        times.sort((a, b) => a - b);
+        process.stdout.write('4× CPU stress: 12 runs with 5,000 table rows or 60 slides, median ' +
+          Math.round((times[5] + times[6]) / 2) + ' ms, p95 ' + Math.round(times[11]) + ' ms. Invalid TSX recovered.\n');
+      } finally {
+        await send('Emulation.setCPUThrottlingRate', { rate: 1 });
+      }
+    }
     await evaluate(`(() => {
       const select = document.querySelector('.playground select[id$="-mode"]');
       select.value = "html";

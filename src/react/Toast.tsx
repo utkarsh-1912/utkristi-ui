@@ -3,7 +3,7 @@ import { createContext, forwardRef, useCallback, useContext, useEffect, useMemo,
 import { Badge, type Tone } from './Badge.js';
 import { Button, IconButton } from './Button.js';
 import { Icon } from './icons.js';
-import { cx } from './utils/cx.js';
+import { cx, type CSSVariables } from './utils/cx.js';
 import { Portal } from './utils/Portal.js';
 import { useId } from './utils/useId.js';
 
@@ -23,20 +23,12 @@ function ToastMessage({ entry, dismiss }: { entry: ToastEntry; dismiss: ToastCon
   const [hovered, hover] = useState(false);
   const [focused, focus] = useState(false);
   const remaining = useRef(duration);
-  const track = useRef<HTMLSpanElement>(null);
   useEffect(() => {
     if (duration <= 0 || hovered || focused) return;
     const start = performance.now();
-    let frame = 0;
-    function update(now: number) {
-      track.current?.style.setProperty('--p', String(Math.max(0, remaining.current - (now - start)) / duration));
-      frame = requestAnimationFrame(update);
-    }
     const timeout = window.setTimeout(() => dismiss(id), remaining.current);
-    frame = requestAnimationFrame(update);
     return () => {
       window.clearTimeout(timeout);
-      cancelAnimationFrame(frame);
       remaining.current = Math.max(0, remaining.current - (performance.now() - start));
     };
   }, [dismiss, duration, focused, hovered, id]);
@@ -53,7 +45,8 @@ function ToastMessage({ entry, dismiss }: { entry: ToastEntry; dismiss: ToastCon
       {action && <Button size="sm" variant="ghost" onClick={() => { dismiss(id); action.onClick(); }}>{action.label}</Button>}
       <IconButton label="Dismiss notification" size="sm" onClick={() => dismiss(id)}><Icon name="close" /></IconButton>
     </div>
-    {duration > 0 && <span ref={track} className="toast-track" aria-hidden="true" />}
+    {duration > 0 && <span className="toast-track" data-animated data-paused={hovered || focused || undefined} aria-hidden="true"
+      style={{ '--ut-toast-duration': duration + 'ms' } as CSSVariables} />}
   </div>;
 }
 

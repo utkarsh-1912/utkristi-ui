@@ -192,3 +192,15 @@
   --ut-navbar-focus: #A3FF00;
 }
 
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass, [data-theme="glass"] {
+    --ut-bg-2: #FCFAFE;
+    --ut-raise: #FFFFFF;
+    --ut-navbar-bg: #202021;
+    --ut-navbar-filter: none;
+    --ut-surface-filter: none;
+    --ut-surface-sheen: none;
+    --ut-canvas: none;
+  }
+}

@@ -91,6 +91,7 @@ Build the website with `npm ci` and `npm run docs:build`. Publish the contents o
 | `npm run docs` | Start the Vite documentation server |
 | `npm run docs:build` | Build the documentation |
 | `npm run docs:preview` | Preview the documentation build |
+| `npm run docs:stress` | Run browser checks and exercise repeated sandbox runs under CPU throttling |
 | `npm run screenshots` | Capture all three themes in headless Edge and check every docs route at 375px in all three themes |
 
 The screenshot script uses Playwright with Chromium when Edge is unavailable. Install them in that environment before running the script.

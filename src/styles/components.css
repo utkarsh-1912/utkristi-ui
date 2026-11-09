@@ -157,7 +157,7 @@ button.chip:hover:where(:not(.is-active, [aria-pressed="true"], [aria-checked="t
 .strip-inner > div { display: flex; align-items: center; gap: 18px; min-width: 0; }
 .strip a:hover, .strip button:hover { color: var(--ut-ink); }
 .strip button { border: 0; background: none; color: inherit; font: inherit; cursor: pointer; padding: 0; }
-.navbar { height: 68px; background: var(--ut-navbar-bg, color-mix(in srgb, var(--ut-bg) 86%, transparent)); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--ut-line);
+.navbar { height: 68px; background: var(--ut-navbar-bg, color-mix(in srgb, var(--ut-bg) 86%, transparent)); backdrop-filter: var(--ut-navbar-filter, blur(14px)); -webkit-backdrop-filter: var(--ut-navbar-filter, blur(14px)); border-bottom: 1px solid var(--ut-line);
   color: var(--ut-navbar-ink, var(--ut-ink)); --ut-focus: var(--ut-navbar-focus, var(--ut-accent));
   --ut-brand-ink: var(--ut-navbar-ink, var(--ut-ink)); --ut-brand-muted: var(--ut-navbar-muted, var(--ut-ink-3));
   --ut-control-ink: var(--ut-navbar-ink, var(--ut-ink)); --ut-control-muted: var(--ut-navbar-muted, var(--ut-ink-2));
@@ -518,6 +518,12 @@ input.switch { display: inline-block; margin: 0; }
 .toast-body { font-size: 14px; line-height: 1.5; }
 .toast-actions { display: flex; align-items: center; gap: 8px; }
 .toast-track { position: absolute; inset: auto 0 0; height: 2px; background: var(--ut-accent); transform-origin: left; transform: scaleX(var(--p, 1)); }
+.toast-track[data-animated] { animation: ut-toast-progress var(--ut-toast-duration) linear forwards; }
+.toast-track[data-paused] { animation-play-state: paused; }
+@keyframes ut-toast-progress { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .toast-track[data-animated] { animation: none; }
+}
 .avatar { position: relative; width: var(--ut-size, 36px); height: var(--ut-size, 36px); font-size: calc(var(--ut-size, 36px) * .36); }
 .avatar-group { display: inline-flex; align-items: center; padding: 2px; }
 .avatar-group > * + * { margin-inline-start: -7px; }

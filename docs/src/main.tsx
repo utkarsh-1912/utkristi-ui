@@ -1,17 +1,18 @@
 import { lazy, StrictMode, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, ArrowUpRight, Copy, Plus } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Plus } from 'lucide-react';
 import {
-  Badge, Button, Card, CardBody, CardHeader, Code, Dot, Field, IconButton, Input, Logo, SearchInput,
-  Shell, Slider, Stat, Stats, Tabs, ThemeProvider, ThemeSwitch, ToastProvider, useTheme, useToast,
+  Badge, Button, Card, CardBody, CardHeader, Code, Dot, Field, Input, Logo, SearchInput,
+  Shell, Slider, Stat, Stats, Tabs, ThemeProvider, ThemeSwitch, ToastProvider, useTheme,
 } from '@utkristi/ui';
 import { componentPages, examples } from './examples';
 import { FontDemo } from './catalog';
-import { api, examples as sampleSources } from 'virtual:utkristi-examples';
+import { CopyCode } from './CopyCode';
 import tokenCSS from '../../src/styles/tokens.css?raw';
 import './styles.css';
 
 const Playground = lazy(() => import('./Playground'));
+const ComponentReference = lazy(() => import('./ComponentReference'));
 
 const primary = [
   { href: '#/overview', label: 'Overview' },
@@ -39,21 +40,6 @@ function route() {
   return { path: path || '/overview', theme, sample: new URLSearchParams(options).get('component') ?? undefined } as const;
 }
 
-function CopyCode({ text }: { text: string }) {
-  const toast = useToast();
-  return <div className="code-example">
-    <IconButton size="sm" label="Copy code" className="copy-code" onClick={async () => {
-      try {
-        await navigator.clipboard.writeText(text);
-        toast.show({ title: 'Copied', tone: 'ok' });
-      } catch {
-        toast.show({ title: 'Could not copy code', tone: 'bad' });
-      }
-    }}><Copy size={15} /></IconButton>
-    <Code>{text}</Code>
-  </div>;
-}
-
 function Frame({ theme, children }: { theme: PreviewTheme; children: ReactNode }) {
   const panel = useRef<HTMLDivElement>(null);
   return <div ref={panel} data-theme={theme} className="theme-preview">
@@ -69,38 +55,13 @@ function Frame({ theme, children }: { theme: PreviewTheme; children: ReactNode }
 function ComponentPage({ slug }: { slug: keyof typeof examples }) {
   const example = examples[slug];
   const Preview = example.preview;
-  const sample = sampleSources[slug];
-  const reactExample = sample.code;
-  const tailwindExample = example.html.replace(/class="([^"]+)"/, 'class="$1 p-0"');
   return <article className="doc-article">
     <PageTitle kicker="Components" title={example.name} detail={example.description} />
     <div className="theme-gallery">
       {themes.map((theme) => <Frame key={theme} theme={theme}><Preview /></Frame>)}
     </div>
-    <div className="example-source">
-      <div className="doc-section-head"><div><span className="label">Implementation</span><h2>Use in your app</h2></div>
-        <Button href={`#/sandbox?component=${slug}`} variant="ghost" iconRight={<ArrowUpRight size={16} />}>Open sandbox</Button></div>
-      <Tabs label="Usage examples" items={[
-        { id: 'tailwind', label: 'Tailwind', content: <><p className="muted">Use utilities such as <Code inline>p-0</Code> to override component padding. Interactive examples use the React component or your own event handlers.</p><CopyCode text={tailwindExample} /></> },
-        { id: 'css', label: 'Plain CSS', content: <><p className="muted">Import <Code inline>@utkristi/ui/utkristi-ui.css</Code> before using these classes. Use native controls or add behavior where needed.</p><CopyCode text={example.html} /></> },
-        { id: 'react', label: 'React', content: <><p className="muted">Install the kit and import its stylesheet once in your app. This example includes its data and theme providers.</p><CopyCode text={reactExample} /></> },
-      ]} />
-    </div>
-    <ComponentApi components={sample.components} />
+    <Suspense fallback={<p className="muted">Loading examples and props…</p>}><ComponentReference slug={slug} html={example.html} /></Suspense>
   </article>;
-}
-
-function ComponentApi({ components }: { components: string[] }) {
-  return <section className="component-api" aria-label="API reference">
-    <h2>API reference</h2>
-    <p className="muted">The tables list kit-specific props. Components also forward their supported HTML attributes.</p>
-    {components.map((name) => <details key={name}>
-      <summary>{name}</summary>
-      {api[name]?.length ? <div className="table-wrap"><table className="table api-table"><thead><tr><th scope="col">Prop</th><th scope="col">Type</th><th scope="col">Required</th></tr></thead>
-        <tbody>{api[name].map((prop) => <tr key={prop.name}><th scope="row"><Code inline>{prop.name}</Code></th><td><code>{prop.type}</code>{prop.description && <p>{prop.description}</p>}</td><td>{prop.required ? "Yes" : "Optional"}</td></tr>)}</tbody>
-      </table></div> : <p className="muted">Uses standard HTML attributes and children.</p>}
-    </details>)}
-  </section>;
 }
 
 function PageTitle({ kicker, title, detail }: { kicker: string; title: ReactNode; detail: ReactNode }) {
@@ -288,6 +249,15 @@ function App() {
     window.addEventListener('hashchange', update);
     return () => window.removeEventListener('hashchange', update);
   }, []);
+  useEffect(() => {
+    if (path !== '/typography' && path !== '/components/typography') return;
+    if (document.getElementById('utkristi-specimen-fonts')) return;
+    const stylesheet = document.createElement('link');
+    stylesheet.id = 'utkristi-specimen-fonts';
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = 'https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Manrope:wght@400..800&family=Newsreader:opsz,wght@6..72,400..700&display=swap';
+    document.head.append(stylesheet);
+  }, [path]);
   const slug = path.slice('/components/'.length);
   const component = path.startsWith('/components/') && Object.hasOwn(examples, slug) ? slug as keyof typeof examples : undefined;
   const pages: Record<string, ReactNode> = {

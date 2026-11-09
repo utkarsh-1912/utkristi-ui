@@ -68,7 +68,8 @@
     "docs": "vite --config docs/vite.config.ts",
     "docs:build": "vite build --config docs/vite.config.ts",
     "docs:preview": "vite preview --config docs/vite.config.ts",
-    "screenshots": "node scripts/screenshots.mjs"
+    "screenshots": "node scripts/screenshots.mjs",
+    "docs:stress": "node scripts/screenshots.mjs --stress"
   },
   "peerDependencies": {
     "lucide-react": ">=0.468",

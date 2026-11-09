@@ -33,30 +33,37 @@ export default function Playground({ component }: { component?: string }) {
   const last = useRef({ code, mode, theme });
   last.current = { code, mode, theme };
 
-  async function compile(source: string, language: 'react' | 'html', previewTheme: ResolvedTheme) {
+  const compiler = useRef<Worker | null>(null);
+  function compile(source: string, language: 'react' | 'html', previewTheme: ResolvedTheme) {
     const token = String(++requested.current);
-    setBusy(true);
     setError('');
     setStatus('');
+    if (language === 'html') {
+      setRun({ token, source, theme: previewTheme, markup: true });
+      setStatus('HTML preview ready');
+      setBusy(false);
+      return;
+    }
+    setBusy(true);
     try {
-      let output = source;
-      if (language === 'react') {
-        const ts = await import('typescript');
-        const result = ts.transpileModule(source, {
-          fileName: 'example.tsx', reportDiagnostics: true,
-          compilerOptions: { jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, esModuleInterop: true },
-        });
-        const syntax = result.diagnostics?.find((diagnostic) => diagnostic.category === ts.DiagnosticCategory.Error);
-        if (syntax) throw new Error(ts.flattenDiagnosticMessageText(syntax.messageText, '\n'));
-        output = result.outputText;
-      }
-      if (token !== String(requested.current)) return;
-      setRun({ token, source: output, theme: previewTheme, markup: language === 'html' });
-      if (language === 'html') setStatus('HTML preview ready');
+      const worker = compiler.current ??= new Worker(new URL('./compile.worker.ts', import.meta.url), { type: 'module' });
+      worker.onmessage = (event: MessageEvent<{ token: string; code?: string; error?: string }>) => {
+        if (event.data.token !== token || token !== String(requested.current)) return;
+        setBusy(false);
+        if (event.data.error || event.data.code === undefined) { setError(event.data.error ?? 'The compiler produced no code.'); return; }
+        setRun({ token, source: event.data.code, theme: previewTheme, markup: false });
+      };
+      worker.onerror = (event) => {
+        if (token !== String(requested.current)) return;
+        setError(event.message || 'The preview compiler could not start.');
+        setBusy(false);
+        worker.terminate();
+        compiler.current = null;
+      };
+      worker.postMessage({ token, source });
     } catch (cause) {
-      if (token === String(requested.current)) setError(cause instanceof Error ? cause.message : String(cause));
-    } finally {
-      if (token === String(requested.current)) setBusy(false);
+      setError(cause instanceof Error ? cause.message : String(cause));
+      setBusy(false);
     }
   }
 
@@ -64,18 +71,19 @@ export default function Playground({ component }: { component?: string }) {
     const initial = last.current;
     void compile(initial.code, initial.mode, initial.theme);
     const pending = requested;
-    return () => { pending.current++; };
+    const activeCompiler = compiler;
+    return () => { pending.current++; activeCompiler.current?.terminate(); activeCompiler.current = null; };
   }, []);
 
   useEffect(() => {
     function message(event: MessageEvent) {
-      if (event.source !== iframe.current?.contentWindow || event.data?.token !== run?.token) return;
+      if (event.source !== iframe.current?.contentWindow || event.data?.token !== String(requested.current)) return;
       if (event.data?.kind === 'utkristi-preview-ready') setStatus('React preview ready');
       if (event.data?.kind === 'utkristi-preview-error') { setError(String(event.data.error)); setStatus(''); }
     }
     window.addEventListener('message', message);
     return () => window.removeEventListener('message', message);
-  }, [run]);
+  }, []);
 
   function changeMode(next: 'react' | 'html') {
     setMode(next);

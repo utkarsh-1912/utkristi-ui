@@ -1,4 +1,4 @@
-import { forwardRef, useState, type HTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useMemo, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Button } from './Button.js';
 import { Code } from './Code.js';
 import { SearchInput } from './Field.js';
@@ -80,20 +80,23 @@ export function DataTable<Row>({ columns, rows, pageSize = 10, searchLabel = 'Fi
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState<{ key: string; descending: boolean }>();
-  const column = columns.find(({ key }) => key === sort?.key);
-  const filter = query.trim().toLocaleLowerCase();
-  const visible = rows.filter((row) => !filter || columns.some((entry) => {
-    const value = entry.filterValue?.(row) ?? entry.sortValue?.(row) ?? row[entry.key as keyof Row];
-    return String(value ?? '').toLocaleLowerCase().includes(filter);
-  }));
-  const accessor = column?.sortValue;
-  if (accessor) visible.sort((a, b) => {
-    const left = accessor(a);
-    const right = accessor(b);
-    const order = typeof left === 'number' && typeof right === 'number' ? left - right
-      : String(left).localeCompare(String(right), undefined, { numeric: true });
-    return sort?.descending ? -order : order;
-  });
+  const visible = useMemo(() => {
+    const column = columns.find(({ key }) => key === sort?.key);
+    const filter = query.trim().toLocaleLowerCase();
+    const matching = rows.filter((row) => !filter || columns.some((entry) => {
+      const value = entry.filterValue?.(row) ?? entry.sortValue?.(row) ?? row[entry.key as keyof Row];
+      return String(value ?? '').toLocaleLowerCase().includes(filter);
+    }));
+    const accessor = column?.sortValue;
+    if (accessor) matching.sort((a, b) => {
+      const left = accessor(a);
+      const right = accessor(b);
+      const order = typeof left === 'number' && typeof right === 'number' ? left - right
+        : String(left).localeCompare(String(right), undefined, { numeric: true });
+      return sort?.descending ? -order : order;
+    });
+    return matching;
+  }, [columns, query, rows, sort]);
   const limit = Math.max(1, Number.isFinite(pageSize) ? Math.floor(pageSize) : 10);
   const count = Math.max(1, Math.ceil(visible.length / limit));
   const current = Math.min(page, count);

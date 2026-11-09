@@ -2,10 +2,12 @@ import { ArrowUpRight } from 'lucide-react';
 import { Button, Code, Tabs } from '@utkristi/ui';
 import { api, examples as sampleSources } from 'virtual:utkristi-examples';
 import { CopyCode } from './CopyCode';
+import enterpriseStyles from './enterprise.css?raw';
 
 export default function ComponentReference({ slug, html }: { slug: string; html: string }) {
   const sample = sampleSources[slug];
   const reactExample = sample?.code;
+  const template = slug === 'enterprise-landing' || slug === 'execution-desk';
   return <>
     <div className="example-source">
       <div className="doc-section-head"><div><span className="label">Implementation</span><h2>Use in your app</h2></div>
@@ -13,8 +15,11 @@ export default function ComponentReference({ slug, html }: { slug: string; html:
       <Tabs label="Usage examples" defaultValue="react" items={[
         { id: 'css', label: 'HTML', content: <><p className="muted">This markup works with the Tailwind preset or <Code inline>@utkristi/ui/utkristi-ui.css</Code>. Use the React example for the full interaction.</p><CopyCode text={html} language="HTML" /></> },
         { id: 'react', label: 'React', content: reactExample
-          ? <><p className="muted">Install the kit and import its stylesheet once in your app. This example includes its data and theme providers.</p><CopyCode text={reactExample} language="TSX" /></>
+          ? <><p className="muted">Install the kit and import its stylesheet once in your app. This example includes its data and theme providers.</p>
+            {template && <p className="muted">Copy the layout stylesheet from the CSS tab and import it beside this example.</p>}
+            <CopyCode text={reactExample} language="TSX" /></>
           : <p className="muted">The React example is temporarily unavailable. See the HTML tab for the markup.</p> },
+        ...(template ? [{ id: 'layout-css', label: 'Layout CSS', content: <CopyCode text={enterpriseStyles} language="CSS" /> }] : []),
       ]} />
     </div>
     {sample && <ComponentApi components={sample.components} />}

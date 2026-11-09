@@ -18,6 +18,10 @@
       "types": "./dist/react/index.d.ts",
       "import": "./dist/react/index.js"
     },
+    "./dom": {
+      "types": "./dist/react/dom.d.ts",
+      "import": "./dist/react/dom.js"
+    },
     "./preset": {
       "import": {
         "types": "./dist/tailwind/preset.d.ts",

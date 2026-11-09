@@ -131,10 +131,11 @@ export function docsPlayground(docs: string, source: string): Plugin {
     resolveId(id) { if (id.startsWith(prefix)) return '\0' + id; },
     async load(id) {
       if (id === '\0' + prefix + 'examples') {
-        const entries = await Promise.all(['catalog', 'examples', 'variants', 'blocks'].map(async (file) => {
+        const registries = [['catalog', 'catalog'], ['examples', 'examples'], ['variants', 'variants'], ['blocks', 'blocks'], ['workflow-blocks', 'workflowBlocks']];
+        const entries = await Promise.all(registries.map(async ([file, name]) => {
           const path = join(docs, 'src', file + '.tsx');
           this.addWatchFile(path);
-          return samples(path, await readFile(path, 'utf8'), file);
+          return samples(path, await readFile(path, 'utf8'), name);
         }));
         const examples = Object.assign({}, ...entries) as ReturnType<typeof samples>;
         const api = apiFor(docs, source, examples);
@@ -148,8 +149,11 @@ export function docsPlayground(docs: string, source: string): Plugin {
         });
         for (const asset of [path, ...['tokens', 'base', 'components'].map((file) => join(source, '..', 'styles', file + '.css'))]) this.addWatchFile(asset);
         const css = await Promise.all(['tokens', 'base', 'components'].map((file) => readFile(join(source, '..', 'styles', file + '.css'), 'utf8')));
-        const demos = await readFile(join(docs, 'src', 'styles.css'), 'utf8');
-        return `export const script = ${JSON.stringify(result.outputFiles[0].text)}; export const styles = ${JSON.stringify(css.join('\n') + demos.replace(/^@tailwind .*$/gm, ''))};`;
+        const demoFiles = ['styles.css', 'enterprise.css'].map((file) => join(docs, 'src', file));
+        for (const file of demoFiles) this.addWatchFile(file);
+        const demos = await Promise.all(demoFiles.map((file) => readFile(file, 'utf8')));
+        const styles = [...css, ...demos].join('\n').replace(/^@tailwind .*$/gm, '');
+        return `export const script = ${JSON.stringify(result.outputFiles[0].text)}; export const styles = ${JSON.stringify(styles)};`;
       }
     },
   };

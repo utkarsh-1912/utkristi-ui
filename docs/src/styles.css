@@ -34,6 +34,9 @@
 .doc-title { display: flex; flex-direction: column; gap: 20px; margin-bottom: 28px; }
 .doc-title .display { overflow-wrap: anywhere; }
 .doc-title .lede { margin: 0; }
+[data-template-page] .doc-title { gap: 8px; margin-block-end: 20px; }
+[data-template-page] .doc-title .display { font-size: clamp(36px, 5vw, 64px); }
+[data-template-page] .doc-title .lede { font-size: clamp(1rem, 1.5vw, 1.25rem); }
 .docs-example { min-inline-size: 0; }
 .docs-example-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; margin-block-end: 10px; }
 .docs-example-title { display: grid; gap: 2px; min-inline-size: 0; flex: 1 1 16rem; }
@@ -148,6 +151,15 @@
 .showcase-stats { margin-block: 36px 18px; }
 .showcase-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .showcase-grid > * { min-width: 0; }
+.showcase-icon-card { grid-column: 1 / -1; }
+.showcase-icon-card .card-head { flex-wrap: wrap; gap: 8px; }
+.showcase-icon-card h2 { margin: 3px 0 0; font-size: 1.2rem; }
+.showcase-icon-body { display: grid; gap: 16px; }
+.showcase-icon-tools { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: 12px; }
+.showcase-icon-tools .select { inline-size: auto; }
+.showcase-icon-tray { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 106px), 1fr)); gap: 6px; margin: 0; padding: 0; list-style: none; }
+.showcase-icon-tray li { display: grid; justify-items: center; gap: 4px; padding: 8px 4px; border-radius: var(--ut-r-field); background: var(--ut-tint); font-size: .75rem; text-align: center; }
+.showcase-icon-preview { display: grid; place-items: center; block-size: 68px; }
 .showcase-pane { display: flex; height: 100%; align-items: flex-start; flex-direction: column; gap: 20px; padding: clamp(20px, 4vw, 44px); }
 .showcase-pane .btn { margin-top: auto; }
 /* The Glass demos put translucent cards over a quiet lilac and green backdrop. */

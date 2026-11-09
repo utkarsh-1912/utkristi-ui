@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added enterprise landing and execution desk templates, four operational layouts, and four custom cards. Added Signal, Ledger, and Terminal presets that work with Night, Paper, and Glass.
+- Rebuilt the showcase icon tray. Scrollbars reveal on hover and focus. Added a native dialog entry point and framework integration examples.
+
 - Added previous and next links to the docs. Simplified Command and docs search, made toast messages compact, and moved copy feedback into the source toolbar.
 - Rebuilt the sandbox with a highlighted editor, line numbers, local drafts, source download, and separate source and preview views on smaller screens.
 

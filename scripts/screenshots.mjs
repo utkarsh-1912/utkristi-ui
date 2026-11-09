@@ -113,6 +113,7 @@ async function captureEdge() {
       await load(`/showcase?theme=${theme}`, 'Build together.');
       await retry(() => evaluate(`document.documentElement.dataset.theme === '${theme}'`), theme);
       await retry(() => evaluate('getComputedStyle(document.querySelector(".header-dock .navbar-links")).display === "flex"'), 'desktop dock links');
+      await retry(() => evaluate('!!document.querySelector(".showcase-icon-tray")'), 'showcase tray');
       await fontsReady();
       await screenshot(file, true);
     }
@@ -129,6 +130,12 @@ async function captureEdge() {
     await retry(() => evaluate('document.querySelector(".playground-run-status")?.textContent === "React preview ready"'), 'sandbox screenshot');
     await fontsReady();
     await screenshot('sandbox');
+    for (const [slug, theme, title] of [['enterprise-landing', 'glass', 'Enterprise landing'], ['execution-desk', 'dark', 'Execution desk']]) {
+      await load(`/blocks/${slug}?theme=${theme}`, title);
+      await retry(() => evaluate(`document.documentElement.dataset.theme === '${theme}' && !!document.querySelector('.ut-template')`), title + ' screenshot');
+      await fontsReady();
+      await screenshot(slug);
+    }
     await size(mobileViewport.width, mobileViewport.height);
     await load('/components/command?theme=glass', 'Command');
     await retry(() => evaluate('document.documentElement.dataset.theme === "glass" && !!document.querySelector(".command [role=listbox]")'), 'mobile Command example');
@@ -138,11 +145,97 @@ async function captureEdge() {
     await retry(() => evaluate('!!document.querySelector(".sheet-dock [aria-current=page]")'), 'mobile navigation screenshot');
     await screenshot('mobile-menu');
     await evaluate(`document.querySelector('.sheet-dock [aria-label="Close menu"]').click()`);
-    process.stdout.write('Captured the overview, showcases, icon catalog, sandbox, and both mobile views.\n');
+    process.stdout.write('Captured the overview, showcases, icon catalog, sandbox, enterprise templates, and both mobile views.\n');
     if (captureOnly) return;
     await send('Emulation.setEmulatedMedia', { features: [] });
 
     await size(1280, 860);
+    for (const [theme, themeKey] of themes) {
+      await load('/showcase?theme=' + theme, 'Build together.');
+      await retry(() => evaluate('!!document.querySelector(".showcase-icon-tray")'), 'showcase tray');
+      await evaluate('document.querySelector(".showcase-icon-tray").scrollIntoView({ block: "center" })');
+      await retry(() => evaluate(`(() => {
+        const images = [...document.querySelectorAll('.showcase-icon-tray img')];
+        return images.length === 6 && images.every((image) => image.naturalWidth > 0 && image.src.includes('/${themeKey}/'));
+      })()`), theme + ' showcase icon assets');
+    }
+    await evaluate(`(() => {
+      const tray = document.querySelector('.showcase-icon-card');
+      const swatch = [...tray.querySelectorAll('.icon-swatch')].find(button => button.getAttribute('aria-label') === 'Teal');
+      swatch.click();
+    })()`);
+    await retry(() => evaluate(`[...document.querySelectorAll('.showcase-icon-tray img')].every(image => image.src.includes('/teal/'))`), 'tray hue applies to all icons');
+    const selectOption = (selector, value) => evaluate(`(() => {
+      const select = document.querySelector(${JSON.stringify(selector)});
+      select.value = ${JSON.stringify(value)};
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    })()`);
+    await selectOption('.showcase-icon-card select', 'line');
+    await retry(() => evaluate('document.querySelectorAll(".showcase-icon-tray .icon-line").length === 6'), 'tray style applies to all icons');
+
+    await load('/blocks/enterprise-landing?theme=glass', 'Enterprise landing');
+    await selectOption('.ut-template select[aria-label="Template preset"]', 'ledger');
+    await selectOption('.docs-example select[aria-label="Preview theme"]', 'light');
+    await retry(() => evaluate('!!document.querySelector(\'.theme-preview[data-theme="light"] .ut-template[data-ut-preset="ledger"]\')'), 'appearance change preserves template preset');
+    await evaluate('document.querySelector(".ut-enterprise-intro .btn-solid").click()');
+    await retry(() => evaluate('!!document.querySelector(\'.ut-portal[data-theme="light"][data-ut-preset="ledger"] .modal\')'), 'template dialog carries scoped appearance');
+    await evaluate(`(() => {
+      const form = document.querySelector('.modal form');
+      form.elements.email.value = 'preview@example.test';
+      form.requestSubmit();
+    })()`);
+    await retry(() => evaluate('!document.querySelector(".modal") && !!document.querySelector(".ut-enterprise-intro [role=status]")'), 'enterprise demo request');
+
+    await load('/blocks/execution-desk?theme=dark', 'Execution desk');
+    await selectOption('.ut-desk select[aria-label="Order status"]', 'Filled');
+    await retry(() => evaluate('document.querySelector(".ut-desk-table tbody").rows.length === 1 && document.querySelector(".ut-desk-inspector h3").textContent === "MIDX"'), 'blotter filter links the inspector');
+    await evaluate(`Array.from(document.querySelectorAll('.ut-desk-inspector [role=tab]')).find(tab => tab.textContent === 'Fills').click()`);
+    await retry(() => evaluate('document.querySelector(".ut-desk-fills")?.children.length === 2'), 'selected order fill history');
+    await evaluate('document.querySelector(".ut-template-toolbar [role=switch]").click()');
+    await retry(() => evaluate('document.querySelector(".ut-desk").dataset.density === "comfortable"'), 'blotter density control');
+    await evaluate('document.querySelector(".ut-desk-foot [role=switch]").click()');
+    await retry(() => evaluate('document.querySelector(".ut-desk-summary [role=status]").textContent.includes("Snapshot stale")'), 'stale snapshot state');
+    await size(375, 812);
+    await retry(() => evaluate(`(() => {
+      const region = document.querySelector('.ut-desk-table');
+      return region.scrollWidth > region.clientWidth && getComputedStyle(region).scrollbarColor ===
+        'rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)';
+    })()`), 'idle scrollbar stays hidden');
+    await evaluate('document.querySelector(".ut-desk-table").focus()');
+    await retry(() => evaluate(`(() => {
+      const region = document.querySelector('.ut-desk-table');
+      return document.activeElement === region && getComputedStyle(region).scrollbarColor !==
+        'rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)';
+    })()`), 'focused scrollbar is visible');
+    await size(1280, 860);
+
+    await load('/blocks/access-review?theme=light', 'Access review');
+    await evaluate('document.querySelector(".docs-example input[type=checkbox]").click()');
+    await evaluate(`[...document.querySelectorAll('.docs-example button')].find(button => button.textContent === 'Mark reviewed').click()`);
+    await retry(() => evaluate('document.querySelectorAll(".docs-example input[type=checkbox]").length === 2'), 'access review applies selected requests');
+    await load('/blocks/metric-card?theme=glass', 'Metric card');
+    await selectOption('.docs-example select[aria-label="Metric period"]', 'month');
+    await retry(() => evaluate('document.querySelector(".docs-example .stat").textContent.includes("97.6")'), 'metric card changes period');
+
+    await load('/frameworks?theme=glass', 'Frameworks');
+    await evaluate(`(() => {
+      const trigger = document.querySelector('[data-ut-open-dialog]');
+      trigger.focus();
+      trigger.click();
+    })()`);
+    await retry(() => evaluate('document.querySelector(".ut-native-dialog")?.matches(":modal")'), 'portable native dialog opens');
+    await evaluate('document.querySelector(".ut-native-dialog button").click()');
+    await retry(() => evaluate('!document.querySelector(".ut-native-dialog").open && document.activeElement.matches("[data-ut-open-dialog]")'), 'native dialog closes and restores focus');
+    await evaluate(`(() => {
+      const tab = document.querySelector('[data-ut-tabs] [role=tab]');
+      tab.focus();
+      tab.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true }));
+    })()`);
+    await retry(() => evaluate(`document.activeElement?.textContent === 'History' && document.activeElement.getAttribute('aria-selected') === 'true' &&
+      !document.getElementById(document.activeElement.getAttribute('aria-controls')).hidden`), 'portable tabs support keyboard navigation');
+    await evaluate(`[...document.querySelectorAll('[role=tab]')].find(tab => tab.textContent === 'Vue').click()`);
+    await retry(() => evaluate(`document.querySelector('[role=tabpanel]:not([hidden]) .code')?.textContent.includes('onBeforeUnmount')`), 'framework code tab');
+
     await load('/showcase?theme=glass', 'Build together.');
     await retry(() => evaluate('document.querySelector(".docs-navbar select").value === "glass"'), 'theme dropdown reflects preview');
     await evaluate(`(() => {
@@ -263,6 +356,8 @@ async function captureEdge() {
       ['/overview', 'Make every app feel like Utkristi.'], ['/icons', 'Icons'], ['/tokens', 'Tokens'], ['/showcase', 'Build together.'],
       ['/components/command', 'Command'], ['/components/data-table', 'Data Table'], ['/components/file-input', 'File Input'],
       ['/sandbox?component=command', 'Sandbox'], ['/blocks', 'Blocks'], ['/blocks/project-directory', 'Project directory'],
+      ['/blocks/enterprise-landing', 'Enterprise landing'], ['/blocks/execution-desk', 'Execution desk'],
+      ['/blocks/metric-card', 'Metric card'], ['/frameworks', 'Frameworks'],
     ];
     for (const width of [320, 390, 768, 981, 1024, 1440]) {
       await size(width, width >= 1024 ? 900 : 740);
@@ -492,6 +587,7 @@ async function capturePlaywright() {
     for (const [theme, file] of themes) {
       await page.goto(`${url}/#/showcase?theme=${theme}`);
       await page.locator(`html[data-theme="${theme}"] .showcase`).waitFor();
+      await page.locator('.showcase-icon-tray').waitFor();
       await page.evaluate(() => document.fonts.ready);
       await page.screenshot({ path: join(screenshots, `${file}.png`), fullPage: true });
     }
@@ -508,6 +604,12 @@ async function capturePlaywright() {
     await page.getByText('React preview ready', { exact: true }).waitFor();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: join(screenshots, 'sandbox.png') });
+    for (const [slug, theme] of [['enterprise-landing', 'glass'], ['execution-desk', 'dark']]) {
+      await page.goto(`${url}/#/blocks/${slug}?theme=${theme}`);
+      await page.locator(`html[data-theme="${theme}"] .ut-template`).waitFor();
+      await page.evaluate(() => document.fonts.ready);
+      await page.screenshot({ path: join(screenshots, slug + '.png') });
+    }
     await page.setViewportSize(mobileViewport);
     await page.goto(`${url}/#/components/command?theme=glass`);
     await page.locator('html[data-theme="glass"] .command [role="listbox"]').first().waitFor();

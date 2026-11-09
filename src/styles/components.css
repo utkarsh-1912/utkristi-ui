@@ -401,6 +401,9 @@ a[aria-current="page"] > .navbar-link-icon { opacity: 1; color: var(--ut-nav-mar
 .modal-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 22px 24px; display: flex; flex-direction: column; gap: 18px; scrollbar-width: thin; scrollbar-color: var(--ut-line-2) transparent; }
 .modal-body > * { flex-shrink: 0; }
 .modal-foot { flex: none; display: flex; justify-content: flex-end; gap: 10px; padding: 16px 24px 22px; border-top: 1px solid var(--ut-line); background: var(--ut-bg-2); }
+.modal.ut-native-dialog { position: fixed; inset: 0; margin: auto; inline-size: min(32rem, calc(100% - 2rem)); padding: 0; }
+.modal.ut-native-dialog:not([open]) { display: none; }
+.ut-native-dialog::backdrop { background: var(--ut-backdrop); }
 
 /* ---------- Empty ---------- */
 .empty-state { padding: 64px 20px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; color: var(--ut-ink-2); }
@@ -745,10 +748,12 @@ input.switch { display: inline-block; margin: 0; }
 .aspect-ratio > :where(img, video, iframe) { display: block; width: 100%; height: 100%; object-fit: cover; }
 .separator { background: var(--ut-line); block-size: 1px; inline-size: 100%; flex: none; }
 .separator[data-orientation="vertical"] { block-size: auto; inline-size: 1px; align-self: stretch; }
-.ut-scrollbar, .scroll-area, .code, .table-wrap { scrollbar-width: thin; scrollbar-color: var(--ut-scroll-thumb, color-mix(in srgb, var(--ut-ink) 42%, var(--ut-bg))) var(--ut-scroll-track, transparent); }
-.ut-scrollbar:hover, .scroll-area:hover, .code:hover, .table-wrap:hover { scrollbar-color: var(--ut-scroll-thumb-hover, var(--ut-ink-2)) var(--ut-scroll-track, transparent); }
+:where(.ut-scrollbar, .scroll-area, .code, .table-wrap) { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+:where(.ut-scrollbar, .scroll-area, .code, .table-wrap):is(:hover, :focus-within) {
+  scrollbar-color: var(--ut-scroll-thumb-hover, var(--ut-scroll-thumb, color-mix(in srgb, var(--ut-ink) 42%, var(--ut-bg)))) var(--ut-scroll-track, transparent);
+}
 @media (pointer: coarse), (forced-colors: active) {
-  :is(.ut-scrollbar, .scroll-area, .code, .table-wrap), :is(.ut-scrollbar, .scroll-area, .code, .table-wrap):hover { scrollbar-width: auto; scrollbar-color: auto; }
+  :is(.ut-scrollbar, .scroll-area, .code, .table-wrap) { scrollbar-width: auto; scrollbar-color: auto; }
 }
 .scroll-area { overflow-y: auto; min-inline-size: 0; max-block-size: var(--ut-scroll-size, 14rem); }
 .scroll-area[data-orientation="horizontal"] { overflow-x: auto; overflow-y: hidden; max-block-size: none; }

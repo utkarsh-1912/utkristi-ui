@@ -1,0 +1,203 @@
+.ut-template {
+  container-type: inline-size;
+  min-inline-size: 0;
+  border: 1px solid var(--ut-line);
+  border-radius: var(--ut-r);
+  background: var(--ut-bg);
+  color: var(--ut-ink);
+}
+
+.ut-template-toolbar,
+.ut-template-toolbar > div,
+.ut-template-actions,
+.ut-desk-summary,
+.ut-desk-panel-head,
+.ut-desk-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.ut-template-toolbar,
+.ut-desk-summary,
+.ut-desk-panel-head,
+.ut-desk-foot {
+  justify-content: space-between;
+}
+
+.ut-template-toolbar {
+  padding: 10px clamp(12px, 3cqi, 30px);
+  border-block-end: 1px solid var(--ut-line);
+  font-size: .875rem;
+}
+
+.ut-template-toolbar .select,
+.ut-desk-panel-head .select {
+  inline-size: auto;
+  min-block-size: 36px;
+  font-size: .8125rem;
+}
+
+.ut-enterprise-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr);
+  align-items: center;
+  gap: clamp(20px, 4cqi, 56px);
+  padding: clamp(22px, 6cqi, 76px);
+  background:
+    radial-gradient(ellipse at 84% 32%, var(--ut-template-tint), transparent 62%),
+    var(--ut-bg);
+}
+
+.ut-enterprise-intro h2 {
+  margin: 10px 0 14px;
+  max-inline-size: 14ch;
+  font: 650 clamp(1.8rem, 5.6cqi, 4.2rem)/1.02 var(--ut-font-display);
+  letter-spacing: -.045em;
+}
+
+.ut-enterprise-intro p {
+  max-inline-size: 39ch;
+  margin: 0 0 22px;
+  color: var(--ut-ink-2);
+}
+
+.ut-enterprise-preview {
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid var(--ut-line);
+  border-radius: var(--ut-r);
+  background: var(--ut-raise);
+  box-shadow: var(--ut-shadow);
+}
+
+.ut-enterprise-preview-head,
+.ut-enterprise-preview-head > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ut-enterprise-preview-head {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-block-end: 1px solid var(--ut-line);
+  font-size: .8125rem;
+}
+
+.ut-enterprise-metric {
+  display: grid;
+  gap: 5px;
+  margin: 14px;
+  padding: clamp(12px, 3cqi, 25px);
+  border-radius: var(--ut-r-field);
+  background: var(--ut-template-tint);
+}
+
+.ut-enterprise-metric strong {
+  font-size: clamp(1rem, 2.2cqi, 1.5rem);
+  letter-spacing: -.02em;
+}
+
+.ut-enterprise-preview ul {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 2px 16px 16px;
+  list-style: none;
+  font-size: .8125rem;
+}
+
+.ut-enterprise-preview li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ut-enterprise-preview li svg { color: var(--ut-ok-ink); }
+
+.ut-enterprise-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 9px 18px;
+  padding: 14px clamp(14px, 6cqi, 76px);
+  border-block: 1px solid var(--ut-line);
+  color: var(--ut-ink-2);
+  font: .75rem var(--ut-font-mono);
+}
+
+.ut-enterprise-features {
+  display: grid;
+  gap: 16px;
+  padding: clamp(16px, 5cqi, 58px) clamp(14px, 6cqi, 76px);
+}
+
+.ut-enterprise-features h3 { margin: 4px 0 0; font-size: clamp(1.2rem, 3cqi, 2rem); }
+.ut-enterprise-features > div:last-child { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.ut-enterprise-features article { padding: clamp(12px, 2cqi, 20px); border-radius: var(--ut-r-field); background: var(--ut-bg-2); }
+.ut-enterprise-features article svg { color: var(--ut-accent); }
+.ut-enterprise-features article h4 { margin: 8px 0 4px; font-size: .95rem; }
+.ut-enterprise-features article p { margin: 0; color: var(--ut-ink-2); font-size: .875rem; }
+.ut-template-form { display: grid; gap: 14px; }
+.ut-template-form .btn { justify-self: start; }
+
+.ut-desk {
+  --ut-desk-row-padding: 11px;
+  display: grid;
+  gap: 12px;
+  padding: clamp(10px, 2cqi, 24px);
+  font-size: .875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ut-desk[data-density="compact"] { --ut-desk-row-padding: 4px; }
+.ut-desk-summary h2 { margin: 3px 0 0; font-size: clamp(1.3rem, 3cqi, 2rem); letter-spacing: -.04em; }
+.ut-desk-summary time, .ut-desk-foot > span { color: var(--ut-ink-2); font: .75rem var(--ut-font-mono); }
+.ut-desk-workspace { display: grid; grid-template-columns: minmax(0, 1.95fr) minmax(0, 1fr); gap: 10px; }
+
+.ut-desk-blotter,
+.ut-desk-inspector {
+  min-inline-size: 0;
+  border: 1px solid var(--ut-line);
+  border-radius: var(--ut-r-field);
+  background: var(--ut-bg-2);
+}
+
+.ut-desk-panel-head { min-block-size: 50px; padding: 8px 12px; border-block-end: 1px solid var(--ut-line); }
+.ut-desk-panel-head h3 { margin: 2px 0 0; font: 600 1.05rem var(--ut-font-mono); }
+.ut-desk-table { overflow: auto; padding: 8px 6px; }
+.ut-desk-table:focus-visible { outline-offset: -2px; }
+.ut-desk-table .table-wrap { overflow: visible; }
+.ut-desk-table .table { min-inline-size: 440px; }
+.ut-desk-table :is(td, th) { padding: var(--ut-desk-row-padding) 8px; white-space: nowrap; }
+.ut-desk-table :is(td, th).num { font-variant-numeric: tabular-nums; }
+.ut-desk-table td:first-child { font-family: var(--ut-font-mono); }
+.ut-desk-table td .btn { min-block-size: 29px; }
+.ut-desk-table td .btn[aria-pressed="true"] { background: var(--ut-template-tint); color: var(--ut-ink); }
+.ut-desk-table [data-side="Buy"] { color: var(--ut-ok-ink); }
+.ut-desk-table [data-side="Sell"] { color: var(--ut-bad-ink); }
+.ut-desk-inspector :is(dl, .tabs) { margin: 0; padding: 10px 12px; }
+.ut-desk-inspector dl { display: grid; gap: 6px; }
+.ut-desk-inspector dl > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 10px; }
+.ut-desk-inspector dt { color: var(--ut-ink-2); }
+.ut-desk-inspector dd { margin: 0; font-family: var(--ut-font-mono); }
+.ut-desk-inspector .tab-panel { padding: 10px 12px; }
+.ut-desk-inspector .tab-panel dl { padding-inline: 0; }
+.ut-desk-fills { display: grid; gap: 6px; margin: 0; padding: 6px 0; list-style: none; font: .75rem var(--ut-font-mono); }
+.ut-desk-fills li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 10px; }
+
+@container (max-width: 740px) {
+  .ut-desk-workspace { grid-template-columns: minmax(0, 1fr); }
+}
+
+@container (max-width: 590px) {
+  .ut-enterprise-hero,
+  .ut-enterprise-features > div:last-child { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (pointer: coarse) {
+  .ut-desk-table td .btn { min-block-size: 36px; }
+}

@@ -18,6 +18,8 @@ Utkristi UI is the shared design system for the Utkristi ecosystem. It includes 
 
 The docs include component variants and a Blocks library with working project management, account, settings, and pricing examples. Open any example in the sandbox to try it in Night, Paper, or Glass.
 
+Blocks also includes an enterprise landing page, a simulated execution desk, operational workflows, and custom cards. The enterprise templates support the Signal, Ledger, and Terminal presets. [Enterprise and theme research](docs/enterprise-research.md) · [Landing preview](docs/screenshots/enterprise-landing.png) · [Execution desk preview](docs/screenshots/execution-desk.png)
+
 ## Install
 
 ```sh
@@ -92,7 +94,9 @@ Run `npm run docs` to open the documentation. Each component page includes inter
 
 The Sandbox runs TSX or HTML in an isolated preview. Edit the example and press **Run** or **Ctrl/⌘ + Enter**. Drafts are saved per example and language in your browser. **Reset** restores the original, and you can copy or download the source. Choose **Fit**, **Phone (375 px)**, or **Tablet (768 px)** to test the layout.
 
-Add `ut-scrollbar` to an existing scroll container to style its native scrollbar, or use `ScrollArea` to add a keyboard-focusable scroll region. The scrollbar follows the theme and keeps system styling for touch and forced colours.
+Add `ut-scrollbar` to an existing scroll container to style its native scrollbar, or use `ScrollArea` to add a keyboard-focusable scroll region. Scrollbars reveal on hover or focus and use system styling for touch and forced colours.
+
+Import `@utkristi/ui/utkristi-ui.css` in HTML, Vue, Svelte, or Angular to use the kit's classes and themes. The `@utkristi/ui/dom` entry point provides `initUI(root)` for native dialogs and tabs. See the Frameworks guide in the docs for copyable integration examples.
 
 Build the website with `npm ci` and `npm run docs:build`. Publish the contents of `docs/dist` with your static host. The site uses relative asset paths and hash routes, so a subdirectory works without a server rewrite. Run `npm run docs:preview` to verify the production build locally.
 

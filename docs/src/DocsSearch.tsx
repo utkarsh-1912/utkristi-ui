@@ -18,12 +18,14 @@ const guideDetails: Record<string, string> = {
   Sandbox: 'Edit and run React or HTML examples.',
   Showcase: 'See the kit in a sample workspace.',
   Blocks: 'Try complete layouts and copy their source.',
+  Frameworks: 'Use Utkristi CSS and native dialog behavior in Vue, Svelte, Angular, or HTML.',
 };
 
 const aliases: Record<string, string[]> = {
   '#/getting-started': ['installation', 'setup', 'npm'],
   '#/icons': ['glyphs', 'svg', '3d'],
   '#/sandbox': ['playground', 'editor'],
+  '#/frameworks': ['vue', 'svelte', 'angular', 'vanilla', 'html'],
   '#/components/data-table': ['grid', 'rows'],
   '#/components/dialog': ['modal'],
   '#/components/command': ['palette', 'launcher'],

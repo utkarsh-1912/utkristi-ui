@@ -432,3 +432,42 @@
     --ut-canvas: none;
   }
 }
+
+/* Template presets resolve against the nearest appearance's palette. */
+[data-ut-preset="signal"] {
+  --ut-template-fill: var(--ut-hue-violet-base);
+  --ut-template-on-fill: var(--ut-hue-violet-on);
+  --ut-template-ink: var(--ut-hue-violet-stroke);
+  --ut-template-tint: var(--ut-hue-violet-tint);
+  --ut-r: 20px;
+  --ut-r-field: 10px;
+}
+
+[data-ut-preset="ledger"] {
+  --ut-template-fill: var(--ut-hue-teal-base);
+  --ut-template-on-fill: var(--ut-hue-teal-on);
+  --ut-template-ink: var(--ut-hue-teal-stroke);
+  --ut-template-tint: var(--ut-hue-teal-tint);
+  --ut-r: 12px;
+  --ut-r-field: 8px;
+}
+
+[data-ut-preset="terminal"] {
+  --ut-template-fill: var(--ut-hue-amber-base);
+  --ut-template-on-fill: var(--ut-hue-amber-on);
+  --ut-template-ink: var(--ut-hue-amber-stroke);
+  --ut-template-tint: var(--ut-hue-amber-tint);
+  --ut-r: 8px;
+  --ut-r-field: 6px;
+}
+
+:is([data-ut-preset="signal"], [data-ut-preset="ledger"], [data-ut-preset="terminal"]) {
+  --ut-accent: var(--ut-template-ink);
+  --ut-on-accent: var(--ut-bg);
+  --ut-solid: var(--ut-template-fill);
+  --ut-on-solid: var(--ut-template-on-fill);
+  --ut-solid-hover: color-mix(in srgb, var(--ut-template-fill) 96%, var(--ut-template-on-fill));
+  --ut-on-solid-hover: var(--ut-template-on-fill);
+  --ut-focus: var(--ut-template-ink);
+  --ut-ring: var(--ut-template-tint);
+}

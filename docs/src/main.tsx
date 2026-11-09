@@ -2,7 +2,7 @@ import { lazy, StrictMode, Suspense, useEffect, useId, useRef, useState, type Re
 import { createRoot } from 'react-dom/client';
 import { ArrowUpRight, Plus } from 'lucide-react';
 import {
-  Badge, Button, Card, CardBody, CardHeader, Code, Dot, Field, Icon, IconPalettePicker, IconPaletteProvider, IconTile, Input, Logo, SearchInput,
+  Badge, Button, Card, CardBody, CardHeader, Code, Dot, Field, Icon, IconPaletteProvider, Input, Logo, SearchInput,
   Select, Shell, Slider, Stat, Stats, Tabs, ThemeProvider, ThemeSelect, ToastProvider, useTheme, type Theme,
 } from '@utkristi/ui';
 import { blockPages, componentPages, examples, type Example } from './examples';
@@ -15,10 +15,13 @@ import { TokensPaletteSection } from './TokensPaletteSection';
 import { MarketingHome, useMarketingMotion, WorkflowSection } from './Marketing';
 import tokenCSS from '../../src/styles/tokens.css?raw';
 import './styles.css';
+import './enterprise.css';
 
 const Playground = lazy(() => import('./Playground'));
 const IconsPage = lazy(() => import('./IconsPage'));
 const ComponentReference = lazy(() => import('./ComponentReference'));
+const ShowcaseIconTray = lazy(() => import('./ShowcaseIconTray'));
+const Frameworks = lazy(() => import('./Frameworks'));
 
 const primary = [
   { href: '#/overview', label: 'Overview' },
@@ -27,6 +30,7 @@ const primary = [
   { href: '#/components/button', label: 'Components' },
   { href: '#/blocks', label: 'Blocks' },
   { href: '#/sandbox', label: 'Sandbox' },
+  { href: '#/frameworks', label: 'Frameworks' },
 ];
 const primaryIcons = {
   Overview: 'home', Install: 'download', Icons: 'palette', Components: 'layers', Blocks: 'grid', Sandbox: 'terminal',
@@ -43,7 +47,8 @@ const guide = [
   { href: '#/sandbox', label: 'Sandbox' },
 ];
 const componentLinks = componentPages.map(([slug, item]) => ({ href: `#/components/${slug}`, label: item.name }));
-const blockLinks = ['Application', 'Account', 'Marketing'].flatMap((category) => blockPages
+const blockCategories = ['Application', 'Account', 'Marketing', 'Cards'];
+const blockLinks = blockCategories.flatMap((category) => blockPages
   .filter(([, block]) => block.category === category).map(([slug, block]) => ({ href: `#/blocks/${slug}`, label: block.name })));
 
 function DocsPagination({ links, current, label }: {
@@ -74,20 +79,20 @@ function route() {
   return { path: path || '/overview', theme, sample: new URLSearchParams(options).get('component') ?? undefined } as const;
 }
 
-function Frame({ theme, children }: { theme: PreviewTheme; children: ReactNode }) {
+function Frame({ theme, fixedTheme, children }: { theme: PreviewTheme; fixedTheme?: boolean; children: ReactNode }) {
   const panel = useRef<HTMLDivElement>(null);
   return <div ref={panel} data-theme={theme} className="theme-preview">
     <span className="label"><Dot static tone="off" /> {themeLabels[theme]}</span>
     <div className="preview-content">
-      <ThemeProvider defaultTheme={theme} storageKey={null} target={() => panel.current}>
+      <ThemeProvider defaultTheme={theme} forcedTheme={fixedTheme ? theme : undefined} storageKey={null} target={() => panel.current}>
         <ToastProvider>{children}</ToastProvider>
       </ThemeProvider>
     </div>
   </div>;
 }
 
-function ExamplePreview({ example, initialTheme, description, children }: {
-  example: Example; initialTheme: PreviewTheme; description?: string; children?: ReactNode;
+function ExamplePreview({ example, initialTheme, description, preserveState, children }: {
+  example: Example; initialTheme: PreviewTheme; description?: string; preserveState?: boolean; children?: ReactNode;
 }) {
   const [previewTheme, setPreviewTheme] = useState(initialTheme);
   const Preview = example.preview;
@@ -99,7 +104,7 @@ function ExamplePreview({ example, initialTheme, description, children }: {
         {themes.map((theme) => <option key={theme} value={theme}>{themeLabels[theme]}</option>)}
       </Select></div>
     </div>
-    <Frame key={previewTheme} theme={previewTheme}><Preview key={example.name} /></Frame>
+    <Frame key={preserveState ? undefined : previewTheme} theme={previewTheme} fixedTheme={preserveState}><Preview key={example.name} /></Frame>
   </div>;
 }
 
@@ -127,7 +132,7 @@ function BlocksPage() {
   const motion = useMarketingMotion();
   return <article ref={motion} className="doc-article">
     <PageTitle kicker="UI library" title="Blocks" detail="Working layouts for application screens, account flows, and marketing pages. Open a block to try it and copy its source." />
-    {['Application', 'Account', 'Marketing'].map((category) => <section key={category} className="blocks-section" data-reveal>
+    {blockCategories.map((category) => <section key={category} className="blocks-section" data-reveal>
       <h2>{category}</h2>
       <div className="blocks-grid">{blockPages.filter(([, block]) => block.category === category).map(([slug, block]) =>
         <a key={slug} href={`#/blocks/${slug}`} className="block-link">
@@ -142,10 +147,11 @@ function BlocksPage() {
 function BlockPage({ slug }: { slug: keyof typeof blocks }) {
   const { resolvedTheme } = useTheme();
   const block = blocks[slug];
-  return <article className="doc-article">
+  const template = slug === 'enterprise-landing' || slug === 'execution-desk';
+  return <article className="doc-article" data-template-page={template || undefined}>
     <a href="#/blocks" className="link block-back"><Icon name="arrow-left" /> All blocks</a>
     <PageTitle kicker={`Blocks / ${block.category}`} title={block.name} detail={block.description} />
-    <ExamplePreview key={resolvedTheme} example={block} initialTheme={resolvedTheme} />
+    <ExamplePreview key={resolvedTheme} example={block} initialTheme={resolvedTheme} preserveState={template} />
     <Suspense fallback={<p className="muted">Loading example source…</p>}><ComponentReference slug={slug} html={block.html} /></Suspense>
     <DocsPagination links={blockLinks} current={`#/blocks/${slug}`} label="Block pagination" />
   </article>;
@@ -175,6 +181,7 @@ function GettingStarted() {
     <CopyCode text={`<link rel="stylesheet" href="https://unpkg.com/@utkristi/ui@0.1.0/fonts.css">\n<link rel="stylesheet" href="https://unpkg.com/@utkristi/ui@0.1.0/utkristi-ui.css">`} />
     <h2>React</h2>
     <CopyCode text={`import { Button, ThemeProvider } from '@utkristi/ui';\nimport '@utkristi/ui/utkristi-ui.css';\n\nexport function App() {\n  return <ThemeProvider><Button>New workspace</Button></ThemeProvider>;\n}`} />
+    <p><a className="link" href="#/frameworks">See HTML, Vue, Svelte, and Angular integrations <Icon name="arrow-right" /></a></p>
     <h2>Host the documentation</h2>
     <p>Build the site and deploy the contents of <Code inline>docs/dist</Code> to a static host. The site uses hash routes and works under a subdirectory.</p>
     <CopyCode text={'npm ci\nnpm run docs:build'} />
@@ -200,6 +207,14 @@ function Theming() {
       Pass the same storage key to the script and provider when you customize it.</p>
     <CopyCode text={`import { themeScript } from '@utkristi/ui';\n\n// Render in the document head.\n<script dangerouslySetInnerHTML={{ __html: themeScript() }} />`} />
     <h2>Brand overrides and variants</h2>
+    <p>Add <Code inline>data-ut-preset</Code> to a template root to choose Signal (violet), Ledger (teal), or
+      Terminal (amber). A preset changes button, focus, and corner tokens within that scope. Night, Paper,
+      and Glass still supply the surfaces and text. Set both attributes on the same element when creating a nested appearance.</p>
+    <CopyCode text={'<section data-theme="dark" data-ut-preset="terminal">\n  <button class="btn btn-solid">Review orders</button>\n</section>'} />
+    <div className="sample-row">
+      <Button href="#/blocks/enterprise-landing" variant="ghost">Enterprise landing</Button>
+      <Button href="#/blocks/execution-desk" variant="ghost">Execution desk</Button>
+    </div>
     <CopyCode text={`[data-theme="light"] {\n  --ut-accent: #3450a4;\n  --ut-on-accent: #fff;\n}\n\n<p class="light:text-accent night:text-ink glass:text-accent">A themed label</p>`} />
   </article>;
 }
@@ -278,7 +293,7 @@ function Showcase() {
     <PageTitle kicker={resolvedTheme === 'glass' ? 'Glass / Component showcase' : 'Component showcase / 0.1.0'} title={<>Build <span className="faint">together.</span></>}
       detail={<>A workspace assembled from <b>Utkristi UI</b>, the shared kit for the Utkristi ecosystem.</>} />
     <div className="sample-row"><Button className="showcase-cta" href="#/components/button" iconLeft={<Plus size={16} />} iconRight={<ArrowUpRight size={16} />}>New workspace</Button><Button href="#/components/card" variant="ghost">Browse surfaces</Button>
-      <Badge tone="ok">All systems operational</Badge></div>
+      <Button href="#/blocks" variant="ghost">Explore templates</Button><Badge tone="ok">All systems operational</Badge></div>
     <div className="showcase-stats"><Stats>
       <Stat label="Active rooms" value="24" desc="Across three teams" /><Stat label="Members" value="86" desc="Working together" />
       <Stat label="Sync uptime" value="99" suffix="%" desc="Last 30 days" /><Stat label="Changes" value="128" desc="This week" />
@@ -300,17 +315,7 @@ function Showcase() {
       <Card><CardHeader><strong>Project setup</strong><Dot label="In progress" tone="warn" /></CardHeader><CardBody className="sample-stack">
         <examples.steps.preview /><examples.tabs.preview /><div className="sample-row"><SplitPreview /></div>
       </CardBody></Card>
-      <Card><CardHeader><strong>Custom 2D &amp; 3D icons</strong><Badge tone="accent">135 glyphs</Badge></CardHeader><CardBody className="sample-stack">
-        <div className="sample-row">
-          <Icon name="rocket" variant="3d" size={52} />
-          <Icon name="palette" variant="3d" size={52} />
-          <Icon name="ai-spark" variant="3d" size={52} />
-          <Icon name="shield" variant="3d" size={52} />
-          <IconTile name="room" hue="violet" size="md" />
-          <IconTile name="terminal" hue="teal" size="md" />
-        </div>
-        <IconPalettePicker showPreview={false} />
-      </CardBody></Card>
+      <Suspense fallback={<p className="muted">Loading icon tray…</p>}><ShowcaseIconTray /></Suspense>
     </div>
     <WorkflowSection />
   </article>;
@@ -400,6 +405,7 @@ function App() {
     '/overview': <MarketingHome />, '/getting-started': <GettingStarted />, '/theming': <Theming />,
     '/tokens': <Tokens />, '/icons': <Suspense fallback={<p className="muted">Loading icon catalog…</p>}><IconsPage /></Suspense>, '/typography': <Typography />, '/showcase': <Showcase />,
     '/blocks': <BlocksPage />,
+    '/frameworks': <Suspense fallback={<p className="muted">Loading integrations…</p>}><Frameworks /></Suspense>,
     '/sandbox': <Suspense fallback={<p className="muted">Loading sandbox…</p>}><Playground key={sample ?? 'carousel'} component={sample} /></Suspense>,
   };
   const content = component ? <ComponentPage key={component} slug={component} /> : block ? <BlockPage key={block} slug={block} /> : pages[path] ?? <MarketingHome />;

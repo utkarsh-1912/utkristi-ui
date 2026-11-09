@@ -2,6 +2,8 @@
 
 Utkristi UI is the shared design system for the Utkristi ecosystem. It includes Night, Paper, and Glass themes, CSS custom properties, a Tailwind CSS 3.4 preset and plugin, a standalone stylesheet, and typed React components.
 
+[Marketing overview preview](docs/screenshots/overview.png)
+
 | Night | Paper | Glass |
 | --- | --- | --- |
 | ![Night showcase](docs/screenshots/night.png) | ![Paper showcase](docs/screenshots/paper.png) | ![Glass showcase](docs/screenshots/glass.png) |
@@ -9,6 +11,8 @@ Utkristi UI is the shared design system for the Utkristi ecosystem. It includes 
 | Mobile docs | Mobile navigation |
 | --- | --- |
 | ![Mobile Glass docs with the index and Command preview](docs/screenshots/mobile-docs.png) | ![Compact mobile navigation panel in Glass](docs/screenshots/mobile-menu.png) |
+
+The docs include component variants and a Blocks library with working project management, account, settings, and pricing examples. Open any example in the sandbox to try it in Night, Paper, or Glass.
 
 ## Install
 
@@ -88,7 +92,7 @@ Build the website with `npm ci` and `npm run docs:build`. Publish the contents o
 
 ## Performance verification
 
-Component source and prop tables load when opened. The sandbox and its compiler load separately from the main docs. With the expanded icon and component catalog, the main docs JavaScript is about 134 KB gzipped.
+Component source and prop tables load when opened. The sandbox and its compiler load separately from the main docs. The production build serves about 142 KB of gzipped JavaScript for the main docs.
 
 Run `npm run docs:stress` to repeat the Edge check. The local run checked 93 routes in each theme at 375px and exercised 12 sandbox runs at 4× CPU throttling with 5,000 table rows or 60 carousel slides. Run-to-preview latency was 215 ms median and 393 ms p95 on the test machine. The editor reported invalid TSX and recovered on the next valid run.
 
@@ -109,7 +113,7 @@ See the [competitive audit and implementation roadmap](docs/competitive-audit.md
 | `npm run docs:preview` | Preview the documentation build |
 | `npm run docs:stress` | Run browser checks and exercise repeated sandbox runs under CPU throttling |
 | `npm run screenshots` | Capture all three themes in headless Edge, sweep every docs route at 375px, and check key pages from 320px to 1440px |
-| `npm run screenshots:capture` | Refresh the full showcase images and the two mobile screenshots |
+| `npm run screenshots:capture` | Refresh the overview, the three showcases, and the two mobile screenshots |
 
 The screenshot script uses Playwright with Chromium when Edge is unavailable. Install them in that environment before running the script.
 

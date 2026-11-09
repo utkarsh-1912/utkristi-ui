@@ -1,10 +1,12 @@
 import { useRef } from 'react';
 import { Command, Icon, Kbd, Modal } from '@utkristi/ui';
-import { componentPages } from './examples';
+import { blockPages, componentPages } from './examples';
 
 interface SearchLink { href: string; label: string }
 const components = componentPages.map(([slug, { name, description }]) => ({ href: '#/components/' + slug, label: name,
   description, keywords: slug.split('-') }));
+const blocks = blockPages.map(([slug, { name, description, category }]) => ({ href: '#/blocks/' + slug, label: name,
+  description, keywords: [...slug.split('-'), category] }));
 
 const guideDetails: Record<string, string> = {
   Overview: 'Explore the shared design system.',
@@ -15,6 +17,7 @@ const guideDetails: Record<string, string> = {
   Typography: 'Compare typefaces and reading styles.',
   Sandbox: 'Edit and run React or HTML examples.',
   Showcase: 'See the kit in a sample workspace.',
+  Blocks: 'Try complete layouts and copy their source.',
 };
 
 const aliases: Record<string, string[]> = {
@@ -29,7 +32,7 @@ const aliases: Record<string, string[]> = {
 export function DocsSearch({ onClose, pages }: { onClose: () => void; pages: readonly SearchLink[] }) {
   const input = useRef<HTMLInputElement | null>(null);
   const options = [...pages.map((item) => ({ ...item, group: 'Guides', description: guideDetails[item.label], keywords: [] })),
-    ...components.map((item) => ({ ...item, group: 'Components' }))].map(({ href, label, group, description, keywords }) => ({
+    ...components.map((item) => ({ ...item, group: 'Components' })), ...blocks.map((item) => ({ ...item, group: 'Blocks' }))].map(({ href, label, group, description, keywords }) => ({
     value: href,
     label,
     group,

@@ -131,7 +131,7 @@ export function docsPlayground(docs: string, source: string): Plugin {
     resolveId(id) { if (id.startsWith(prefix)) return '\0' + id; },
     async load(id) {
       if (id === '\0' + prefix + 'examples') {
-        const entries = await Promise.all(['catalog', 'examples'].map(async (file) => {
+        const entries = await Promise.all(['catalog', 'examples', 'variants', 'blocks'].map(async (file) => {
           const path = join(docs, 'src', file + '.tsx');
           this.addWatchFile(path);
           return samples(path, await readFile(path, 'utf8'), file);

@@ -7,7 +7,10 @@ import {
   Textarea, ThemeSwitch, ThemeToggle, Tooltip, useToast,
 } from '@utkristi/ui';
 
+import { logoWordmarkPath } from '../../src/react/logo-wordmark.js';
 import { catalog } from './catalog';
+import { blocks } from './blocks';
+import { variants, variantSets } from './variants';
 
 export interface Example {
   name: string;
@@ -255,9 +258,9 @@ export const examples = {
     jsx: '<Code lines={["npm run build", "npm test"]} />',
   },
   logo: {
-    name: 'Logo', description: 'Two rising ribbons and a floating accent tile form the ecosystem mark. Use it with a configurable wordmark or on its own.',
-    preview: () => <div className="sample-row"><Logo /><Logo compact size={24} /></div>,
-    html: '<span class="brand" role="img" aria-label="Utkristi UI"><svg class="brand-mark" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path class="brand-tile" fill="currentColor" d="M2.8 20.5 12.6 10.7a1.65 1.65 0 0 1 2.3 0l3.1 3.1a1.65 1.65 0 0 1 0 2.3l-9.8 9.8a1.65 1.65 0 0 1-2.3 0l-3.1-3.1a1.65 1.65 0 0 1 0-2.3Z" /><path class="brand-tile" fill="currentColor" transform="translate(11 2.5)" d="M2.8 20.5 12.6 10.7a1.65 1.65 0 0 1 2.3 0l3.1 3.1a1.65 1.65 0 0 1 0 2.3l-9.8 9.8a1.65 1.65 0 0 1-2.3 0l-3.1-3.1a1.65 1.65 0 0 1 0-2.3Z" /><path class="brand-dot" fill="currentColor" d="m21.4 6.3 3.5-3.5a1.25 1.25 0 0 1 1.8 0l3.5 3.5a1.25 1.25 0 0 1 0 1.8l-3.5 3.5a1.25 1.25 0 0 1-1.8 0l-3.5-3.5a1.25 1.25 0 0 1 0-1.8Z" /></svg><span class="brand-name" aria-hidden="true"><span class="brand-pre">Utkristi</span><span class="brand-co">ui</span></span></span>',
+    name: 'Logo', description: 'The Utkristi mark pairs rising ribbons with custom lettering. Use the full logo, the symbol alone, or your own label.',
+    preview: () => <div className="sample-row"><Logo /><Logo compact size={24} /><Logo name="Workspace" suffix="" /></div>,
+    html: `<span class="brand" role="img" aria-label="Utkristi UI"><svg class="brand-mark" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path class="brand-tile" fill="currentColor" d="M2.8 20.5 12.6 10.7a1.65 1.65 0 0 1 2.3 0l3.1 3.1a1.65 1.65 0 0 1 0 2.3l-9.8 9.8a1.65 1.65 0 0 1-2.3 0l-3.1-3.1a1.65 1.65 0 0 1 0-2.3Z" /><path class="brand-tile" fill="currentColor" transform="translate(11 2.5)" d="M2.8 20.5 12.6 10.7a1.65 1.65 0 0 1 2.3 0l3.1 3.1a1.65 1.65 0 0 1 0 2.3l-9.8 9.8a1.65 1.65 0 0 1-2.3 0l-3.1-3.1a1.65 1.65 0 0 1 0-2.3Z" /><path class="brand-dot" fill="currentColor" d="m21.4 6.3 3.5-3.5a1.25 1.25 0 0 1 1.8 0l3.5 3.5a1.25 1.25 0 0 1 0 1.8l-3.5 3.5a1.25 1.25 0 0 1-1.8 0l-3.5-3.5a1.25 1.25 0 0 1 0-1.8Z" /></svg><span class="brand-name" aria-hidden="true"><svg class="brand-wordmark" viewBox="0 0 106 24" width="106" height="24" aria-hidden="true"><path fill="currentColor" d="${logoWordmarkPath}" /></svg><span class="brand-co">ui</span></span></span>`,
     jsx: '<Logo size={30} name="Utkristi" suffix="ui" />',
   },
   spinner: {
@@ -269,3 +272,12 @@ export const examples = {
 } satisfies Record<string, Example>;
 
 export const componentPages = Object.entries(examples).sort(([, a], [, b]) => a.name.localeCompare(b.name));
+
+export const sandboxExamples: Record<string, Example> = { ...examples, ...variants, ...blocks };
+export const blockPages = Object.entries(blocks);
+
+export function examplePage(slug: string) {
+  if (Object.hasOwn(blocks, slug)) return { href: `#/blocks/${slug}`, label: 'Block docs' };
+  const parent = Object.entries(variantSets).find(([, values]) => values?.some((key) => key === slug))?.[0] ?? slug;
+  return { href: `#/components/${parent}`, label: 'Component docs' };
+}

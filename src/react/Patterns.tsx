@@ -1,4 +1,4 @@
-import { useId, useState, type HTMLAttributes, type InputHTMLAttributes, type ReactNode, type VideoHTMLAttributes } from 'react';
+import { useId, useRef, useState, type HTMLAttributes, type InputHTMLAttributes, type ReactNode, type VideoHTMLAttributes } from 'react';
 import { Button, type ButtonProps } from './Button.js';
 import { Input } from './Field.js';
 import { Popover, type PopoverProps } from './Overlays.js';
@@ -50,6 +50,57 @@ export function DeviceMockup({ device = 'phone', className, children, ...props }
 export type FileInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'defaultValue'>;
 export function FileInput({ className, ...props }: FileInputProps) {
   return <Input {...props} type="file" className={cx('file-input', className)} />;
+}
+
+export interface FileDropzoneProps {
+  label?: string;
+  description?: string;
+  multiple?: boolean;
+  disabled?: boolean;
+  className?: string;
+  /** Receives the files from a drop or the native picker. The app handles upload and validation. */
+  onFiles: (files: File[]) => void;
+}
+
+export function FileDropzone({ label = 'Choose files', description = 'Or drag files here.', multiple, disabled, className, onFiles }: FileDropzoneProps) {
+  const id = useId();
+  const input = useRef<HTMLInputElement>(null);
+  const depth = useRef(0);
+  const [dragging, setDragging] = useState(false);
+  function pick(files: FileList | null) {
+    if (disabled || !files?.length) return;
+    onFiles(multiple ? Array.from(files) : [files[0]]);
+  }
+  return <div className={cx('file-dropzone', className)} data-dragging={dragging && !disabled || undefined}
+    onDragEnter={(event) => {
+      if (!event.dataTransfer.types.includes('Files')) return;
+      event.preventDefault();
+      depth.current++;
+      setDragging(true);
+    }}
+    onDragOver={(event) => {
+      if (!event.dataTransfer.types.includes('Files')) return;
+      event.preventDefault();
+      event.dataTransfer.dropEffect = disabled ? 'none' : 'copy';
+    }}
+    onDragLeave={() => {
+      depth.current = Math.max(0, depth.current - 1);
+      if (!depth.current) setDragging(false);
+    }}
+    onDrop={(event) => {
+      if (!event.dataTransfer.types.includes('Files')) return;
+      event.preventDefault();
+      depth.current = 0;
+      setDragging(false);
+      pick(event.dataTransfer.files);
+    }}>
+    <input hidden ref={input} type="file" multiple={multiple} disabled={disabled} onChange={(event) => {
+      pick(event.currentTarget.files);
+      event.currentTarget.value = '';
+    }} />
+    <Button variant="ghost" disabled={disabled} aria-describedby={id} onClick={() => input.current?.click()}>{label}</Button>
+    <span id={id} className="muted">{description}</span>
+  </div>;
 }
 
 export type NativeInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>;

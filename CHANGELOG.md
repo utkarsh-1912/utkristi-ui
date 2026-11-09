@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added a Blocks library and full-width component previews with selectable variants. Added FileDropzone and a panel accordion variant. Simplified the docs sidebar selection and keyboard focus styles.
+- Rebuilt the marketing overview and extended the showcase with working layouts, theme previews, and motion that respects reduced-motion preferences.
+
 - Rebuilt the navbar dock as one surface with flat links and controls. The mobile menu opens in a compact panel and adapts to the dock width.
 
 - Replaced the docs theme switch with a native dropdown and redesigned the search palette with grouped results, descriptions, and keyboard hints.

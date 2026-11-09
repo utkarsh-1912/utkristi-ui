@@ -116,6 +116,10 @@ async function captureEdge() {
       await fontsReady();
       await screenshot(file, true);
     }
+    await load('/overview?theme=glass', 'Make every app feel like Utkristi.');
+    await retry(() => evaluate('document.documentElement.dataset.theme === "glass"'), 'marketing theme');
+    await fontsReady();
+    await screenshot('overview', true);
     await size(mobileViewport.width, mobileViewport.height);
     await load('/components/command?theme=glass', 'Command');
     await retry(() => evaluate('document.documentElement.dataset.theme === "glass" && !!document.querySelector(".command [role=listbox]")'), 'mobile Command example');
@@ -125,7 +129,7 @@ async function captureEdge() {
     await retry(() => evaluate('!!document.querySelector(".sheet-dock [aria-current=page]")'), 'mobile navigation screenshot');
     await screenshot('mobile-menu');
     await evaluate(`document.querySelector('.sheet-dock [aria-label="Close menu"]').click()`);
-    process.stdout.write('Captured full showcases in Night, Paper, and Glass and both mobile views.\n');
+    process.stdout.write('Captured the overview, all three showcases, and both mobile views.\n');
     if (captureOnly) return;
     await send('Emulation.setEmulatedMedia', { features: [] });
 
@@ -153,7 +157,7 @@ async function captureEdge() {
     await retry(() => evaluate('document.querySelector("h1")?.textContent === "Data Table" && !document.querySelector(".docs-search-dialog")'), 'search Enter opens the result');
 
     await size(375, 812);
-    await load('/showcase?theme=glass', 'Build together.');
+    await load('/overview?theme=glass', 'Make every app feel like Utkristi.');
     await retry(() => evaluate('getComputedStyle(document.querySelector(".header-dock .burger")).display !== "none"'), 'mobile dock button');
     await evaluate('(() => { const button = document.querySelector(".header-dock .burger"); button.focus(); button.click(); })()');
     await retry(() => evaluate('document.activeElement?.getAttribute("aria-label") === "Close menu" && !!document.querySelector(".sheet-dock [aria-current=page]")'), 'focused mobile dock');
@@ -174,24 +178,57 @@ async function captureEdge() {
     await retry(() => evaluate('document.activeElement?.getAttribute("aria-label") === "Find a component or guide"'), 'focused docs search');
     await evaluate(`document.querySelector('.docs-search-dialog [role=option][aria-label="Carousel"]').click()`);
     await retry(() => evaluate('document.querySelector("h1")?.textContent.trim() === "Carousel" && !document.querySelector(".sheet-dock, .modal")'), 'docs search navigation');
+    await load('/blocks?theme=glass', 'Blocks');
+    const blocks = await evaluate(`Array.from(document.querySelectorAll('.block-link'), link => [link.hash.slice(1), link.querySelector('strong').textContent])`);
+    if (blocks.length < 4) throw new Error('The Blocks catalog is missing examples.');
+    await load('/blocks/project-directory?theme=glass', 'Project directory');
+    await evaluate('Array.from(document.querySelectorAll(".docs-example button")).find(button => button.textContent.trim() === "Add project").click()');
+    await retry(() => evaluate('!!document.querySelector(".modal input[name=project]")'), 'project editor');
+    await evaluate(`(() => {
+      const form = document.querySelector('form.modal');
+      form.elements.project.value = 'Testing workspace';
+      form.elements.owner.value = 'Example owner';
+      form.requestSubmit();
+    })()`);
+    await retry(() => evaluate('!!document.querySelector(".docs-example input[aria-label=\'Select Testing workspace\']") && !document.querySelector(".modal")'), 'project creation');
+    await evaluate(`document.querySelector('.docs-example input[aria-label="Select Testing workspace"]').click()`);
+    await evaluate('Array.from(document.querySelectorAll(".docs-example button")).find(button => button.textContent.trim() === "Delete selected").click()');
+    await retry(() => evaluate('!!document.querySelector(".modal")'), 'bulk delete confirmation');
+    await evaluate('Array.from(document.querySelectorAll(".modal button")).find(button => button.textContent.trim() === "Delete projects").click()');
+    await retry(() => evaluate('!document.querySelector(".docs-example input[aria-label=\'Select Testing workspace\']")'), 'bulk delete removes the selected row');
+
+    await load('/components/file-input?theme=glass', 'File Input');
+    await evaluate(`(() => {
+      const select = document.querySelector('select[aria-label="Example variant"]');
+      select.value = 'file-dropzone';
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    })()`);
+    await retry(() => evaluate('!!document.querySelector(".file-dropzone") && !!document.querySelector("a[href*=file-dropzone]")'), 'file input variant and its sandbox link');
+    await evaluate(`(() => {
+      const transfer = new DataTransfer();
+      transfer.items.add(new File(['preview'], 'example.txt', { type: 'text/plain' }));
+      document.querySelector('.file-dropzone').dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer: transfer }));
+    })()`);
+    await retry(() => evaluate('document.querySelector(".docs-example [role=status]")?.textContent === "1 file selected"'), 'dropzone accepts a file');
+
     await load('/getting-started', 'Getting started');
     const links = await evaluate(`Array.from(document.querySelectorAll('.doc-sidebar a'), link => [link.hash.slice(1), link.textContent])`);
-    const routes = [['/overview', 'Utkristi UI'], ['/showcase', 'Build together.'], ...links];
+    const routes = [['/overview', 'Make every app feel like Utkristi.'], ['/showcase', 'Build together.'], ...blocks, ...links];
     const overflow = [];
     for (const [theme] of themes) {
       for (const [path, title] of routes) {
         await load(path + '?theme=' + theme, title);
         await retry(() => evaluate('document.documentElement.dataset.theme === ' + JSON.stringify(theme)), theme);
-        if (path.startsWith('/components/')) await retry(() => evaluate('!!document.querySelector(".component-api")'), path + ' generated example');
+        if (path.startsWith('/components/') || path.startsWith('/blocks/')) await retry(() => evaluate('!!document.querySelector(".component-api")'), path + ' generated example');
         const width = await evaluate('document.documentElement.scrollWidth');
         if (width > 375) overflow.push(path + ' (' + theme + ', ' + width + 'px)');
       }
     }
     if (overflow.length) throw new Error(`Horizontal overflow at 375px: ${overflow.join(', ')}`);
     const responsiveRoutes = [
-      ['/overview', 'Utkristi UI'], ['/icons', 'Icons'], ['/tokens', 'Tokens'], ['/showcase', 'Build together.'],
+      ['/overview', 'Make every app feel like Utkristi.'], ['/icons', 'Icons'], ['/tokens', 'Tokens'], ['/showcase', 'Build together.'],
       ['/components/command', 'Command'], ['/components/data-table', 'Data Table'], ['/components/file-input', 'File Input'],
-      ['/sandbox?component=command', 'Sandbox'],
+      ['/sandbox?component=command', 'Sandbox'], ['/blocks', 'Blocks'], ['/blocks/project-directory', 'Project directory'],
     ];
     for (const width of [320, 390, 768, 981, 1024, 1440]) {
       await size(width, width >= 1024 ? 900 : 740);
@@ -214,6 +251,13 @@ async function captureEdge() {
       }
     }
     if (overflow.length) throw new Error(`Horizontal overflow: ${overflow.join(', ')}`);
+    await load('/getting-started?theme=light', 'Getting started');
+    await evaluate('document.querySelector(".doc-sidebar nav [aria-current=page]").focus()');
+    await retry(() => evaluate(`(() => {
+      const link = document.querySelector('.doc-sidebar nav [aria-current=page]');
+      const styles = getComputedStyle(link);
+      return styles.boxShadow === 'none' && styles.outlineStyle === 'none';
+    })()`), 'sidebar current page has no outline or side rule');
     await size(375, 812);
     await load('/getting-started?theme=glass', 'Getting started');
     await evaluate('document.querySelector(".doc-index-toggle").click()');
@@ -344,6 +388,10 @@ async function capturePlaywright() {
       await page.evaluate(() => document.fonts.ready);
       await page.screenshot({ path: join(screenshots, `${file}.png`), fullPage: true });
     }
+    await page.goto(`${url}/#/overview?theme=glass`);
+    await page.locator('html[data-theme="glass"] .marketing-hero').waitFor();
+    await page.evaluate(() => document.fonts.ready);
+    await page.screenshot({ path: join(screenshots, 'overview.png'), fullPage: true });
     await page.setViewportSize(mobileViewport);
     await page.goto(`${url}/#/components/command?theme=glass`);
     await page.locator('html[data-theme="glass"] .command [role="listbox"]').first().waitFor();

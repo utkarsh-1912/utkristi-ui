@@ -6,17 +6,15 @@ import { CopyCode } from './CopyCode';
 export default function ComponentReference({ slug, html }: { slug: string; html: string }) {
   const sample = sampleSources[slug];
   const reactExample = sample?.code;
-  const tailwindExample = html.replace(/class="([^"]+)"/, 'class="$1 p-0"');
   return <>
     <div className="example-source">
       <div className="doc-section-head"><div><span className="label">Implementation</span><h2>Use in your app</h2></div>
         <Button href={`#/sandbox?component=${slug}`} variant="ghost" iconRight={<ArrowUpRight size={16} />}>Open sandbox</Button></div>
-      <Tabs label="Usage examples" items={[
-        { id: 'tailwind', label: 'Tailwind', content: <><p className="muted">Use utilities such as <Code inline>p-0</Code> to override component padding. Interactive examples use the React component or your own event handlers.</p><CopyCode text={tailwindExample} /></> },
-        { id: 'css', label: 'Plain CSS', content: <><p className="muted">Import <Code inline>@utkristi/ui/utkristi-ui.css</Code> before using these classes. Use native controls or add behavior where needed.</p><CopyCode text={html} /></> },
+      <Tabs label="Usage examples" defaultValue="react" items={[
+        { id: 'css', label: 'HTML', content: <><p className="muted">This markup works with the Tailwind preset or <Code inline>@utkristi/ui/utkristi-ui.css</Code>. Use the React example for the full interaction.</p><CopyCode text={html} /></> },
         { id: 'react', label: 'React', content: reactExample
           ? <><p className="muted">Install the kit and import its stylesheet once in your app. This example includes its data and theme providers.</p><CopyCode text={reactExample} /></>
-          : <p className="muted">The React example is temporarily unavailable. The HTML example is available in the Plain CSS tab.</p> },
+          : <p className="muted">The React example is temporarily unavailable. See the HTML tab for the markup.</p> },
       ]} />
     </div>
     {sample && <ComponentApi components={sample.components} />}

@@ -1,15 +1,18 @@
 import { lazy, StrictMode, Suspense, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, ArrowUpRight, Plus } from 'lucide-react';
+import { ArrowUpRight, Plus } from 'lucide-react';
 import {
   Badge, Button, Card, CardBody, CardHeader, Code, Dot, Field, Icon, IconPalettePicker, IconPaletteProvider, IconTile, Input, Logo, SearchInput,
-  Shell, Slider, Stat, Stats, Tabs, ThemeProvider, ThemeSelect, ToastProvider, useTheme, type Theme,
+  Select, Shell, Slider, Stat, Stats, Tabs, ThemeProvider, ThemeSelect, ToastProvider, useTheme, type Theme,
 } from '@utkristi/ui';
-import { componentPages, examples } from './examples';
+import { blockPages, componentPages, examples, type Example } from './examples';
+import { blocks } from './blocks';
+import { variants, variantSets } from './variants';
 import { FontDemo } from './catalog';
 import { CopyCode } from './CopyCode';
 import { DocsSearch } from './DocsSearch';
 import { IconsPage, TokensPaletteSection } from './IconsPage';
+import { MarketingHome, useMarketingMotion, WorkflowSection } from './Marketing';
 import tokenCSS from '../../src/styles/tokens.css?raw';
 import './styles.css';
 
@@ -21,12 +24,13 @@ const primary = [
   { href: '#/getting-started', label: 'Install' },
   { href: '#/icons', label: 'Icons' },
   { href: '#/components/button', label: 'Components' },
-  { href: '#/showcase', label: 'Showcase' },
+  { href: '#/blocks', label: 'Blocks' },
   { href: '#/sandbox', label: 'Sandbox' },
 ];
 const primaryIcons = {
-  Overview: 'home', Install: 'download', Icons: 'palette', Components: 'layers', Showcase: 'ai-spark', Sandbox: 'terminal',
+  Overview: 'home', Install: 'download', Icons: 'palette', Components: 'layers', Blocks: 'grid', Sandbox: 'terminal',
 } as const;
+const showcaseLink = { href: '#/showcase', label: 'Showcase' };
 const isMac = typeof navigator !== 'undefined' && /Mac|iP(hone|ad|od)/.test(navigator.platform);
 const guide = [
   { href: '#/getting-started', label: 'Getting started' },
@@ -34,6 +38,7 @@ const guide = [
   { href: '#/tokens', label: 'Tokens' },
   { href: '#/icons', label: 'Icons' },
   { href: '#/typography', label: 'Typography' },
+  { href: '#/blocks', label: 'Blocks' },
   { href: '#/sandbox', label: 'Sandbox' },
 ];
 
@@ -60,15 +65,66 @@ function Frame({ theme, children }: { theme: PreviewTheme; children: ReactNode }
   </div>;
 }
 
-function ComponentPage({ slug }: { slug: keyof typeof examples }) {
-  const example = examples[slug];
+function ExamplePreview({ example, initialTheme, description, children }: {
+  example: Example; initialTheme: PreviewTheme; description?: string; children?: ReactNode;
+}) {
+  const [previewTheme, setPreviewTheme] = useState(initialTheme);
   const Preview = example.preview;
+  return <div className="docs-example">
+    <div className="docs-example-toolbar">
+      <div className="docs-example-title"><strong>Live preview</strong>{description && <span className="muted">{description}</span>}</div>
+      <div className="docs-example-controls">{children}<Select aria-label="Preview theme" value={previewTheme}
+        onChange={(event) => setPreviewTheme(event.target.value as PreviewTheme)}>
+        {themes.map((theme) => <option key={theme} value={theme}>{themeLabels[theme]}</option>)}
+      </Select></div>
+    </div>
+    <Frame key={previewTheme} theme={previewTheme}><Preview key={example.name} /></Frame>
+  </div>;
+}
+
+function ComponentPage({ slug }: { slug: keyof typeof examples }) {
+  const { resolvedTheme } = useTheme();
+  const [variant, setVariant] = useState<keyof typeof variants>();
+  const example = examples[slug];
+  const choices = variantSets[slug] ?? [];
+  const selected = variant ? variants[variant] : example;
   return <article className="doc-article">
     <PageTitle kicker="Components" title={example.name} detail={example.description} />
-    <div className="theme-gallery">
-      {themes.map((theme) => <Frame key={theme} theme={theme}><Preview /></Frame>)}
-    </div>
-    <Suspense fallback={<p className="muted">Loading examples and props…</p>}><ComponentReference slug={slug} html={example.html} /></Suspense>
+    <ExamplePreview key={resolvedTheme} example={selected} initialTheme={resolvedTheme} description={variant ? selected.description : undefined}>
+      {choices.length > 0 && <Select aria-label="Example variant" value={variant ?? ''}
+        onChange={(event) => setVariant(choices.find((key) => key === event.target.value))}>
+        <option value="">Default example</option>
+        {choices.map((key) => <option key={key} value={key}>{variants[key].name}</option>)}
+      </Select>}
+    </ExamplePreview>
+    <Suspense fallback={<p className="muted">Loading examples and props…</p>}><ComponentReference slug={variant ?? slug} html={selected.html} /></Suspense>
+  </article>;
+}
+
+function BlocksPage() {
+  const motion = useMarketingMotion();
+  return <article ref={motion} className="doc-article">
+    <PageTitle kicker="UI library" title="Blocks" detail="Working layouts for application screens, account flows, and marketing pages. Open a block to try it and copy its source." />
+    {['Application', 'Account', 'Marketing'].map((category) => <section key={category} className="blocks-section" data-reveal>
+      <h2>{category}</h2>
+      <div className="blocks-grid">{blockPages.filter(([, block]) => block.category === category).map(([slug, block]) =>
+        <a key={slug} href={`#/blocks/${slug}`} className="block-link">
+          <span className="block-link-icon"><Icon name={category === 'Application' ? 'grid' : category === 'Account' ? 'lock' : 'ai-spark'} size={22} /></span>
+          <span><strong>{block.name}</strong><span className="muted">{block.description}</span></span><Icon name="arrow-up-right" />
+        </a>)}
+      </div>
+    </section>)}
+  </article>;
+}
+
+function BlockPage({ slug }: { slug: keyof typeof blocks }) {
+  const { resolvedTheme } = useTheme();
+  const block = blocks[slug];
+  return <article className="doc-article">
+    <a href="#/blocks" className="link block-back"><Icon name="arrow-left" /> All blocks</a>
+    <PageTitle kicker={`Blocks / ${block.category}`} title={block.name} detail={block.description} />
+    <ExamplePreview key={resolvedTheme} example={block} initialTheme={resolvedTheme} />
+    <Suspense fallback={<p className="muted">Loading example source…</p>}><ComponentReference slug={slug} html={block.html} /></Suspense>
   </article>;
 }
 
@@ -79,21 +135,6 @@ function PageTitle({ kicker, title, detail }: { kicker: string; title: ReactNode
     <p className="lede">{detail}</p>
   </header>;
 }
-function Overview() {
-  return <>
-    <PageTitle kicker="Utkristi ecosystem / UI kit" title={<>Utkristi <span className="faint">UI</span></>}
-      detail={<>A shared component library for <b>every Utkristi app</b>, packaged for Tailwind, plain CSS, and React.</>} />
-    <div className="sample-row"><Button href="#/getting-started" iconRight={<ArrowRight size={17} />}>Get started</Button>
-      <Button href="#/showcase" variant="ghost" iconRight={<ArrowUpRight size={16} />}>View showcase</Button>
-      <Button href="#/sandbox" variant="ghost" iconRight={<ArrowUpRight size={16} />}>Try the sandbox</Button></div>
-    <div className="overview-grid">
-      <Frame theme="dark"><Card><CardHeader><Logo /><Badge tone="accent">Night</Badge></CardHeader><CardBody>Warm ink, quiet borders, and blue accents.</CardBody></Card></Frame>
-      <Frame theme="light"><Card><CardHeader><Logo /><Badge tone="accent">Paper</Badge></CardHeader><CardBody>Cool paper, dark ink, and the same component geometry.</CardBody></Card></Frame>
-      <Frame theme="glass"><Card><CardHeader><Logo /><Badge tone="accent">Glass</Badge></CardHeader><CardBody>Frosted lilac surfaces, charcoal chrome, and lime actions.</CardBody></Card></Frame>
-    </div>
-  </>;
-}
-
 function GettingStarted() {
   return <article className="doc-article">
     <PageTitle kicker="Guide" title="Getting started" detail="Install the kit and choose how to load its styles." />
@@ -208,8 +249,9 @@ function Typography() {
 const SplitPreview = examples['split-button'].preview;
 
 function Showcase() {
+  const motion = useMarketingMotion();
   const { resolvedTheme } = useTheme();
-  return <article className="showcase" data-showcase-theme={resolvedTheme}>
+  return <article ref={motion} className="showcase" data-showcase-theme={resolvedTheme}>
     <PageTitle kicker={resolvedTheme === 'glass' ? 'Glass / Component showcase' : 'Component showcase / 0.1.0'} title={<>Build <span className="faint">together.</span></>}
       detail={<>A workspace assembled from <b>Utkristi UI</b>, the shared kit for the Utkristi ecosystem.</>} />
     <div className="sample-row"><Button className="showcase-cta" href="#/components/button" iconLeft={<Plus size={16} />} iconRight={<ArrowUpRight size={16} />}>New workspace</Button><Button href="#/components/card" variant="ghost">Browse surfaces</Button>
@@ -218,7 +260,7 @@ function Showcase() {
       <Stat label="Active rooms" value="24" desc="Across three teams" /><Stat label="Members" value="86" desc="Working together" />
       <Stat label="Sync uptime" value="99" suffix="%" desc="Last 30 days" /><Stat label="Changes" value="128" desc="This week" />
     </Stats></div>
-    <div className="showcase-grid">
+    <div className="showcase-grid" data-reveal>
       <Card><CardHeader><strong>Workspace settings</strong><Badge tone="accent">Studio</Badge></CardHeader><CardBody className="sample-stack">
         <Field label="Workspace name" hint="Visible to everyone in your workspace"><Input defaultValue="Studio" /></Field>
         <Field label="Find a collaborator"><SearchInput placeholder="Search names" shortcut="⌘ K" /></Field>
@@ -247,6 +289,7 @@ function Showcase() {
         <IconPalettePicker showPreview={false} />
       </CardBody></Card>
     </div>
+    <WorkflowSection />
   </article>;
 }
 
@@ -328,13 +371,16 @@ function App() {
   }, [path]);
   const slug = path.slice('/components/'.length);
   const component = path.startsWith('/components/') && Object.hasOwn(examples, slug) ? slug as keyof typeof examples : undefined;
+  const blockSlug = path.slice('/blocks/'.length);
+  const block = path.startsWith('/blocks/') && Object.hasOwn(blocks, blockSlug) ? blockSlug as keyof typeof blocks : undefined;
   const pages: Record<string, ReactNode> = {
-    '/overview': <Overview />, '/getting-started': <GettingStarted />, '/theming': <Theming />,
+    '/overview': <MarketingHome />, '/getting-started': <GettingStarted />, '/theming': <Theming />,
     '/tokens': <Tokens />, '/icons': <IconsPage />, '/typography': <Typography />, '/showcase': <Showcase />,
+    '/blocks': <BlocksPage />,
     '/sandbox': <Suspense fallback={<p className="muted">Loading sandbox…</p>}><Playground key={sample ?? 'carousel'} component={sample} /></Suspense>,
   };
-  const content = component ? <ComponentPage key={component} slug={component} /> : pages[path] ?? <Overview />;
-  const standalone = path === '/overview' || path === '/showcase' || path === '/sandbox';
+  const content = component ? <ComponentPage key={component} slug={component} /> : block ? <BlockPage key={block} slug={block} /> : pages[path] ?? <MarketingHome />;
+  const standalone = path === '/overview' || path === '/showcase' || path === '/sandbox' || path === '/blocks' || !!block;
   function releasePreviewTheme() {
     const url = new URL(location.href);
     const [, options] = url.hash.split('?');
@@ -355,7 +401,7 @@ function App() {
       links: primary.map((item) => ({
         ...item,
         icon: <Icon name={primaryIcons[item.label as keyof typeof primaryIcons]} size={16} />,
-        active: item.href === `#${path}` || (item.label === 'Components' && !!component),
+        active: item.href === `#${path}` || (item.label === 'Components' && !!component) || (item.label === 'Blocks' && !!block),
       })),
       onSearch: () => setSearchOpen(true),
       searchLabel: 'Search docs',
@@ -367,13 +413,13 @@ function App() {
       lede: <div className="docs-footer-brand"><Logo size={32} /><p>Design and build across the Utkristi ecosystem.</p></div>,
       cta: <Button href="#/sandbox" variant="ghost">Open sandbox <Icon name="arrow-up-right" /></Button>,
       columns: [{ title: 'Build', links: [guide[0], guide[1], primary[3]] },
-        { title: 'Design', links: [guide[2], guide[3], guide[4]] }, { title: 'Explore', links: [primary[0], primary[4]] }],
+        { title: 'Design', links: [guide[2], guide[3], guide[4]] }, { title: 'Explore', links: [primary[0], primary[4], showcaseLink] }],
       themeSwitch: <div className="docs-footer-appearance"><span className="label">Appearance</span>{themeSelect()}</div>,
       bottom: <><span>Utkristi UI · MIT license</span><span>Version 0.1.0</span></>,
     }}>
       {standalone ? content : <div className="doc-layout"><Sidebar path={path} />{content}</div>}
     </Shell>
-    {searchOpen && <DocsSearch onClose={() => setSearchOpen(false)} pages={[...guide, primary[0], primary[4]]} />}
+    {searchOpen && <DocsSearch onClose={() => setSearchOpen(false)} pages={[...guide, primary[0], showcaseLink]} />}
   </ToastProvider></IconPaletteProvider></ThemeProvider>;
 }
 

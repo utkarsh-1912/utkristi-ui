@@ -27,15 +27,17 @@ export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
   defaultValue?: readonly string[];
   onValueChange?: (value: readonly string[]) => void;
   multiple?: boolean;
+  /** Use a list of dividers instead of enclosing the accordion in a surface. */
+  appearance?: 'panel' | 'flush';
 }
 export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Accordion(
-  { items, value, defaultValue = [], onValueChange, multiple, className, ...props }, ref,
+  { items, value, defaultValue = [], onValueChange, multiple, appearance = 'flush', className, ...props }, ref,
 ) {
   const id = useId();
   const [expanded, setExpanded] = useControllable(value, defaultValue, onValueChange);
   const triggers = useRef(new Map<string, HTMLButtonElement>());
   const enabled = items.filter((item) => !item.disabled);
-  return <div {...props} ref={ref} className={cx('accordion', className)}>
+  return <div {...props} ref={ref} className={cx('accordion', appearance === 'panel' && 'accordion-panel', className)}>
     {items.map((item, index) => {
       const active = expanded.includes(item.id);
       const title = `${id}-title-${index}`;

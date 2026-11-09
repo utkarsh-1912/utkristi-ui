@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Button, Icon, Select, type ResolvedTheme, useTheme } from '@utkristi/ui';
-import { componentPages, examples as previews } from './examples';
+import { blockPages, componentPages, examplePage, sandboxExamples as previews } from './examples';
+import { variants, variantSets } from './variants';
 import { examples } from 'virtual:utkristi-examples';
 import { script, styles } from 'virtual:utkristi-runtime';
 
@@ -22,6 +23,7 @@ export default function Playground({ component }: { component?: string }) {
   const slug = component && Object.hasOwn(previews, component) && Object.hasOwn(examples, component)
     ? component as keyof typeof previews : 'carousel';
   const example = previews[slug];
+  const docs = examplePage(slug);
   const [theme, setTheme] = useState<ResolvedTheme>(resolvedTheme);
   const [mode, setMode] = useState<'react' | 'html'>('react');
   const [reactCode, setReactCode] = useState(examples[slug].code);
@@ -102,9 +104,14 @@ export default function Playground({ component }: { component?: string }) {
       <p className="lede">Edit a working example, run it in any theme, and copy the code into your app.</p>
     </header>
     <div className="playground-toolbar">
-      <label htmlFor={id + "-component"}>Component<Select id={id + "-component"} value={slug} onChange={(event) => {
+      <label htmlFor={id + "-component"}>Example<Select id={id + "-component"} value={slug} onChange={(event) => {
         window.location.hash = '/sandbox?' + new URLSearchParams({ component: event.target.value, theme });
-      }}>{componentPages.map(([key, item]) => <option key={key} value={key}>{item.name}</option>)}</Select></label>
+      }}>
+        <optgroup label="Components">{componentPages.map(([key, item]) => <option key={key} value={key}>{item.name}</option>)}</optgroup>
+        <optgroup label="Component variants">{componentPages.flatMap(([key, item]) => (variantSets[key] ?? []).map((variant) =>
+          <option key={variant} value={variant}>{item.name} / {variants[variant].name}</option>))}</optgroup>
+        <optgroup label="Blocks">{blockPages.map(([key, item]) => <option key={key} value={key}>{item.name}</option>)}</optgroup>
+      </Select></label>
       <label htmlFor={id + "-theme"}>Theme<Select id={id + "-theme"} value={theme} onChange={(event) => {
         const next = event.target.value as ResolvedTheme;
         setTheme(next);
@@ -117,7 +124,7 @@ export default function Playground({ component }: { component?: string }) {
     <div className="playground-workspace">
     <div className="playground-result">
       <div className="playground-head"><span className="label">Live preview</span>
-        <a className="link" href={`#/components/${slug}`}>Component docs</a></div>
+        <a className="link" href={docs.href}>{docs.label}</a></div>
       <div className="playground-devices" role="group" aria-label="Preview width">
         {(['fluid', 'phone', 'tablet'] as const).map((device) => <Button key={device} size="sm" variant="quiet"
           aria-pressed={viewport === device} onClick={() => setViewport(device)}

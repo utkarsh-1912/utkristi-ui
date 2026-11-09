@@ -436,6 +436,7 @@ a[aria-current="page"] > .navbar-link-icon { opacity: 1; color: var(--ut-nav-mar
 .brand:hover .brand-dot { transform: translate(1px, -1px); }
 .brand-name { display: inline-flex; align-items: center; gap: .36em; white-space: nowrap; }
 .brand-pre { font-family: var(--ut-font-text, 'Archivo', sans-serif); font-weight: 700; letter-spacing: -.045em; font-size: 1em; color: var(--ut-brand-ink, var(--ut-ink, #E8E6DF)); }
+.brand-wordmark { display: block; flex: none; block-size: .9em; inline-size: auto; color: var(--ut-brand-ink, var(--ut-ink, #E8E6DF)); }
 .brand-co { font-family: var(--ut-font-mono, monospace); font-weight: 500; font-size: .49em; text-transform: uppercase; letter-spacing: .06em; padding: .32em .4em; border: 1px solid var(--ut-control-line, var(--ut-line-2)); border-radius: 4px; color: var(--ut-brand-muted, var(--ut-ink-3, #8E8B83)); }
 
 @keyframes ut-up { from { transform: translateY(40px); opacity: 0; } }
@@ -790,6 +791,8 @@ input.switch { display: inline-block; margin: 0; }
 .disclosure-body { padding: 0 0 12px; color: var(--ut-ink-2); }
 .accordion-heading { margin: 0; }
 .accordion-item + .accordion-item { border-block-start: 1px solid var(--ut-line); }
+.accordion-panel { padding-inline: 14px; background: var(--ut-bg-2); border: 1px solid var(--ut-line); border-radius: var(--ut-r); }
+.accordion-panel .disclosure-trigger { min-block-size: 44px; }
 .toggle[aria-pressed="true"] { background: var(--ut-solid); color: var(--ut-on-solid); border-color: var(--ut-solid); }
 .toggle-group { flex-wrap: wrap; }
 .popover, .popover-anchor, .hover-card { position: relative; display: inline-block; max-inline-size: 100%; }
@@ -850,6 +853,8 @@ input.switch { display: inline-block; margin: 0; }
 .device-frame[data-device="desktop"] { --ut-device-width: 60rem; border-radius: 12px; padding-block-end: 13px; }
 .device-screen { min-inline-size: 0; overflow: auto; border-radius: 12px; background: var(--ut-bg); }
 .file-input { display: block; min-inline-size: 0; max-inline-size: 100%; padding: 5px; font-size: .875rem; }
+.file-dropzone { display: grid; justify-items: center; gap: 8px; padding: 22px 12px; border: 1px dashed var(--ut-line-2); border-radius: var(--ut-r); background: var(--ut-bg-2); text-align: center; overflow-wrap: anywhere; }
+.file-dropzone[data-dragging] { border-color: var(--ut-accent); background: var(--ut-tint); }
 .file-input::file-selector-button { border: 0; border-radius: 6px; margin-inline-end: 8px; padding: 6px 8px; background: var(--ut-tint); color: var(--ut-ink); font: inherit; cursor: pointer; }
 .floating-field { position: relative; min-inline-size: 0; }
 .floating-field .input { padding-block: 1.05rem .3rem; min-block-size: 3.25rem; }

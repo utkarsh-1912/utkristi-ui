@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rebuilt the icon browser around search, category filters, and a detail dialog. Expanded the library to 256 glyphs and corrected clipped or ambiguous artwork.
+
 - Added a Blocks library and full-width component previews with selectable variants. Added FileDropzone and a panel accordion variant. Simplified the docs sidebar selection and keyboard focus styles.
 - Rebuilt the marketing overview and extended the showcase with working layouts, theme previews, and motion that respects reduced-motion preferences.
 

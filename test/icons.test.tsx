@@ -13,7 +13,7 @@ function toPascalCase(kebab: string) {
 }
 
 test('every source SVG has a 24x24 viewBox, no raw hex colour, and no <style>', () => {
-  expect(iconManifest.length).toBeGreaterThanOrEqual(135);
+  expect(iconManifest.length).toBeGreaterThanOrEqual(256);
   for (const entry of iconManifest) {
     const svgPath = join('icons', 'source', `${entry.name}.svg`);
     expect(existsSync(svgPath), svgPath).toBe(true);

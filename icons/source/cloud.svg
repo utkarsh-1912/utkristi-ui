@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-  <g data-layer="plate"><path fill="var(--ut-icon-tint)" d="M7 18h11a4 4 0 0 0 .5-8A5.5 5.5 0 0 0 7.5 9 4.5 4.5 0 0 0 7 18Z" /></g>
+  <g data-layer="plate"><path fill="var(--ut-icon-tint)" fill-rule="evenodd" d="M7 18h11a4 4 0 0 0 .5-8A5.5 5.5 0 0 0 7.5 9 4.5 4.5 0 0 0 7 18Z" /></g>
   <g data-layer="line" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 19h11a4.5 4.5 0 0 0 .6-9A6 6 0 0 0 6.6 8.5 4.5 4.5 0 0 0 6.5 19Z" /></g>
-  <g data-layer="filled" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.5 3a7 7 0 0 1 6.7 5A5.5 5.5 0 0 1 18 19H7a5.5 5.5 0 0 1-.8-10.9A7 7 0 0 1 12.5 3Z" /><path data-detail="true" d="M9 13h6v2H9v-2Z" /></g>
+  <g data-layer="filled" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.587 4.238C14.581 4.242 17.218 6.21 18.074 9.079C21.015 9.4 23.139 12.044 22.818 14.985C22.497 17.926 19.853 20.051 16.912 19.73H6.262C3.556 19.621 1.363 17.499 1.164 14.799C0.966 12.098 2.826 9.679 5.487 9.176C6.264 6.401 8.71 4.42 11.587 4.238Z" /><path data-detail="true" d="M9 13h6v2H9v-2Z" /></g>
 </svg>

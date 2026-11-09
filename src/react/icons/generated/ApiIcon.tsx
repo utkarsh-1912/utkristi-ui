@@ -2,9 +2,9 @@ import { useId, type SVGProps } from 'react';
 
 export const ApiIconData = {
   name: "api",
-  plate: "M6 6h12v12H6V6Z",
-  line: "m9 15 6-6M8 6l-2 2a4 4 0 0 0 5.6 5.6l2-2m2.4-1.2 2-2A4 4 0 0 0 12.4 2.8l-2 2M4 20l3-3m10-10 3-3",
-  filled: "M19.3 3.3a1 1 0 0 1 1.4 1.4l-2.1 2.1a5 5 0 0 1-.8 6.1l-2 2a1 1 0 0 1-1.4 0l-5.2-5.2a1 1 0 0 1 0-1.4l2-2a5 5 0 0 1 6.1-.8l2-2.2ZM6.7 9.9a1 1 0 0 1 1.4 0l6 6a1 1 0 0 1 0 1.4l-1.3 1.3a5 5 0 0 1-6.1.8l-2 2a1 1 0 0 1-1.4-1.4l2-2a5 5 0 0 1 .8-6.1l.6-.6Z",
+  plate: "M8 8h8v8H8z",
+  line: "M7 5 3 12l4 7m10-14 4 7-4 7M10 8v3m4-3v3m-5 0h6v2a3 3 0 0 1-6 0v-2Zm3 5v3",
+  filled: "M6.3 4 8 5l-4 7 4 7-1.7 1-4.6-8 4.6-8Zm11.4 0 4.6 8-4.6 8-1.7-1 4-7-4-7 1.7-1ZM9 7h2v3h2V7h2v3h1v3a4 4 0 0 1-3 3.9V20h-2v-3.1A4 4 0 0 1 8 13v-3h1V7Z",
   detail: undefined,
   has3d: false,
 } as const;
@@ -27,7 +27,7 @@ export function ApiIcon({ variant = 'line', size = 16, strokeWidth, ...props }: 
   if (variant === 'duotone') {
     return (
       <svg viewBox="0 0 24 24" width={size} height={size} fill="none" {...props}>
-        <path className="icon-plate" fill="var(--ut-icon-tint)" d={ApiIconData.plate} />
+        <path className="icon-plate" fill="var(--ut-icon-tint)" fillRule="evenodd" d={ApiIconData.plate} />
         <path className="icon-stroke" stroke="var(--ut-icon-stroke, currentColor)" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" d={ApiIconData.line} />
       </svg>
     );
@@ -36,7 +36,7 @@ export function ApiIcon({ variant = 'line', size = 16, strokeWidth, ...props }: 
     const faceId = `ut-face-${uid}`;
     const shadowId = `ut-shadow-${uid}`;
     return (
-      <svg viewBox="0 0 24 24" width={size} height={size} fill="none" {...props}>
+      <svg viewBox="-2 -2 31 31" width={size} height={size} fill="none" {...props}>
         <defs>
           <linearGradient id={faceId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="var(--ut-icon-hi)" />

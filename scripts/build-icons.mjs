@@ -4,10 +4,13 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { iconsPart1 } from './icon-catalog-part1.mjs';
 import { iconsPart2 } from './icon-catalog-part2.mjs';
+import { iconsPart3 } from './icon-catalog-part3.mjs';
 import { buildClayGeometry, shadeClayRender } from './render-clay-3d.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const allIcons = [...iconsPart1, ...iconsPart2];
+const allIcons = [...iconsPart1, ...iconsPart2, ...iconsPart3];
+if (new Set(allIcons.map(({ name }) => name)).size !== allIcons.length) throw new Error('Duplicate icon names in the catalog.');
+const dimensionalViewBox = '-2 -2 31 31';
 const allHues = ['blue', 'lime', 'violet', 'teal', 'amber', 'coral', 'rose', 'graphite'];
 const allThemes = ['night', 'paper', 'glass'];
 
@@ -22,7 +25,7 @@ function toCamelCase(kebab) {
 function buildMasterSvg(icon) {
   return [
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">',
-    `  <g data-layer="plate"><path fill="var(--ut-icon-tint)" d="${icon.plate}" /></g>`,
+    `  <g data-layer="plate"><path fill="var(--ut-icon-tint)" fill-rule="evenodd" d="${icon.plate}" /></g>`,
     `  <g data-layer="line" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${icon.line}" /></g>`,
     `  <g data-layer="filled" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="${icon.filled}" />${
       icon.detail ? `<path data-detail="true" d="${icon.detail}" />` : ''
@@ -56,13 +59,13 @@ function buildStandaloneSvg(icon, style) {
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="${icon.filled}"/></svg>\n`;
   }
   if (style === 'duotone') {
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path class="icon-plate" fill="var(--ut-icon-tint)" d="${icon.plate}"/><path class="icon-stroke" stroke="var(--ut-icon-stroke, currentColor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="${icon.line}"/></svg>\n`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path class="icon-plate" fill="var(--ut-icon-tint)" fill-rule="evenodd" d="${icon.plate}"/><path class="icon-stroke" stroke="var(--ut-icon-stroke, currentColor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="${icon.line}"/></svg>\n`;
   }
   // 2.5d layered SVG
   const gradId = `ut-2d5-${icon.name}-face`;
   const shadowId = `ut-2d5-${icon.name}-shadow`;
   return [
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">',
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${dimensionalViewBox}" fill="none">`,
     '  <defs>',
     `    <linearGradient id="${gradId}" x1="0%" y1="0%" x2="100%" y2="100%">`,
     '      <stop offset="0%" stop-color="var(--ut-icon-hi)" />',
@@ -73,7 +76,7 @@ function buildStandaloneSvg(icon, style) {
     '      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="var(--ut-icon-shadow, rgba(0,0,0,.35))" />',
     '    </filter>',
     '  </defs>',
-    `  <path fill="var(--ut-icon-shadow, rgba(0,0,0,.35))" transform="translate(0 2)" filter="url(#${shadowId})" d="${icon.filled}" />`,
+    `  <path fill="var(--ut-icon-shadow, rgba(0,0,0,.35))" fill-rule="evenodd" transform="translate(0 2)" filter="url(#${shadowId})" d="${icon.filled}" />`,
     `  <g class="icon-2d5-ext" fill="var(--ut-icon-shade)">`,
     `    <path transform="translate(2.25 2.25)" fill-rule="evenodd" clip-rule="evenodd" d="${icon.filled}" />`,
     `    <path transform="translate(1.5 1.5)" fill-rule="evenodd" clip-rule="evenodd" d="${icon.filled}" />`,
@@ -120,7 +123,7 @@ export function ${compName}({ variant = 'line', size = 16, strokeWidth, ...props
   if (variant === 'duotone') {
     return (
       <svg viewBox="0 0 24 24" width={size} height={size} fill="none" {...props}>
-        <path className="icon-plate" fill="var(--ut-icon-tint)" d={${compName}Data.plate} />
+        <path className="icon-plate" fill="var(--ut-icon-tint)" fillRule="evenodd" d={${compName}Data.plate} />
         <path className="icon-stroke" stroke="var(--ut-icon-stroke, currentColor)" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" d={${compName}Data.line} />
       </svg>
     );
@@ -129,7 +132,7 @@ export function ${compName}({ variant = 'line', size = 16, strokeWidth, ...props
     const faceId = \`ut-face-\${uid}\`;
     const shadowId = \`ut-shadow-\${uid}\`;
     return (
-      <svg viewBox="0 0 24 24" width={size} height={size} fill="none" {...props}>
+      <svg viewBox="${dimensionalViewBox}" width={size} height={size} fill="none" {...props}>
         <defs>
           <linearGradient id={faceId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="var(--ut-icon-hi)" />
@@ -213,7 +216,7 @@ for (const icon of allIcons) {
     `  <symbol id="ut-icon-${icon.name}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${icon.line}"/></symbol>`,
     `  <symbol id="ut-icon-line-${icon.name}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${icon.line}"/></symbol>`,
     `  <symbol id="ut-icon-filled-${icon.name}" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="${icon.filled}"/></symbol>`,
-    `  <symbol id="ut-icon-duotone-${icon.name}" viewBox="0 0 24 24" fill="none"><path fill="var(--ut-icon-tint)" d="${icon.plate}"/><path stroke="var(--ut-icon-stroke, currentColor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="${icon.line}"/></symbol>`,
+    `  <symbol id="ut-icon-duotone-${icon.name}" viewBox="0 0 24 24" fill="none"><path fill="var(--ut-icon-tint)" fill-rule="evenodd" d="${icon.plate}"/><path stroke="var(--ut-icon-stroke, currentColor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="${icon.line}"/></symbol>`,
   );
 
   // Per-icon React module
@@ -229,6 +232,7 @@ await writeFile(join(docsIconsDir, 'sprite.svg'), spriteSvg, 'utf8');
 
 // 3. Generate 3D soft-clay renders for all has3d icons x 3 themes x 8 hues (@1x = 96px, @2x = 160px)
 const force3d = process.argv.includes('--force-3d');
+const rerender = new Set(process.argv.find((arg) => arg.startsWith('--rerender='))?.slice('--rerender='.length).split(',') ?? []);
 const rasterFormats = { avif: [], webp: [] };
 const dimensionalNames = allIcons.filter((item) => item.has3d).map(({ name }) => name);
 
@@ -249,7 +253,7 @@ for (const icon of allIcons.filter((item) => item.has3d)) {
       const file1x = join(srcRenderDir, `${icon.name}@1x.png`);
       const file2x = join(srcRenderDir, `${icon.name}@2x.png`);
 
-      if (force3d || !existsSync(file1x) || !existsSync(file2x)) {
+      if (force3d || rerender.has(icon.name) || !existsSync(file1x) || !existsSync(file2x)) {
         if (!geom1x) geom1x = buildClayGeometry(icon, 96);
         if (!geom2x) geom2x = buildClayGeometry(icon, 160);
         const png1x = shadeClayRender(geom1x, theme, hue);
@@ -280,7 +284,7 @@ const indexExports = allIcons.map((icon) => {
   return `export { ${compName}, ${compName}Data } from './${compName}.js';`;
 }).join('\n');
 
-const glyphEntries = allIcons.flatMap((icon) => {
+const glyphEntries = allIcons.map((icon) => {
   const entry = JSON.stringify({
     name: icon.name,
     group: icon.group,
@@ -293,15 +297,16 @@ const glyphEntries = allIcons.flatMap((icon) => {
     filled: icon.filled,
     detail: icon.detail,
   });
-  const camel = toCamelCase(icon.name);
-  return camel !== icon.name
-    ? [`  ${JSON.stringify(icon.name)}: ${entry},`, `  ${JSON.stringify(camel)}: ${entry},`]
-    : [`  ${JSON.stringify(icon.name)}: ${entry},`];
+  return `  ${JSON.stringify(icon.name)}: ${entry},`;
+}).join('\n');
+const glyphAliases = allIcons.flatMap(({ name }) => {
+  const alias = toCamelCase(name);
+  return alias === name ? [] : [`  ${JSON.stringify(alias)}: glyphs[${JSON.stringify(name)}],`];
 }).join('\n');
 
 await writeFile(
   join(generatedReactDir, 'index.ts'),
-  `${indexExports}\n\nexport const iconGlyphs = {\n${glyphEntries}\n} as const;\n\nexport type IconGlyphName = keyof typeof iconGlyphs;\n`,
+  `${indexExports}\n\nconst glyphs = {\n${glyphEntries}\n} as const;\n\nexport const iconGlyphs = {\n  ...glyphs,\n${glyphAliases}\n} as const;\n\nexport type IconGlyphName = keyof typeof iconGlyphs;\n`,
   'utf8',
 );
 

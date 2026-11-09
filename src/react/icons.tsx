@@ -377,7 +377,7 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
     return (
       <svg
         ref={ref}
-        viewBox="0 0 24 24"
+        viewBox="-2 -2 31 31"
         width={resolvedSize}
         height={resolvedSize}
         fill="none"
@@ -446,7 +446,7 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
         {...a11yProps}
         {...props}
       >
-        <path className="icon-plate" fill="var(--ut-icon-tint)" d={glyph.plate} />
+        <path className="icon-plate" fill="var(--ut-icon-tint)" fillRule="evenodd" d={glyph.plate} />
         <path
           className="icon-stroke"
           stroke="var(--ut-icon-stroke, currentColor)"

@@ -4,6 +4,8 @@ Utkristi UI is the shared design system for the Utkristi ecosystem. It includes 
 
 [Marketing overview preview](docs/screenshots/overview.png)
 
+[Icon catalog preview](docs/screenshots/icons.png)
+
 | Night | Paper | Glass |
 | --- | --- | --- |
 | ![Night showcase](docs/screenshots/night.png) | ![Paper showcase](docs/screenshots/paper.png) | ![Glass showcase](docs/screenshots/glass.png) |

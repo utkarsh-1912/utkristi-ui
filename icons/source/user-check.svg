@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <g data-layer="plate"><path fill="var(--ut-icon-tint)" fill-rule="evenodd" d="M12 8a4 4 0 1 1 -8 0a4 4 0 1 1 8 0ZM2.5 21v-3a5.5 5.5 0 1 1 11 0v3Zm11.7-7 1.5-1.5 1.4 1.4 3.4-3.4L22 12l-4.9 5Z" /></g>
+  <g data-layer="line" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM3 20v-2a5 5 0 0 1 10 0v2m2-6 2 2 4-4" /></g>
+  <g data-layer="filled" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 8a4 4 0 1 1 -8 0a4 4 0 1 1 8 0ZM2.5 21v-3a5.5 5.5 0 1 1 11 0v3Zm11.7-7 1.5-1.5 1.4 1.4 3.4-3.4L22 12l-4.9 5Z" /></g>
+</svg>

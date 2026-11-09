@@ -27,7 +27,7 @@ export function ImageIcon({ variant = 'line', size = 16, strokeWidth, ...props }
   if (variant === 'duotone') {
     return (
       <svg viewBox="0 0 24 24" width={size} height={size} fill="none" {...props}>
-        <path className="icon-plate" fill="var(--ut-icon-tint)" d={ImageIconData.plate} />
+        <path className="icon-plate" fill="var(--ut-icon-tint)" fillRule="evenodd" d={ImageIconData.plate} />
         <path className="icon-stroke" stroke="var(--ut-icon-stroke, currentColor)" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" d={ImageIconData.line} />
       </svg>
     );
@@ -36,7 +36,7 @@ export function ImageIcon({ variant = 'line', size = 16, strokeWidth, ...props }
     const faceId = `ut-face-${uid}`;
     const shadowId = `ut-shadow-${uid}`;
     return (
-      <svg viewBox="0 0 24 24" width={size} height={size} fill="none" {...props}>
+      <svg viewBox="-2 -2 31 31" width={size} height={size} fill="none" {...props}>
         <defs>
           <linearGradient id={faceId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="var(--ut-icon-hi)" />

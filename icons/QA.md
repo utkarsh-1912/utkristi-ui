@@ -2,13 +2,17 @@
 
 This document records the design, optical-weight, 3D consistency, and accessibility QA checks defined in Section 11 of `ICON_SYSTEM_INSTRUCTIONS.md`.
 
-The shipped clay images use the repository’s deterministic renderer. A verified Blender scene and the full size and density matrix are still outstanding. The current assets use 96px and 160px PNG masters. The brand hue for each theme also has AVIF and WebP at both sizes. The largest generated AVIF is 5,167 bytes. The optical and lighting rows below describe checks of the shipped artwork and its geometry.
+The shipped clay images use the repository’s deterministic renderer. A verified Blender scene and the full size and density matrix are still outstanding. The current assets use 96px and 160px PNG masters. The brand hue for each theme also has AVIF and WebP at both sizes. The optical and lighting rows below describe checks of the shipped artwork and its geometry.
+
+The explorer follows the category and search patterns used by Lucide and the compact filtered catalog used by Tabler. The Utkristi grid loads 72 results at a time and keeps copy actions, size, colour, and the three theme previews in a dialog for the selected icon. [Lucide catalog](https://lucide.dev/icons) · [Tabler icon explorer](https://tabler.io/icons)
+
+The catalog now contains 256 glyphs. Settings and API were redrawn, and Branch, Battery, Cloud, Link, Offline, and Rocket were adjusted to fit the canvas. Settings, Cloud, and Rocket also have regenerated 3D assets. The browser suite checks outline and filled SVG bounds for every entry in the sprite.
 
 ## 1. Optical Weight & Pixel-Fit Audit (16px, 20px, 24px)
 
 | Check | Target | Night (`#0B0B0A`) | Paper (`#F5F7FB`) | Glass (`#F7F4FB`) | Result |
 | --- | --- | --- | --- | --- | --- |
-| **Grid & keylines** | 24×24 grid, 2px margin (20×20 live area), circle Ø20, square 18×18, portrait 16×20, landscape 20×16 | Verified across all 135 glyphs | Verified across all 135 glyphs | Verified across all 135 glyphs | **Pass** |
+| **Grid & keylines** | 24×24 artwork canvas with room for the default stroke | All sprite paths checked in the browser | Theme uses the same paths | Theme uses the same paths | **Automated** |
 | **Optical stroke scaling** | `16px → 1.75`, `20px → 1.875`, `24px+ → 2.0` (`round` caps & joins) | Crisp 1× rendering, even weight | Crisp 1× rendering, even weight | Crisp 1× rendering, charcoal stroke | **Pass** |
 | **Typography pairing** | Line icons alongside 14px Archivo & 11px Geist Mono labels | Never fights or outweighs display/mono text | Balanced against `#0E1A33` ink | Balanced against `#202021` ink | **Pass** |
 | **Filled knock-outs** | Inner details use `fill-rule="evenodd"` cut-throughs | Clean silhouettes at 16–32px | Clean silhouettes at 16–32px | Clean silhouettes at 16–32px | **Pass** |

@@ -4,7 +4,7 @@ export const LinkIconData = {
   name: "link",
   plate: "M6 8h12v8H6V8Z",
   line: "M10 13a5 5 0 0 0 7.1 0l2.8-2.8a5 5 0 0 0-7.1-7.1L11 4.9M14 11a5 5 0 0 0-7.1 0l-2.8 2.8a5 5 0 0 0 7.1 7.1l1.8-1.8",
-  filled: "M13.5 2.4a6 6 0 0 1 8.5 8.5l-2.8 2.8a1 1 0 0 1-1.4-1.4l2.8-2.8a4 4 0 1 0-5.7-5.7l-1.8 1.8a1 1 0 1 1-1.4-1.4l1.8-1.8Zm-8.7 7.9a1 1 0 0 1 1.4 1.4L3.4 14.5a4 4 0 1 0 5.7 5.7l1.8-1.8a1 1 0 1 1 1.4 1.4l-1.8 1.8a6 6 0 0 1-8.5-8.5l2.8-2.8Zm4.5 4.4 5-5a1 1 0 0 1 1.4 1.4l-5 5a1 1 0 0 1-1.4-1.4Z",
+  filled: "M13.384 3.143C15.549 0.978 19.06 0.978 21.226 3.143C23.391 5.309 23.391 8.82 21.226 10.985L18.643 13.568C18.275 13.844 17.761 13.807 17.437 13.483C17.112 13.158 17.076 12.644 17.351 12.277L19.934 9.694C21.386 8.241 21.386 5.887 19.934 4.435C18.482 2.983 16.128 2.983 14.676 4.435L13.015 6.095C12.798 6.384 12.433 6.52 12.08 6.443C11.728 6.366 11.452 6.091 11.375 5.738C11.298 5.386 11.434 5.02 11.723 4.804L13.384 3.143L13.384 3.143ZM5.357 10.432C5.725 10.156 6.239 10.193 6.563 10.517C6.888 10.842 6.924 11.356 6.649 11.723L4.066 14.306C2.614 15.759 2.614 18.113 4.066 19.565C5.518 21.017 7.872 21.017 9.324 19.565L10.985 17.905C11.202 17.616 11.567 17.48 11.92 17.557C12.272 17.634 12.548 17.909 12.625 18.262C12.702 18.614 12.566 18.98 12.277 19.196L10.616 20.857C8.451 23.022 4.94 23.022 2.774 20.857C0.609 18.691 0.609 15.18 2.774 13.015L5.357 10.432L5.357 10.432ZM9.509 14.491 14.122 9.878C14.489 9.603 15.003 9.639 15.328 9.964C15.653 10.288 15.689 10.802 15.414 11.17L10.801 15.783C10.433 16.058 9.919 16.022 9.595 15.697C9.27 15.372 9.234 14.858 9.509 14.491Z",
   detail: undefined,
   has3d: false,
 } as const;
@@ -27,7 +27,7 @@ export function LinkIcon({ variant = 'line', size = 16, strokeWidth, ...props }:
   if (variant === 'duotone') {
     return (
       <svg viewBox="0 0 24 24" width={size} height={size} fill="none" {...props}>
-        <path className="icon-plate" fill="var(--ut-icon-tint)" d={LinkIconData.plate} />
+        <path className="icon-plate" fill="var(--ut-icon-tint)" fillRule="evenodd" d={LinkIconData.plate} />
         <path className="icon-stroke" stroke="var(--ut-icon-stroke, currentColor)" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" d={LinkIconData.line} />
       </svg>
     );
@@ -36,7 +36,7 @@ export function LinkIcon({ variant = 'line', size = 16, strokeWidth, ...props }:
     const faceId = `ut-face-${uid}`;
     const shadowId = `ut-shadow-${uid}`;
     return (
-      <svg viewBox="0 0 24 24" width={size} height={size} fill="none" {...props}>
+      <svg viewBox="-2 -2 31 31" width={size} height={size} fill="none" {...props}>
         <defs>
           <linearGradient id={faceId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="var(--ut-icon-hi)" />

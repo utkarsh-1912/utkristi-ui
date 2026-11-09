@@ -120,6 +120,11 @@ async function captureEdge() {
     await retry(() => evaluate('document.documentElement.dataset.theme === "glass"'), 'marketing theme');
     await fontsReady();
     await screenshot('overview', true);
+    await size(1440, 900);
+    await load('/icons?theme=glass', 'Icons');
+    await retry(() => evaluate('!!document.querySelector(".icons-cell")'), 'icon catalog screenshot');
+    await fontsReady();
+    await screenshot('icons');
     await size(mobileViewport.width, mobileViewport.height);
     await load('/components/command?theme=glass', 'Command');
     await retry(() => evaluate('document.documentElement.dataset.theme === "glass" && !!document.querySelector(".command [role=listbox]")'), 'mobile Command example');
@@ -265,7 +270,33 @@ async function captureEdge() {
     await evaluate(`document.querySelector('.doc-index a[href="#/components/command"]').click()`);
     await retry(() => evaluate('document.querySelector("h1")?.textContent === "Command" && document.querySelector(".doc-index-toggle").getAttribute("aria-expanded") === "false"'), 'mobile index navigation');
     await load('/icons?theme=glass', 'Icons');
-    await evaluate('Array.from(document.querySelectorAll(\'[aria-label="Icon style"] button\')).find(button => button.textContent.trim() === "3D").click()');
+    await evaluate('window.dispatchEvent(new KeyboardEvent("keydown", { key: "/", bubbles: true, cancelable: true }))');
+    await retry(() => evaluate('document.activeElement?.getAttribute("aria-label") === "Search icons"'), 'icon search shortcut');
+    const searchIcon = (term) => evaluate(`(() => {
+      const input = document.querySelector('[aria-label="Search icons"]');
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, ${JSON.stringify(term)});
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    })()`);
+    await searchIcon('api');
+    await retry(() => evaluate('document.querySelector(".icons-cell")?.textContent.trim() === "api"'), 'exact icon match ranked first');
+    await evaluate('(() => { const result = document.querySelector(".icons-cell"); result.focus(); result.click(); })()');
+    await retry(() => evaluate('document.querySelector(".icons-detail .modal-title")?.textContent === "api"'), 'icon detail opens');
+    await evaluate(`(() => {
+      Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText(value) { window.copiedIcon = value; return Promise.resolve(); } } });
+      Array.from(document.querySelectorAll('.icons-detail button')).find(button => button.textContent.trim() === 'Copy SVG').click();
+    })()`);
+    await retry(() => evaluate('window.copiedIcon?.startsWith("<svg") && window.copiedIcon.includes("http://www.w3.org/2000/svg") && window.copiedIcon.includes("M7 5 3 12")'), 'standalone SVG export');
+    await evaluate('document.activeElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }))');
+    await retry(() => evaluate('!document.querySelector(".icons-detail") && document.activeElement?.matches(".icons-cell")'), 'icon detail restores focus');
+    await searchIcon('settings');
+    await retry(() => evaluate('document.querySelector(".icons-cell")?.textContent.trim() === "settings"'), 'settings search result');
+    await evaluate('document.querySelector(".icons-cell").click()');
+    await retry(() => evaluate('!!document.querySelector(".icons-detail select")'), 'settings detail controls');
+    await evaluate(`(() => {
+      const select = document.querySelector('.icons-detail select');
+      select.value = '3d';
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    })()`);
     await retry(() => evaluate(`['dark', 'light', 'glass'].every((theme, index) => {
       const icon = document.querySelector('.theme-preview[data-theme="' + theme + '"] .icon-3d img');
       return icon?.getAttribute('src').includes('/' + ['night', 'paper', 'glass'][index] + '/');
@@ -273,6 +304,28 @@ async function captureEdge() {
     await send('Emulation.setEmulatedMedia', { features: [{ name: 'forced-colors', value: 'active' }] });
     await retry(() => evaluate('getComputedStyle(document.querySelector(".icon-3d-fallback")).display !== "none"'), 'forced-colour icon fallback');
     await send('Emulation.setEmulatedMedia', { features: [] });
+    await evaluate('document.activeElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }))');
+    const clippedIcons = await evaluate(`(async () => {
+      const response = await fetch('./icons/sprite.svg');
+      if (!response.ok) throw new Error('The SVG sprite could not be loaded');
+      const sprite = new DOMParser().parseFromString(await response.text(), 'image/svg+xml');
+      const ns = 'http://www.w3.org/2000/svg';
+      const host = document.createElementNS(ns, 'svg');
+      const path = document.createElementNS(ns, 'path');
+      host.setAttribute('style', 'position:fixed;visibility:hidden;inline-size:24px;block-size:24px');
+      host.append(path);
+      document.body.append(host);
+      try {
+        return Array.from(sprite.querySelectorAll('symbol[id^="ut-icon-line-"],symbol[id^="ut-icon-filled-"]')).flatMap(symbol => {
+          path.setAttribute('d', symbol.querySelector('path').getAttribute('d'));
+          const box = path.getBBox();
+          const margin = symbol.id.startsWith('ut-icon-line-') ? .99 : .09;
+          return box.x < margin || box.y < margin || box.x + box.width > 24 - margin || box.y + box.height > 24 - margin ||
+            !(box.width || box.height) ? [symbol.id] : [];
+        });
+      } finally { host.remove(); }
+    })()`);
+    if (clippedIcons.length) throw new Error(`SVG paths outside the icon canvas: ${clippedIcons.join(', ')}`);
     for (const [theme] of themes) {
       await load('/components/carousel?theme=' + theme, 'Carousel');
       const selector = '.theme-preview[data-theme="' + theme + '"] .carousel';
@@ -392,6 +445,11 @@ async function capturePlaywright() {
     await page.locator('html[data-theme="glass"] .marketing-hero').waitFor();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: join(screenshots, 'overview.png'), fullPage: true });
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`${url}/#/icons?theme=glass`);
+    await page.locator('.icons-cell').first().waitFor();
+    await page.evaluate(() => document.fonts.ready);
+    await page.screenshot({ path: join(screenshots, 'icons.png') });
     await page.setViewportSize(mobileViewport);
     await page.goto(`${url}/#/components/command?theme=glass`);
     await page.locator('html[data-theme="glass"] .command [role="listbox"]').first().waitFor();

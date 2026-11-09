@@ -2725,5 +2725,2069 @@ export const iconManifest: readonly IconManifestEntry[] = [
     ],
     "has3d": false,
     "hues3d": []
+  },
+  {
+    "name": "text-bold",
+    "group": "Text formatting",
+    "keywords": [
+      "weight",
+      "typography",
+      "rich-text"
+    ],
+    "description": "Apply bold formatting to text.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "text-italic",
+    "group": "Text formatting",
+    "keywords": [
+      "slant",
+      "typography",
+      "rich-text"
+    ],
+    "description": "Set text in italics.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "text-underline",
+    "group": "Text formatting",
+    "keywords": [
+      "emphasis",
+      "typography",
+      "rich-text"
+    ],
+    "description": "Underline the selected text.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "text-strikethrough",
+    "group": "Text formatting",
+    "keywords": [
+      "strike",
+      "delete",
+      "formatting"
+    ],
+    "description": "Strike through the selected text.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "align-start",
+    "group": "Text formatting",
+    "keywords": [
+      "left",
+      "paragraph",
+      "layout"
+    ],
+    "description": "Align text to the start of a line.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "align-center",
+    "group": "Text formatting",
+    "keywords": [
+      "paragraph",
+      "layout",
+      "justify"
+    ],
+    "description": "Center text between the margins.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "align-end",
+    "group": "Text formatting",
+    "keywords": [
+      "right",
+      "paragraph",
+      "layout"
+    ],
+    "description": "Align text to the end of a line.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "align-justify",
+    "group": "Text formatting",
+    "keywords": [
+      "paragraph",
+      "layout",
+      "width"
+    ],
+    "description": "Stretch text across both margins.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "indent-increase",
+    "group": "Text formatting",
+    "keywords": [
+      "nest",
+      "list",
+      "formatting"
+    ],
+    "description": "Move a paragraph inward.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "indent-decrease",
+    "group": "Text formatting",
+    "keywords": [
+      "outdent",
+      "list",
+      "formatting"
+    ],
+    "description": "Move a paragraph outward.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "list-numbered",
+    "group": "Text formatting",
+    "keywords": [
+      "ordered",
+      "ol",
+      "sequence"
+    ],
+    "description": "Format items as a numbered list.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "list-checklist",
+    "group": "Text formatting",
+    "keywords": [
+      "todos",
+      "checklist",
+      "tasks"
+    ],
+    "description": "Make a list of tasks to complete.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "heading-one",
+    "group": "Text formatting",
+    "keywords": [
+      "title",
+      "h1",
+      "typography"
+    ],
+    "description": "Use a top-level heading.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "heading-two",
+    "group": "Text formatting",
+    "keywords": [
+      "subtitle",
+      "h2",
+      "typography"
+    ],
+    "description": "Use a second-level heading.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "highlighter",
+    "group": "Text formatting",
+    "keywords": [
+      "marker",
+      "emphasize",
+      "annotate"
+    ],
+    "description": "Highlight text with a marker.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "clear-formatting",
+    "group": "Text formatting",
+    "keywords": [
+      "reset",
+      "clean",
+      "text",
+      "editor"
+    ],
+    "description": "Remove formatting from text.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "git-fork",
+    "group": "Code",
+    "keywords": [
+      "git",
+      "branch",
+      "source"
+    ],
+    "description": "Fork a repository into a new workspace.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "code-review",
+    "group": "Code",
+    "keywords": [
+      "approve",
+      "diff",
+      "pull-request"
+    ],
+    "description": "Review and approve a change.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "braces",
+    "group": "Code",
+    "keywords": [
+      "json",
+      "object",
+      "syntax"
+    ],
+    "description": "View an object or structured source.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "regex",
+    "group": "Code",
+    "keywords": [
+      "pattern",
+      "match",
+      "wildcard"
+    ],
+    "description": "Match text with a regular expression.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "webhook",
+    "group": "Code",
+    "keywords": [
+      "endpoint",
+      "event",
+      "integration"
+    ],
+    "description": "Send events to a callback URL.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "deploy",
+    "group": "Code",
+    "keywords": [
+      "release",
+      "ship",
+      "publish",
+      "cloud"
+    ],
+    "description": "Release a build to an environment.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "code-test",
+    "group": "Code",
+    "keywords": [
+      "test",
+      "suite",
+      "qa",
+      "verify"
+    ],
+    "description": "Run a suite of automated checks.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "variable",
+    "group": "Code",
+    "keywords": [
+      "expression",
+      "input",
+      "configuration"
+    ],
+    "description": "Inspect a variable or parameter.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "diff",
+    "group": "Code",
+    "keywords": [
+      "change",
+      "patch",
+      "compare",
+      "code"
+    ],
+    "description": "Compare additions and removals.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "server-rack",
+    "group": "Code",
+    "keywords": [
+      "hosting",
+      "infrastructure",
+      "data",
+      "backend"
+    ],
+    "description": "View servers and deployments.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "database-search",
+    "group": "Code",
+    "keywords": [
+      "sql",
+      "query",
+      "storage"
+    ],
+    "description": "Find a record in a database.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "file-diff",
+    "group": "Code",
+    "keywords": [
+      "patch",
+      "source",
+      "comparison"
+    ],
+    "description": "Open a file with tracked changes.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "code-compare",
+    "group": "Code",
+    "keywords": [
+      "diff",
+      "compare",
+      "revision"
+    ],
+    "description": "Compare two versions of source.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "database-lock",
+    "group": "Code",
+    "keywords": [
+      "storage",
+      "private",
+      "sql"
+    ],
+    "description": "Restrict access to stored data.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "chart-donut",
+    "group": "Data and analytics",
+    "keywords": [
+      "analytics",
+      "pie",
+      "metrics"
+    ],
+    "description": "Show proportions as a ring chart.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "chart-area",
+    "group": "Data and analytics",
+    "keywords": [
+      "analytics",
+      "time",
+      "series",
+      "trend"
+    ],
+    "description": "Show cumulative change over time.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "chart-scatter",
+    "group": "Data and analytics",
+    "keywords": [
+      "analytics",
+      "scatterplot",
+      "dot"
+    ],
+    "description": "Compare individual data points.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "chart-bars-horizontal",
+    "group": "Data and analytics",
+    "keywords": [
+      "analytics",
+      "ranking",
+      "metrics"
+    ],
+    "description": "Compare categories with horizontal bars.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "trend-up",
+    "group": "Data and analytics",
+    "keywords": [
+      "increase",
+      "growth",
+      "positive"
+    ],
+    "description": "Indicate an upward trend.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "trend-down",
+    "group": "Data and analytics",
+    "keywords": [
+      "decrease",
+      "decline",
+      "negative"
+    ],
+    "description": "Indicate a downward trend.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "dashboard-layout",
+    "group": "Data and analytics",
+    "keywords": [
+      "metrics",
+      "widgets",
+      "overview"
+    ],
+    "description": "Open an overview dashboard.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "table-add-row",
+    "group": "Data and analytics",
+    "keywords": [
+      "spreadsheet",
+      "record",
+      "create"
+    ],
+    "description": "Insert a row into a table.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "table-add-column",
+    "group": "Data and analytics",
+    "keywords": [
+      "spreadsheet",
+      "field",
+      "create"
+    ],
+    "description": "Insert a column into a table.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "pivot-table",
+    "group": "Data and analytics",
+    "keywords": [
+      "pivot",
+      "spreadsheet",
+      "report"
+    ],
+    "description": "Summarize a table by rows and columns.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "export-data",
+    "group": "Data and analytics",
+    "keywords": [
+      "download",
+      "report",
+      "csv"
+    ],
+    "description": "Export tabular data to a file.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "filter-off",
+    "group": "Data and analytics",
+    "keywords": [
+      "remove",
+      "funnel",
+      "no-filter"
+    ],
+    "description": "Clear an active filter.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "activity-pulse",
+    "group": "Data and analytics",
+    "keywords": [
+      "health",
+      "pulse",
+      "timeline",
+      "metrics"
+    ],
+    "description": "Track changes in live activity.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "gauge",
+    "group": "Data and analytics",
+    "keywords": [
+      "speed",
+      "meter",
+      "usage"
+    ],
+    "description": "Show capacity on a dial.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "shopping-cart",
+    "group": "Commerce and account",
+    "keywords": [
+      "basket",
+      "store",
+      "buy"
+    ],
+    "description": "View items ready for checkout.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "shopping-bag",
+    "group": "Commerce and account",
+    "keywords": [
+      "checkout",
+      "store",
+      "retail"
+    ],
+    "description": "Open a shopping bag or order.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "storefront",
+    "group": "Commerce and account",
+    "keywords": [
+      "store",
+      "retail",
+      "shop"
+    ],
+    "description": "Open a shop or vendor page.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "receipt",
+    "group": "Commerce and account",
+    "keywords": [
+      "tax",
+      "payment",
+      "billing"
+    ],
+    "description": "Read a receipt or invoice.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "wallet",
+    "group": "Commerce and account",
+    "keywords": [
+      "money",
+      "balance",
+      "cards"
+    ],
+    "description": "Manage saved payment methods.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "coins",
+    "group": "Commerce and account",
+    "keywords": [
+      "currency",
+      "payment",
+      "tokens"
+    ],
+    "description": "View a balance or credits.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "bank",
+    "group": "Commerce and account",
+    "keywords": [
+      "financial",
+      "money",
+      "columns"
+    ],
+    "description": "View a bank account or institution.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "price-tag",
+    "group": "Commerce and account",
+    "keywords": [
+      "commerce",
+      "label",
+      "discount"
+    ],
+    "description": "Label an item with a price or tag.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "percent-off",
+    "group": "Commerce and account",
+    "keywords": [
+      "sale",
+      "deal",
+      "coupon"
+    ],
+    "description": "Show a percentage discount.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "truck",
+    "group": "Commerce and account",
+    "keywords": [
+      "shipping",
+      "courier",
+      "transit"
+    ],
+    "description": "Track a shipment or delivery.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "parcel-check",
+    "group": "Commerce and account",
+    "keywords": [
+      "shipping",
+      "delivered",
+      "order"
+    ],
+    "description": "Confirm that a package arrived.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "barcode",
+    "group": "Commerce and account",
+    "keywords": [
+      "sku",
+      "scanning",
+      "inventory"
+    ],
+    "description": "Scan a product barcode.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "scan-corners",
+    "group": "Commerce and account",
+    "keywords": [
+      "scanner",
+      "capture",
+      "focus"
+    ],
+    "description": "Position an object inside a scan area.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "refund",
+    "group": "Commerce and account",
+    "keywords": [
+      "money",
+      "return",
+      "credit"
+    ],
+    "description": "Return a payment or issue a refund.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "mail",
+    "group": "Communication and media",
+    "keywords": [
+      "envelope",
+      "inbox",
+      "email"
+    ],
+    "description": "Open messages or send an email.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "mail-open",
+    "group": "Communication and media",
+    "keywords": [
+      "inbox",
+      "read",
+      "envelope"
+    ],
+    "description": "Read an opened email.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "inbox",
+    "group": "Communication and media",
+    "keywords": [
+      "mail",
+      "messages",
+      "notifications"
+    ],
+    "description": "View new incoming work.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "send",
+    "group": "Communication and media",
+    "keywords": [
+      "plane",
+      "submit",
+      "email"
+    ],
+    "description": "Send a message or submission.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "reply",
+    "group": "Communication and media",
+    "keywords": [
+      "respond",
+      "conversation",
+      "return"
+    ],
+    "description": "Reply to a message.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "reply-all",
+    "group": "Communication and media",
+    "keywords": [
+      "respond",
+      "group",
+      "email"
+    ],
+    "description": "Reply to everyone in a conversation.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "megaphone",
+    "group": "Communication and media",
+    "keywords": [
+      "marketing",
+      "notice",
+      "audio"
+    ],
+    "description": "Broadcast an announcement.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "video-off",
+    "group": "Communication and media",
+    "keywords": [
+      "camera",
+      "disabled",
+      "media"
+    ],
+    "description": "Turn off video in a call.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "headphones",
+    "group": "Communication and media",
+    "keywords": [
+      "audio",
+      "headset",
+      "support"
+    ],
+    "description": "Listen or open support audio.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "volume-up",
+    "group": "Communication and media",
+    "keywords": [
+      "speaker",
+      "loud",
+      "audio"
+    ],
+    "description": "Increase or play sound.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "volume-mute",
+    "group": "Communication and media",
+    "keywords": [
+      "speaker",
+      "silence",
+      "audio"
+    ],
+    "description": "Mute playback or an audio channel.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "pause",
+    "group": "Communication and media",
+    "keywords": [
+      "media",
+      "stop",
+      "hold"
+    ],
+    "description": "Pause an animation or playback.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "skip-next",
+    "group": "Communication and media",
+    "keywords": [
+      "media",
+      "forward",
+      "playback"
+    ],
+    "description": "Skip to the next track or item.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "skip-previous",
+    "group": "Communication and media",
+    "keywords": [
+      "media",
+      "back",
+      "playback"
+    ],
+    "description": "Return to the previous track or item.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "bluetooth",
+    "group": "Device and system",
+    "keywords": [
+      "wireless",
+      "pairing",
+      "device"
+    ],
+    "description": "Connect a nearby Bluetooth device.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "ethernet",
+    "group": "Device and system",
+    "keywords": [
+      "network",
+      "lan",
+      "connection"
+    ],
+    "description": "Open wired connection settings.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "usb",
+    "group": "Device and system",
+    "keywords": [
+      "port",
+      "cable",
+      "peripheral"
+    ],
+    "description": "Connect or inspect a USB device.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "plug",
+    "group": "Device and system",
+    "keywords": [
+      "power",
+      "connector",
+      "cable"
+    ],
+    "description": "Connect a device or integration.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "printer",
+    "group": "Device and system",
+    "keywords": [
+      "paper",
+      "device",
+      "output"
+    ],
+    "description": "Print a document or label.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "keyboard",
+    "group": "Device and system",
+    "keywords": [
+      "keys",
+      "typing",
+      "shortcut"
+    ],
+    "description": "Open keyboard options or shortcuts.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "mouse",
+    "group": "Device and system",
+    "keywords": [
+      "cursor",
+      "click",
+      "device"
+    ],
+    "description": "View pointer or mouse settings.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "chip",
+    "group": "Device and system",
+    "keywords": [
+      "cpu",
+      "compute",
+      "silicon"
+    ],
+    "description": "Represent a processor or hardware module.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "hard-drive",
+    "group": "Device and system",
+    "keywords": [
+      "storage",
+      "hardware",
+      "backup"
+    ],
+    "description": "Show a local drive or disk.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "monitor-play",
+    "group": "Device and system",
+    "keywords": [
+      "screen",
+      "media",
+      "playback"
+    ],
+    "description": "Play a video on a display.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "battery-charge",
+    "group": "Device and system",
+    "keywords": [
+      "energy",
+      "power",
+      "battery"
+    ],
+    "description": "Show a device charging.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "signal-bars",
+    "group": "Device and system",
+    "keywords": [
+      "reception",
+      "mobile",
+      "network"
+    ],
+    "description": "Show cellular signal strength.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "plug-off",
+    "group": "Device and system",
+    "keywords": [
+      "unplug",
+      "power",
+      "offline"
+    ],
+    "description": "Show a disconnected integration.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "shield-check",
+    "group": "Accessibility and security",
+    "keywords": [
+      "security",
+      "trust",
+      "safe"
+    ],
+    "description": "Mark an item as protected or verified.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "shield-alert",
+    "group": "Accessibility and security",
+    "keywords": [
+      "security",
+      "risk",
+      "warning"
+    ],
+    "description": "Warn about a security issue.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "fingerprint",
+    "group": "Accessibility and security",
+    "keywords": [
+      "biometric",
+      "login",
+      "security"
+    ],
+    "description": "Unlock with a fingerprint.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "scan-face",
+    "group": "Accessibility and security",
+    "keywords": [
+      "biometric",
+      "camera",
+      "identity"
+    ],
+    "description": "Scan a face for verification.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "user-check",
+    "group": "Accessibility and security",
+    "keywords": [
+      "account",
+      "verified",
+      "member"
+    ],
+    "description": "Approve a person or membership.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "user-off",
+    "group": "Accessibility and security",
+    "keywords": [
+      "account",
+      "block",
+      "member"
+    ],
+    "description": "Disable a person’s access.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "badge-verified",
+    "group": "Accessibility and security",
+    "keywords": [
+      "check",
+      "seal",
+      "trust"
+    ],
+    "description": "Show a verified profile or item.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "key-round",
+    "group": "Accessibility and security",
+    "keywords": [
+      "credentials",
+      "login",
+      "token"
+    ],
+    "description": "Manage an access key.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "id-card",
+    "group": "Accessibility and security",
+    "keywords": [
+      "profile",
+      "badge",
+      "credentials"
+    ],
+    "description": "View a user identity card.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "accessibility",
+    "group": "Accessibility and security",
+    "keywords": [
+      "a11y",
+      "assist",
+      "universal"
+    ],
+    "description": "Open accessibility preferences.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "eye-scan",
+    "group": "Accessibility and security",
+    "keywords": [
+      "vision",
+      "focus",
+      "accessibility"
+    ],
+    "description": "Inspect a visual target or scan result.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "keyboard-focus",
+    "group": "Accessibility and security",
+    "keywords": [
+      "a11y",
+      "focus",
+      "target",
+      "interaction"
+    ],
+    "description": "Show a focus target for keyboard users.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "sidebar-left",
+    "group": "Layout and views",
+    "keywords": [
+      "navigation",
+      "panel",
+      "layout"
+    ],
+    "description": "Toggle a sidebar at the start edge.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "sidebar-right",
+    "group": "Layout and views",
+    "keywords": [
+      "navigation",
+      "panel",
+      "layout"
+    ],
+    "description": "Toggle a sidebar at the end edge.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "panel-top",
+    "group": "Layout and views",
+    "keywords": [
+      "layout",
+      "header",
+      "region"
+    ],
+    "description": "Open a panel above the content.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "panel-bottom",
+    "group": "Layout and views",
+    "keywords": [
+      "layout",
+      "footer",
+      "region"
+    ],
+    "description": "Open a panel below the content.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "columns-two",
+    "group": "Layout and views",
+    "keywords": [
+      "layout",
+      "split",
+      "grid"
+    ],
+    "description": "Arrange content in two columns.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "columns-three",
+    "group": "Layout and views",
+    "keywords": [
+      "layout",
+      "split",
+      "grid"
+    ],
+    "description": "Arrange content in three columns.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "fullscreen",
+    "group": "Layout and views",
+    "keywords": [
+      "maximize",
+      "media",
+      "screen"
+    ],
+    "description": "Expand content to the full viewport.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "fullscreen-exit",
+    "group": "Layout and views",
+    "keywords": [
+      "minimize",
+      "screen",
+      "media"
+    ],
+    "description": "Return content to its normal size.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "window-stack",
+    "group": "Layout and views",
+    "keywords": [
+      "browser",
+      "layers",
+      "layout"
+    ],
+    "description": "Switch between overlapping windows.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "split-view",
+    "group": "Layout and views",
+    "keywords": [
+      "editor",
+      "compare",
+      "resize"
+    ],
+    "description": "Show two panes side by side.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "expand-all",
+    "group": "Layout and views",
+    "keywords": [
+      "accordion",
+      "unfold",
+      "expand"
+    ],
+    "description": "Open all sections of a list.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "collapse-all",
+    "group": "Layout and views",
+    "keywords": [
+      "accordion",
+      "fold",
+      "collapse"
+    ],
+    "description": "Close all sections of a list.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "map-pin",
+    "group": "Places and transport",
+    "keywords": [
+      "location",
+      "address",
+      "marker"
+    ],
+    "description": "Show a location on a map.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "map-route",
+    "group": "Places and transport",
+    "keywords": [
+      "directions",
+      "navigation",
+      "path"
+    ],
+    "description": "Show a route between places.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "compass",
+    "group": "Places and transport",
+    "keywords": [
+      "navigation",
+      "direction",
+      "north"
+    ],
+    "description": "Orient a map or find a bearing.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "navigation-pointer",
+    "group": "Places and transport",
+    "keywords": [
+      "directions",
+      "gps",
+      "cursor"
+    ],
+    "description": "Point toward a destination.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "building",
+    "group": "Places and transport",
+    "keywords": [
+      "company",
+      "workplace",
+      "address"
+    ],
+    "description": "View an organization or office.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "warehouse",
+    "group": "Places and transport",
+    "keywords": [
+      "storage",
+      "inventory",
+      "shipping"
+    ],
+    "description": "View a warehouse or fulfillment center.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "car",
+    "group": "Places and transport",
+    "keywords": [
+      "transport",
+      "route",
+      "trip"
+    ],
+    "description": "Use driving directions or track a vehicle.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "train",
+    "group": "Places and transport",
+    "keywords": [
+      "transit",
+      "travel",
+      "transport"
+    ],
+    "description": "Use rail directions or track a train.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "bus",
+    "group": "Places and transport",
+    "keywords": [
+      "transit",
+      "travel",
+      "transport"
+    ],
+    "description": "Use bus directions or track a shuttle.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "bike",
+    "group": "Places and transport",
+    "keywords": [
+      "transport",
+      "bicycle",
+      "route"
+    ],
+    "description": "Use cycling directions or track a ride.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "flag",
+    "group": "Places and transport",
+    "keywords": [
+      "report",
+      "milestone",
+      "navigation"
+    ],
+    "description": "Flag an item or mark a waypoint.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
+  },
+  {
+    "name": "signpost",
+    "group": "Places and transport",
+    "keywords": [
+      "navigation",
+      "wayfinding"
+    ],
+    "description": "Show a route direction or destination.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": false,
+    "hues3d": []
   }
 ] as const;

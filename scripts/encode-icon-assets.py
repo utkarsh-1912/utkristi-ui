@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 
 from PIL import Image, features
 
@@ -10,8 +11,11 @@ def main():
     root = Path(__file__).resolve().parents[1] / 'icons' / '3d' / 'render'
     brand_hues = {'night': 'blue', 'paper': 'blue', 'glass': 'lime'}
     count = 0
+    names = set(sys.argv[1:])
     for theme, hue in brand_hues.items():
         for source in sorted((root / theme / hue).glob('*.png')):
+            if names and source.stem.split('@')[0] not in names:
+                continue
             with Image.open(source) as image:
                 rgba = image.convert('RGBA')
                 for extension in formats:

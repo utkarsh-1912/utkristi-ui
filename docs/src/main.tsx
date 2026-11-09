@@ -11,12 +11,13 @@ import { variants, variantSets } from './variants';
 import { FontDemo } from './catalog';
 import { CopyCode } from './CopyCode';
 import { DocsSearch } from './DocsSearch';
-import { IconsPage, TokensPaletteSection } from './IconsPage';
+import { TokensPaletteSection } from './TokensPaletteSection';
 import { MarketingHome, useMarketingMotion, WorkflowSection } from './Marketing';
 import tokenCSS from '../../src/styles/tokens.css?raw';
 import './styles.css';
 
 const Playground = lazy(() => import('./Playground'));
+const IconsPage = lazy(() => import('./IconsPage'));
 const ComponentReference = lazy(() => import('./ComponentReference'));
 
 const primary = [
@@ -375,12 +376,12 @@ function App() {
   const block = path.startsWith('/blocks/') && Object.hasOwn(blocks, blockSlug) ? blockSlug as keyof typeof blocks : undefined;
   const pages: Record<string, ReactNode> = {
     '/overview': <MarketingHome />, '/getting-started': <GettingStarted />, '/theming': <Theming />,
-    '/tokens': <Tokens />, '/icons': <IconsPage />, '/typography': <Typography />, '/showcase': <Showcase />,
+    '/tokens': <Tokens />, '/icons': <Suspense fallback={<p className="muted">Loading icon catalog…</p>}><IconsPage /></Suspense>, '/typography': <Typography />, '/showcase': <Showcase />,
     '/blocks': <BlocksPage />,
     '/sandbox': <Suspense fallback={<p className="muted">Loading sandbox…</p>}><Playground key={sample ?? 'carousel'} component={sample} /></Suspense>,
   };
   const content = component ? <ComponentPage key={component} slug={component} /> : block ? <BlockPage key={block} slug={block} /> : pages[path] ?? <MarketingHome />;
-  const standalone = path === '/overview' || path === '/showcase' || path === '/sandbox' || path === '/blocks' || !!block;
+  const standalone = path === '/overview' || path === '/showcase' || path === '/sandbox' || path === '/blocks' || path === '/icons' || !!block;
   function releasePreviewTheme() {
     const url = new URL(location.href);
     const [, options] = url.hash.split('?');

@@ -4,7 +4,7 @@ export const BatteryIconData = {
   name: "battery",
   plate: "M3 7h15v10H3V7Z",
   line: "M3 7h14a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Zm19 3v4M6 10v4m4-4v4",
-  filled: "M3 6h14a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3Zm19 3a1 1 0 0 1 1 1v4a1 1 0 1 1-2 0v-4a1 1 0 0 1 1-1ZM5 10v4h2v-4H5Zm4 0v4h2v-4H9Z",
+  filled: "M3.98 6.339H17.189C18.752 6.339 20.02 7.606 20.02 9.17V14.83C20.02 16.394 18.752 17.661 17.189 17.661H3.98C2.417 17.661 1.15 16.394 1.15 14.83V9.17C1.15 7.606 2.417 6.339 3.98 6.339ZM21.907 9.17C22.428 9.17 22.85 9.592 22.85 10.113V13.887C22.85 14.408 22.428 14.83 21.907 14.83C21.385 14.83 20.963 14.408 20.963 13.887V10.113C20.963 9.592 21.385 9.17 21.907 9.17ZM5.867 10.113V13.887H7.754V10.113H5.867ZM9.641 10.113V13.887H11.528V10.113H9.641Z",
   detail: undefined,
   has3d: false,
 } as const;
@@ -27,7 +27,7 @@ export function BatteryIcon({ variant = 'line', size = 16, strokeWidth, ...props
   if (variant === 'duotone') {
     return (
       <svg viewBox="0 0 24 24" width={size} height={size} fill="none" {...props}>
-        <path className="icon-plate" fill="var(--ut-icon-tint)" d={BatteryIconData.plate} />
+        <path className="icon-plate" fill="var(--ut-icon-tint)" fillRule="evenodd" d={BatteryIconData.plate} />
         <path className="icon-stroke" stroke="var(--ut-icon-stroke, currentColor)" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" d={BatteryIconData.line} />
       </svg>
     );
@@ -36,7 +36,7 @@ export function BatteryIcon({ variant = 'line', size = 16, strokeWidth, ...props
     const faceId = `ut-face-${uid}`;
     const shadowId = `ut-shadow-${uid}`;
     return (
-      <svg viewBox="0 0 24 24" width={size} height={size} fill="none" {...props}>
+      <svg viewBox="-2 -2 31 31" width={size} height={size} fill="none" {...props}>
         <defs>
           <linearGradient id={faceId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="var(--ut-icon-hi)" />

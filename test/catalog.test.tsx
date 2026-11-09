@@ -1,10 +1,10 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { expect, test, vi } from 'vitest';
 import {
   Accordion, AlertDialog, Calendar, Carousel, Combobox, ContextMenu, DataTable, DatePicker,
-  InputOTP, Loader, Progress, Questionnaire, Resizable, SelectMenu,
+  InputOTP, Loader, Progress, Questionnaire, Resizable, SelectMenu, ToastProvider, useToast,
 } from '../src/react/index.js';
 
 test('carousel moves with arrows and keyboard and respects boundaries', async () => {
@@ -147,4 +147,43 @@ test('questionnaire validates required answers and retains them across steps', a
   await user.click(screen.getByRole('button', { name: 'Next' }));
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(submit).toHaveBeenCalledWith({ name: 'Studio', access: 'private' });
+});
+
+test('paging a sorted table with 5,000 rows does not recalculate sort keys or mount extra rows', async () => {
+  const user = userEvent.setup();
+  const rows = Array.from({ length: 5_000 }, (_, id) => ({ id, name: 'Workspace ' + id }));
+  const sortValue = vi.fn((row: typeof rows[number]) => row.id);
+  render(<DataTable rows={rows} columns={[{ key: 'name', header: 'Name', sortValue }]} getRowKey={(row) => row.id} pageSize={20} />);
+  await user.click(screen.getByRole('button', { name: 'Name' }));
+  expect(sortValue).toHaveBeenCalled();
+  sortValue.mockClear();
+  await user.click(screen.getByRole('button', { name: 'Next page' }));
+  expect(sortValue).not.toHaveBeenCalled();
+  expect(screen.getAllByRole('cell')).toHaveLength(20);
+  expect(screen.getAllByRole('cell')[0]).toHaveTextContent('Workspace 20');
+});
+
+test('a toast preserves its remaining dismissal time while progress is paused', () => {
+  vi.useFakeTimers();
+  try {
+    function ToastDemo() {
+      const toast = useToast();
+      return <button onClick={() => toast.show({ title: 'Sync complete', duration: 1000 })}>Notify</button>;
+    }
+    render(<ToastProvider><ToastDemo /></ToastProvider>);
+    fireEvent.click(screen.getByRole('button', { name: 'Notify' }));
+    const toast = screen.getByText('Sync complete').closest('.toast')!;
+    const progress = toast.querySelector('.toast-track')!;
+    act(() => vi.advanceTimersByTime(400));
+    fireEvent.mouseEnter(toast);
+    expect(progress).toHaveAttribute('data-paused', 'true');
+    act(() => vi.advanceTimersByTime(2000));
+    expect(toast).toBeInTheDocument();
+    fireEvent.mouseLeave(toast);
+    expect(progress).not.toHaveAttribute('data-paused');
+    act(() => vi.advanceTimersByTime(650));
+    expect(toast).not.toBeInTheDocument();
+  } finally {
+    vi.useRealTimers();
+  }
 });

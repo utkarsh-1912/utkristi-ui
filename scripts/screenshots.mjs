@@ -33,7 +33,7 @@ async function retry(work, description, attempts = 80) {
   throw new Error(`Timed out waiting for ${description}`);
 }
 
-async function connect(address) {
+async function connect(address, onEvent) {
   const socket = new WebSocket(address);
   await new Promise((accept, reject) => {
     socket.addEventListener('open', accept, { once: true });
@@ -43,6 +43,7 @@ async function connect(address) {
   const pending = new Map();
   socket.addEventListener('message', ({ data }) => {
     const message = JSON.parse(data);
+    if (message.method) onEvent?.(message);
     const request = pending.get(message.id);
     if (!request) return;
     pending.delete(message.id);
@@ -75,8 +76,15 @@ async function captureEdge() {
   try {
     const port = await retry(async () => (await readFile(join(profile, 'DevToolsActivePort'), 'utf8')).split(/\r?\n/)[0], 'Edge');
     const targets = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
-    client = await connect(targets.find((target) => target.type === 'page').webSocketDebuggerUrl);
+    const exceptions = [];
+    client = await connect(targets.find((target) => target.type === 'page').webSocketDebuggerUrl, ({ method, params }) => {
+      if (method === 'Runtime.exceptionThrown') {
+        const detail = params.exceptionDetails;
+        exceptions.push(detail.exception?.description ?? detail.text);
+      }
+    });
     const { send } = client;
+    await send('Runtime.enable');
     const evaluate = async (expression) => {
       const result = await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true });
       if (result.exceptionDetails) throw new Error(result.exceptionDetails.exception?.description ?? result.exceptionDetails.text);
@@ -186,6 +194,7 @@ async function captureEdge() {
       select.dispatchEvent(new Event("change", { bubbles: true }));
     })()`);
     await retry(() => evaluate('document.querySelector(".playground iframe")?.srcdoc.includes("carousel-viewport") && document.querySelector(".playground [role=status]")?.textContent === "HTML preview ready"'), 'HTML sandbox');
+    if (exceptions.length) throw new Error('Unhandled browser errors: ' + exceptions.join('\n'));
     process.stdout.write('Verified React and HTML sandbox previews.\n');
     process.stdout.write(`Checked ${routes.length} docs routes in Night, Paper, and Glass at 375px.\n`);
   } finally {

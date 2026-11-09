@@ -1,4 +1,4 @@
-import React, { Component, type ReactNode } from 'react';
+import React, { Component, useEffect, type ReactNode } from 'react';
 import * as jsxRuntime from 'react/jsx-runtime';
 import { createRoot } from 'react-dom/client';
 import * as kit from '@utkristi/ui';
@@ -23,6 +23,11 @@ class PreviewBoundary extends Component<{ children: ReactNode; token: string }, 
   render() { return this.state.failed ? <p role="alert">The example could not render.</p> : this.props.children; }
 }
 
+function Ready({ token }: { token: string }) {
+  useEffect(() => { window.parent.postMessage({ kind: 'utkristi-preview-ready', token }, '*'); }, [token]);
+  return null;
+}
+
 window.addEventListener('message', (event) => {
   if (event.source !== window.parent || event.data?.kind !== 'utkristi-preview') return;
   const { code, theme, token } = event.data;
@@ -37,7 +42,7 @@ window.addEventListener('message', (event) => {
     if (!Example) throw new Error('Export a default React component.');
     root.render(<PreviewBoundary key={token} token={token}>
       <kit.ThemeProvider defaultTheme={theme} storageKey={null}><kit.ToastProvider>
-        <Example theme={theme} />
+        <Example theme={theme} /><Ready token={token} />
       </kit.ToastProvider></kit.ThemeProvider>
     </PreviewBoundary>);
   } catch (error) {

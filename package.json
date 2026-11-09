@@ -4,22 +4,49 @@
   "description": "The shared component library and design tokens for the Utkristi ecosystem.",
   "license": "MIT",
   "type": "module",
-  "sideEffects": ["**/*.css"],
-  "files": ["dist", "CHANGELOG.md", "DESIGN_TOKENS.md"],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "DESIGN_TOKENS.md"
+  ],
   "types": "./dist/react/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/react/index.d.ts", "import": "./dist/react/index.js" },
+    ".": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js"
+    },
     "./preset": {
-      "import": { "types": "./dist/tailwind/preset.d.ts", "default": "./dist/tailwind/preset.js" },
-      "require": { "types": "./dist/tailwind/preset.d.cts", "default": "./dist/tailwind/preset.cjs" }
+      "import": {
+        "types": "./dist/tailwind/preset.d.ts",
+        "default": "./dist/tailwind/preset.js"
+      },
+      "require": {
+        "types": "./dist/tailwind/preset.d.cts",
+        "default": "./dist/tailwind/preset.cjs"
+      }
     },
     "./plugin": {
-      "import": { "types": "./dist/tailwind/plugin.d.ts", "default": "./dist/tailwind/plugin.js" },
-      "require": { "types": "./dist/tailwind/plugin.d.cts", "default": "./dist/tailwind/plugin.cjs" }
+      "import": {
+        "types": "./dist/tailwind/plugin.d.ts",
+        "default": "./dist/tailwind/plugin.js"
+      },
+      "require": {
+        "types": "./dist/tailwind/plugin.d.cts",
+        "default": "./dist/tailwind/plugin.cjs"
+      }
     },
     "./tokens": {
-      "import": { "types": "./dist/tokens.d.ts", "default": "./dist/tokens.js" },
-      "require": { "types": "./dist/tokens.d.cts", "default": "./dist/tokens.cjs" }
+      "import": {
+        "types": "./dist/tokens.d.ts",
+        "default": "./dist/tokens.js"
+      },
+      "require": {
+        "types": "./dist/tokens.d.cts",
+        "default": "./dist/tokens.cjs"
+      }
     },
     "./utkristi-ui.css": "./dist/utkristi-ui.css",
     "./css": "./dist/utkristi-ui.css",
@@ -50,10 +77,18 @@
     "tailwindcss": ">=3.4"
   },
   "peerDependenciesMeta": {
-    "lucide-react": { "optional": true },
-    "react": { "optional": true },
-    "react-dom": { "optional": true },
-    "tailwindcss": { "optional": true }
+    "lucide-react": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "tailwindcss": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
@@ -76,6 +111,7 @@
     "postcss-js": "^4.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "sucrase": "^3.35.1",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.0",

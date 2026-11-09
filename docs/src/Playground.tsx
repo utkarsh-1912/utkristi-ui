@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Button, Select, type ResolvedTheme, useTheme } from '@utkristi/ui';
 import { componentPages, examples as previews } from './examples';
 import { examples } from 'virtual:utkristi-examples';
@@ -15,6 +15,7 @@ interface Run { token: string; source: string; theme: ResolvedTheme; markup: boo
 
 export default function Playground({ component }: { component?: string }) {
   const { resolvedTheme } = useTheme();
+  const id = useId();
   const slug = component && Object.hasOwn(previews, component) ? component as keyof typeof previews : 'carousel';
   const example = previews[slug];
   const [theme, setTheme] = useState<ResolvedTheme>(resolvedTheme);
@@ -51,7 +52,7 @@ export default function Playground({ component }: { component?: string }) {
       }
       if (token !== String(requested.current)) return;
       setRun({ token, source: output, theme: previewTheme, markup: language === 'html' });
-      setStatus('Preview updated');
+      if (language === 'html') setStatus('HTML preview ready');
     } catch (cause) {
       if (token === String(requested.current)) setError(cause instanceof Error ? cause.message : String(cause));
     } finally {
@@ -62,15 +63,15 @@ export default function Playground({ component }: { component?: string }) {
   useEffect(() => {
     const initial = last.current;
     void compile(initial.code, initial.mode, initial.theme);
-    return () => { requested.current++; };
+    const pending = requested;
+    return () => { pending.current++; };
   }, []);
 
   useEffect(() => {
     function message(event: MessageEvent) {
-      if (event.source !== iframe.current?.contentWindow || event.data?.kind !== 'utkristi-preview-error'
-        || event.data.token !== run?.token) return;
-      setError(String(event.data.error));
-      setStatus('');
+      if (event.source !== iframe.current?.contentWindow || event.data?.token !== run?.token) return;
+      if (event.data?.kind === 'utkristi-preview-ready') setStatus('React preview ready');
+      if (event.data?.kind === 'utkristi-preview-error') { setError(String(event.data.error)); setStatus(''); }
     }
     window.addEventListener('message', message);
     return () => window.removeEventListener('message', message);
@@ -87,22 +88,22 @@ export default function Playground({ component }: { component?: string }) {
       <p className="lede">Edit a working example, run it in any theme, and copy the code into your app.</p>
     </header>
     <div className="playground-toolbar">
-      <label>Component<Select value={slug} onChange={(event) => {
+      <label htmlFor={id + "-component"}>Component<Select id={id + "-component"} value={slug} onChange={(event) => {
         window.location.hash = '/sandbox?component=' + encodeURIComponent(event.target.value);
       }}>{componentPages.map(([key, item]) => <option key={key} value={key}>{item.name}</option>)}</Select></label>
-      <label>Theme<Select value={theme} onChange={(event) => {
+      <label htmlFor={id + "-theme"}>Theme<Select id={id + "-theme"} value={theme} onChange={(event) => {
         const next = event.target.value as ResolvedTheme;
         setTheme(next);
         void compile(code, mode, next);
       }}><option value="dark">Night</option><option value="light">Paper</option><option value="glass">Glass</option></Select></label>
-      <label>Editor<Select value={mode} onChange={(event) => changeMode(event.target.value as 'react' | 'html')}>
+      <label htmlFor={id + "-mode"}>Editor<Select id={id + "-mode"} value={mode} onChange={(event) => changeMode(event.target.value as 'react' | 'html')}>
         <option value="react">React / TSX</option><option value="html">HTML / CSS / JS</option>
       </Select></label>
     </div>
     <div className="playground-result">
       <div className="playground-head"><span className="label">Live preview</span>
         <a className="link" href={`#/components/${slug}`}>Component docs</a></div>
-      {run ? <iframe key={run.token} ref={iframe} title={example.name + ' sandbox preview'} sandbox="allow-scripts"
+      {run ? <iframe key={run.token} ref={iframe} data-preview-run={run.token} title={example.name + ' sandbox preview'} sandbox="allow-scripts"
         srcDoc={run.markup ? frameHead.replace('<html>', '<html data-theme="' + run.theme + '">') + '<body>' + run.source + '</body></html>' : reactFrame}
         onLoad={() => {
           if (!run.markup) iframe.current?.contentWindow?.postMessage({

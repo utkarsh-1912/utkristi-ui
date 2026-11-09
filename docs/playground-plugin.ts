@@ -76,11 +76,30 @@ function samples(file: string, text: string, recordName: string) {
   }));
 }
 
-function apiFor(source: string, requested: Set<string>) {
+function apiFor(docs: string, source: string, examples: ReturnType<typeof samples>) {
   const config = ts.readConfigFile(join(source, '../../tsconfig.json'), ts.sys.readFile);
   const options = ts.parseJsonConfigFileContent(config.config, ts.sys, join(source, '../..')).options;
   const entry = join(source, 'index.ts');
-  const program = ts.createProgram([entry], options);
+  const paths = new Map(Object.entries(examples).map(([key, example]) => [join(docs, 'src', key + '.example.tsx').replaceAll('\\', '/'), example.code]));
+  const host = ts.createCompilerHost(options);
+  const original = host.getSourceFile;
+  host.getSourceFile = (fileName, ...args) => {
+    const generated = paths.get(fileName.replaceAll('\\', '/')) ?? paths.get(fileName);
+    return generated === undefined ? original(fileName, ...args)
+      : ts.createSourceFile(fileName, generated, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  };
+  const program = ts.createProgram([entry, ...paths.keys()], options, host);
+  const failures = [...paths.keys()].flatMap((path) => {
+    const sample = program.getSourceFile(path);
+    if (!sample) throw new Error('Unable to load example ' + path);
+    return [...program.getSyntacticDiagnostics(sample), ...program.getSemanticDiagnostics(sample)];
+  });
+  if (failures.length) throw new Error(ts.formatDiagnosticsWithColorAndContext(failures, {
+    getCurrentDirectory: ts.sys.getCurrentDirectory,
+    getCanonicalFileName: (name) => name,
+    getNewLine: () => '\n',
+  }));
+  const requested = new Set(Object.values(examples).flatMap((sample) => sample.components));
   const checker = program.getTypeChecker();
   const file = program.getSourceFile(entry);
   const module = file && checker.getSymbolAtLocation(file);
@@ -114,8 +133,7 @@ export function docsPlayground(docs: string, source: string): Plugin {
           return samples(path, await readFile(path, 'utf8'), file);
         }));
         const examples = Object.assign({}, ...entries) as ReturnType<typeof samples>;
-        const requested = new Set<string>(Object.values(examples).flatMap((sample) => sample.components));
-        const api = apiFor(source, requested);
+        const api = apiFor(docs, source, examples);
         return `export const examples = ${JSON.stringify(examples)}; export const api = ${JSON.stringify(api)};`;
       }
       if (id === '\0' + prefix + 'runtime') {

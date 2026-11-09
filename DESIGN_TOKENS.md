@@ -1,6 +1,6 @@
 # Design tokens and class map
 
-Utkristi UI is extracted from the Utkristi CoLabs app. Its source of truth is
+Utkristi UI is shared across the Utkristi ecosystem. The original Night and Paper reference is
 `rtm-code-editor/src/styles/app.css`: the tokens under `.ux, .ws` and `.light-theme .ux`, and the
 `.u-*` component classes. This file shows how each one is named in the kit.
 
@@ -136,3 +136,4 @@ Use `.glass` or `[data-theme="glass"]` for the third palette in `src/styles/toke
 These match the app: **980px** (the navbar links collapse into the burger), **700px** (the navbar is
 60px tall, modals become bottom sheets, steps stack) and **560px** (tighter modal padding, and
 `.table-stack` turns rows into cards).
+

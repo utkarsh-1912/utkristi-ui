@@ -25,6 +25,7 @@ const guide = [
   { href: '#/theming', label: 'Theming' },
   { href: '#/tokens', label: 'Tokens' },
   { href: '#/typography', label: 'Typography' },
+  { href: '#/sandbox', label: 'Sandbox' },
 ];
 
 const themeLabels = { dark: 'Night', light: 'Paper', glass: 'Glass' } as const;
@@ -115,7 +116,7 @@ function Overview() {
       detail={<>A shared component library for <b>every Utkristi app</b>, packaged for Tailwind, plain CSS, and React.</>} />
     <div className="sample-row"><Button href="#/getting-started" iconRight={<ArrowRight size={17} />}>Get started</Button>
       <Button href="#/showcase" variant="ghost" iconRight={<ArrowUpRight size={16} />}>View showcase</Button>
-      <Button href="#/showcase?theme=glass" variant="ghost" iconRight={<ArrowUpRight size={16} />}>Preview Glass</Button></div>
+      <Button href="#/sandbox" variant="ghost" iconRight={<ArrowUpRight size={16} />}>Try the sandbox</Button></div>
     <div className="overview-grid">
       <Frame theme="dark"><Card><CardHeader><Logo /><Badge tone="accent">Night</Badge></CardHeader><CardBody>Warm ink, quiet borders, and blue accents.</CardBody></Card></Frame>
       <Frame theme="light"><Card><CardHeader><Logo /><Badge tone="accent">Paper</Badge></CardHeader><CardBody>Cool paper, dark ink, and the same component geometry.</CardBody></Card></Frame>

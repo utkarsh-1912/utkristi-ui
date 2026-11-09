@@ -1,7 +1,10 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
-  background: var(--ut-bg) var(--ut-canvas, none) no-repeat top / 100% 48rem;
+  background-color: var(--ut-bg);
+  background-image: var(--ut-canvas, none);
+  background-repeat: no-repeat;
+  background-size: 100% 48rem;
   color: var(--ut-ink);
   font-family: var(--ut-font-text);
   font-stretch: 100%;

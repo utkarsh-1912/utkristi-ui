@@ -123,6 +123,25 @@ async function captureEdge() {
           carousel.querySelector("[role=status]").textContent.includes("Slide 2 of");
       })()`), theme + ' carousel movement');
     }
+    await load('/sandbox?component=carousel&theme=glass', 'Sandbox');
+    const ready = () => evaluate('document.querySelector(".playground [role=status]")?.textContent === "React preview ready"');
+    await retry(ready, 'initial React sandbox');
+    const before = await evaluate('document.querySelector(".playground iframe").dataset.previewRun');
+    const edited = JSON.stringify('export default function Example() { return <p>Edited sandbox example</p>; }');
+    await evaluate(`(() => {
+      const editor = document.querySelector("#sandbox-source");
+      Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value").set.call(editor, ${edited});
+      editor.dispatchEvent(new Event("input", { bubbles: true }));
+    })()`);
+    await evaluate('Array.from(document.querySelectorAll(".playground button")).find(button => button.textContent.trim() === "Run").click()');
+    await retry(async () => (await evaluate('document.querySelector(".playground iframe").dataset.previewRun')) !== before && await ready(), 'edited React sandbox');
+    await evaluate(`(() => {
+      const select = document.querySelector('.playground select[id$="-mode"]');
+      select.value = "html";
+      select.dispatchEvent(new Event("change", { bubbles: true }));
+    })()`);
+    await retry(() => evaluate('document.querySelector(".playground iframe")?.srcdoc.includes("carousel-viewport") && document.querySelector(".playground [role=status]")?.textContent === "HTML preview ready"'), 'HTML sandbox');
+    process.stdout.write('Verified React and HTML sandbox previews.\n');
     process.stdout.write(`Checked ${routes.length} docs routes in Night, Paper, and Glass at 375px.\n`);
   } finally {
     client?.close();

@@ -4,12 +4,14 @@ import { componentPages, examples as previews } from './examples';
 import { examples } from 'virtual:utkristi-examples';
 import { script, styles } from 'virtual:utkristi-runtime';
 
-const policy = "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; form-action 'none'; base-uri 'none'";
+const policy = "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline' https://fonts.googleapis.com; img-src data: blob:; font-src data: https://fonts.gstatic.com; form-action 'none'; base-uri 'none'";
 const frameHead = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
   '<meta http-equiv="Content-Security-Policy" content="' + policy + '"><style>' +
   styles.replace(/<\/style/gi, '<\\/style') +
   'body{padding:16px;min-height:100vh}#playground{min-width:0}.sample-row{display:flex;flex-wrap:wrap;gap:8px}</style></head>';
 const reactFrame = frameHead + '<body><div id="playground"></div><script>' + script.replace(/<\/script/gi, '<\\/script') + '</script></body></html>';
+
+const specimenFonts = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&amp;family=Geist:wght@400..800&amp;family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400..800&amp;family=Newsreader:opsz,wght@6..72,400..700&amp;display=swap">';
 
 interface Run { token: string; source: string; theme: ResolvedTheme; markup: boolean }
 
@@ -85,6 +87,8 @@ export default function Playground({ component }: { component?: string }) {
     return () => window.removeEventListener('message', message);
   }, []);
 
+  const previewDocument = run?.markup ? frameHead.replace('<html>', '<html data-theme="' + run.theme + '">') + '<body>' + run.source + '</body></html>' : reactFrame;
+
   function changeMode(next: 'react' | 'html') {
     setMode(next);
     void compile(next === 'react' ? reactCode : htmlCode, next, theme);
@@ -112,7 +116,7 @@ export default function Playground({ component }: { component?: string }) {
       <div className="playground-head"><span className="label">Live preview</span>
         <a className="link" href={`#/components/${slug}`}>Component docs</a></div>
       {run ? <iframe key={run.token} ref={iframe} data-preview-run={run.token} title={example.name + ' sandbox preview'} sandbox="allow-scripts"
-        srcDoc={run.markup ? frameHead.replace('<html>', '<html data-theme="' + run.theme + '">') + '<body>' + run.source + '</body></html>' : reactFrame}
+        srcDoc={slug === 'typography' ? previewDocument.replace('</head>', specimenFonts + '</head>') : previewDocument}
         onLoad={() => {
           if (!run.markup) iframe.current?.contentWindow?.postMessage({
             kind: 'utkristi-preview', code: run.source, theme: run.theme, token: run.token,

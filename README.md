@@ -80,6 +80,14 @@ Run `npm run docs` to open the documentation. Each component page includes inter
 
 Build the website with `npm ci` and `npm run docs:build`. Publish the contents of `docs/dist` with your static host. The site uses relative asset paths and hash routes, so a subdirectory works without a server rewrite. Run `npm run docs:preview` to verify the production build locally.
 
+## Performance verification
+
+Component source and prop tables load when opened. The sandbox compiler runs in a worker. Its gzip size fell from 1,030 KB to 48 KB, while the initial docs JavaScript fell from 101 KB to 90 KB.
+
+Run `npm run docs:stress` to repeat the Edge check. The local run checked 93 routes in each theme at 375px and exercised 12 sandbox runs at 4× CPU throttling with 5,000 table rows or 60 carousel slides. Run-to-preview latency was 215 ms median and 393 ms p95 on the test machine. The editor reported invalid TSX and recovered on the next valid run.
+
+[React code splitting](https://react.dev/reference/react/lazy) · [Long tasks and main-thread work](https://web.dev/articles/optimize-long-tasks) · [Animation rendering](https://web.dev/articles/animations-guide)
+
 ## Development
 
 | Command | Purpose |

@@ -93,7 +93,11 @@ async function captureEdge() {
     const size = (width, height) => send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: false });
     const load = async (hash, title) => {
       await send('Page.navigate', { url: `${url}/#${hash}` });
-      await retry(() => evaluate(`document.querySelector('h1')?.textContent.trim() === ${JSON.stringify(title)}`), title);
+      try { await retry(() => evaluate(`document.querySelector('h1')?.textContent.trim() === ${JSON.stringify(title)}`), title); }
+      catch (error) {
+        if (exceptions.length) throw new Error('Browser error on ' + hash + ': ' + exceptions.join('\n'), { cause: error });
+        throw error;
+      }
     };
     await size(viewport.width, viewport.height);
     for (const [theme, file] of themes) {

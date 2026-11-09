@@ -133,7 +133,7 @@ function Theming() {
 
 const palettes = [...tokenCSS.matchAll(/(?:\[data-theme="(?:dark|light|glass)"\])\s*\{([^}]+)\}/g)].map(([, text]) =>
   Object.fromEntries([...text.matchAll(/--ut-([\w-]+):\s*([^;]+);/g)].map(([, key, value]) => [key, value])),
-);
+).filter((palette) => Object.hasOwn(palette, 'on-solid'));
 function color(value: string) {
   return value.startsWith('#') ? value.slice(1).match(/../g)!.map((channel) => Number.parseInt(channel, 16))
     : value.match(/[\d.]+/g)!.map(Number);

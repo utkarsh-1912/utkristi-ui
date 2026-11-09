@@ -102,7 +102,7 @@ Build the website with `npm ci` and `npm run docs:build`. Publish the contents o
 
 ## Performance verification
 
-Component source and prop tables load when opened. The production build reports about 153 KB of gzipped JavaScript for the main docs. The sandbox preview runtime is in a separate route bundle, and the TSX compiler runs in a worker.
+Component source and prop tables load when opened. The production build reports about 159 KB of gzipped JavaScript for the main docs. The sandbox preview runtime is in a separate route bundle, and the TSX compiler runs in a worker.
 
 Run `npm run docs:stress` to repeat the Edge check. It sweeps the docs at 375px in all three themes and checks key routes from 320px to 1440px. It reports run-to-preview latency for 12 sandbox runs at 4× CPU throttling with 5,000 table rows or 60 carousel slides, and checks that the preview recovers after invalid TSX.
 

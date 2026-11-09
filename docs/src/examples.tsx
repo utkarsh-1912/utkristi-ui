@@ -195,10 +195,10 @@ export const examples = {
     jsx: '<EmptyState title="No rooms" action={<Button>Create room</Button>}><p>Your rooms will appear here.</p></EmptyState>',
   },
   navbar: {
-    name: 'Navbar', description: 'Responsive navigation with a full-screen mobile sheet.',
-    preview: () => <Navbar links={links} strip={{ left: 'Utkristi UI', right: '0.1.0' }} right={<IconButton label="Search"><Search size={17} /></IconButton>} />,
-    html: '<header class="header"><div class="navbar"><div class="navbar-inner"><nav class="navbar-links" aria-label="Primary"><a href="#/overview" class="link">Overview</a></nav><button class="icon-btn burger" aria-label="Open menu">☰</button></div></div></header>',
-    jsx: '<Navbar links={[{ href: "/", label: "Overview", active: true }]} />',
+    name: 'Navbar', description: 'Choose a full-width header or an inset dock with centered links and a mobile sheet.',
+    preview: () => <Navbar variant="dock" links={links} right={<IconButton label="Search"><Search size={17} /></IconButton>} />,
+    html: '<header class="header header-dock"><div class="navbar navbar-dock"><div class="navbar-inner"><div class="navbar-left">Utkristi UI</div><nav class="navbar-links" aria-label="Primary"><a href="#/overview" class="navbar-dock-link" aria-current="page">Overview</a></nav><div class="navbar-right"><button class="icon-btn burger" aria-label="Open menu">☰</button></div></div></div></header>',
+    jsx: '<Navbar variant="dock" links={[{ href: "/", label: "Overview", active: true }]} />',
   },
   footer: {
     name: 'Footer', description: 'Link columns, an optional theme control, and a fitted wordmark.',
@@ -255,9 +255,9 @@ export const examples = {
     jsx: '<Code lines={["npm run build", "npm test"]} />',
   },
   logo: {
-    name: 'Logo', description: 'The ecosystem kit’s geometric U mark with a configurable wordmark.',
+    name: 'Logo', description: 'Two rising ribbons and a floating accent tile form the ecosystem mark. Use it with a configurable wordmark or on its own.',
     preview: () => <div className="sample-row"><Logo /><Logo compact size={24} /></div>,
-    html: '<span class="brand"><span class="brand-name"><span class="brand-pre">Utkristi</span><span class="brand-co">ui</span></span></span>',
+    html: '<span class="brand" role="img" aria-label="Utkristi UI"><svg class="brand-mark" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path class="brand-tile" fill="currentColor" d="M2.8 20.5 12.6 10.7a1.65 1.65 0 0 1 2.3 0l3.1 3.1a1.65 1.65 0 0 1 0 2.3l-9.8 9.8a1.65 1.65 0 0 1-2.3 0l-3.1-3.1a1.65 1.65 0 0 1 0-2.3Z" /><path class="brand-tile" fill="currentColor" transform="translate(11 2.5)" d="M2.8 20.5 12.6 10.7a1.65 1.65 0 0 1 2.3 0l3.1 3.1a1.65 1.65 0 0 1 0 2.3l-9.8 9.8a1.65 1.65 0 0 1-2.3 0l-3.1-3.1a1.65 1.65 0 0 1 0-2.3Z" /><path class="brand-dot" fill="currentColor" d="m21.4 6.3 3.5-3.5a1.25 1.25 0 0 1 1.8 0l3.5 3.5a1.25 1.25 0 0 1 0 1.8l-3.5 3.5a1.25 1.25 0 0 1-1.8 0l-3.5-3.5a1.25 1.25 0 0 1 0-1.8Z" /></svg><span class="brand-name" aria-hidden="true"><span class="brand-pre">Utkristi</span><span class="brand-co">ui</span></span></span>',
     jsx: '<Logo size={30} name="Utkristi" suffix="ui" />',
   },
   spinner: {

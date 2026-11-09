@@ -1,13 +1,14 @@
 import { lazy, StrictMode, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, ArrowUpRight, Plus } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Plus, Search } from 'lucide-react';
 import {
-  Badge, Button, Card, CardBody, CardHeader, Code, Dot, Field, Input, Logo, SearchInput,
+  Badge, Button, Card, CardBody, CardHeader, Code, Dot, Field, IconButton, Input, Logo, SearchInput,
   Shell, Slider, Stat, Stats, Tabs, ThemeProvider, ThemeSwitch, ToastProvider, useTheme,
 } from '@utkristi/ui';
 import { componentPages, examples } from './examples';
 import { FontDemo } from './catalog';
 import { CopyCode } from './CopyCode';
+import { DocsSearch } from './DocsSearch';
 import tokenCSS from '../../src/styles/tokens.css?raw';
 import './styles.css';
 
@@ -244,6 +245,7 @@ function Sidebar({ path }: { path: string }) {
 
 function App() {
   const [{ path, theme, sample }, setRoute] = useState(route);
+  const [searchOpen, setSearchOpen] = useState(false);
   useEffect(() => {
     const update = () => { setRoute(route()); window.scrollTo(0, 0); };
     window.addEventListener('hashchange', update);
@@ -269,10 +271,13 @@ function App() {
   const standalone = path === '/overview' || path === '/showcase' || path === '/sandbox';
   return <ThemeProvider forcedTheme={theme}><ToastProvider>
     <Shell navbar={{
-      brand: <a href="#/overview" aria-label="Utkristi UI overview"><Logo size={27} /></a>,
+      variant: 'dock',
+      brand: <a href="#/overview" aria-label="Utkristi UI overview"><Logo size={32} /></a>,
       links: primary.map((item) => ({ ...item, active: item.href === `#${path}` || (item.label === 'Components' && !!component) })),
-      strip: { left: <><Dot static /> Utkristi ecosystem UI</>, right: 'v0.1.0' },
-      right: <ThemeSwitch className="nav-theme" />, sheetFoot: <ThemeSwitch />,
+      onSearch: () => setSearchOpen(true),
+      right: <><IconButton label="Search docs" onClick={() => setSearchOpen(true)}><Search size={18} /></IconButton>
+        <ThemeSwitch className="nav-theme" /></>,
+      sheetFoot: <div className="docs-sheet-theme"><span className="label">Appearance</span><ThemeSwitch /></div>,
     }} footer={{
       lede: <><b>Utkristi UI.</b> The shared kit for Utkristi apps.</>,
       columns: [{ title: 'Guide', links: guide }, { title: 'Explore', links: primary }],
@@ -281,6 +286,7 @@ function App() {
     }}>
       {standalone ? content : <div className="doc-layout"><Sidebar path={path} />{content}</div>}
     </Shell>
+    {searchOpen && <DocsSearch onClose={() => setSearchOpen(false)} pages={guide} />}
   </ToastProvider></ThemeProvider>;
 }
 

@@ -18,6 +18,7 @@
 .overview-grid { margin-top: 44px; }
 .theme-preview { container-type: inline-size; padding: clamp(12px, 2vw, 24px); border-radius: var(--ut-r-lg); border: 1px solid var(--ut-line); background: var(--ut-bg); color: var(--ut-ink); min-width: 0; }
 .preview-content { margin-top: 24px; min-width: 0; }
+.preview-content .header-dock { padding: 0; }
 .preview-content .navbar-inner, .preview-content .strip-inner { padding-inline: 10px; }
 .preview-content .navbar-left { gap: 14px; }
 .preview-content .navbar-links { gap: 12px; }
@@ -92,6 +93,7 @@
 
 @container (max-width: 380px) {
   .preview-content .navbar-links { display: none; }
+  .preview-content .navbar-dock .navbar-inner { grid-template-columns: minmax(0, 1fr) auto; }
   .preview-content .burger { display: inline-flex; }
   .preview-content .sample-grid { grid-template-columns: minmax(0, 1fr); }
 }
@@ -114,6 +116,7 @@
   .sample-stats .stat, .showcase-stats .stat { padding-inline: 12px; }
 }
 
+.docs-sheet-theme { display: grid; gap: 8px; }
 .catalog-frame { display: grid; place-items: center; border-radius: var(--ut-r); background: var(--ut-bg-3); }
 .catalog-slide { min-block-size: 128px; display: grid; align-content: center; gap: 7px; }
 .catalog-slide strong { font-size: 1.7rem; line-height: 1; }

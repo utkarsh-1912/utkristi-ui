@@ -103,12 +103,25 @@ async function captureEdge() {
     for (const [theme, file] of themes) {
       await load(`/showcase?theme=${theme}`, 'Build together.');
       await retry(() => evaluate(`document.documentElement.dataset.theme === '${theme}'`), theme);
+      await retry(() => evaluate('getComputedStyle(document.querySelector(".header-dock .navbar-links")).display === "flex"'), 'desktop dock links');
       await evaluate('Promise.race([document.fonts.ready.then(() => true), new Promise(resolve => setTimeout(resolve, 4000))])');
       const { data } = await send('Page.captureScreenshot', { format: 'png', fromSurface: true, captureBeyondViewport: false });
       await writeFile(join(screenshots, `${file}.png`), Buffer.from(data, 'base64'));
     }
 
     await size(375, 812);
+    await load('/showcase?theme=glass', 'Build together.');
+    await retry(() => evaluate('getComputedStyle(document.querySelector(".header-dock .burger")).display !== "none"'), 'mobile dock button');
+    await evaluate('(() => { const button = document.querySelector(".header-dock .burger"); button.focus(); button.click(); })()');
+    await retry(() => evaluate('document.activeElement?.getAttribute("aria-label") === "Close menu" && !!document.querySelector(".sheet-dock [aria-current=page]")'), 'focused mobile dock');
+    await evaluate('document.activeElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }))');
+    await retry(() => evaluate('document.activeElement === document.querySelector(".header-dock .burger") && !document.querySelector(".sheet-dock")'), 'restored dock focus');
+    await evaluate('document.querySelector(".header-dock .burger").click()');
+    await retry(() => evaluate('!!document.querySelector(".sheet-dock .sheet-search")'), 'dock search button');
+    await evaluate('document.querySelector(".sheet-dock .sheet-search").click()');
+    await retry(() => evaluate('document.activeElement?.getAttribute("aria-label") === "Find a component or guide"'), 'focused docs search');
+    await evaluate('Array.from(document.querySelectorAll(".modal [role=option]")).find(item => item.textContent.trim() === "Carousel").click()');
+    await retry(() => evaluate('document.querySelector("h1")?.textContent.trim() === "Carousel" && !document.querySelector(".sheet-dock, .modal")'), 'docs search navigation');
     await load('/getting-started', 'Getting started');
     const links = await evaluate(`Array.from(document.querySelectorAll('.doc-sidebar a'), link => [link.hash.slice(1), link.textContent])`);
     const routes = [['/overview', 'Utkristi UI'], ['/showcase', 'Build together.'], ...links];

@@ -14,10 +14,9 @@ export const Logo = forwardRef<HTMLSpanElement, LogoProps>(function Logo(
   return <span role="img" aria-label={[name, suffix].filter(Boolean).join(' ')} {...props} ref={ref}
     className={cx('brand', className)} style={{ '--ut-brand-size': `${Math.round(size * .66)}px`, ...style } as CSSVariables}>
     <svg className="brand-mark" width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
-      <path className="brand-tile" d="M1 8 8 1h16l7 7v16l-7 7H8l-7-7Z" />
-      <path className="brand-ring" d="M8.5 9.5v7.8a7.5 7.5 0 0 0 15 0v-2" fill="none" strokeWidth="3.1" strokeLinecap="round" />
-      <path className="brand-halo" d="M19 5.5h7.5l2 2v6h-7.5l-2-2Z" />
-      <path className="brand-dot" d="M20 6.5h6l1.5 1.5v4.5h-6L20 11Z" />
+      <path className="brand-tile" fill="currentColor" d="M2.8 20.5 12.6 10.7a1.65 1.65 0 0 1 2.3 0l3.1 3.1a1.65 1.65 0 0 1 0 2.3l-9.8 9.8a1.65 1.65 0 0 1-2.3 0l-3.1-3.1a1.65 1.65 0 0 1 0-2.3Z" />
+      <path className="brand-tile" fill="currentColor" transform="translate(11 2.5)" d="M2.8 20.5 12.6 10.7a1.65 1.65 0 0 1 2.3 0l3.1 3.1a1.65 1.65 0 0 1 0 2.3l-9.8 9.8a1.65 1.65 0 0 1-2.3 0l-3.1-3.1a1.65 1.65 0 0 1 0-2.3Z" />
+      <path className="brand-dot" fill="currentColor" d="m21.4 6.3 3.5-3.5a1.25 1.25 0 0 1 1.8 0l3.5 3.5a1.25 1.25 0 0 1 0 1.8l-3.5 3.5a1.25 1.25 0 0 1-1.8 0l-3.5-3.5a1.25 1.25 0 0 1 0-1.8Z" />
     </svg>
     {!compact && <span className="brand-name" aria-hidden="true"><span className="brand-pre">{name}</span>{suffix && <span className="brand-co">{suffix}</span>}</span>}
   </span>;

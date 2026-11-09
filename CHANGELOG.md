@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Designed a new ecosystem mark and added an inset Navbar dock with a compact mobile menu.
+
 - Added an editable component sandbox, full example source, and prop references to the hosting-ready docs.
 - Added the ecosystem logo and refined the Glass surfaces.
 

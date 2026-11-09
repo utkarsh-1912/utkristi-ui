@@ -1,8 +1,9 @@
-import { forwardRef, useMemo, useState, type HTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useEffect, useMemo, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Button } from './Button.js';
 import { Checkbox } from './Choice.js';
 import { Code } from './Code.js';
 import { SearchInput } from './Field.js';
+import { Icon } from './icons.js';
 import { Pagination } from './Layout.js';
 import { Table, type TableColumn, type TableProps } from './Table.js';
 import { cx, type CSSVariables } from './utils/cx.js';
@@ -17,17 +18,31 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(function Cod
 ) {
   const [feedback, setFeedback] = useState<{ code: string; message: string }>();
   const status = feedback?.code === code ? feedback.message : '';
+  const source = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = window.setTimeout(() => setFeedback(undefined), 2200);
+    return () => window.clearTimeout(timer);
+  }, [feedback]);
   const lines = code.split(/\r?\n/);
   return <div {...props} ref={ref} className={cx('code-block', className)}>
     {(copy || title || language) && <div className="code-block-head">
       <span className="label">{title ?? language ?? 'Code'}</span>
-      {copy && <Button size="sm" variant="ghost" onClick={async () => {
+      {copy && <Button size="sm" variant="quiet" className="code-block-copy" data-copied={status === 'Copied' || undefined}
+        iconLeft={<Icon name={status === 'Copied' ? 'check' : 'copy'} size={15} />} onClick={async () => {
         try { await navigator.clipboard.writeText(code); setFeedback({ code, message: 'Copied' }); }
-        catch { setFeedback({ code, message: 'Copy failed' }); }
-      }}>{status || 'Copy'}</Button>}
-      <span className="ut-sr-only" role="status">{status}</span>
+        catch {
+          setFeedback({ code, message: 'Could not copy. Select and copy the source manually.' });
+          if (!source.current) return;
+          const range = document.createRange();
+          range.selectNodeContents(source.current);
+          window.getSelection()?.removeAllRanges();
+          window.getSelection()?.addRange(range);
+        }
+      }}>{status === 'Copied' ? 'Copied' : status ? 'Retry copy' : 'Copy'}</Button>}
+      {copy && <span className="ut-sr-only" role="status">{status}</span>}
     </div>}
-    <Code lines={lineNumbers || renderLine ? lines.map((line, index) => renderLine?.(line, index) ?? line) : undefined}
+    <Code ref={source} lines={lineNumbers || renderLine ? lines.map((line, index) => renderLine?.(line, index) ?? line) : undefined}
       className={!lineNumbers && renderLine ? 'code-no-gutter' : undefined}>{code}</Code>
   </div>;
 });

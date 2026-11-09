@@ -1,6 +1,6 @@
 import { createContext, forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState,
   type HTMLAttributes, type ReactNode } from 'react';
-import { Badge, type Tone } from './Badge.js';
+import type { Tone } from './Badge.js';
 import { Button, IconButton } from './Button.js';
 import { Icon } from './icons.js';
 import { cx, type CSSVariables } from './utils/cx.js';
@@ -32,19 +32,17 @@ function ToastMessage({ entry, dismiss }: { entry: ToastEntry; dismiss: ToastCon
       remaining.current = Math.max(0, remaining.current - (performance.now() - start));
     };
   }, [dismiss, duration, focused, hovered, id]);
-  return <div className="toast" onMouseEnter={() => hover(true)} onMouseLeave={() => hover(false)}
+  return <div className="toast" data-tone={tone} onMouseEnter={() => hover(true)} onMouseLeave={() => hover(false)}
     onFocus={() => focus(true)} onBlur={(event) => {
       if (!event.currentTarget.contains(event.relatedTarget)) focus(false);
     }}>
-    <div role={tone === 'bad' ? 'alert' : 'status'} aria-live={tone === 'bad' ? 'assertive' : 'polite'} aria-atomic="true">
-      {tone !== 'neutral' && <Badge tone={tone} aria-hidden="true">{tone}</Badge>}
+    <span className="toast-icon" aria-hidden="true"><Icon size={17} name={tone === 'ok' ? 'check' : tone === 'warn' || tone === 'bad' ? 'warning' : 'info'} /></span>
+    <div className="toast-content" role={tone === 'bad' ? 'alert' : 'status'} aria-atomic="true">
       <div className="toast-title">{title}</div>
       {body != null && <div className="toast-body">{body}</div>}
     </div>
-    <div className="toast-actions">
-      {action && <Button size="sm" variant="ghost" onClick={() => { dismiss(id); action.onClick(); }}>{action.label}</Button>}
-      <IconButton label="Dismiss notification" size="sm" onClick={() => dismiss(id)}><Icon name="close" /></IconButton>
-    </div>
+    <IconButton className="toast-dismiss" label="Dismiss notification" size="sm" onClick={() => dismiss(id)}><Icon name="close" /></IconButton>
+    {action && <Button className="toast-action" size="sm" variant="quiet" onClick={() => { dismiss(id); action.onClick(); }}>{action.label}</Button>}
     {duration > 0 && <span className="toast-track" data-animated data-paused={hovered || focused || undefined} aria-hidden="true"
       style={{ '--ut-toast-duration': duration + 'ms' } as CSSVariables} />}
   </div>;

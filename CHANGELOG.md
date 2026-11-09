@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added previous and next links to the docs. Simplified Command and docs search, made toast messages compact, and moved copy feedback into the source toolbar.
+- Rebuilt the sandbox with a highlighted editor, line numbers, local drafts, source download, and separate source and preview views on smaller screens.
+
 - Rebuilt the icon browser around search, category filters, and a detail dialog. Expanded the library to 256 glyphs and corrected clipped or ambiguous artwork.
 
 - Added a Blocks library and full-width component previews with selectable variants. Added FileDropzone and a panel accordion variant. Simplified the docs sidebar selection and keyboard focus styles.

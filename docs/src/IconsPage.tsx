@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Button, Icon, IconPalettePicker, Modal, SearchInput, Select, Tabs,
-  icon3dRenders, iconHues, iconManifest, useIconPalette, useTheme, useToast,
+  icon3dRenders, iconHues, iconManifest, useIconPalette, useTheme,
   type IconGlyphName, type IconManifestEntry, type IconVariant,
 } from '@utkristi/ui';
-import { CopyCode } from './CopyCode';
+import { CopyAction, CopyCode } from './CopyCode';
 
 const styles: ReadonlyArray<{ id: IconVariant; label: string }> = [
   { id: 'line', label: 'Line' }, { id: 'filled', label: 'Filled' }, { id: 'duotone', label: 'Duotone' },
@@ -51,7 +51,6 @@ function standaloneSvg(node: SVGSVGElement) {
 function IconDetails({ entry, initialStyle, onClose }: { entry: IconManifestEntry; initialStyle: IconVariant; onClose: () => void }) {
   const { hue, custom } = useIconPalette();
   const { resolvedTheme } = useTheme();
-  const toast = useToast();
   const [style, setStyle] = useState(initialStyle);
   const [size, setSize] = useState(initialStyle === '3d' || initialStyle === '2.5d' ? 64 : 24);
   const [customize, setCustomize] = useState(false);
@@ -64,11 +63,6 @@ function IconDetails({ entry, initialStyle, onClose }: { entry: IconManifestEntr
   const vectorStyle = style === '3d' ? '2.5d' : style;
   const spriteStyle = vectorStyle === '2.5d' ? 'duotone' : vectorStyle;
   const react = `import { Icon } from '@utkristi/ui';\n\n<Icon name="${entry.name}" variant="${style}" size={${size}} hue="${color}"${customColor ? ` customColor=${JSON.stringify(customColor)}` : ''}${color !== 'mono' ? ' inColour' : ''} />`;
-
-  async function copy(text: string, format: string) {
-    try { await navigator.clipboard.writeText(text); toast.show({ title: `${format} copied`, tone: 'ok' }); }
-    catch { toast.show({ title: 'Could not copy', body: 'Use the code or download controls below.', tone: 'bad' }); }
-  }
 
   function readSvg() {
     const svg = currentPreview.current?.querySelector('svg');
@@ -106,13 +100,13 @@ function IconDetails({ entry, initialStyle, onClose }: { entry: IconManifestEntr
       </div>)}
     </div>
     <div className="icons-detail-actions">
-      <Button onClick={() => void copy(react, 'React')} iconLeft={<Icon name="copy" />}>Copy React</Button>
+      <CopyAction value={react} label="Copy React" onFailure={() => setCustomize(true)} />
       {raster ? <Button variant="ghost" href={raster} download={`${entry.name}-${activeTheme.key}.png`} iconLeft={<Icon name="download" />}>Download PNG</Button> : <>
-        <Button variant="ghost" onClick={() => { const svg = readSvg(); if (svg) void copy(svg, 'SVG'); }}>Copy SVG</Button>
+        <CopyAction value={readSvg} label="Copy SVG" />
         <Button variant="ghost" onClick={downloadSvg} iconLeft={<Icon name="download" />}>Download SVG</Button>
       </>}
     </div>
-    <details className="icons-detail-extra" onToggle={(event) => setCustomize(event.currentTarget.open)}><summary>Colour palette and code examples</summary>
+    <details className="icons-detail-extra" open={customize} onToggle={(event) => setCustomize(event.currentTarget.open)}><summary>Colour palette and code examples</summary>
       {customize && <>
       <IconPalettePicker showPreview={false} />
       <Tabs label="Icon usage snippets" items={[

@@ -125,6 +125,10 @@ async function captureEdge() {
     await retry(() => evaluate('!!document.querySelector(".icons-cell")'), 'icon catalog screenshot');
     await fontsReady();
     await screenshot('icons');
+    await load('/sandbox?component=carousel&theme=glass', 'Sandbox');
+    await retry(() => evaluate('document.querySelector(".playground-run-status")?.textContent === "React preview ready"'), 'sandbox screenshot');
+    await fontsReady();
+    await screenshot('sandbox');
     await size(mobileViewport.width, mobileViewport.height);
     await load('/components/command?theme=glass', 'Command');
     await retry(() => evaluate('document.documentElement.dataset.theme === "glass" && !!document.querySelector(".command [role=listbox]")'), 'mobile Command example');
@@ -134,7 +138,7 @@ async function captureEdge() {
     await retry(() => evaluate('!!document.querySelector(".sheet-dock [aria-current=page]")'), 'mobile navigation screenshot');
     await screenshot('mobile-menu');
     await evaluate(`document.querySelector('.sheet-dock [aria-label="Close menu"]').click()`);
-    process.stdout.write('Captured the overview, all three showcases, and both mobile views.\n');
+    process.stdout.write('Captured the overview, showcases, icon catalog, sandbox, and both mobile views.\n');
     if (captureOnly) return;
     await send('Emulation.setEmulatedMedia', { features: [] });
 
@@ -152,6 +156,11 @@ async function captureEdge() {
       document.activeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true, cancelable: true }));
     })()`);
     await retry(() => evaluate('document.activeElement?.getAttribute("aria-label") === "Find a component or guide"'), 'search keyboard shortcut');
+    await retry(() => evaluate(`(() => {
+      const input = getComputedStyle(document.activeElement);
+      const results = getComputedStyle(document.querySelector('.docs-search-dialog .search-results'));
+      return input.outlineWidth === '0px' && input.borderTopWidth === '0px' && input.boxShadow === 'none' && results.borderTopWidth === '0px';
+    })()`), 'search surface has no nested rings or borders');
     await evaluate(`(() => {
       const field = document.activeElement;
       Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(field, 'grid rows');
@@ -160,6 +169,26 @@ async function captureEdge() {
     await retry(() => evaluate('document.querySelector(".docs-search-dialog [aria-selected=true]")?.getAttribute("aria-label") === "Data Table"'), 'search matches multiple keywords');
     await evaluate('document.activeElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true }))');
     await retry(() => evaluate('document.querySelector("h1")?.textContent === "Data Table" && !document.querySelector(".docs-search-dialog")'), 'search Enter opens the result');
+    const [adjacentTitle, adjacentHash] = await evaluate(`(() => {
+      const next = document.querySelector('.docs-pagination [rel=next]');
+      return [next.querySelector('strong').textContent, next.hash];
+    })()`);
+    await evaluate('document.querySelector(".docs-pagination [rel=next]").click()');
+    await retry(() => evaluate(`location.hash === ${JSON.stringify(adjacentHash)} && document.querySelector('h1')?.textContent === ${JSON.stringify(adjacentTitle)}`), 'next component');
+    await evaluate('document.querySelector(".docs-pagination [rel=prev]").click()');
+    await retry(() => evaluate('document.querySelector("h1")?.textContent === "Data Table"'), 'previous component');
+    await load('/getting-started?theme=light', 'Getting started');
+    await evaluate(`(() => {
+      Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: text => { window.copiedCode = text; return Promise.resolve(); } } });
+      document.querySelector('.code-example button').click();
+    })()`);
+    await retry(() => evaluate('window.copiedCode === "npm install @utkristi/ui" && document.querySelector(".code-example button").textContent.trim() === "Copied" && !document.querySelector(".toast")'), 'copy uses inline feedback');
+    await evaluate(`(() => {
+      navigator.clipboard.writeText = () => Promise.reject(new Error('Clipboard denied'));
+      document.querySelector('.code-example button').click();
+    })()`);
+    await retry(() => evaluate('document.querySelector(".code-example button").textContent.trim() === "Retry copy" && getSelection().toString() === "npm install @utkristi/ui"'), 'copy failure selects the source');
+    await evaluate('getSelection().removeAllRanges()');
 
     await size(375, 812);
     await load('/overview?theme=glass', 'Make every app feel like Utkristi.');
@@ -349,12 +378,27 @@ async function captureEdge() {
       await evaluate(`document.querySelector(${tablePreview}).querySelector('[aria-label="Next page"]').click()`);
       await evaluate(`document.querySelector(${tablePreview}).querySelector('.data-table-controls input[type=checkbox]').click()`);
       await retry(() => evaluate(`document.querySelector(${tablePreview}).querySelector('[role=status]').textContent === '2 selected'`), theme + ' table page selection');
+      await load('/components/toast?theme=' + theme, 'Toast');
+      await evaluate(`Array.from(document.querySelectorAll(${tablePreview} + ' button')).find(button => button.textContent.trim() === 'Show toast').click()`);
+      await retry(() => evaluate(`(() => {
+        const toast = document.querySelector('.toast');
+        const icon = toast?.querySelector('.toast-icon')?.getBoundingClientRect();
+        const title = toast?.querySelector('.toast-title')?.getBoundingClientRect();
+        const dismiss = toast?.querySelector('.toast-dismiss')?.getBoundingClientRect();
+        return icon && title && dismiss && icon.right <= title.left && title.right <= dismiss.left &&
+          title.top < dismiss.bottom && dismiss.top < title.bottom && toast.getBoundingClientRect().height < 100;
+      })()`), theme + ' toast alignment');
+      await evaluate('document.querySelector(".toast-dismiss").click()');
+      await retry(() => evaluate('!document.querySelector(".toast")'), theme + ' toast dismisses');
     }
+    await size(1440, 900);
     await load('/sandbox?component=carousel&theme=glass', 'Sandbox');
-    const ready = () => evaluate('document.querySelector(".playground [role=status]")?.textContent === "React preview ready"');
+    const ready = () => evaluate('document.querySelector(".playground-run-status")?.textContent === "React preview ready"');
     await retry(ready, 'initial React sandbox');
     await evaluate('Array.from(document.querySelectorAll(".playground-devices button")).find(button => button.textContent.trim() === "Phone").click()');
-    await retry(() => evaluate('document.querySelector(".playground-stage").dataset.viewport === "phone"'), 'sandbox phone preview');
+    await retry(() => evaluate('document.querySelector(".playground-stage").dataset.viewport === "phone" && document.querySelector(".playground iframe").clientWidth === 375'), 'sandbox phone preview width');
+    await evaluate('Array.from(document.querySelectorAll(".playground-devices button")).find(button => button.textContent.trim() === "Tablet").click()');
+    await retry(() => evaluate('document.querySelector(".playground iframe").clientWidth === 768'), 'sandbox tablet preview width');
     async function setSource(source) {
       await evaluate(`(() => {
         const editor = document.querySelector("#sandbox-source");
@@ -385,6 +429,16 @@ async function captureEdge() {
     }
     const edited = 'export default function Example() { return <p>Edited sandbox example</p>; }';
     await runSource(edited);
+    await load('/sandbox?component=command&theme=glass', 'Sandbox');
+    await retry(() => evaluate('document.querySelector("#sandbox-source").value.includes("Command")'), 'switch sandbox example');
+    await load('/sandbox?component=carousel&theme=glass', 'Sandbox');
+    await retry(() => evaluate(`document.querySelector('#sandbox-source').value === ${JSON.stringify(edited)}`), 'sandbox draft survives changing examples');
+    await retry(ready, 'restored React draft runs');
+    await size(375, 812);
+    await retry(() => evaluate('getComputedStyle(document.querySelector(".playground-result")).display === "none"'), 'mobile editor first');
+    await evaluate('document.querySelector(".playground-panes button:last-child").click()');
+    await retry(() => evaluate('getComputedStyle(document.querySelector(".playground-editor")).display === "none" && getComputedStyle(document.querySelector(".playground-result")).display !== "none"'), 'mobile preview pane');
+    await size(1440, 900);
     if (process.argv.includes('--stress')) {
       await send('Emulation.setCPUThrottlingRate', { rate: 4 });
       try {
@@ -450,6 +504,10 @@ async function capturePlaywright() {
     await page.locator('.icons-cell').first().waitFor();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: join(screenshots, 'icons.png') });
+    await page.goto(`${url}/#/sandbox?component=carousel&theme=glass`);
+    await page.getByText('React preview ready', { exact: true }).waitFor();
+    await page.evaluate(() => document.fonts.ready);
+    await page.screenshot({ path: join(screenshots, 'sandbox.png') });
     await page.setViewportSize(mobileViewport);
     await page.goto(`${url}/#/components/command?theme=glass`);
     await page.locator('html[data-theme="glass"] .command [role="listbox"]').first().waitFor();

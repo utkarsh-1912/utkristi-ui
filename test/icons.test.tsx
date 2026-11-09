@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -25,16 +25,19 @@ test('every source SVG has a 24x24 viewBox, no raw hex colour, and no <style>', 
 });
 
 test('every manifest entry has its line, filled, duotone, and 2.5D / 3D files when has3d is true', () => {
+  const files = (...parts: string[]) => new Set(readdirSync(join(...parts)));
+  const styles = ['line', 'filled', 'duotone', '2.5d'].map((style) => ({ style, files: files('dist', 'icons', 'svg', style) }));
+  const generated = files('src', 'react', 'icons', 'generated');
+  const renders = [['night', 'blue'], ['paper', 'blue'], ['glass', 'lime']].map(([theme, hue]) => ({
+    theme, files: files('icons', '3d', 'render', theme, hue),
+  }));
   for (const entry of iconManifest) {
-    for (const style of ['line', 'filled', 'duotone'] as const) {
-      expect(existsSync(join('dist', 'icons', 'svg', style, `${entry.name}.svg`)), `${entry.name} ${style}`).toBe(true);
+    for (const { style, files } of styles) {
+      if (style !== '2.5d' || entry.has3d) expect(files.has(`${entry.name}.svg`), `${entry.name} ${style}`).toBe(true);
     }
-    expect(existsSync(join('src', 'react', 'icons', 'generated', `${toPascalCase(entry.name)}.tsx`)), entry.name).toBe(true);
+    expect(generated.has(`${toPascalCase(entry.name)}.tsx`), entry.name).toBe(true);
     if (entry.has3d) {
-      expect(existsSync(join('dist', 'icons', 'svg', '2.5d', `${entry.name}.svg`)), `${entry.name} 2.5d`).toBe(true);
-      expect(existsSync(join('icons', '3d', 'render', 'night', 'blue', `${entry.name}@1x.png`)), `${entry.name} night 3d`).toBe(true);
-      expect(existsSync(join('icons', '3d', 'render', 'paper', 'blue', `${entry.name}@1x.png`)), `${entry.name} paper 3d`).toBe(true);
-      expect(existsSync(join('icons', '3d', 'render', 'glass', 'lime', `${entry.name}@1x.png`)), `${entry.name} glass 3d`).toBe(true);
+      for (const { theme, files } of renders) expect(files.has(`${entry.name}@1x.png`), `${entry.name} ${theme} 3d`).toBe(true);
     }
   }
   expect(existsSync(join('dist', 'icons', 'sprite.svg'))).toBe(true);

@@ -80,11 +80,22 @@ const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchLi
   const [open, setOpen] = useState(false);
   const [cursor, setCursor] = useState(-1);
   const visible = !popup || open;
-  const terms = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  const normalizedQuery = query.trim().toLocaleLowerCase().replace(/\s+/g, ' ');
+  const terms = normalizedQuery.split(' ').filter(Boolean);
   const matches = options.filter((item) => {
     const searchable = [item.label, ...(item.keywords ?? [])].join(' ').toLocaleLowerCase();
     return terms.every((term) => searchable.includes(term));
   });
+  if (!popup && normalizedQuery) {
+    const score = ({ label, value }: SearchOption) => {
+      const name = label.toLocaleLowerCase();
+      if (name === normalizedQuery || value.toLocaleLowerCase() === normalizedQuery) return 0;
+      if (name.startsWith(normalizedQuery)) return 1;
+      if (name.includes(normalizedQuery)) return 2;
+      return 3;
+    };
+    matches.sort((a, b) => Number(!!a.disabled) - Number(!!b.disabled) || score(a) - score(b));
+  }
   const groups = new Map<string | undefined, SearchOption[]>();
   for (const item of matches) {
     const items = groups.get(item.group);

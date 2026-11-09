@@ -6,6 +6,8 @@ Utkristi UI is the shared design system for the Utkristi ecosystem. It includes 
 
 [Icon catalog preview](docs/screenshots/icons.png)
 
+[Sandbox editor preview](docs/screenshots/sandbox.png)
+
 | Night | Paper | Glass |
 | --- | --- | --- |
 | ![Night showcase](docs/screenshots/night.png) | ![Paper showcase](docs/screenshots/paper.png) | ![Glass showcase](docs/screenshots/glass.png) |
@@ -86,17 +88,19 @@ Use `Typography` with `typeface="archivo"`, `"geist"`, `"inter"`, `"manrope"`, o
 
 ## Docs and hosting
 
-Run `npm run docs` to open the documentation. Each component page includes interactive previews, copyable code, and a prop reference. The Sandbox runs editable TSX or HTML in a separate preview and lets you test any theme.
+Run `npm run docs` to open the documentation. Each component page includes interactive previews, copyable code, a prop reference, and links to adjacent components.
 
-The Sandbox offers Fit, Phone, and Tablet preview widths. Add `ut-scrollbar` to an existing scroll container to style its native scrollbar, or use `ScrollArea` to add a keyboard-focusable scroll region. The scrollbar follows the theme and keeps system styling for touch and forced colours.
+The Sandbox runs TSX or HTML in an isolated preview. Edit the example and press **Run** or **Ctrl/⌘ + Enter**. Drafts are saved per example and language in your browser. **Reset** restores the original, and you can copy or download the source. Choose **Fit**, **Phone (375 px)**, or **Tablet (768 px)** to test the layout.
+
+Add `ut-scrollbar` to an existing scroll container to style its native scrollbar, or use `ScrollArea` to add a keyboard-focusable scroll region. The scrollbar follows the theme and keeps system styling for touch and forced colours.
 
 Build the website with `npm ci` and `npm run docs:build`. Publish the contents of `docs/dist` with your static host. The site uses relative asset paths and hash routes, so a subdirectory works without a server rewrite. Run `npm run docs:preview` to verify the production build locally.
 
 ## Performance verification
 
-Component source and prop tables load when opened. The sandbox and its compiler load separately from the main docs. The production build serves about 142 KB of gzipped JavaScript for the main docs.
+Component source and prop tables load when opened. The production build reports about 153 KB of gzipped JavaScript for the main docs. The sandbox preview runtime is in a separate route bundle, and the TSX compiler runs in a worker.
 
-Run `npm run docs:stress` to repeat the Edge check. The local run checked 93 routes in each theme at 375px and exercised 12 sandbox runs at 4× CPU throttling with 5,000 table rows or 60 carousel slides. Run-to-preview latency was 215 ms median and 393 ms p95 on the test machine. The editor reported invalid TSX and recovered on the next valid run.
+Run `npm run docs:stress` to repeat the Edge check. It sweeps the docs at 375px in all three themes and checks key routes from 320px to 1440px. It reports run-to-preview latency for 12 sandbox runs at 4× CPU throttling with 5,000 table rows or 60 carousel slides, and checks that the preview recovers after invalid TSX.
 
 [React code splitting](https://react.dev/reference/react/lazy) · [Long tasks and main-thread work](https://web.dev/articles/optimize-long-tasks) · [Animation rendering](https://web.dev/articles/animations-guide)
 
@@ -115,7 +119,7 @@ See the [competitive audit and implementation roadmap](docs/competitive-audit.md
 | `npm run docs:preview` | Preview the documentation build |
 | `npm run docs:stress` | Run browser checks and exercise repeated sandbox runs under CPU throttling |
 | `npm run screenshots` | Capture all three themes in headless Edge, sweep every docs route at 375px, and check key pages from 320px to 1440px |
-| `npm run screenshots:capture` | Refresh the overview, the three showcases, and the two mobile screenshots |
+| `npm run screenshots:capture` | Refresh the overview, showcases, icon catalog, sandbox, and mobile screenshots |
 
 The screenshot script uses Playwright with Chromium when Edge is unavailable. Install them in that environment before running the script.
 

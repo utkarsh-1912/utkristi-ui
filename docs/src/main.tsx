@@ -42,6 +42,26 @@ const guide = [
   { href: '#/blocks', label: 'Blocks' },
   { href: '#/sandbox', label: 'Sandbox' },
 ];
+const componentLinks = componentPages.map(([slug, item]) => ({ href: `#/components/${slug}`, label: item.name }));
+const blockLinks = ['Application', 'Account', 'Marketing'].flatMap((category) => blockPages
+  .filter(([, block]) => block.category === category).map(([slug, block]) => ({ href: `#/blocks/${slug}`, label: block.name })));
+
+function DocsPagination({ links, current, label }: {
+  links: readonly { href: string; label: string }[]; current: string; label: string;
+}) {
+  const index = links.findIndex(({ href }) => href === current);
+  if (index < 0 || links.length < 2) return null;
+  return <nav className="docs-pagination" aria-label={label}>
+    {(['Previous', 'Next'] as const).map((direction) => {
+      const previous = direction === 'Previous';
+      const link = links[index + (previous ? -1 : 1)];
+      return link && <a key={direction} href={link.href} rel={previous ? 'prev' : 'next'}>
+        <Icon name={previous ? 'arrow-left' : 'arrow-right'} size={19} />
+        <span><span className="label">{direction}</span><strong>{link.label}</strong></span>
+      </a>;
+    })}
+  </nav>;
+}
 
 const themeLabels = { dark: 'Night', light: 'Paper', glass: 'Glass' } as const;
 const themes = ['dark', 'light', 'glass'] as const;
@@ -99,6 +119,7 @@ function ComponentPage({ slug }: { slug: keyof typeof examples }) {
       </Select>}
     </ExamplePreview>
     <Suspense fallback={<p className="muted">Loading examples and props…</p>}><ComponentReference slug={variant ?? slug} html={selected.html} /></Suspense>
+    <DocsPagination links={componentLinks} current={`#/components/${slug}`} label="Component pagination" />
   </article>;
 }
 
@@ -126,6 +147,7 @@ function BlockPage({ slug }: { slug: keyof typeof blocks }) {
     <PageTitle kicker={`Blocks / ${block.category}`} title={block.name} detail={block.description} />
     <ExamplePreview key={resolvedTheme} example={block} initialTheme={resolvedTheme} />
     <Suspense fallback={<p className="muted">Loading example source…</p>}><ComponentReference slug={slug} html={block.html} /></Suspense>
+    <DocsPagination links={blockLinks} current={`#/blocks/${slug}`} label="Block pagination" />
   </article>;
 }
 
@@ -418,7 +440,8 @@ function App() {
       themeSwitch: <div className="docs-footer-appearance"><span className="label">Appearance</span>{themeSelect()}</div>,
       bottom: <><span>Utkristi UI · MIT license</span><span>Version 0.1.0</span></>,
     }}>
-      {standalone ? content : <div className="doc-layout"><Sidebar path={path} />{content}</div>}
+      {standalone ? <>{content}{!block && <DocsPagination links={guide} current={`#${path}`} label="Guide pagination" />}</> : <div className="doc-layout"><Sidebar path={path} />{component ? content :
+        <div className="docs-guide-content">{content}<DocsPagination links={guide} current={`#${path}`} label="Guide pagination" /></div>}</div>}
     </Shell>
     {searchOpen && <DocsSearch onClose={() => setSearchOpen(false)} pages={[...guide, primary[0], showcaseLink]} />}
   </ToastProvider></IconPaletteProvider></ThemeProvider>;

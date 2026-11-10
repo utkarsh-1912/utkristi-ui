@@ -272,6 +272,7 @@ a[aria-current="page"] > .navbar-link-icon { opacity: 1; color: var(--ut-nav-mar
 .navbar-dock[data-collapse-links] .navbar-right { grid-column: 3; }
 .navbar-dock[data-collapse-links] .navbar-right .burger { display: none; }
 .navbar-fit-item, .navbar-more { display: flex; flex: none; }
+.navbar-more :is(.popover, .popover-anchor) { display: flex; }
 .navbar-links > :is(.navbar-fit-item, .navbar-more)[data-hidden] {
   position: absolute; inset-inline-start: 0; visibility: hidden; pointer-events: none;
 }
@@ -285,7 +286,7 @@ a[aria-current="page"] > .navbar-link-icon { opacity: 1; color: var(--ut-nav-mar
 .navbar-more[data-current] .popover-anchor > .btn { color: var(--ut-nav-mark); }
 .navbar-more .popover-panel {
   display: grid; gap: 2px; min-inline-size: 10rem; padding: 5px; color: var(--ut-ink);
-  background: var(--ut-raise); inset-inline: auto 0;
+  background: linear-gradient(var(--ut-raise), var(--ut-raise)), var(--ut-bg); inset-inline: auto 0;
 }
 .navbar-more .navbar-overflow-link {
   display: flex; align-items: center; gap: 8px; padding: 9px 10px; border-radius: 7px; color: var(--ut-ink-2);

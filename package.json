@@ -1,6 +1,6 @@
 {
   "name": "@utkristi/ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The shared component library and design tokens for the Utkristi ecosystem.",
   "license": "MIT",
   "type": "module",

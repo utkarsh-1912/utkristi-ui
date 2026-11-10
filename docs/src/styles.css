@@ -3,6 +3,24 @@
 @tailwind utilities;
 
 .docs-main { min-inline-size: 0; }
+.docs-status {
+  max-inline-size: 44rem;
+  margin-inline: auto;
+  padding-block: clamp(36px, 9vw, 116px);
+  text-align: center;
+}
+.docs-status-icon {
+  display: grid; place-items: center; inline-size: 48px; block-size: 48px;
+  margin: 0 auto 18px; border-radius: var(--ut-r-field); background: var(--ut-tint); color: var(--ut-accent);
+}
+.docs-status h1 {
+  margin: 8px 0 14px; font: 680 clamp(2rem, 5.5vw, 4rem)/1.03 var(--ut-font-display);
+  letter-spacing: -.045em; overflow-wrap: anywhere;
+}
+.docs-status h1:focus { outline: none; }
+.docs-status p { max-inline-size: 44ch; margin: 0 auto; color: var(--ut-ink-2); }
+.docs-status-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-block-start: 24px; }
+.docs-status-root { min-block-size: 100vh; display: grid; align-items: center; }
 .doc-layout { display: grid; grid-template-columns: minmax(0, 216px) minmax(0, 1fr); gap: clamp(24px, 3.5vw, 52px); }
 .doc-sidebar { position: sticky; inset-block-start: 106px; align-self: start; min-inline-size: 0; }
 .doc-index { display: grid; grid-template-rows: auto minmax(0, 1fr); max-block-size: calc(100dvh - 122px); border: 1px solid var(--ut-line); border-radius: var(--ut-r); background: var(--ut-bg-2); }
@@ -271,9 +289,9 @@
 .source-status > :first-child { font-family: var(--ut-font-mono); }
 .playground-help { margin-block: 12px; }
 .syntax-keyword { color: var(--ut-accent); }
-.syntax-markup { color: var(--ut-accent-ink, var(--ut-accent)); }
-.syntax-string { color: color-mix(in srgb, var(--ut-ok-ink) 85%, var(--ut-ink)); }
-.syntax-number { color: color-mix(in srgb, var(--ut-warn-ink) 85%, var(--ut-ink)); }
+.syntax-markup { color: color-mix(in srgb, var(--ut-accent) 65%, var(--ut-ink)); }
+.syntax-string { color: color-mix(in srgb, var(--ut-ok-ink) 65%, var(--ut-ink)); }
+.syntax-number { color: color-mix(in srgb, var(--ut-warn-ink) 65%, var(--ut-ink)); }
 .syntax-comment { color: var(--ut-ink-2); }
 @media (forced-colors: active) {
   .source-input pre { visibility: hidden; }

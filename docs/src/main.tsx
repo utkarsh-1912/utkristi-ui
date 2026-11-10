@@ -11,6 +11,8 @@ import { variants, variantSets } from './variants';
 import { FontDemo } from './catalog';
 import { CopyCode } from './CopyCode';
 import { DocsSearch } from './DocsSearch';
+import { DocsErrorBoundary, DocsStatus } from './DocsStatus';
+import ShowcaseIconTray from './ShowcaseIconTray';
 import { TokensPaletteSection } from './TokensPaletteSection';
 import { MarketingHome, useMarketingMotion, WorkflowSection } from './Marketing';
 import tokenCSS from '../../src/styles/tokens.css?raw';
@@ -20,7 +22,6 @@ import './enterprise.css';
 const Playground = lazy(() => import('./Playground'));
 const IconsPage = lazy(() => import('./IconsPage'));
 const ComponentReference = lazy(() => import('./ComponentReference'));
-const ShowcaseIconTray = lazy(() => import('./ShowcaseIconTray'));
 const Frameworks = lazy(() => import('./Frameworks'));
 
 const primary = [
@@ -297,7 +298,7 @@ function Showcase() {
         </div>
         <ProjectDirectory />
       </section>
-      <Suspense fallback={<p className="muted">Loading icon tray…</p>}><ShowcaseIconTray /></Suspense>
+      <ShowcaseIconTray />
     </div>
     <WorkflowSection />
   </article>;
@@ -390,8 +391,14 @@ function App() {
     '/frameworks': <Suspense fallback={<p className="muted">Loading integrations…</p>}><Frameworks /></Suspense>,
     '/sandbox': <Suspense fallback={<p className="muted">Loading sandbox…</p>}><Playground key={sample ?? 'carousel'} component={sample} /></Suspense>,
   };
-  const content = component ? <ComponentPage key={component} slug={component} /> : block ? <BlockPage key={block} slug={block} /> : pages[path] ?? <MarketingHome />;
-  const standalone = path === '/overview' || path === '/showcase' || path === '/sandbox' || path === '/blocks' || path === '/icons' || !!block;
+  const page = Object.hasOwn(pages, path) ? pages[path] : undefined;
+  const notFound = !component && !block && !page;
+  const content = component ? <ComponentPage key={component} slug={component} /> : block ? <BlockPage key={block} slug={block} /> : page ?? <DocsStatus status="missing" />;
+  const standalone = notFound || path === '/overview' || path === '/showcase' || path === '/sandbox' || path === '/blocks' || path === '/icons' || !!block;
+  useEffect(() => {
+    document.title = notFound ? 'Page not found · Utkristi UI' : 'Utkristi UI · Ecosystem design system';
+  }, [notFound]);
+  const routeContent = <DocsErrorBoundary key={JSON.stringify([path, sample])}>{content}</DocsErrorBoundary>;
   function releasePreviewTheme() {
     const url = new URL(location.href);
     const [, options] = url.hash.split('?');
@@ -428,12 +435,12 @@ function App() {
       themeSwitch: <div className="docs-footer-appearance"><span className="label">Appearance</span>{themeSelect()}</div>,
       bottom: <><span>Utkristi UI · MIT license</span><span>Version 0.1.0</span></>,
     }}>
-      {standalone ? <>{content}{!block && <DocsPagination links={guide} current={`#${path}`} label="Guide pagination" />}</> : <div className="doc-layout"><Sidebar path={path} />{component ? content :
-        <div className="docs-guide-content">{content}<DocsPagination links={guide} current={`#${path}`} label="Guide pagination" /></div>}</div>}
+      {standalone ? <>{routeContent}{!block && <DocsPagination links={guide} current={`#${path}`} label="Guide pagination" />}</> : <div className="doc-layout"><Sidebar path={path} />{component ? routeContent :
+        <div className="docs-guide-content">{routeContent}<DocsPagination links={guide} current={`#${path}`} label="Guide pagination" /></div>}</div>}
     </Shell>
     {searchOpen && <DocsSearch onClose={() => setSearchOpen(false)} pages={[...guide, primary[0], showcaseLink]} />}
   </ToastProvider></IconPaletteProvider></ThemeProvider>;
 }
 
-createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);
+createRoot(document.getElementById('root')!).render(<StrictMode><DocsErrorBoundary root><App /></DocsErrorBoundary></StrictMode>);
 

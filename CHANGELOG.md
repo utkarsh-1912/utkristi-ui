@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added recovery for missing docs bundles, a route-level error view, and standalone 404 and 500 pages. Code blocks and the sandbox now use each appearance's surface and border tokens.
+
 - Added enterprise landing and execution desk templates, four operational layouts, and four custom cards. Added Signal, Ledger, and Terminal presets that work with Night, Paper, and Glass.
 - Rebuilt the showcase icon tray. Scrollbars reveal on hover and focus. Added a native dialog entry point and framework integration examples.
 

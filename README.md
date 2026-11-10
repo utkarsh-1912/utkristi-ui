@@ -2,25 +2,25 @@
 
 Utkristi UI is the shared design system for the Utkristi ecosystem. It includes Night, Paper, and Glass themes, CSS custom properties, a Tailwind CSS 3.4 preset and plugin, a standalone stylesheet, and typed React components.
 
-[Marketing overview preview](docs/screenshots/overview.png)
+[Marketing overview preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/overview.png)
 
-[Navigation overflow preview](docs/screenshots/navbar-overflow.png)
+[Navigation overflow preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/navbar-overflow.png)
 
-[Icon catalog preview](docs/screenshots/icons.png)
+[Icon catalog preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/icons.png)
 
-[Sandbox editor preview](docs/screenshots/sandbox.png)
+[Sandbox editor preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/sandbox.png)
 
 | Night | Paper | Glass |
 | --- | --- | --- |
-| ![Night showcase](docs/screenshots/night.png) | ![Paper showcase](docs/screenshots/paper.png) | ![Glass showcase](docs/screenshots/glass.png) |
+| ![Night showcase](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/night.png) | ![Paper showcase](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/paper.png) | ![Glass showcase](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/glass.png) |
 
 | Mobile docs | Mobile navigation |
 | --- | --- |
-| ![Mobile Glass docs with the index and Command preview](docs/screenshots/mobile-docs.png) | ![Compact mobile navigation panel in Glass](docs/screenshots/mobile-menu.png) |
+| ![Mobile Glass docs with the index and Command preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/mobile-docs.png) | ![Compact mobile navigation panel in Glass](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/mobile-menu.png) |
 
 The docs include component variants and a Blocks library with working project management, account, settings, and pricing examples. Open any example in the sandbox to try it in Night, Paper, or Glass.
 
-Blocks also includes an enterprise landing page, a simulated execution desk, operational workflows, and custom cards. The enterprise templates support the Signal, Ledger, and Terminal presets. [Enterprise and theme research](docs/enterprise-research.md) · [Landing preview](docs/screenshots/enterprise-landing.png) · [Execution desk preview](docs/screenshots/execution-desk.png)
+Blocks also includes an enterprise landing page, a simulated execution desk, operational workflows, and custom cards. The enterprise templates support the Signal, Ledger, and Terminal presets. [Enterprise and theme research](docs/enterprise-research.md) · [Landing preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/enterprise-landing.png) · [Execution desk preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/execution-desk.png)
 
 ## Install
 
@@ -101,6 +101,8 @@ Add `ut-scrollbar` to an existing scroll container to style its native scrollbar
 Import `@utkristi/ui/utkristi-ui.css` in HTML, Vue, Svelte, or Angular to use the kit's classes and themes. The `@utkristi/ui/dom` entry point provides `initUI(root)` for native dialogs and tabs. See the Frameworks guide in the docs for copyable integration examples.
 
 Build the website with `npm ci` and `npm run docs:build`. Publish the contents of `docs/dist` with your static host. The site uses relative asset paths and hash routes, so a subdirectory works without a server rewrite. Run `npm run docs:preview` to verify the production build locally.
+
+On Vercel, use the repository root as the project root. The checked-in configuration builds `docs/dist` and revalidates the HTML entry document so it can pick up new asset URLs. The build emits `404.html` for missing URLs and `500.html` for hosts with custom server error pages. Vercel's custom platform error pages require Enterprise. The app's runtime error page works on any static host. For subdirectory hosts, configure their error documents and adjust the home links in the static pages to the mount path.
 
 ## Performance verification
 

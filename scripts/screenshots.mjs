@@ -79,10 +79,17 @@ async function captureEdge() {
     const port = await retry(async () => (await readFile(join(profile, 'DevToolsActivePort'), 'utf8')).split(/\r?\n/)[0], 'Edge');
     const targets = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
     const exceptions = [];
+    let fault;
+    let faultRequests = 0;
     client = await connect(targets.find((target) => target.type === 'page').webSocketDebuggerUrl, ({ method, params }) => {
       if (method === 'Runtime.exceptionThrown') {
         const detail = params.exceptionDetails;
         exceptions.push(detail.exception?.description ?? detail.text);
+      }
+      if (method === 'Fetch.requestPaused' && fault) {
+        faultRequests++;
+        client.send('Fetch.fulfillRequest', { requestId: params.requestId, ...fault })
+          .catch((error) => exceptions.push(error.message));
       }
     });
     const { send } = client;
@@ -605,6 +612,47 @@ async function captureEdge() {
     })()`);
     await retry(() => evaluate('document.querySelector(".playground iframe")?.srcdoc.includes("carousel-viewport") && document.querySelector(".playground [role=status]")?.textContent === "HTML preview ready"'), 'HTML sandbox');
     if (exceptions.length) throw new Error('Unhandled browser errors: ' + exceptions.join('\n'));
+    await load('/components/not-a-real-component', 'Page not found');
+    await retry(() => evaluate('document.activeElement?.matches(".docs-status h1") && !!document.querySelector(".docs-navbar")'), '404 focuses heading and keeps navigation');
+    await evaluate('document.querySelector(\'.docs-status a[href="#/overview"]\').click()');
+    await retry(() => evaluate('document.querySelector("h1")?.textContent === "A design system for Utkristi."'), '404 returns to overview');
+    for (const [code, title] of [[404, 'Page not found'], [500, 'Something went wrong']]) {
+      await send('Page.navigate', { url: `${url}/${code}.html` });
+      await retry(() => evaluate(`document.querySelector("h1")?.textContent === ${JSON.stringify(title)} && !document.querySelector("script")`), 'standalone ' + code);
+    }
+
+    await send('Network.enable');
+    await send('Network.setCacheDisabled', { cacheDisabled: true });
+    fault = { responseCode: 404, responseHeaders: [{ name: 'Cache-Control', value: 'no-store' }] };
+    await send('Fetch.enable', { patterns: [{ urlPattern: '*/assets/IconsPage-*.js' }] });
+    try {
+      await send('Page.navigate', { url: `${url}/?recovery-test=missing#/icons` });
+      await retry(() => evaluate(`document.querySelector('.docs-status h1')?.textContent.trim() === 'This page couldn’t load' &&
+        !!sessionStorage.getItem('utkristi-docs:asset-recovery')`), 'missing chunk recovery panel');
+      await retry(() => faultRequests >= 2, 'one automatic retry of missing chunk');
+      const recoveredAt = await evaluate('performance.timeOrigin');
+      await sleep(400);
+      if (faultRequests !== 2 || await evaluate('performance.timeOrigin') !== recoveredAt) throw new Error('Missing chunk recovery reloaded more than once');
+    } finally {
+      await send('Fetch.disable');
+    }
+    await evaluate('document.querySelector(".docs-status button").click()');
+    await retry(() => evaluate('document.querySelector("h1")?.textContent === "Icons" && !!document.querySelector(".icons-cell")'), 'reload restores the missing route');
+
+    faultRequests = 0;
+    fault = { responseCode: 200, responseHeaders: [{ name: 'Content-Type', value: 'text/javascript' }, { name: 'Cache-Control', value: 'no-store' }],
+      body: Buffer.from('throw new Error("Forced docs module error");').toString('base64') };
+    await send('Fetch.enable', { patterns: [{ urlPattern: '*/assets/IconsPage-*.js' }] });
+    try {
+      await send('Page.navigate', { url: `${url}/?recovery-test=render#/icons` });
+      await retry(() => evaluate('document.querySelector(".docs-status h1")?.textContent.trim() === "Something went wrong"'), 'runtime error fallback');
+      if (faultRequests !== 1) throw new Error('A runtime error triggered an automatic reload');
+      await evaluate('document.querySelector(".docs-status a").click()');
+      await retry(() => evaluate('document.querySelector("h1")?.textContent === "A design system for Utkristi."'), 'leave a failed route without reloading');
+    } finally {
+      await send('Fetch.disable');
+    }
+    process.stdout.write('Verified standalone error pages, docs 404 routing, and recovery from a missing bundle and module error.\n');
     process.stdout.write('Verified React and HTML sandbox previews.\n');
     process.stdout.write(`Checked ${routes.length} docs routes in Night, Paper, and Glass at 375px.\n`);
     process.stdout.write(`Checked ${responsiveRoutes.length} key routes at 320, 390, 768, 981, 1024, and 1440px in all themes.\n`);

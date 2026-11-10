@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { Button, Card, CardBody, CardHeader, Icon, IconPalettePicker, iconManifest, Select, type IconVariant } from '@utkristi/ui';
+import { Button, Card, CardBody, CardHeader, Icon, IconPalettePicker, iconGlyphs, Select, type IconVariant } from '@utkristi/ui';
 
 const styles = [['line', 'Line'], ['filled', 'Filled'], ['duotone', 'Duotone'], ['2.5d', '2.5D'], ['3d', '3D']] as const;
 const samples = [['rocket', 'Rocket'], ['palette', 'Palette'], ['ai-spark', 'AI spark'],
   ['shield', 'Shield'], ['bell', 'Bell'], ['folder', 'Folder']] as const;
+const iconCount = new Set(Object.values(iconGlyphs).map(({ name }) => name)).size;
 
 export default function ShowcaseIconTray() {
   const [style, setStyle] = useState<IconVariant>('3d');
   return <Card className="showcase-icon-card">
     <CardHeader><div><span className="label">Icon library</span><h2>Icon tray</h2></div>
-      <Button href="#/icons" variant="quiet" size="sm" iconRight={<Icon name="arrow-up-right" />}>Browse {iconManifest.length} icons</Button>
+      <Button href="#/icons" variant="quiet" size="sm" iconRight={<Icon name="arrow-up-right" />}>Browse {iconCount} icons</Button>
     </CardHeader>
     <CardBody className="showcase-icon-body">
       <div className="showcase-icon-tools">

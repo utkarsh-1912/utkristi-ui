@@ -392,12 +392,15 @@ function App() {
     '/sandbox': <Suspense fallback={<p className="muted">Loading sandbox…</p>}><Playground key={sample ?? 'carousel'} component={sample} /></Suspense>,
   };
   const page = Object.hasOwn(pages, path) ? pages[path] : undefined;
-  const notFound = !component && !block && !page;
-  const content = component ? <ComponentPage key={component} slug={component} /> : block ? <BlockPage key={block} slug={block} /> : page ?? <DocsStatus status="missing" />;
-  const standalone = notFound || path === '/overview' || path === '/showcase' || path === '/sandbox' || path === '/blocks' || path === '/icons' || !!block;
+  const errorPage = /^\/(?:error|500)(?:\.html)?\/?$/.test(path);
+  const status = errorPage ? 'error' : !component && !block && !page ? 'missing' : undefined;
+  const content = component ? <ComponentPage key={component} slug={component} />
+    : block ? <BlockPage key={block} slug={block} /> : status ? <DocsStatus status={status} /> : page;
+  const standalone = !!status || path === '/overview' || path === '/showcase' || path === '/sandbox' || path === '/blocks' || path === '/icons' || !!block;
   useEffect(() => {
-    document.title = notFound ? 'Page not found · Utkristi UI' : 'Utkristi UI · Ecosystem design system';
-  }, [notFound]);
+    document.title = status === 'missing' ? 'Page not found · Utkristi UI'
+      : status === 'error' ? 'Something went wrong · Utkristi UI' : 'Utkristi UI · Ecosystem design system';
+  }, [status]);
   const routeContent = <DocsErrorBoundary key={JSON.stringify([path, sample])}>{content}</DocsErrorBoundary>;
   function releasePreviewTheme() {
     const url = new URL(location.href);

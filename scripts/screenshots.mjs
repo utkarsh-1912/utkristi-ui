@@ -616,6 +616,22 @@ async function captureEdge() {
     await retry(() => evaluate('document.activeElement?.matches(".docs-status h1") && !!document.querySelector(".docs-navbar")'), '404 focuses heading and keeps navigation');
     await evaluate('document.querySelector(\'.docs-status a[href="#/overview"]\').click()');
     await retry(() => evaluate('document.querySelector("h1")?.textContent === "A design system for Utkristi."'), '404 returns to overview');
+    await load('/404', 'Page not found');
+    await load('/error?theme=glass', 'Something went wrong');
+    await load('/500', 'Something went wrong');
+    for (const [path, code, title] of [
+      ['/404', 404, 'Page not found'], ['/missing/nested/docs-page', 404, 'Page not found'],
+      ['/error', 500, 'Something went wrong'], ['/500', 500, 'Something went wrong'],
+    ]) {
+      const response = await fetch(url + path, { headers: { Accept: 'text/html' } });
+      if (response.status !== code || !(await response.text()).includes(`<h1>${title}</h1>`)) {
+        throw new Error(`${path} should return HTTP ${code} and the branded status page`);
+      }
+      await send('Page.navigate', { url: url + path });
+      await retry(() => evaluate(`document.querySelector("h1")?.textContent === ${JSON.stringify(title)} && !document.querySelector("script")`), path + ' direct browser navigation');
+    }
+    const missingAsset = await fetch(url + '/assets/nonexistent-chunk.js');
+    if (missingAsset.status !== 404) throw new Error('A missing asset should return HTTP 404');
     for (const [code, title] of [[404, 'Page not found'], [500, 'Something went wrong']]) {
       await send('Page.navigate', { url: `${url}/${code}.html` });
       await retry(() => evaluate(`document.querySelector("h1")?.textContent === ${JSON.stringify(title)} && !document.querySelector("script")`), 'standalone ' + code);

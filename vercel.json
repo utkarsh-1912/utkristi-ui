@@ -2,14 +2,15 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run docs:build",
   "outputDirectory": "docs/dist",
-  "headers": [
+  "routes": [
     {
-      "source": "/",
-      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+      "src": "^/(?:index\\.html)?$",
+      "headers": { "Cache-Control": "no-cache" },
+      "continue": true
     },
-    {
-      "source": "/index.html",
-      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
-    }
+    { "src": "^/404/?$", "status": 404, "dest": "/404.html" },
+    { "src": "^/(?:error(?:\\.html)?|500)/?$", "status": 500, "dest": "/500.html" },
+    { "handle": "filesystem" },
+    { "src": "/.*", "status": 404, "dest": "/404.html" }
   ]
 }

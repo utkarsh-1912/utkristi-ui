@@ -104,6 +104,8 @@ Build the website with `npm ci` and `npm run docs:build`. Publish the contents o
 
 On Vercel, use the repository root as the project root. The checked-in configuration builds `docs/dist` and revalidates the HTML entry document so it can pick up new asset URLs. The build emits `404.html` for missing URLs and `500.html` for hosts with custom server error pages. Vercel's custom platform error pages require Enterprise. The app's runtime error page works on any static host. For subdirectory hosts, configure their error documents and adjust the home links in the static pages to the mount path.
 
+Open `/404` or `/error` to verify the standalone pages and their HTTP status codes. Open `/#/404` or `/#/error` to check the versions inside the docs shell.
+
 ## Performance verification
 
 Component source and prop tables load when opened. The production build reports about 159 KB of gzipped JavaScript for the main docs. The sandbox preview runtime is in a separate route bundle, and the TSX compiler runs in a worker.

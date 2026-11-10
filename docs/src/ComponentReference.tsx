@@ -37,6 +37,9 @@ export default function ComponentReference({ slug, html }: { slug: string; html:
         and sorting through <Code inline>remote.onStateChange</Code>. Set <Code inline>sortable</Code> on server-sortable columns.</p>
       <p>Keep request cancellation and error handling in your data layer. Keep the last result during a refresh,
         reset the page when app filters change, and provide a retry callback for recoverable errors.</p>
+      <p>Set <Code inline>pageSizeOptions</Code> to let users choose a page size. Fetch using the emitted
+        <Code inline>state.pageSize</Code> when present. Use <Code inline>columnVisibility</Code> for saved views,
+        <Code inline>hideable=false</Code> for identifying columns, and <Code inline>labels</Code> for translations.</p>
       <Button href="#/blocks/project-worklist" variant="ghost">Try the project worklist</Button>
     </section>}
     {sample && <ComponentApi components={sample.components} />}

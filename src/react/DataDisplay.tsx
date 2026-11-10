@@ -2,14 +2,15 @@ import { forwardRef, useEffect, useMemo, useRef, useState, type HTMLAttributes, 
 import { Button } from './Button.js';
 import { Checkbox } from './Choice.js';
 import { Code } from './Code.js';
-import { SearchInput } from './Field.js';
+import { SearchInput, Select } from './Field.js';
 import { ControlIcon } from './ControlIcon.js';
 import { CheckIconData } from './icons/generated/CheckIcon.js';
 import { CopyIconData } from './icons/generated/CopyIcon.js';
-import { Pagination } from './Layout.js';
+import { Pagination, type PaginationProps } from './Layout.js';
 import { Table, type TableColumn, type TableProps } from './Table.js';
 import { cx, type CSSVariables } from './utils/cx.js';
 import { useControllable } from './utils/useControllable.js';
+import { ColumnChooser } from './Worklist.js';
 
 export interface CodeBlockProps extends HTMLAttributes<HTMLDivElement> {
   code: string; language?: string; lineNumbers?: boolean; copy?: boolean;
@@ -92,6 +93,8 @@ export interface DataColumn<Row> extends TableColumn<Row> {
   filterValue?: (row: Row) => string;
   /** Enables server sorting without requiring a local value accessor. */
   sortable?: boolean;
+  /** Keep an identifying column visible when the column chooser is enabled. */
+  hideable?: boolean;
 }
 
 export type DataTableRowKey = ReturnType<TableProps<unknown>['getRowKey']>;
@@ -111,7 +114,29 @@ export interface DataTableState {
   query: string;
   /** One-based page index. */
   page: number;
+  /** Rows per page. When omitted, the pageSize prop is used. */
+  pageSize?: number;
   sort?: { key: string; descending: boolean };
+}
+
+export interface DataTableColumnVisibility {
+  visibleKeys?: readonly string[];
+  defaultVisibleKeys?: readonly string[];
+  onChange?: (keys: readonly string[]) => void;
+  label?: string;
+}
+
+export interface DataTableLabels {
+  rowsPerPage?: string;
+  rowRange?: (range: { first: number; last: number; total: number }) => ReactNode;
+  selectionColumn?: string;
+  selectedCount?: (count: number) => ReactNode;
+  clearSelection?: string;
+  loading?: ReactNode;
+  refreshing?: ReactNode;
+  error?: ReactNode;
+  retry?: string;
+  pagination?: PaginationProps['labels'];
 }
 
 export interface DataTableRemote {
@@ -126,6 +151,13 @@ export interface DataTableRemote {
 
 export interface DataTableProps<Row> extends Omit<TableProps<Row>, 'columns'> {
   columns: DataColumn<Row>[]; pageSize?: number; searchLabel?: string;
+  /** Controls the query, page, and sort for client-side data. Remote mode uses remote.state. */
+  state?: DataTableState;
+  defaultState?: DataTableState;
+  onStateChange?: (state: DataTableState) => void;
+  pageSizeOptions?: readonly number[];
+  columnVisibility?: DataTableColumnVisibility;
+  labels?: DataTableLabels;
   toolbar?: ReactNode;
   emptyMessage?: ReactNode;
   noResultsMessage?: ReactNode;
@@ -136,11 +168,17 @@ export interface DataTableProps<Row> extends Omit<TableProps<Row>, 'columns'> {
 }
 
 const noSelection: readonly DataTableRowKey[] = [];
+const initialTableState: DataTableState = { query: '', page: 1 };
 
 export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize = 10,
+  state: controlledState, defaultState = initialTableState, onStateChange, pageSizeOptions, columnVisibility, labels,
   searchLabel = 'Filter rows', toolbar, emptyMessage = 'No rows yet.', noResultsMessage = 'No matching rows.',
   selection, remote, className, ...props }: DataTableProps<Row>) {
-  const [local, setLocal] = useState<DataTableState>({ query: '', page: 1 });
+  const [local, setLocal] = useControllable(controlledState, defaultState, onStateChange);
+  const [columnKeys, setColumnKeys] = useControllable<readonly string[] | undefined>(
+    columnVisibility?.visibleKeys, columnVisibility?.defaultVisibleKeys,
+    (keys) => { if (keys !== undefined) columnVisibility?.onChange?.(keys); },
+  );
   const state = remote?.state ?? local;
   const searchField = useRef<HTMLInputElement>(null);
   const { query, page, sort } = state;
@@ -171,14 +209,21 @@ export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize 
     }
     return matching;
   }, [columns, isRemote, query, rows, sort]);
-  const limit = Math.max(1, Number.isFinite(pageSize) ? Math.floor(pageSize) : 10);
-  const count = Math.max(1, Math.ceil((remote?.totalRows ?? visible.length) / limit));
-  const current = Math.min(Math.max(page, 1), count);
+  const requestedSize = state.pageSize ?? pageSize;
+  const limit = Math.max(1, Number.isFinite(requestedSize) ? Math.floor(requestedSize) : 10);
+  const suppliedTotal = remote?.totalRows ?? visible.length;
+  const total = Number.isFinite(suppliedTotal) ? Math.max(0, Math.floor(suppliedTotal)) : 0;
+  const count = Math.max(1, Math.ceil(total / limit));
+  const current = Math.min(Math.max(Number.isFinite(page) ? Math.floor(page) : 1, 1), count);
   const busy = remote?.status === 'loading' || remote?.status === 'refreshing';
   const pageRows = (isRemote ? visible : visible.slice((current - 1) * limit, current * limit)).map(({ row, index }) => ({
     row, key: getRowKey(row, index), selectable: !busy && (selection ? selection.isRowSelectable?.(row) ?? true : false),
   }));
-  const prepared = columns.map((entry): TableColumn<typeof pageRows[number]> => {
+  const visibleColumns = columnVisibility && columnKeys
+    ? columns.filter(({ key, hideable }) => hideable === false || columnKeys.includes(key))
+    : columns;
+  const displayedColumns = visibleColumns.length ? visibleColumns : columns.slice(0, 1);
+  const prepared = displayedColumns.map((entry): TableColumn<typeof pageRows[number]> => {
     const cell = { ...entry, render: ({ row }: typeof pageRows[number]) => entry.render
       ? entry.render(row) : String(row[entry.key as keyof Row] ?? '') };
     if (isRemote ? !(entry.sortable ?? Boolean(entry.sortValue)) : !entry.sortValue) return cell;
@@ -209,7 +254,7 @@ export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize 
         toggle(keys, event.currentTarget.checked);
       }} />;
     prepared.unshift({ key, label: '', align: 'center',
-      header: <span className="ut-sr-only">Selection</span>,
+      header: <span className="ut-sr-only">{labels?.selectionColumn ?? 'Selection'}</span>,
       render: ({ row, key: rowKey, selectable }) => <Checkbox
         aria-label={selection.getRowCheckboxLabel?.(row, rowKey) ?? `Select row ${rowKey}`}
         checked={selected.has(rowKey)} disabled={!selectable} onClick={(event) => event.stopPropagation()}
@@ -218,29 +263,50 @@ export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize 
   }
   const search = <SearchInput ref={searchField} aria-label={searchLabel} placeholder={searchLabel} value={query}
     onChange={(event) => update({ ...state, query: event.target.value, page: 1 })} />;
+  const chooser = columnVisibility && columns.length > 0 && <ColumnChooser label={columnVisibility.label}
+    columns={columns.map(({ key, label, header, hideable }) => ({
+      key, label: label ?? (typeof header === 'string' ? header : key), required: hideable === false,
+    }))}
+    visible={displayedColumns.map(({ key }) => key)} onChange={setColumnKeys} />;
+  const sizes = pageSizeOptions?.filter((size) => Number.isSafeInteger(size) && size > 0) ?? [];
+  const range = { first: total ? (current - 1) * limit + 1 : 0, last: Math.min(current * limit, total), total };
+  const sizePicker = sizes.length > 0 && <label className="data-table-page-size">
+    <span>{labels?.rowsPerPage ?? 'Rows per page'}</span>
+    <Select value={limit} onChange={(event) => update({ ...state, pageSize: Number(event.target.value), page: 1 })}>
+      {[...new Set([limit, ...sizes])].sort((a, b) => a - b).map((size) => <option key={size}>{size}</option>)}
+    </Select>
+  </label>;
+  const pagination = count > 1 && <Pagination page={current} totalPages={count} labels={labels?.pagination}
+    onPageChange={(page) => update({ ...state, page })} />;
   return <div className={cx('data-table', className)} data-ut-slot="data-table">
-    {selection || toolbar != null ? <div className="data-table-controls" data-ut-slot="data-table-toolbar">
-      {search}{pageCheckbox}{toolbar}
+    {selection || toolbar != null || chooser ? <div className="data-table-controls" data-ut-slot="data-table-toolbar">
+      {chooser}{search}{pageCheckbox}{toolbar}
     </div> : search}
     {selection && <div className="data-table-status" data-ut-slot="data-table-selection" hidden={selected.size === 0}>
-      <span aria-live="polite">{selected.size > 0 && `${selected.size} selected across pages`}</span>
+      <span aria-live="polite">{selected.size > 0 && (labels?.selectedCount?.(selected.size) ?? `${selected.size} selected across pages`)}</span>
       <button type="button" className="btn btn-sm btn-plain" onClick={() => {
         searchField.current?.focus();
         setSelectedKeys([]);
-      }}>Clear selection</button>
+      }}>{labels?.clearSelection ?? 'Clear selection'}</button>
     </div>}
     {busy && <p role="status" className="muted data-table-status">
-      {remote.status === 'loading' ? 'Loading rows…' : 'Updating rows…'}
+      {remote.status === 'loading' ? labels?.loading ?? 'Loading rows…' : labels?.refreshing ?? 'Updating rows…'}
     </p>}
     {remote?.status === 'error' && <div className="data-table-status">
-      <p role="alert">{remote.error ?? 'Could not load rows.'}</p>
-      {remote.onRetry && <button type="button" className="btn btn-sm" onClick={remote.onRetry}>Retry</button>}
+      <p role="alert">{remote.error ?? labels?.error ?? 'Could not load rows.'}</p>
+      {remote.onRetry && <button type="button" className="btn btn-sm" onClick={remote.onRetry}>{labels?.retry ?? 'Retry'}</button>}
     </div>}
     <Table {...props} aria-busy={isRemote ? busy : props['aria-busy']} columns={prepared} rows={pageRows} getRowKey={({ key }) => `${typeof key}:${key}`}
       onRowClick={onRowClick && (({ row }) => onRowClick(row))} />
     {visible.length === 0 && !busy && remote?.status !== 'error' && <p role="status" className="muted">
       {query.trim() ? noResultsMessage : emptyMessage}
     </p>}
-    {count > 1 && <Pagination page={current} totalPages={count} onPageChange={(page) => update({ ...state, page })} />}
+    {sizePicker || labels?.rowRange ? <div className="data-table-footer" data-ut-slot="data-table-pagination">
+      {sizePicker}
+      <span className="muted" aria-live="polite">
+        {labels?.rowRange?.(range) ?? `${range.first}–${range.last} of ${range.total}`}
+      </span>
+      {pagination}
+    </div> : pagination}
   </div>;
 }

@@ -8,6 +8,50 @@ import {
   type DataTableRowKey, type DataTableState,
 } from '../src/react/index.js';
 
+test('table views keep required columns, preserve selection and localize page controls', async () => {
+  const user = userEvent.setup();
+  const rows = [{ id: 'a', project: 'Atlas', owner: 'Design' }, { id: 'b', project: 'Beacon', owner: 'Engineering' }];
+  render(<DataTable rows={rows} getRowKey={(row) => row.id}
+    columns={[{ key: 'project', header: 'Project', hideable: false }, { key: 'owner', header: 'Owner' }]}
+    columnVisibility={{ defaultVisibleKeys: ['owner'] }} selection={{}} pageSize={1} pageSizeOptions={[1, 2]}
+    labels={{ rowsPerPage: 'Page length', pagination: { next: 'Forward' },
+      rowRange: ({ first, last, total }) => `Rows ${first} to ${last} from ${total}` }} />);
+  await user.click(screen.getByRole('checkbox', { name: 'Select row a' }));
+  await user.click(screen.getByRole('button', { name: 'Forward' }));
+  expect(screen.getByText('Rows 2 to 2 from 2')).toBeVisible();
+  await user.selectOptions(screen.getByRole('combobox', { name: 'Page length' }), '2');
+  expect(screen.getByText('Rows 1 to 2 from 2')).toBeVisible();
+  expect(screen.getByRole('checkbox', { name: 'Select row a' })).toBeChecked();
+  await user.click(screen.getByRole('button', { name: 'Columns' }));
+  expect(screen.getByRole('checkbox', { name: 'Project' })).toBeDisabled();
+  await user.click(screen.getByRole('checkbox', { name: 'Owner' }));
+  expect(screen.queryByRole('columnheader', { name: 'Owner' })).not.toBeInTheDocument();
+  expect(screen.getByRole('columnheader', { name: 'Project' })).toBeVisible();
+});
+
+test('controlled client and remote views report changes without mutating supplied state', async () => {
+  const user = userEvent.setup();
+  const onStateChange = vi.fn();
+  const onColumnsChange = vi.fn();
+  const rows = [{ id: 'a', name: 'Atlas', owner: 'Design' }];
+  const columns = [{ key: 'name', header: 'Project' }, { key: 'owner', header: 'Owner' }];
+  const base = { rows, columns, getRowKey: (row: typeof rows[number]) => row.id };
+  const state = { query: '', page: 3, pageSize: 1 };
+  const { rerender } = render(<DataTable {...base} state={state} onStateChange={onStateChange}
+    columnVisibility={{ visibleKeys: ['name', 'owner'], onChange: onColumnsChange }} />);
+  fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'atlas' } });
+  expect(onStateChange).toHaveBeenCalledWith({ ...state, query: 'atlas', page: 1 });
+  expect(screen.getByRole('searchbox')).toHaveValue('');
+  await user.click(screen.getByRole('button', { name: 'Columns' }));
+  await user.click(screen.getByRole('checkbox', { name: 'Owner' }));
+  expect(onColumnsChange).toHaveBeenCalledWith(['name']);
+  expect(screen.getByRole('columnheader', { name: 'Owner' })).toBeVisible();
+  rerender(<DataTable {...base} pageSizeOptions={[1, 5]} remote={{ state, totalRows: 12, onStateChange }} />);
+  await user.selectOptions(screen.getByRole('combobox', { name: 'Rows per page' }), '5');
+  expect(onStateChange).toHaveBeenLastCalledWith({ ...state, pageSize: 5, page: 1 });
+  expect(screen.getByRole('combobox', { name: 'Rows per page' })).toHaveValue('1');
+});
+
 test('keyboard users can sort a remote review queue and select eligible rows across pages without activating a row', async () => {
   const user = userEvent.setup();
   const open = vi.fn();

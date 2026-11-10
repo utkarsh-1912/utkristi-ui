@@ -3,7 +3,7 @@ import { IconButton } from './Button.js';
 import { ControlIcon } from './ControlIcon.js';
 import { ArrowLeftIconData } from './icons/generated/ArrowLeftIcon.js';
 import { ArrowRightIconData } from './icons/generated/ArrowRightIcon.js';
-import { Popover } from './Overlays.js';
+import { Popover } from './Popover.js';
 import { assignRef, cx } from './utils/cx.js';
 import { useControllable } from './utils/useControllable.js';
 import { useId } from './utils/useId.js';

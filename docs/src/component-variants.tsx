@@ -366,9 +366,63 @@ export const componentVariants = {
     RequiredColumn, menuHtml('Visible columns', '<label class="choice"><input type="checkbox" class="checkbox" checked disabled> Project</label><label class="choice"><input type="checkbox" class="checkbox" checked> Owner</label>')),
   'filter-bar--chips': example('Removable active filter', 'Show the active team as a removable chip.',
     FilterChips, '<div class="worklist-filters" role="group" aria-label="Filters"><button class="btn btn-ghost" data-ut-reveal="active-team">Filter by Design</button><button id="active-team" class="btn btn-ghost" data-ut-dismiss="active-team">Remove filter Team: Design</button></div>'),
-  'data-table--page-size': example('Compact page size', 'Render one row per page while retaining selection.',
-    () => <DataTable rows={projects} columns={[{ key: 'name', header: 'Project', sortValue: (row) => row.name }]} getRowKey={(row) => row.id} pageSize={1} selection={{}} />,
-    '<label class="field">Filter projects<input class="input" type="search" data-ut-filter="compact-projects"></label><div class="table-wrap"><table class="table"><thead><tr><th scope="col">Project</th></tr></thead><tbody id="compact-projects"><tr data-ut-option><td>Studio</td></tr><tr data-ut-option><td>Atlas</td></tr></tbody></table></div>'),
+  'data-table--page-size': example('Configurable project table', 'Change page size and hide optional columns while retaining selection.',
+    () => <section data-ut-density="compact">
+      <DataTable rows={projects} columns={[{ key: 'name', header: 'Project', hideable: false, sortValue: (row) => row.name },
+        { key: 'owner', header: 'Owner' }]} getRowKey={(row) => row.id}
+      pageSize={1} pageSizeOptions={[1, 2]} columnVisibility={{}} selection={{}} />
+    </section>,
+    `<section id="configurable-projects" class="data-table" data-ut-density="compact">
+  <div class="data-table-controls">
+    <label class="field">Filter projects <input class="input" type="search"></label>
+    <label class="choice"><input class="checkbox" type="checkbox" checked> Show owner</label>
+  </div>
+  <div class="table-wrap" role="region" aria-label="Projects" tabindex="0">
+    <table class="table" data-density="compact">
+      <thead><tr><th scope="col">Project</th><th scope="col" data-owner>Owner</th></tr></thead>
+      <tbody>
+        <tr><td>Studio</td><td data-owner>Design</td></tr>
+        <tr hidden><td>Atlas</td><td data-owner>Engineering</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="data-table-footer">
+    <label class="data-table-page-size">Rows per page
+      <select class="select"><option>1</option><option>2</option></select>
+    </label>
+    <output aria-live="polite">1–1 of 2</output>
+    <nav class="pagination" aria-label="Pagination">
+      <button class="btn btn-sm btn-ghost" type="button" disabled>Previous</button>
+      <button class="btn btn-sm btn-ghost" type="button">Next</button>
+    </nav>
+  </div>
+</section>
+<script>
+  const projects = document.getElementById("configurable-projects");
+  const search = projects.querySelector('input[type="search"]');
+  const owner = projects.querySelector('input[type="checkbox"]');
+  const size = projects.querySelector("select");
+  const [previous, next] = projects.querySelectorAll("nav button");
+  const rows = [...projects.querySelectorAll("tbody tr")];
+  let page = 0;
+  function render() {
+    const limit = Number(size.value);
+    const matches = rows.filter(row => row.textContent.toLowerCase().includes(search.value.trim().toLowerCase()));
+    const visible = matches.slice(page * limit, (page + 1) * limit);
+    rows.forEach(row => { row.hidden = !visible.includes(row); });
+    projects.querySelectorAll("[data-owner]").forEach(cell => { cell.hidden = !owner.checked; });
+    const first = visible.length ? page * limit + 1 : 0;
+    const last = Math.min((page + 1) * limit, matches.length);
+    projects.querySelector("output").textContent = first + "–" + last + " of " + matches.length;
+    previous.disabled = page === 0;
+    next.disabled = last >= matches.length;
+  }
+  search.addEventListener("input", () => { page = 0; render(); });
+  size.addEventListener("change", () => { page = 0; render(); });
+  owner.addEventListener("change", render);
+  previous.addEventListener("click", () => { page--; render(); });
+  next.addEventListener("click", () => { page++; render(); });
+</script>`),
   'direction--rtl': example('Right-to-left controls', 'Mirror alignment and navigation order for Arabic.',
     () => <Direction dir="rtl" lang="ar"><ButtonGroup><Button variant="ghost">السابق</Button><Button>التالي</Button></ButtonGroup></Direction>,
     '<div dir="rtl" lang="ar"><div class="button-group"><button class="btn btn-ghost">السابق</button><button class="btn btn-solid">التالي</button></div></div>'),

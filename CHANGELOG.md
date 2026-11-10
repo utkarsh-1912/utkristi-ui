@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added controlled table views, page-size selection, column visibility, translatable table controls, and scoped control density.
+
 - Removed the full icon catalog from control bundles and added an `@utkristi/ui/icons` entry and a CI bundle budget.
 - Added table density, sticky headers, a toolbar, selection clearing, and click protection for controls inside rows.
 - Added scoped CSS and form submission and reset support for Combobox and DatePicker.

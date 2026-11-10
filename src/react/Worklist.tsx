@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Button } from './Button.js';
 import { Checkbox } from './Choice.js';
 import { Field, Input } from './Field.js';
-import { Popover } from './Overlays.js';
+import { Popover } from './Popover.js';
 
 export interface FilterBarProps {
   children?: ReactNode;

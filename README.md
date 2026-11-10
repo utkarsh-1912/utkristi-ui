@@ -26,6 +26,8 @@ The Project Worklist demonstrates a controlled remote `DataTable`, request cance
 
 Pass `remote={{ state, onStateChange, totalRows, status }}` to `DataTable` with the current server page in `rows`. Use `toolbar` for app filters and actions, `density` for row spacing, and `stickyHeader` for a bounded scroll region. Set `--ut-table-height` on the table's container to adjust the region height. The header checkbox selects eligible rows on the current page. The selection summary counts keys across pages and can clear the selection. Render row action buttons or links inside a column to make them reachable with Tab.
 
+Use `state` and `onStateChange` to control a client-side table from a URL or saved view. With `pageSizeOptions`, the table emits `state.pageSize` and resets to page one when the size changes. In remote mode, use that size when fetching and fall back to the `pageSize` prop when it is omitted. Enable `columnVisibility` for an editable column view and set `hideable: false` on required columns. Hidden columns remain searchable. Use `labels` to translate pagination, selection, loading, and retry controls.
+
 
 ## Install
 
@@ -90,6 +92,8 @@ To embed the kit in an existing app, import `@utkristi/ui/scoped.css` and wrap i
 Give a `Combobox` or `DatePicker` a `name` inside a form to include it in `FormData`. `Combobox` submits selected option values and uses repeated entries for multiple selection. `DatePicker` accepts a local `YYYY-MM-DD` string or a `Date` and submits the calendar date as `YYYY-MM-DD`. Use `onDateValueChange` for string state. Both pickers use their surrounding `Field` label and description. Uncontrolled pickers restore their defaults when the form resets.
 
 Set `data-ut-radius="square"`, `"soft"`, `"round"`, or `"pill"` on a component or section in any theme. Use `--ut-shape-radius` for a custom value. In React, buttons, cards, inputs, dialogs, and video players accept `radius` and `inlineSize` as pixel numbers or CSS values. In HTML, set `inline-size` on the component and add `btn-fit` to let a fixed-width button wrap its label.
+
+Set `data-ut-density="compact"` or `"comfortable"` on a section to adjust default button and field heights in React or native markup. Explicit button sizes still apply, and portalled dialogs inherit the density of their trigger's section.
 
 ```tsx
 <Button radius={0} inlineSize={176}>Create project</Button>

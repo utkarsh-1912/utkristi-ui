@@ -470,6 +470,15 @@
 [data-ut-radius="round"] { --ut-shape-radius: 18px; }
 [data-ut-radius="pill"] { --ut-shape-radius: 999px; }
 
+[data-ut-density="compact"] {
+  --ut-field-height: 40px;
+  --ut-button-default-height: 36px;
+}
+[data-ut-density="comfortable"] {
+  --ut-field-height: 48px;
+  --ut-button-default-height: 44px;
+}
+
 /* Template presets resolve against the nearest appearance's palette. */
 [data-ut-preset="signal"] {
   --ut-template-fill: var(--ut-hue-violet-base);

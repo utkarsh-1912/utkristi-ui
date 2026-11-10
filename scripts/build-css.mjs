@@ -11,6 +11,26 @@ const [tokens, base, components] = await Promise.all(
 const css = [tokens, base, components].join('\n\n');
 const { code } = await transform(css, { loader: 'css', minify: true, legalComments: 'none' });
 
+const scope = ':where([data-ut-scope])';
+function scopedStyles(source, kind) {
+  const sheet = postcss.parse(source);
+  sheet.walkRules((rule) => {
+    if (rule.parent.type === 'atrule' && rule.parent.name.endsWith('keyframes')) return;
+    if (kind === 'base' && rule.selector === 'body') {
+      rule.walkDecls(/^(margin|min-height)$/, (declaration) => declaration.remove());
+    }
+    rule.selectors = rule.selectors.flatMap((selector) => {
+      if (selector === ':root' || (kind === 'base' && /^(html|body)$/.test(selector))) return [scope];
+      if (kind === 'tokens') return [scope + selector, `${scope} ${selector}`];
+      if (kind === 'base' && selector.startsWith('*')) return [scope + selector.slice(1), `${scope} ${selector}`];
+      if (kind === 'components' && /^(\[data-ut-|:where\(\[data-ut-)/.test(selector)) return [scope + selector, `${scope} ${selector}`];
+      return [`${scope} ${selector}`];
+    });
+  });
+  return sheet.toString();
+}
+const scoped = [scopedStyles(tokens, 'tokens'), scopedStyles(base, 'base'), scopedStyles(components, 'components')].join('\n\n');
+
 const rules = postcss.parse(tokens).nodes.filter((node) => node.type === 'rule');
 const [shared, night, paper] = rules;
 const glass = rules.find((rule) => rule.selector.startsWith('.glass,'));
@@ -30,6 +50,7 @@ await mkdir(target(''), { recursive: true });
 await Promise.all([
   writeFile(target('utkristi-ui.css'), css),
   writeFile(target('utkristi-ui.min.css'), code),
+  writeFile(target('scoped.css'), scoped),
   copyFile(source('tokens'), target('tokens.css')),
   copyFile(source('fonts'), target('fonts.css')),
   writeFile(target('tokens.js'), `${exports}\nexport { night, paper, glass };\n`),

@@ -6,6 +6,7 @@ import { ArrowUpRight, Bell, Check, Copy, Ellipsis, FolderOpen, Plus, Search, Tr
 
 const modules: Record<string, unknown> = {
   react: React, 'react/jsx-runtime': jsxRuntime, '@utkristi/ui': kit,
+  '@utkristi/ui/utkristi-ui.css': {},
   'lucide-react': { ArrowUpRight, Bell, Check, Copy, Ellipsis, FolderOpen, Plus, Search, Trash2 },
 };
 const container = document.getElementById('playground');

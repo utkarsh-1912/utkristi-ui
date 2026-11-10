@@ -4,7 +4,12 @@ import {
 } from 'react';
 import { IconButton } from './Button.js';
 import { initDisclosures } from './dom.js';
-import { Icon } from './icons.js';
+import { ControlIcon } from './ControlIcon.js';
+import { ChevronDownIconData } from './icons/generated/ChevronDownIcon.js';
+import { CloseIconData } from './icons/generated/CloseIcon.js';
+import { MenuIconData } from './icons/generated/MenuIcon.js';
+import { MoreHorizontalIconData } from './icons/generated/MoreHorizontalIcon.js';
+import { SearchIconData } from './icons/generated/SearchIcon.js';
 import { Logo } from './Logo.js';
 import { Popover } from './Overlays.js';
 import { cx, type CSSVariables } from './utils/cx.js';
@@ -71,7 +76,7 @@ function NavEntry({ link, renderLink, className, hidden, onSelect, nested }: {
     tabIndex: hidden ? -1 : undefined, onClick: onSelect, children: linkContent(link) });
   return <details data-ut-disclosure="" className={cx('navbar-disclosure', nested && 'navbar-disclosure-nested')}>
     <summary className={cx(className, 'navbar-disclosure-trigger')} tabIndex={hidden ? -1 : undefined}
-      data-nav-current={currentLink(link) || undefined}>{linkContent(link)}<Icon name="chevronDown" size={14} /></summary>
+      data-nav-current={currentLink(link) || undefined}>{linkContent(link)}<ControlIcon glyph={ChevronDownIconData} size={14} /></summary>
     <div className="pop navbar-submenu" data-ut-enter="">
       {link.children.map((child) => <NavEntry key={child.href} link={child} renderLink={renderLink} nested
         className="navbar-overflow-link" onSelect={onSelect} />)}
@@ -91,9 +96,9 @@ function MobileSheet({ id, brand, links, renderLink, onSearch, searchLabel, shee
   const content = <div id={id} ref={ref} role="dialog" aria-modal="true" aria-label="Menu" tabIndex={-1} className={cx('sheet', dock && 'sheet-dock')}>
     <div className="sheet-top" onClickCapture={(event) => {
       if (event.target instanceof Element && event.target.closest('a[href]')) onClose();
-    }}>{brand}<IconButton ref={closeButton} label="Close menu" onClick={onClose}><Icon name="close" size={22} /></IconButton></div>
+    }}>{brand}<IconButton ref={closeButton} label="Close menu" onClick={onClose}><ControlIcon glyph={CloseIconData} size={22} /></IconButton></div>
     {onSearch && <button type="button" className="sheet-search" onClick={() => { onClose(); onSearch(); }}>
-      <Icon name="search" size={18} /><span>{searchLabel === 'Search' ? 'Search pages' : searchLabel}</span>
+      <ControlIcon glyph={SearchIconData} size={18} /><span>{searchLabel === 'Search' ? 'Search pages' : searchLabel}</span>
     </button>}
     <nav aria-label="Primary" className={cx('sheet-nav', !dock && 'sheet-lines')}>
       {links.map((link, index) => <div key={link.href} style={{ '--d': `${80 + index * 60}ms` } as CSSVariables}>
@@ -235,7 +240,7 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
     {collapsible && <div className="navbar-more" data-hidden={!overflow.length || undefined}
       aria-hidden={!overflow.length || undefined} data-current={overflow.some(currentLink) || undefined}>
       <Popover label="More navigation links" open={moreOpen && !!overflow.length} onOpenChange={setMoreOpen} align="end"
-        trigger={<><Icon name="more-horizontal" size={20} /><span className="ut-sr-only">More navigation links</span></>}>
+        trigger={<><ControlIcon glyph={MoreHorizontalIconData} size={20} /><span className="ut-sr-only">More navigation links</span></>}>
         {overflow.map((link) => <NavEntry key={link.href} link={link} renderLink={renderLink} className="navbar-overflow-link"
           onSelect={() => {
             setMoreOpen(false);
@@ -246,7 +251,7 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
   </nav> : null;
 
   const search = onSearch && <button type="button" className="navbar-search" aria-label={searchLabel} onClick={onSearch}>
-    <Icon name="search" size={16} />
+    <ControlIcon glyph={SearchIconData} size={16} />
     <span className="navbar-search-text" aria-hidden="true">{searchLabel}</span>
     {searchShortcut && <kbd className="kbd navbar-search-kbd" aria-hidden="true">{searchShortcut}</kbd>}
   </button>;
@@ -264,7 +269,7 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
           {search}
           {right}
           <IconButton ref={burger} label="Open menu" className="burger" aria-expanded={open} aria-controls={open ? id : undefined} onClick={() => setOpen(true)}>
-            <Icon name="menu" size={20} />
+            <ControlIcon glyph={MenuIconData} size={20} />
           </IconButton>
         </div>
       </div></div>

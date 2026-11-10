@@ -1,7 +1,10 @@
 import { forwardRef, type SelectHTMLAttributes } from 'react';
 import { IconButton, type IconButtonProps } from './Button.js';
 import { Select } from './Field.js';
-import { Icon } from './icons.js';
+import { ControlIcon } from './ControlIcon.js';
+import { LayersIconData } from './icons/generated/LayersIcon.js';
+import { MoonIconData } from './icons/generated/MoonIcon.js';
+import { SunIconData } from './icons/generated/SunIcon.js';
 import { Segmented, type SegmentedProps } from './Segmented.js';
 import { useTheme, type Theme } from './theme/ThemeProvider.js';
 
@@ -11,7 +14,7 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, Omit<IconButtonProps, '
   return <IconButton {...props} ref={ref} label={`Switch to ${next} theme`} onClick={(event) => {
     onClick?.(event);
     if (!event.defaultPrevented) setTheme(next);
-  }}><Icon name={next === 'glass' ? 'layers' : next === 'light' ? 'sun' : 'moon'} size={18} /></IconButton>;
+  }}><ControlIcon glyph={next === 'glass' ? LayersIconData : next === 'light' ? SunIconData : MoonIconData} size={18} /></IconButton>;
 });
 
 const items = [{ id: 'dark', label: 'Dark' }, { id: 'light', label: 'Light' }, { id: 'glass', label: 'Glass' }, { id: 'system', label: 'Auto' }];

@@ -178,19 +178,28 @@ export const catalog = {
     '<DeviceMockup device="phone">{content}</DeviceMockup>', '<div class="device-frame" data-device="phone"><div class="device-screen">App preview</div></div>'),
   'file-input': demo('File Input', 'Choose local files through a native, labelled file control.',
     () => <Field label="Upload artwork"><FileInput accept="image/*" multiple /></Field>,
-    '<Field label="Upload artwork"><FileInput accept="image/*" multiple /></Field>', '<label>Upload artwork<input type="file" class="input file-input" accept="image/*" multiple></label>'),
+    '<Field label="Upload artwork"><FileInput accept="image/*" multiple /></Field>', `<label class="field">
+  <span class="field-label">Upload artwork</span>
+  <input type="file" class="input file-input" accept="image/*" multiple>
+</label>`),
   'floating-input': demo('Floating Input', 'Keep the field label visible when the input has a value or focus.',
     () => <FloatingInput label="Workspace name" name="workspace" />,
     '<FloatingInput label="Workspace name" name="workspace" />', '<div class="floating-field"><input class="input" id="workspace" placeholder=" "><label for="workspace">Workspace name</label></div>'),
   'number-input': demo('Number Input', 'Use native numeric entry with minimum, maximum, and step constraints.',
     () => <Field label="Seats"><NumberInput min={1} max={100} defaultValue={8} /></Field>,
-    '<Field label="Seats"><NumberInput min={1} max={100} /></Field>', '<label>Seats<input class="input" type="number" min="1" max="100"></label>'),
+    '<Field label="Seats"><NumberInput min={1} max={100} /></Field>', `<label class="field">
+  <span class="field-label">Seats</span>
+  <input class="input" type="number" min="1" max="100">
+</label>`),
   'phone-input': demo('Phone Input', 'Offer a phone keyboard and telephone autofill on supported devices.',
     () => <Field label="Phone number"><PhoneInput placeholder="+91" /></Field>,
     '<Field label="Phone number"><PhoneInput /></Field>', '<label>Phone number<input class="input" type="tel" autocomplete="tel"></label>'),
   'time-input': demo('Time Input', 'Select a time with the browser’s locale-aware time control.',
     () => <Field label="Start time"><TimeInput defaultValue="09:30" /></Field>,
-    '<Field label="Start time"><TimeInput defaultValue="09:30" /></Field>', '<label>Start time<input class="input" type="time" value="09:30"></label>'),
+    '<Field label="Start time"><TimeInput defaultValue="09:30" /></Field>', `<label class="field">
+  <span class="field-label">Start time</span>
+  <input class="input" type="time" value="09:30">
+</label>`),
   gallery: demo('Gallery', 'Arrange artwork in a responsive grid with a maximum column count.',
     () => <Gallery columns={3}>{(['image', 'calendar', 'folder'] as const).map((name) => <figure key={name}>
       <AspectRatio className="catalog-frame" ratio={4 / 3}><Icon name={name} variant="duotone" size={40} /></AspectRatio><figcaption>{name}</figcaption></figure>)}</Gallery>,

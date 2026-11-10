@@ -1,5 +1,6 @@
 import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
-import { Icon } from './icons.js';
+import { ControlIcon } from './ControlIcon.js';
+import { CloseIconData } from './icons/generated/CloseIcon.js';
 import { assignRef, cx } from './utils/cx.js';
 
 export type Tone = 'neutral' | 'ok' | 'warn' | 'bad' | 'accent';
@@ -40,5 +41,5 @@ export const Chip = forwardRef<HTMLElement, ChipProps>(function Chip(
     : <span {...props} ref={setRef} className={classes}>{children}</span>;
   return onRemove ? <span className="chip-group">{chip}<button type="button" className="chip-remove"
     aria-label={removeLabel ?? `Remove ${typeof children === 'string' ? children : 'chip'}`}
-    onClick={onRemove}><Icon name="close" size={12} /></button></span> : chip;
+    onClick={onRemove}><ControlIcon glyph={CloseIconData} size={12} /></button></span> : chip;
 });

@@ -1,6 +1,7 @@
 import { forwardRef, useRef, type FormEventHandler, type HTMLAttributes, type ReactNode, type RefObject } from 'react';
 import { IconButton } from './Button.js';
-import { Icon } from './icons.js';
+import { ControlIcon } from './ControlIcon.js';
+import { CloseIconData } from './icons/generated/CloseIcon.js';
 import { assignRef, cx } from './utils/cx.js';
 import { useDialogFocus } from './utils/focus.js';
 import { geometryStyle, type ComponentGeometry } from './utils/geometry.js';
@@ -39,7 +40,7 @@ const ModalContent = forwardRef<HTMLElement, Omit<ModalProps, 'open'>>(function 
         <h3 className="modal-title" id={`${id}-title`}>{title}</h3>
         {description != null && <p className="modal-desc" id={`${id}-desc`}>{description}</p>}
       </div>
-      {onClose && <IconButton label="Close" onClick={onClose}><Icon name="close" size={20} /></IconButton>}
+      {onClose && <IconButton label="Close" onClick={onClose}><ControlIcon glyph={CloseIconData} size={20} /></IconButton>}
     </div>
     {children != null && <div className="modal-body">{children}</div>}
     {footer != null && <div className="modal-foot">{footer}</div>}

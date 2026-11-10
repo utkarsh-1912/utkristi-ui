@@ -24,6 +24,8 @@ The docs include component variants and a Blocks library with working project ma
 
 The Project Worklist demonstrates a controlled remote `DataTable`, request cancellation, retries, and bulk actions. Audit Explorer adds date filtering, visible columns, and a saved view. Roles and Access demonstrates permission editing in a sheet. All three include editable TSX and API references. The docs build also emits the worklist source as `r/project-worklist.json` for use with the matching package build.
 
+Pass `remote={{ state, onStateChange, totalRows, status }}` to `DataTable` with the current server page in `rows`. Use `toolbar` for app filters and actions, `density` for row spacing, and `stickyHeader` for a bounded scroll region. Set `--ut-table-height` on the table's container to adjust the region height. The header checkbox selects eligible rows on the current page. The selection summary counts keys across pages and can clear the selection. Render row action buttons or links inside a column to make them reachable with Tab.
+
 
 ## Install
 
@@ -82,6 +84,10 @@ React and React DOM 18 or later are peer dependencies. Pass icons as React nodes
 ## Themes and accessibility
 
 Night is the default. Set `data-theme="light"` for Paper, `data-theme="dark"` for Night, or `data-theme="glass"` for Glass. Use `data-theme="system"` to follow the operating-system preference for Night and Paper. These selectors also work on nested surfaces. `ThemeProvider` persists the preference and applies the resolved theme to the root. Render `themeScript()` in the document head to set the theme before paint. Override `--ut-*` variables to customize a theme and use the `light:`, `night:`, and `glass:` Tailwind variants for local adjustments.
+
+To embed the kit in an existing app, import `@utkristi/ui/scoped.css` and wrap its components in an element with `data-ut-scope` and your preferred `data-theme`. When using `ThemeProvider`, pass that element as its `target`. Table headers, cells, and field errors expose `data-ut-slot="table-header"`, `data-ut-slot="table-cell"`, and `data-ut-slot="field-error"` for custom styles. Import the full icon API from `@utkristi/ui/icons` or the main entry.
+
+Give a `Combobox` or `DatePicker` a `name` inside a form to include it in `FormData`. `Combobox` submits selected option values and uses repeated entries for multiple selection. `DatePicker` accepts a local `YYYY-MM-DD` string or a `Date` and submits the calendar date as `YYYY-MM-DD`. Use `onDateValueChange` for string state. Both pickers use their surrounding `Field` label and description. Uncontrolled pickers restore their defaults when the form resets.
 
 Set `data-ut-radius="square"`, `"soft"`, `"round"`, or `"pill"` on a component or section in any theme. Use `--ut-shape-radius` for a custom value. In React, buttons, cards, inputs, dialogs, and video players accept `radius` and `inlineSize` as pixel numbers or CSS values. In HTML, set `inline-size` on the component and add `btn-fit` to let a fixed-width button wrap its label.
 

@@ -1,5 +1,6 @@
 import { forwardRef, useRef, type ButtonHTMLAttributes, type HTMLAttributes, type ReactNode } from 'react';
-import { Icon } from './icons.js';
+import { ControlIcon } from './ControlIcon.js';
+import { ChevronDownIconData } from './icons/generated/ChevronDownIcon.js';
 import { cx } from './utils/cx.js';
 import { navigationIndex } from './utils/focus.js';
 import { useControllable } from './utils/useControllable.js';
@@ -15,7 +16,7 @@ export const Collapsible = forwardRef<HTMLDivElement, CollapsibleProps>(function
   const [expanded, setExpanded] = useControllable(open, defaultOpen, onOpenChange);
   return <div {...props} ref={ref} className={cx('collapsible', className)}>
     <button type="button" className="disclosure-trigger" aria-expanded={expanded} aria-controls={id} disabled={disabled}
-      onClick={() => setExpanded(!expanded)}>{label}<Icon name="chevronDown" /></button>
+      onClick={() => setExpanded(!expanded)}>{label}<ControlIcon glyph={ChevronDownIconData} /></button>
     <div id={id} className="disclosure-body" hidden={!expanded}>{children}</div>
   </div>;
 });
@@ -53,7 +54,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Acc
             if (next === undefined) return;
             event.preventDefault();
             triggers.current.get(enabled[next].id)?.focus();
-          }}>{item.label}<Icon name="chevronDown" /></button></h3>
+          }}>{item.label}<ControlIcon glyph={ChevronDownIconData} /></button></h3>
         <div id={panel} aria-labelledby={title} role="region" className="disclosure-body" hidden={!active}>{item.content}</div>
       </div>;
     })}

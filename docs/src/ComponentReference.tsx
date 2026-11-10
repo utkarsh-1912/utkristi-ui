@@ -21,7 +21,7 @@ export default function ComponentReference({ slug, html }: { slug: string; html:
           </div>
           <CopyCode text={`<link rel="stylesheet" href="./utkristi-ui.css">\n<script src="./utkristi-dom.js"></script>\n<div data-ut-motion="${exampleMotion(slug)}" data-ut-enter>\n${html}\n</div>\n<script>UtkristiDOM.initUI(document);</script>`} language="HTML / CSS / JS" /></> },
         { id: 'react', label: 'React', content: reactExample
-          ? <><p className="muted">Install the kit and import its stylesheet once in your app. This example includes its data and theme providers.</p>
+          ? <><p className="muted">Install the kit and use the example with its stylesheet and providers.</p>
             {template && <p className="muted">Copy the stylesheet from the Layout CSS tab and import it beside this example.</p>}
             <CopyCode text={reactExample} language="TSX" /></>
           : <p className="muted">The React example is temporarily unavailable. See the HTML tab for the markup.</p> },

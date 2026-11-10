@@ -3,7 +3,9 @@ import { Button } from './Button.js';
 import { Checkbox } from './Choice.js';
 import { Code } from './Code.js';
 import { SearchInput } from './Field.js';
-import { Icon } from './icons.js';
+import { ControlIcon } from './ControlIcon.js';
+import { CheckIconData } from './icons/generated/CheckIcon.js';
+import { CopyIconData } from './icons/generated/CopyIcon.js';
 import { Pagination } from './Layout.js';
 import { Table, type TableColumn, type TableProps } from './Table.js';
 import { cx, type CSSVariables } from './utils/cx.js';
@@ -29,7 +31,7 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(function Cod
     {(copy || title || language) && <div className="code-block-head">
       <span className="label">{title ?? language ?? 'Code'}</span>
       {copy && <Button size="sm" variant="quiet" className="code-block-copy" data-copied={status === 'Copied' || undefined}
-        iconLeft={<Icon name={status === 'Copied' ? 'check' : 'copy'} size={15} />} onClick={async () => {
+        iconLeft={<ControlIcon glyph={status === 'Copied' ? CheckIconData : CopyIconData} size={15} />} onClick={async () => {
         try { await navigator.clipboard.writeText(code); setFeedback({ code, message: 'Copied' }); }
         catch {
           setFeedback({ code, message: 'Could not copy. Select and copy the source manually.' });
@@ -124,6 +126,9 @@ export interface DataTableRemote {
 
 export interface DataTableProps<Row> extends Omit<TableProps<Row>, 'columns'> {
   columns: DataColumn<Row>[]; pageSize?: number; searchLabel?: string;
+  toolbar?: ReactNode;
+  emptyMessage?: ReactNode;
+  noResultsMessage?: ReactNode;
   /** Enables row and current-page selection. Use stable, unique keys from the data. */
   selection?: DataTableSelection<Row>;
   /** Treats rows as an already filtered, ordered, and paginated result. */
@@ -133,9 +138,11 @@ export interface DataTableProps<Row> extends Omit<TableProps<Row>, 'columns'> {
 const noSelection: readonly DataTableRowKey[] = [];
 
 export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize = 10,
-  searchLabel = 'Filter rows', selection, remote, className, ...props }: DataTableProps<Row>) {
+  searchLabel = 'Filter rows', toolbar, emptyMessage = 'No rows yet.', noResultsMessage = 'No matching rows.',
+  selection, remote, className, ...props }: DataTableProps<Row>) {
   const [local, setLocal] = useState<DataTableState>({ query: '', page: 1 });
   const state = remote?.state ?? local;
+  const searchField = useRef<HTMLInputElement>(null);
   const { query, page, sort } = state;
   const update = remote?.onStateChange ?? setLocal;
   const isRemote = remote !== undefined;
@@ -209,10 +216,19 @@ export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize 
         onChange={(event) => toggle([rowKey], event.currentTarget.checked)} />,
     });
   }
-  const search = <SearchInput aria-label={searchLabel} placeholder={searchLabel} value={query}
+  const search = <SearchInput ref={searchField} aria-label={searchLabel} placeholder={searchLabel} value={query}
     onChange={(event) => update({ ...state, query: event.target.value, page: 1 })} />;
-  return <div className={cx('data-table', className)}>
-    {selection ? <div className="data-table-controls">{search}{pageCheckbox}</div> : search}
+  return <div className={cx('data-table', className)} data-ut-slot="data-table">
+    {selection || toolbar != null ? <div className="data-table-controls" data-ut-slot="data-table-toolbar">
+      {search}{pageCheckbox}{toolbar}
+    </div> : search}
+    {selection && <div className="data-table-status" data-ut-slot="data-table-selection" hidden={selected.size === 0}>
+      <span aria-live="polite">{selected.size > 0 && `${selected.size} selected across pages`}</span>
+      <button type="button" className="btn btn-sm btn-plain" onClick={() => {
+        searchField.current?.focus();
+        setSelectedKeys([]);
+      }}>Clear selection</button>
+    </div>}
     {busy && <p role="status" className="muted data-table-status">
       {remote.status === 'loading' ? 'Loading rows…' : 'Updating rows…'}
     </p>}
@@ -222,7 +238,9 @@ export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize 
     </div>}
     <Table {...props} aria-busy={isRemote ? busy : props['aria-busy']} columns={prepared} rows={pageRows} getRowKey={({ key }) => `${typeof key}:${key}`}
       onRowClick={onRowClick && (({ row }) => onRowClick(row))} />
-    {visible.length === 0 && !busy && remote?.status !== 'error' && <p role="status" className="muted">No matching rows.</p>}
+    {visible.length === 0 && !busy && remote?.status !== 'error' && <p role="status" className="muted">
+      {query.trim() ? noResultsMessage : emptyMessage}
+    </p>}
     {count > 1 && <Pagination page={current} totalPages={count} onPageChange={(page) => update({ ...state, page })} />}
   </div>;
 }

@@ -1,6 +1,10 @@
 import { forwardRef, useEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { IconButton } from './Button.js';
-import { Icon } from './icons.js';
+import { ControlIcon } from './ControlIcon.js';
+import { ArrowDownIconData } from './icons/generated/ArrowDownIcon.js';
+import { ArrowLeftIconData } from './icons/generated/ArrowLeftIcon.js';
+import { ArrowRightIconData } from './icons/generated/ArrowRightIcon.js';
+import { ArrowUpIconData } from './icons/generated/ArrowUpIcon.js';
 import { cx } from './utils/cx.js';
 import { useId } from './utils/useId.js';
 
@@ -89,9 +93,9 @@ export const Carousel = forwardRef<HTMLElement, CarouselProps>(function Carousel
       <span className="label" role="status" aria-atomic="true">Slide {index + 1} of {count}</span>
       <div className="button-group" role="group" aria-label="Slide navigation">
         <IconButton className="carousel-arrow" label="Previous slide" aria-controls={id} disabled={count < 2 || (!loop && index === 0)}
-          onClick={() => go(index - 1)}><Icon name={vertical ? 'arrowUp' : 'arrowLeft'} /></IconButton>
+          onClick={() => go(index - 1)}><ControlIcon glyph={vertical ? ArrowUpIconData : ArrowLeftIconData} /></IconButton>
         <IconButton className="carousel-arrow" label="Next slide" aria-controls={id} disabled={count < 2 || (!loop && index === count - 1)}
-          onClick={() => go(index + 1)}><Icon name={vertical ? 'arrowDown' : 'arrowRight'} /></IconButton>
+          onClick={() => go(index + 1)}><ControlIcon glyph={vertical ? ArrowDownIconData : ArrowRightIconData} /></IconButton>
       </div>
     </div>}
     {children}

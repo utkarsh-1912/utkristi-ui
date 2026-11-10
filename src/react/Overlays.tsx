@@ -55,9 +55,10 @@ export const Drawer = forwardRef<HTMLElement, SheetProps>(function Drawer(
 export interface PopoverProps extends HTMLAttributes<HTMLDivElement> {
   trigger: ReactNode; label: string; open?: boolean; defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void; align?: 'start' | 'end';
+  triggerProps?: Pick<React.ButtonHTMLAttributes<HTMLButtonElement>, 'id' | 'form' | 'disabled' | 'aria-describedby' | 'aria-invalid' | 'aria-labelledby'>;
 }
 export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover(
-  { trigger, label, open, defaultOpen = false, onOpenChange, align = 'start', className, children, onKeyDown, ...props }, ref,
+  { trigger, label, open, defaultOpen = false, onOpenChange, align = 'start', className, children, onKeyDown, triggerProps, ...props }, ref,
 ) {
   const id = useId();
   const [shown, setShown] = useControllable(open, defaultOpen, onOpenChange);
@@ -89,7 +90,7 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover
     <div ref={anchor} className="popover-anchor" onBlur={(event) => {
       if (shown && !event.currentTarget.contains(event.relatedTarget)) setShown(false);
     }}>
-      <Button ref={(node) => { button.current = node; }} variant="ghost" aria-haspopup="dialog"
+      <Button {...triggerProps} ref={(node) => { button.current = node; }} variant="ghost" aria-haspopup="dialog"
         aria-expanded={shown} aria-controls={shown ? id : undefined} onClick={() => setShown(!shown)}>{trigger}</Button>
       {shown && <div ref={panel} id={id} role="dialog" aria-label={label} tabIndex={-1}
         className={cx('pop popover-panel', align === 'start' && 'pop-left')}>{children}</div>}

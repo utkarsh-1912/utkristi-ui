@@ -14,7 +14,7 @@ function namesIn(node: ts.Node) {
   return names;
 }
 
-function samples(file: string, text: string, recordName: string) {
+function samples(file: string, text: string, recordName: string, includeStyles = false) {
   const diagnostics = ts.transpileModule(text, { fileName: file, reportDiagnostics: true,
     compilerOptions: { jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 } }).diagnostics ?? [];
   const error = diagnostics.find((diagnostic) => diagnostic.category === ts.DiagnosticCategory.Error);
@@ -39,10 +39,13 @@ function samples(file: string, text: string, recordName: string) {
     if (!ts.isPropertyAssignment(property)) return [];
     const key = property.name.getText(source).replace(/^['"]|['"]$/g, '');
     const item = property.initializer;
-    const preview = ts.isCallExpression(item) ? item.arguments[2] : ts.isObjectLiteralExpression(item)
+    const propertyValue = (name: string) => ts.isObjectLiteralExpression(item)
       ? item.properties.find((entry): entry is ts.PropertyAssignment =>
-        ts.isPropertyAssignment(entry) && entry.name.getText(source) === 'preview')?.initializer : undefined;
+        ts.isPropertyAssignment(entry) && entry.name.getText(source) === name)?.initializer : undefined;
+    const preview = ts.isCallExpression(item) ? item.arguments[2] : propertyValue('preview');
+    const html = ts.isCallExpression(item) ? item.arguments[item.arguments.length - 1] : propertyValue('html');
     if (!preview) throw new Error('Missing preview for ' + key);
+    if (!html || html === preview || (ts.isStringLiteralLike(html) && !html.text.trim())) throw new Error('Missing HTML source for ' + key);
     const names = namesIn(preview);
     const fixtures = new Set<ts.Statement>();
     for (const name of names) {
@@ -68,6 +71,7 @@ function samples(file: string, text: string, recordName: string) {
     const code = [
       ...selected,
       "import { ThemeProvider, ToastProvider, type ResolvedTheme } from '@utkristi/ui';",
+      includeStyles ? "import '@utkristi/ui/utkristi-ui.css';" : '',
       fixtureText,
       ts.isIdentifier(preview) ? '' : 'const Preview = ' + preview.getText(source) + ';',
       `export default function Example({ theme }: { theme?: ResolvedTheme } = {}) {
@@ -187,7 +191,7 @@ export function docsPlayground(docs: string, source: string): Plugin {
         const entries = await Promise.all(registries.map(async ([file, name]) => {
           const path = join(docs, 'src', file + '.tsx');
           this.addWatchFile(path);
-          return samples(path, await readFile(path, 'utf8'), name);
+          return samples(path, await readFile(path, 'utf8'), name, true);
         }));
         const examples = Object.assign({}, ...entries) as ReturnType<typeof samples>;
         const api = apiFor(docs, source, examples);

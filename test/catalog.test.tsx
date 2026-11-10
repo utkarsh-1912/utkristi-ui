@@ -3,9 +3,86 @@ import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { expect, test, vi } from 'vitest';
 import {
-  Accordion, AlertDialog, Calendar, Carousel, ColumnChooser, Combobox, Command, ContextMenu, DataTable, DatePicker, DateRangePicker,
+  Accordion, AlertDialog, Calendar, Carousel, ColumnChooser, Combobox, Command, ContextMenu, DataTable, DatePicker, DateRangePicker, Field,
   InputOTP, Loader, Progress, Questionnaire, Resizable, SelectMenu, ToastProvider, useToast,
+  type DataTableRowKey, type DataTableState,
 } from '../src/react/index.js';
+
+test('keyboard users can sort a remote review queue and select eligible rows across pages without activating a row', async () => {
+  const user = userEvent.setup();
+  const open = vi.fn();
+  const menu = vi.fn();
+  const approve = vi.fn();
+  const rows = [
+    { id: 'A', amount: 18, status: 'Pending' }, { id: 'B', amount: 12, status: 'Pending' },
+    { id: 'C', amount: 30, status: 'Pending' }, { id: 'D', amount: 4, status: 'Closed' },
+  ];
+  function Queue() {
+    const [state, setState] = useState<DataTableState>({ query: '', page: 1 });
+    const [selectedKeys, setSelectedKeys] = useState<readonly DataTableRowKey[]>([]);
+    const matching = rows.filter(({ status }) => status.toLowerCase().includes(state.query.toLowerCase()));
+    if (state.sort) matching.sort((a, b) => state.sort?.descending ? b.amount - a.amount : a.amount - b.amount);
+    return <DataTable caption="Reconciliation queue" density="compact" stickyHeader
+      toolbar={<button disabled={!selectedKeys.length} onClick={() => approve(selectedKeys)}>Approve selected</button>}
+      rows={matching.slice((state.page - 1) * 2, state.page * 2)} pageSize={2} getRowKey={(row) => row.id} onRowClick={open}
+      columns={[{ key: 'amount', header: 'Amount', sortable: true },
+        { key: 'action', header: 'Actions', render: (row) => <button onClick={() => menu(row.id)}>Open menu</button> }]}
+      selection={{ selectedKeys, onSelectionChange: setSelectedKeys, isRowSelectable: (row) => row.id !== 'A' }}
+      remote={{ state, onStateChange: setState, totalRows: matching.length }} />;
+  }
+  render(<Queue />);
+  screen.getByRole('searchbox').focus();
+  await user.keyboard('pending');
+  screen.getByRole('button', { name: 'Amount' }).focus();
+  await user.keyboard('{Enter}');
+  expect(screen.getByRole('columnheader', { name: 'Amount' })).toHaveAttribute('aria-sort', 'ascending');
+  expect(screen.getByRole('checkbox', { name: 'Select row A' })).toBeDisabled();
+  screen.getByRole('checkbox', { name: 'Select all on this page' }).focus();
+  await user.keyboard(' ');
+  screen.getByRole('button', { name: 'Next page' }).focus();
+  await user.keyboard('{Enter}');
+  screen.getByRole('checkbox', { name: 'Select row C' }).focus();
+  await user.keyboard(' ');
+  expect(screen.getByText('2 selected across pages')).toBeVisible();
+  const action = screen.getByRole('button', { name: 'Open menu' });
+  action.focus();
+  await user.keyboard('{Enter}');
+  expect(menu).toHaveBeenCalledWith('C');
+  expect(open).not.toHaveBeenCalled();
+  screen.getByRole('button', { name: 'Approve selected' }).focus();
+  await user.keyboard('{Enter}');
+  expect(approve).toHaveBeenCalledWith(['B', 'C']);
+  screen.getByRole('button', { name: 'Clear selection' }).focus();
+  await user.keyboard('{Enter}');
+  expect(screen.getByRole('searchbox')).toHaveFocus();
+  expect(screen.getByRole('checkbox', { name: 'Select row C' })).not.toBeChecked();
+});
+
+test('form-backed pickers use Field labels and reset submitted values', async () => {
+  const user = userEvent.setup();
+  render(<form aria-label="Booking">
+    <Field label="Team" hint="Pick an owner" error="Review this team" required>
+      <Combobox name="team" options={[{ value: 'ops', label: 'Operations' }, { value: 'design', label: 'Design' }]} defaultValue={['ops']} />
+    </Field>
+    <Field label="Booking date" hint="Local calendar date">
+      <DatePicker name="bookingDate" defaultValue="2026-11-09" locale="en-US" />
+    </Field>
+    <button type="reset">Reset booking</button>
+  </form>);
+  const form = screen.getByRole<HTMLFormElement>('form', { name: 'Booking' });
+  const team = screen.getByRole('combobox', { name: 'Team' });
+  expect(team).toHaveAccessibleDescription('Pick an owner Review this team');
+  expect(team).toHaveAttribute('aria-invalid', 'true');
+  await user.click(team);
+  await user.click(screen.getByRole('option', { name: 'Design' }));
+  const date = screen.getByLabelText('Booking date');
+  expect(date).toHaveAccessibleDescription('Local calendar date');
+  await user.click(date);
+  await user.click(screen.getByRole('button', { name: 'Tuesday, November 10, 2026' }));
+  expect(Object.fromEntries(new FormData(form))).toEqual({ team: 'design', bookingDate: '2026-11-10' });
+  await user.click(screen.getByRole('button', { name: 'Reset booking' }));
+  expect(Object.fromEntries(new FormData(form))).toEqual({ team: 'ops', bookingDate: '2026-11-09' });
+});
 
 test('remote tables preserve server order and expose request controls with stable page selection', async () => {
   const user = userEvent.setup();

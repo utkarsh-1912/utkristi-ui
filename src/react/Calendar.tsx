@@ -1,10 +1,13 @@
 import { forwardRef, useRef, useState, type HTMLAttributes } from 'react';
 import { IconButton } from './Button.js';
-import { Icon } from './icons.js';
+import { ControlIcon } from './ControlIcon.js';
+import { ArrowLeftIconData } from './icons/generated/ArrowLeftIcon.js';
+import { ArrowRightIconData } from './icons/generated/ArrowRightIcon.js';
 import { Popover } from './Overlays.js';
 import { assignRef, cx } from './utils/cx.js';
 import { useControllable } from './utils/useControllable.js';
 import { useId } from './utils/useId.js';
+import { useControl, useFormReset } from './utils/field.js';
 
 function day(year: number, month: number, date: number) {
   const value = new Date(0);
@@ -57,9 +60,9 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
 
   return <div {...props} ref={ref} className={cx('calendar', className)}>
     <div className="calendar-header">
-      <IconButton label="Previous month" size="sm" onClick={() => moveMonth(-1)} disabled={!!min && day(year, month, 1) <= from(min)}><Icon name="arrowLeft" /></IconButton>
+      <IconButton label="Previous month" size="sm" onClick={() => moveMonth(-1)} disabled={!!min && day(year, month, 1) <= from(min)}><ControlIcon glyph={ArrowLeftIconData} /></IconButton>
       <strong id={id} aria-live="polite">{monthLabel}</strong>
-      <IconButton label="Next month" size="sm" onClick={() => moveMonth(1)} disabled={!!max && day(year, month + 1, 1) > from(max)}><Icon name="arrowRight" /></IconButton>
+      <IconButton label="Next month" size="sm" onClick={() => moveMonth(1)} disabled={!!max && day(year, month + 1, 1) > from(max)}><ControlIcon glyph={ArrowRightIconData} /></IconButton>
     </div>
     <table className="calendar-grid" aria-labelledby={id} role="grid">
       <thead><tr>{days.slice(0, 7).map((date) => <th key={+date} scope="col">{weekdayFormat.format(date)}</th>)}</tr></thead>
@@ -89,21 +92,58 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
   </div>;
 });
 
-export interface DatePickerProps extends CalendarProps { placeholder?: string; label?: string }
+function parseDateOnly(value: string) {
+  const parts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!parts) return undefined;
+  const [, year, month, date] = parts.map(Number);
+  const result = day(year, month - 1, date);
+  return result.getFullYear() === year && result.getMonth() === month - 1 && result.getDate() === date ? result : undefined;
+}
+
+function dateOnly(value?: Date | string) {
+  const date = typeof value === 'string' ? parseDateOnly(value) : value;
+  if (!date || !Number.isFinite(+date)) return '';
+  return [String(date.getFullYear()).padStart(4, '0'), date.getMonth() + 1, date.getDate()]
+    .map((part) => String(part).padStart(2, '0')).join('-');
+}
+
+export interface DatePickerProps extends Omit<CalendarProps, 'value' | 'defaultValue'> {
+  value?: Date | string;
+  defaultValue?: Date | string;
+  onDateValueChange?: (value: string) => void;
+  placeholder?: string;
+  label?: string;
+  name?: string;
+  form?: string;
+  disabled?: boolean;
+}
 export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(function DatePicker(
-  { value, defaultValue, onValueChange, locale, min, max, weekStartsOn, placeholder = 'Choose a date',
-    label = 'Calendar', className, ...props }, ref,
+  { value, defaultValue, onValueChange, onDateValueChange, locale, min, max, weekStartsOn, placeholder = 'Choose a date',
+    label = 'Calendar', className, name, form, disabled, ...props }, ref,
 ) {
-  const [selected, select] = useControllable<Date | undefined>(value, defaultValue, (date) => { if (date) onValueChange?.(date); });
+  const field = useControl({ 'aria-describedby': props['aria-describedby'], 'aria-invalid': props['aria-invalid'] });
+  const hidden = useRef<HTMLInputElement>(null);
+  const [selectedValue, select] = useControllable(value === undefined ? undefined : dateOnly(value), dateOnly(defaultValue), (next) => {
+    onDateValueChange?.(next);
+    const date = parseDateOnly(next);
+    if (date) onValueChange?.(date);
+  });
+  const selected = parseDateOnly(selectedValue);
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement | null>(null);
-  return <Popover {...props} ref={(node) => { root.current = node; assignRef(ref, node); }} label={label} className={cx('date-picker', className)} open={open} onOpenChange={setOpen}
+  useFormReset(hidden, () => {
+    select(dateOnly(defaultValue));
+    setOpen(false);
+  }, form);
+  return <><input ref={hidden} type="hidden" name={name} form={form} value={selectedValue} disabled={disabled} />
+  <Popover {...props} ref={(node) => { root.current = node; assignRef(ref, node); }} label={label} className={cx('date-picker', className)} open={!disabled && open} onOpenChange={setOpen}
+    triggerProps={{ id: field.id, form, disabled, 'aria-describedby': field['aria-describedby'], 'aria-invalid': field['aria-invalid'], 'aria-labelledby': props['aria-labelledby'] }}
     trigger={selected ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(selected) : placeholder}>
     <Calendar value={selected} locale={locale} weekStartsOn={weekStartsOn} min={min} max={max}
       onValueChange={(date) => {
-        select(date);
+        select(dateOnly(date));
         root.current?.querySelector<HTMLElement>('button[aria-haspopup="dialog"]')?.focus();
         setOpen(false);
       }} />
-  </Popover>;
+  </Popover></>;
 });

@@ -2,7 +2,11 @@ import { createContext, forwardRef, useCallback, useContext, useEffect, useMemo,
   type HTMLAttributes, type ReactNode } from 'react';
 import type { Tone } from './Badge.js';
 import { Button, IconButton } from './Button.js';
-import { Icon } from './icons.js';
+import { ControlIcon } from './ControlIcon.js';
+import { CheckIconData } from './icons/generated/CheckIcon.js';
+import { CloseIconData } from './icons/generated/CloseIcon.js';
+import { InfoIconData } from './icons/generated/InfoIcon.js';
+import { WarningIconData } from './icons/generated/WarningIcon.js';
 import { cx, type CSSVariables } from './utils/cx.js';
 import { Portal } from './utils/Portal.js';
 import { useId } from './utils/useId.js';
@@ -36,12 +40,12 @@ function ToastMessage({ entry, dismiss }: { entry: ToastEntry; dismiss: ToastCon
     onFocus={() => focus(true)} onBlur={(event) => {
       if (!event.currentTarget.contains(event.relatedTarget)) focus(false);
     }}>
-    <span className="toast-icon" aria-hidden="true"><Icon size={17} name={tone === 'ok' ? 'check' : tone === 'warn' || tone === 'bad' ? 'warning' : 'info'} /></span>
+    <span className="toast-icon" aria-hidden="true"><ControlIcon size={17} glyph={tone === 'ok' ? CheckIconData : tone === 'warn' || tone === 'bad' ? WarningIconData : InfoIconData} /></span>
     <div className="toast-content" role={tone === 'bad' ? 'alert' : 'status'} aria-atomic="true">
       <div className="toast-title">{title}</div>
       {body != null && <div className="toast-body">{body}</div>}
     </div>
-    <IconButton className="toast-dismiss" label="Dismiss notification" size="sm" onClick={() => dismiss(id)}><Icon name="close" /></IconButton>
+    <IconButton className="toast-dismiss" label="Dismiss notification" size="sm" onClick={() => dismiss(id)}><ControlIcon glyph={CloseIconData} /></IconButton>
     {action && <Button className="toast-action" size="sm" variant="quiet" onClick={() => { dismiss(id); action.onClick(); }}>{action.label}</Button>}
     {duration > 0 && <span className="toast-track" data-animated data-paused={hovered || focused || undefined} aria-hidden="true"
       style={{ '--ut-toast-duration': duration + 'ms' } as CSSVariables} />}

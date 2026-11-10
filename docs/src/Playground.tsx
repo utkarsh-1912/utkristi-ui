@@ -53,9 +53,10 @@ function draftKey(slug: string, mode: Mode) { return `utkristi-sandbox:${mode ==
 function readDraft(slug: string, mode: Mode, initial: string) {
   try {
     const saved = localStorage.getItem(draftKey(slug, mode));
-    if (saved !== null || mode !== 'html') return saved ?? initial;
+    if (saved !== null || mode !== 'html') return saved?.trim() ? saved : initial;
     const legacy = `utkristi-sandbox:v1:${slug}`;
-    const markup = localStorage.getItem(legacy + ':html') ?? initial;
+    const savedMarkup = localStorage.getItem(legacy + ':html');
+    const markup = savedMarkup?.trim() ? savedMarkup : initial;
     const javascript = localStorage.getItem(legacy + ':js')?.trim();
     return javascript && javascript !== legacyJavaScriptHint
       ? `${markup}\n<script>\n${safeScript(javascript)}\n</script>` : markup;
@@ -155,6 +156,7 @@ export default function Playground({ component, editorMode, initialMotion }: { c
 
   function changeMode(next: Mode) {
     setMode(next);
+    setPane('source');
     void compile(next === 'react' ? reactCode : htmlCode, next, theme);
   }
 

@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState, type CSSProperties, type VideoHTMLAttributes } from 'react';
 import { IconButton } from './Button.js';
 import { Select } from './Field.js';
-import { Icon } from './icons.js';
+import { ControlIcon } from './ControlIcon.js';
+import { FullscreenExitIconData } from './icons/generated/FullscreenExitIcon.js';
+import { FullscreenIconData } from './icons/generated/FullscreenIcon.js';
+import { PauseIconData } from './icons/generated/PauseIcon.js';
+import { RunIconData } from './icons/generated/RunIcon.js';
+import { VolumeMuteIconData } from './icons/generated/VolumeMuteIcon.js';
+import { VolumeUpIconData } from './icons/generated/VolumeUpIcon.js';
 import { cx } from './utils/cx.js';
 import { geometryStyle, type ComponentGeometry } from './utils/geometry.js';
 
@@ -101,7 +107,7 @@ function CustomVideo({ geometry, frameClassName, ...props }: VideoAttributes & {
     <video {...props} ref={media} controls={false} playsInline={props.playsInline ?? true} />
     <div className="video-controls" role="group" aria-label="Video controls">
       <IconButton className="video-play" label={paused ? 'Play' : 'Pause'} disabled={failed} onClick={() => void togglePlayback()}>
-        <Icon name={paused ? 'run' : 'pause'} />
+        <ControlIcon glyph={paused ? RunIconData : PauseIconData} />
       </IconButton>
       <input type="range" className="video-seek" aria-label="Seek"
         aria-valuetext={`${formatTime(time)} of ${formatTime(duration)}`} min={0} max={duration || 1} step="any"
@@ -119,7 +125,7 @@ function CustomVideo({ geometry, frameClassName, ...props }: VideoAttributes & {
           if (!video) return;
           if (muted && video.volume === 0) video.volume = 1;
           video.muted = !muted;
-        }}><Icon name={muted ? 'volume-mute' : 'volume-up'} /></IconButton>
+        }}><ControlIcon glyph={muted ? VolumeMuteIconData : VolumeUpIconData} /></IconButton>
         {captions.length > 0 && <Select aria-label="Captions" value={activeCaption}
           onChange={(event) => {
             const selected = Number(event.currentTarget.value);
@@ -130,7 +136,7 @@ function CustomVideo({ geometry, frameClassName, ...props }: VideoAttributes & {
           {captions.map((track, index) => <option key={index} value={index}>{track.label || track.language || `Track ${index + 1}`}</option>)}
         </Select>}
         {canFullscreen && <IconButton label={fullscreen ? 'Exit fullscreen' : 'Fullscreen'} onClick={() => void toggleFullscreen()}>
-          <Icon name={fullscreen ? 'fullscreen-exit' : 'fullscreen'} />
+          <ControlIcon glyph={fullscreen ? FullscreenExitIconData : FullscreenIconData} />
         </IconButton>}
       </div>
     </div>

@@ -120,7 +120,9 @@ async function captureEdge() {
       const { data } = await send('Page.captureScreenshot', { format: 'png', fromSurface: true, captureBeyondViewport: fullPage, clip });
       await writeFile(join(screenshots, `${file}.png`), Buffer.from(data, 'base64'));
     };
-    await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+    // Keep motion assertions independent of the runner's OS accessibility settings.
+    const setMotion = (value) => send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value }] });
+    await setMotion('reduce');
     await size(760, 480);
     await send('Fetch.enable', { patterns: [{ urlPattern: '*/assets/index-*.js' }] });
     try {
@@ -177,14 +179,14 @@ async function captureEdge() {
     await evaluate(`document.querySelector('.sheet-dock [aria-label="Close menu"]').click()`);
     if (!verifyOnly) process.stdout.write('Captured the overview, showcases, icon catalog, sandbox, enterprise templates, and both mobile views.\n');
     if (captureOnly) return;
-    await send('Emulation.setEmulatedMedia', { features: [] });
+    await setMotion('no-preference');
 
     await size(1280, 860);
     await load('/components/loader?theme=glass', 'Loader');
     await retry(() => evaluate('getComputedStyle(document.querySelector(".docs-example .loader-brand .brand-tile")).animationName === "ut-loader-assemble"'), 'animated brand loader');
-    await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+    await setMotion('reduce');
     await retry(() => evaluate('getComputedStyle(document.querySelector(".docs-example .loader-brand .brand-tile")).animationName === "none"'), 'static brand loader with reduced motion');
-    await send('Emulation.setEmulatedMedia', { features: [] });
+    await setMotion('no-preference');
     const { version } = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
     await load('/overview', 'A design system for Utkristi.');
     for (const [page, heading] of [['about', 'About'], ['terms', 'Terms'], ['privacy', 'Privacy']]) {
@@ -238,7 +240,7 @@ async function captureEdge() {
       const glass = getComputedStyle(document.querySelector('.shape-demo [data-theme="glass"] .card'));
       return glass.backdropFilter === 'none' && glass.backgroundColor === 'rgb(240, 237, 250)';
     })()`), 'Glass respects reduced transparency');
-    await send('Emulation.setEmulatedMedia', { features: [] });
+    await setMotion('no-preference');
 
     await load('/components/button?theme=glass', 'Button');
     await retry(() => evaluate(`(() => {
@@ -575,9 +577,9 @@ async function captureEdge() {
     await load('/components/navbar?variant=navbar-multilevel&theme=glass', 'Navbar');
     await retry(() => evaluate('document.querySelector(".docs-example select[aria-label=\'Example variant\']").value === "navbar-multilevel"'), 'navbar variant deep link');
     await retry(() => evaluate('getComputedStyle(document.querySelector(".docs-example [data-ut-enter]")).animationName === "ut-appear-slide"'), 'variant entry motion');
-    await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+    await setMotion('reduce');
     await retry(() => evaluate('getComputedStyle(document.querySelector(".docs-example [data-ut-enter]")).animationName === "none"'), 'variant respects reduced motion');
-    await send('Emulation.setEmulatedMedia', { features: [] });
+    await setMotion('no-preference');
 
     await load('/getting-started', 'Getting started');
     const links = await evaluate(`Array.from(document.querySelectorAll('.doc-sidebar a'), link => [link.hash.slice(1), link.textContent])`);
@@ -702,7 +704,7 @@ async function captureEdge() {
     })`), 'independent Night, Paper and Glass icon renders');
     await send('Emulation.setEmulatedMedia', { features: [{ name: 'forced-colors', value: 'active' }] });
     await retry(() => evaluate('getComputedStyle(document.querySelector(".icon-3d-fallback")).display !== "none"'), 'forced-colour icon fallback');
-    await send('Emulation.setEmulatedMedia', { features: [] });
+    await setMotion('no-preference');
     await evaluate('document.activeElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }))');
     const clippedIcons = await evaluate(`(async () => {
       const response = await fetch('./icons/sprite.svg');
@@ -761,6 +763,19 @@ async function captureEdge() {
       await evaluate('document.querySelector(".toast-dismiss").click()');
       await retry(() => evaluate('!document.querySelector(".toast")'), theme + ' toast dismisses');
     }
+    await size(390, 812);
+    await evaluate(`localStorage.setItem('utkristi-sandbox:v1:file-input:react', '');
+      localStorage.setItem('utkristi-sandbox:v2:file-input:html', '  ')`);
+    await load('/sandbox?component=file-input&theme=glass', 'Sandbox');
+    await retry(() => evaluate('document.querySelector("#sandbox-source")?.value.includes("utkristi-ui.css")'), 'empty React draft recovers its starter');
+    const showMobilePreview = () => evaluate(`[...document.querySelectorAll('.playground-panes button')].find(button => button.textContent === 'Preview').click()`);
+    await showMobilePreview();
+    await retry(() => evaluate('document.querySelector(".playground-run-status")?.textContent === "React preview ready"'), 'recovered React source runs on mobile');
+    await selectOption('.playground select[id$="-mode"]', 'html');
+    await retry(() => evaluate(`document.querySelector('#sandbox-source')?.value.includes('type="file"') &&
+      getComputedStyle(document.querySelector('.playground-editor')).display !== 'none'`), 'empty HTML draft recovers and changing editors shows source on mobile');
+    await showMobilePreview();
+    await retry(() => evaluate('document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), 'recovered HTML source runs on mobile');
     await size(1440, 900);
     await load('/sandbox?component=carousel&theme=glass', 'Sandbox');
     const ready = () => evaluate('document.querySelector(".playground-run-status")?.textContent === "React preview ready"');

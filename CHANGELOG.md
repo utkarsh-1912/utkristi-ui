@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Removed the full icon catalog from control bundles and added an `@utkristi/ui/icons` entry and a CI bundle budget.
+- Added table density, sticky headers, a toolbar, selection clearing, and click protection for controls inside rows.
+- Added scoped CSS and form submission and reset support for Combobox and DatePicker.
+- Restored starter code when a sandbox draft is blank and corrected the alignment of grouped package controls.
+
 - Corrected navigation, connectivity, table, and spinner glyphs and deferred offscreen icon previews in the catalog.
 - Extended the Glass backdrop through the full page and tinted its raised surfaces.
 - Added a collapsible docs index, an on-page outline, and integration examples for 16 platforms.

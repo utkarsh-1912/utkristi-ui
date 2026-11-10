@@ -1,22 +1,11 @@
-import { createContext, forwardRef, useContext, type HTMLAttributes, type InputHTMLAttributes, type ReactNode,
+import { forwardRef, type HTMLAttributes, type InputHTMLAttributes, type ReactNode,
   type SelectHTMLAttributes, type TextareaHTMLAttributes } from 'react';
-import { Icon } from './icons.js';
+import { ControlIcon } from './ControlIcon.js';
+import { SearchIconData } from './icons/generated/SearchIcon.js';
 import { cx } from './utils/cx.js';
 import { useId } from './utils/useId.js';
 import { geometryStyle, type ComponentGeometry } from './utils/geometry.js';
-
-type ControlProps = Pick<InputHTMLAttributes<HTMLInputElement>, 'id' | 'required' | 'aria-describedby' | 'aria-invalid'>;
-const FieldContext = createContext<ControlProps>({});
-
-function useControl(props: ControlProps) {
-  const field = useContext(FieldContext);
-  return {
-    id: props.id ?? field.id,
-    required: props.required ?? field.required,
-    'aria-invalid': props['aria-invalid'] ?? field['aria-invalid'],
-    'aria-describedby': cx(field['aria-describedby'], props['aria-describedby']) || undefined,
-  };
-}
+import { FieldContext, useControl } from './utils/field.js';
 
 export interface FieldProps extends HTMLAttributes<HTMLDivElement> {
   label?: ReactNode;
@@ -39,7 +28,7 @@ export const Field = forwardRef<HTMLDivElement, FieldProps>(function Field(
       {children}
     </FieldContext.Provider>
     {hintId && <span id={hintId} className="field-hint">{hint}</span>}
-    {errorId && <span id={errorId} className="field-error">{error}</span>}
+    {errorId && <span id={errorId} className="field-error" data-ut-slot="field-error">{error}</span>}
   </div>;
 });
 
@@ -64,7 +53,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
 
 export interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement>, ComponentGeometry { icon?: ReactNode; shortcut?: ReactNode }
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(function SearchInput(
-  { className, icon = <Icon name="search" />, shortcut, radius, inlineSize, ...props }, ref,
+  { className, icon = <ControlIcon glyph={SearchIconData} />, shortcut, radius, inlineSize, ...props }, ref,
 ) {
   const field = useControl(props);
   return <div className={cx('search', className)} style={geometryStyle({ radius, inlineSize }, undefined)}>

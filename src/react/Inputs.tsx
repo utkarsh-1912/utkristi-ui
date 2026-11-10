@@ -5,6 +5,7 @@ import { Input, Select } from './Field.js';
 import { cx } from './utils/cx.js';
 import { useControllable } from './utils/useControllable.js';
 import { useId } from './utils/useId.js';
+import { useControl, useFormReset } from './utils/field.js';
 
 export const NativeSelect = Select;
 
@@ -66,15 +67,32 @@ export interface SearchOption {
   icon?: ReactNode; description?: string;
 }
 interface SearchListProps extends HTMLAttributes<HTMLDivElement> {
-  options: readonly SearchOption[]; label: string; placeholder?: string; emptyText?: string;
+  options: readonly SearchOption[]; label?: string; placeholder?: string; emptyText?: string;
   selected?: readonly string[]; onPick: (value: string) => void; popup?: boolean; multiple?: boolean; disabled?: boolean; selectOnly?: boolean;
   inputIcon?: ReactNode;
+  form?: string;
+  required?: boolean;
+  onResetValue?: () => void;
 }
 
 const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchList(
-  { options, label, placeholder, emptyText = 'No results.', selected = [], onPick, popup, multiple, disabled, selectOnly, className, inputIcon, ...props }, ref,
+  { options, label, placeholder, emptyText = 'No results.', selected = [], onPick, popup, multiple, disabled, selectOnly,
+    className, inputIcon, form, required, onResetValue, ...props }, ref,
 ) {
   const id = useId();
+  const field = useControl({ required, 'aria-describedby': props['aria-describedby'], 'aria-invalid': props['aria-invalid'] });
+  const control = useRef<HTMLInputElement | HTMLButtonElement | null>(null);
+  useFormReset(control, onResetValue && (() => {
+    onResetValue();
+    setOpen(false);
+    setQuery('');
+    setCursor(-1);
+  }), form);
+  useEffect(() => {
+    if (control.current instanceof HTMLInputElement && popup) {
+      control.current.setCustomValidity(field.required && selected.length === 0 ? 'Choose an option.' : '');
+    }
+  }, [popup, field.required, selected.length]);
   const results = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
@@ -166,22 +184,27 @@ const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchLi
         {options.find((item) => item.value === value)?.label ?? value}</Chip>)}
     </div>}
     {selectOnly
-      ? <Button variant="ghost" className="select-menu-trigger" role="combobox" aria-haspopup="listbox"
-        aria-label={label} aria-expanded={visible} aria-controls={visible ? id : undefined}
+      ? <Button ref={(node) => { control.current = node as HTMLButtonElement | null; }} id={field.id} form={form}
+        variant="ghost" className="select-menu-trigger" role="combobox" aria-haspopup="listbox"
+        aria-label={label ?? (field.id ? undefined : 'Choose an option')} aria-expanded={visible} aria-controls={visible ? id : undefined}
+        aria-invalid={field['aria-invalid']} aria-describedby={field['aria-describedby']} aria-labelledby={props['aria-labelledby']}
         aria-activedescendant={activeId} disabled={disabled}
         onClick={() => setOpen(!open)} onKeyDown={handleKey}>
         <span>{selectedLabel || placeholder || 'Select an option'}</span><span aria-hidden="true">⌄</span>
       </Button>
       : <div className={cx('search-list-input', inputIcon != null && 'search-list-input-icon')}>
         {inputIcon != null && <span className="search-list-leading" aria-hidden="true">{inputIcon}</span>}
-        <Input role="combobox" aria-autocomplete="list" aria-label={label} aria-expanded={visible} aria-controls={visible ? id : undefined}
+        <Input ref={(node) => { control.current = node; }} form={form} required={false} aria-required={popup && field.required || undefined}
+        role="combobox" aria-autocomplete="list" aria-label={label ?? (field.id ? undefined : 'Choose an option')}
+        aria-labelledby={props['aria-labelledby']} aria-invalid={props['aria-invalid']} aria-describedby={props['aria-describedby']}
+        aria-expanded={visible} aria-controls={visible ? id : undefined}
         aria-activedescendant={activeId} autoComplete="off" placeholder={placeholder} disabled={disabled}
         value={popup && !open ? selectedLabel : query} onFocus={() => setOpen(true)} onClick={() => setOpen(true)}
         onChange={(event) => { setQuery(event.target.value); setCursor(-1); setOpen(true); }} onKeyDown={handleKey} />
       </div>}
     {visible && <div ref={results} className={cx('search-results', 'ut-scrollbar', popup && 'search-results-floating')}>
       {matches.length === 0 && <p role="status" className="search-empty">{emptyText}</p>}
-      <div role="listbox" id={id} aria-label={label} aria-multiselectable={multiple || undefined}>
+      <div role="listbox" id={id} aria-label={label ?? 'Options'} aria-multiselectable={multiple || undefined}>
         {[...groups].map(([group, items]) => group ? <div key={group} role="group" aria-label={group}>
           <div aria-hidden="true" className="search-group-label">{group}</div>{items.map(renderOption)}
         </div> : items.map(renderOption))}
@@ -190,19 +213,25 @@ const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchLi
   </div>;
 });
 
-export interface ComboboxProps extends Omit<SearchListProps, 'selected' | 'onPick' | 'popup' | 'selectOnly'> {
+export interface ComboboxProps extends Omit<SearchListProps, 'selected' | 'onPick' | 'popup' | 'selectOnly' | 'onResetValue'> {
   value?: readonly string[]; defaultValue?: readonly string[]; onValueChange?: (value: readonly string[]) => void;
+  name?: string;
 }
+const emptyOptions: readonly string[] = [];
 export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(function Combobox(
-  { value, defaultValue = [], onValueChange, multiple, ...props }, ref,
+  { value, defaultValue = emptyOptions, onValueChange, multiple, name, ...props }, ref,
 ) {
   const [selected, setSelected] = useControllable(value, defaultValue, onValueChange);
-  return <SearchList {...props} ref={ref} selected={selected} multiple={multiple} popup
-    onPick={(next) => setSelected(multiple ? selected.includes(next) ? selected.filter((item) => item !== next) : [...selected, next] : [next])} />;
+  return <>
+    {name && selected.map((key) => <input key={key} type="hidden" name={name} form={props.form} value={key} disabled={props.disabled} />)}
+    <SearchList {...props} ref={ref} selected={selected} multiple={multiple} popup
+      onResetValue={() => setSelected(defaultValue)}
+      onPick={(next) => setSelected(multiple ? selected.includes(next) ? selected.filter((item) => item !== next) : [...selected, next] : [next])} />
+  </>;
 });
 
 export interface CommandOption extends SearchOption { onSelect: () => void }
-export const Command = forwardRef<HTMLDivElement, Omit<SearchListProps, 'options' | 'onPick' | 'selected' | 'popup' | 'multiple' | 'selectOnly'> & {
+export const Command = forwardRef<HTMLDivElement, Omit<SearchListProps, 'options' | 'onPick' | 'selected' | 'popup' | 'multiple' | 'selectOnly' | 'onResetValue'> & {
   options: readonly CommandOption[];
 }>(function Command({ options, ...props }, ref) {
   return <SearchList {...props} ref={ref} options={options} onPick={(value) => options.find((item) => item.value === value)?.onSelect()} />;
@@ -217,7 +246,8 @@ export const SelectMenu = forwardRef<HTMLDivElement, SelectMenuProps>(function S
 ) {
   const [selected, setSelected] = useControllable(value, defaultValue, onValueChange);
   return <>
-    {name && <input type="hidden" name={name} value={selected} disabled={props.disabled} />}
-    <SearchList {...props} ref={ref} selected={selected ? [selected] : []} popup selectOnly onPick={setSelected} />
+    {name && <input type="hidden" name={name} form={props.form} value={selected} disabled={props.disabled} />}
+    <SearchList {...props} ref={ref} selected={selected ? [selected] : []} popup selectOnly onPick={setSelected}
+      onResetValue={() => setSelected(defaultValue)} />
   </>;
 });

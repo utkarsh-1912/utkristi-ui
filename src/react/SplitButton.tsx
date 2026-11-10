@@ -1,6 +1,8 @@
 import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { Button, type ButtonProps } from './Button.js';
-import { Icon } from './icons.js';
+import { ControlIcon } from './ControlIcon.js';
+import { ChevronDownIconData } from './icons/generated/ChevronDownIcon.js';
+import { PlusIconData } from './icons/generated/PlusIcon.js';
 import { Menu, type MenuItem } from './Menu.js';
 import { cx } from './utils/cx.js';
 
@@ -24,7 +26,7 @@ export interface SplitButtonProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const SplitButton = forwardRef<HTMLDivElement, SplitButtonProps>(function SplitButton(
-  { items, label = 'New', toggleLabel = 'More actions', icon = <Icon name="plus" />, mainProps, align = 'start',
+  { items, label = 'New', toggleLabel = 'More actions', icon = <ControlIcon glyph={PlusIconData} />, mainProps, align = 'start',
     onAction, className, children, ...props }, ref,
 ) {
   const options: MenuItem[] = items.map(({ title, sub, ...item }) => ({
@@ -34,7 +36,7 @@ export const SplitButton = forwardRef<HTMLDivElement, SplitButtonProps>(function
   return <div {...props} ref={ref} className={cx('split-button', className)}>
     <Button onClick={onAction} {...mainProps} iconLeft={icon} className={cx('split-button-main', mainProps?.className)}>{children ?? label}</Button>
     <Menu items={options} align={align} menuClassName="split-button-pop" trigger={(trigger) =>
-      <Button {...trigger} className="split-button-toggle" aria-label={toggleLabel}><Icon name="chevronDown" size={15} /></Button>
+      <Button {...trigger} size={mainProps?.size} className="split-button-toggle" aria-label={toggleLabel}><ControlIcon glyph={ChevronDownIconData} size={15} /></Button>
     } />
   </div>;
 });

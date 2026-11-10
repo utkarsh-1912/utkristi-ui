@@ -320,7 +320,10 @@ export const componentVariants = {
     '<nav class="bottom-nav" aria-label="Workspace"><a class="bottom-nav-link" href="#projects" aria-current="page">Projects</a><a class="bottom-nav-link" href="#team">Team</a></nav>'),
   'file-input--images': example('Multiple image uploads', 'Limit the file picker to images and allow several files.',
     () => <Field label="Brand images"><FileInput accept="image/*" multiple /></Field>,
-    '<label class="field">Brand images<input class="file-input" type="file" accept="image/*" multiple></label>'),
+    `<label class="field">
+  <span class="field-label">Brand images</span>
+  <input class="input file-input" type="file" accept="image/*" multiple>
+</label>`),
   'floating-input--prefilled': example('Prefilled floating field', 'Keep a floating label visible over a saved value.',
     () => <FloatingInput label="Workspace name" defaultValue="Studio" required />,
     '<div class="floating-field"><input class="input" id="saved-workspace" placeholder=" " value="Studio" required><label for="saved-workspace">Workspace name</label></div>'),

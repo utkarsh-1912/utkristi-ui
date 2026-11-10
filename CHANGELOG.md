@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added component variants throughout the docs, including seven Navbar configurations. Navbar supports nested groups and explicit sticky positioning.
+- Added scoped entry animations, an expanded standalone DOM runtime, and separate HTML and JavaScript editors in the sandbox.
+
 - Added theme-independent corners and custom widths to buttons, cards, form controls, dialogs, and video. Glass now uses clearer frosted surfaces and an opaque reduced-transparency mode.
 - Added optional themed VideoPlayer controls with seeking, mute, captions, and fullscreen.
 

@@ -7,5 +7,6 @@ declare module 'virtual:utkristi-examples' {
 
 declare module 'virtual:utkristi-runtime' {
   export const script: string;
+  export const domScript: string;
   export const styles: string;
 }

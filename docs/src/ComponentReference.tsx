@@ -3,6 +3,7 @@ import { Button, Code, Tabs } from '@utkristi/ui';
 import { api, examples as sampleSources } from 'virtual:utkristi-examples';
 import { CopyCode } from './CopyCode';
 import enterpriseStyles from './enterprise.css?raw';
+import { exampleMotion } from './motion-options';
 
 export default function ComponentReference({ slug, html }: { slug: string; html: string }) {
   const sample = sampleSources[slug];
@@ -13,12 +14,19 @@ export default function ComponentReference({ slug, html }: { slug: string; html:
       <div className="doc-section-head"><div><span className="label">Implementation</span><h2>Use in your app</h2></div>
         <Button href={`#/sandbox?component=${slug}`} variant="ghost" iconRight={<ArrowUpRight size={16} />}>Open sandbox</Button></div>
       <Tabs label="Usage examples" defaultValue="react" items={[
-        { id: 'css', label: 'HTML', content: <><p className="muted">This markup works with the Tailwind preset or <Code inline>@utkristi/ui/utkristi-ui.css</Code>. Use the React example for the full interaction.</p><CopyCode text={html} language="HTML" /></> },
+        { id: 'css', label: 'HTML', content: <><p className="muted">Use the kit stylesheet and the JavaScript tab to activate controls marked with <Code inline>data-ut-*</Code>.</p>
+          <CopyCode text={`<div data-ut-motion="${exampleMotion(slug)}" data-ut-enter>\n${html}\n</div>`} language="HTML" /></> },
+        { id: 'js', label: 'JavaScript', content: <><p className="muted">Run the initializer once after inserting the markup. The returned cleanup removes its event listeners.</p>
+          <CopyCode text={"import { initUI } from '@utkristi/ui/dom';\n\nconst dispose = initUI(document);"} language="JavaScript" />
+          <p><a className="link" href={`${import.meta.env.BASE_URL}utkristi-dom.js`} download>Download standalone script</a></p>
+          <CopyCode text={'<script src="./utkristi-dom.js"></script>\n<script>UtkristiDOM.initUI(document);</script>'} language="HTML" /></> },
         { id: 'react', label: 'React', content: reactExample
           ? <><p className="muted">Install the kit and import its stylesheet once in your app. This example includes its data and theme providers.</p>
             {template && <p className="muted">Copy the layout stylesheet from the CSS tab and import it beside this example.</p>}
             <CopyCode text={reactExample} language="TSX" /></>
           : <p className="muted">The React example is temporarily unavailable. See the HTML tab for the markup.</p> },
+        { id: 'motion', label: 'Motion', content: <><p className="muted">Choose fade, rise, scale, slide, or none. The scope also sets the entry motion for supported overlays inside it.</p>
+          <CopyCode text={`<div data-ut-motion="${exampleMotion(slug)}" data-ut-enter>\n  {/* Place the component here. */}\n</div>`} language="TSX" /></> },
         ...(template ? [{ id: 'layout-css', label: 'Layout CSS', content: <CopyCode text={enterpriseStyles} language="CSS" /> }] : []),
       ]} />
     </div>

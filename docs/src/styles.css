@@ -260,7 +260,7 @@
 .playground .doc-title .display, .icons-heading .display { font-size: clamp(42px, 5.5vw, 72px); }
 .playground .doc-title .lede, .icons-heading .lede { font-size: clamp(1rem, 1.5vw, 1.25rem); max-inline-size: 65ch; }
 .playground-workspace { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
-.playground-toolbar { display: grid; grid-template-columns: minmax(0, 1.3fr) repeat(2, minmax(0, 1fr)); gap: 10px; margin-block: 0 14px; }
+.playground-toolbar { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); gap: 10px; margin-block: 0 14px; }
 .playground-toolbar label { display: grid; gap: 4px; font-size: .875rem; color: var(--ut-ink-2); min-inline-size: 0; }
 .playground-result, .playground-editor { display: flex; flex-direction: column; min-inline-size: 0; background: var(--ut-bg-2) var(--ut-surface-sheen, none); border-radius: var(--ut-r); overflow: hidden; }
 .playground-editor { background: var(--ut-code-bar); border: 1px solid var(--ut-code-line); }

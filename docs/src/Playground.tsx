@@ -5,7 +5,8 @@ import { SourceEditor } from './SourceEditor';
 import { blockPages, componentPages, examplePage, sandboxExamples as previews } from './examples';
 import { variants, variantSets } from './variants';
 import { examples } from 'virtual:utkristi-examples';
-import { script, styles } from 'virtual:utkristi-runtime';
+import { script, styles, domScript } from 'virtual:utkristi-runtime';
+import { exampleMotion, motionOptions, type PreviewMotion } from './motion-options';
 
 const policy = "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline' https://fonts.googleapis.com; img-src data: blob:; media-src data: blob:; font-src data: https://fonts.gstatic.com; form-action 'none'; base-uri 'none'";
 const frameHead = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
@@ -16,15 +17,35 @@ const reactFrame = frameHead + '<body><div id="playground"></div><script>' + scr
 
 const specimenFonts = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&amp;family=Geist:wght@400..800&amp;family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400..800&amp;family=Newsreader:opsz,wght@6..72,400..700&amp;display=swap">';
 
-interface Run { token: string; source: string; theme: ResolvedTheme; markup: boolean }
-type Mode = 'react' | 'html';
+interface Run { token: string; source: string; theme: ResolvedTheme; motion: PreviewMotion; markup: boolean; javascript?: string }
+type Mode = 'react' | 'html' | 'js';
+const initialJavaScript = '// Add JavaScript for this HTML example. The kit initializes automatically.\n';
+const safeScript = (source: string) => source.replace(/<\/script/gi, '<\\/script');
+
+function htmlDocument(source: string, javascript: string, theme: ResolvedTheme, motion: PreviewMotion, token?: string) {
+  const report = token ? `<script>
+    let previewFailed = false;
+    window.previewReport = (kind, error) => {
+      if (kind === 'utkristi-html-ready' && previewFailed) return;
+      if (kind === 'utkristi-preview-error') previewFailed = true;
+      parent.postMessage({kind, token: ${JSON.stringify(token)}, error}, '*');
+    };
+    addEventListener('error', event => previewReport('utkristi-preview-error', event.message));
+    addEventListener('unhandledrejection', event => previewReport('utkristi-preview-error', String(event.reason)));
+  </script>` : '';
+  const ready = token ? "<script>previewReport('utkristi-html-ready');</script>" : '';
+  const head = token ? frameHead : frameHead.replace(/<meta http-equiv="Content-Security-Policy"[^>]*>/, '');
+  return head.replace('<html>', `<html data-theme="${theme}" data-ut-motion="${motion}">`) +
+    '<body>' + report + '<div data-ut-enter>' + source + '</div><script>' + safeScript(domScript) +
+    '</script><script>UtkristiDOM.initUI(document);</script><script>' + safeScript(javascript) + '</script>' + ready + '</body></html>';
+}
 
 function draftKey(slug: string, mode: Mode) { return `utkristi-sandbox:v1:${slug}:${mode}`; }
 function readDraft(slug: string, mode: Mode, initial: string) {
   try { return localStorage.getItem(draftKey(slug, mode)) ?? initial; } catch { return initial; }
 }
 
-export default function Playground({ component }: { component?: string }) {
+export default function Playground({ component, editorMode, initialMotion }: { component?: string; editorMode?: string; initialMotion?: string }) {
   const { resolvedTheme } = useTheme();
   const id = useId();
   const [viewport, setViewport] = useState<'fluid' | 'phone' | 'tablet'>('fluid');
@@ -33,10 +54,14 @@ export default function Playground({ component }: { component?: string }) {
     ? component as keyof typeof previews : 'carousel';
   const example = previews[slug];
   const docs = examplePage(slug);
+  const parent = Object.entries(variantSets).find(([, keys]) => keys?.some((key) => key === slug))?.[0] ?? slug;
+  const related = variantSets[parent] ?? [];
   const [theme, setTheme] = useState<ResolvedTheme>(resolvedTheme);
-  const [mode, setMode] = useState<Mode>('react');
+  const [motion, setMotion] = useState(() => motionOptions.find(([value]) => value === initialMotion)?.[0] ?? exampleMotion(slug));
+  const [mode, setMode] = useState<Mode>(editorMode === 'html' || editorMode === 'js' ? editorMode : 'react');
   const [reactCode, setReactCode] = useState(() => readDraft(slug, 'react', examples[slug].code));
   const [htmlCode, setHtmlCode] = useState(() => readDraft(slug, 'html', example.html));
+  const [jsCode, setJsCode] = useState(() => readDraft(slug, 'js', initialJavaScript));
   const [run, setRun] = useState<Run>();
   const [status, setStatus] = useState('');
   const [busy, setBusy] = useState(false);
@@ -46,29 +71,26 @@ export default function Playground({ component }: { component?: string }) {
   const editor = useRef<HTMLTextAreaElement>(null);
   const previewHeading = useRef<HTMLSpanElement>(null);
   const requested = useRef(0);
-  const code = mode === 'react' ? reactCode : htmlCode;
-  const initialSource = mode === 'react' ? examples[slug].code : example.html;
-  const filename = slug + (mode === 'react' ? '.tsx' : '.html');
+  const code = mode === 'react' ? reactCode : mode === 'html' ? htmlCode : jsCode;
+  const initialSource = mode === 'react' ? examples[slug].code : mode === 'html' ? example.html : initialJavaScript;
+  const filename = slug + (mode === 'react' ? '.tsx' : mode === 'html' ? '.html' : '.js');
   function update(next: string) {
-    (mode === 'react' ? setReactCode : setHtmlCode)(next);
+    (mode === 'react' ? setReactCode : mode === 'html' ? setHtmlCode : setJsCode)(next);
     try {
       const key = draftKey(slug, mode);
       if (next === initialSource || next.length > 200_000) localStorage.removeItem(key);
       else localStorage.setItem(key, next);
     } catch { /* Editing remains available without storage. */ }
   }
-  const last = useRef({ code, mode, theme });
-  last.current = { code, mode, theme };
-
   const compiler = useRef<Worker | null>(null);
-  function compile(source: string, language: 'react' | 'html', previewTheme: ResolvedTheme) {
+  function compile(source: string, language: Mode, previewTheme: ResolvedTheme, previewMotion = motion) {
     const token = String(++requested.current);
     setExecuted({ code: source, mode: language });
     setError('');
     setStatus('');
-    if (language === 'html') {
-      setRun({ token, source, theme: previewTheme, markup: true });
-      setStatus('HTML preview ready');
+    if (language !== 'react') {
+      setRun({ token, source: language === 'html' ? source : htmlCode, javascript: language === 'js' ? source : jsCode,
+        theme: previewTheme, motion: previewMotion, markup: true });
       setBusy(false);
       return;
     }
@@ -79,7 +101,7 @@ export default function Playground({ component }: { component?: string }) {
         if (event.data.token !== token || token !== String(requested.current)) return;
         setBusy(false);
         if (event.data.error || event.data.code === undefined) { setError(event.data.error ?? 'The compiler produced no code.'); return; }
-        setRun({ token, source: event.data.code, theme: previewTheme, markup: false });
+        setRun({ token, source: event.data.code, theme: previewTheme, motion: previewMotion, markup: false });
       };
       worker.onerror = (event) => {
         if (token !== String(requested.current)) return;
@@ -95,9 +117,9 @@ export default function Playground({ component }: { component?: string }) {
     }
   }
 
+  const initialRun = useRef(() => compile(code, mode, theme));
   useEffect(() => {
-    const initial = last.current;
-    void compile(initial.code, initial.mode, initial.theme);
+    initialRun.current();
     const pending = requested;
     const activeCompiler = compiler;
     return () => { pending.current++; activeCompiler.current?.terminate(); activeCompiler.current = null; };
@@ -107,17 +129,18 @@ export default function Playground({ component }: { component?: string }) {
     function message(event: MessageEvent) {
       if (event.source !== iframe.current?.contentWindow || event.data?.token !== String(requested.current)) return;
       if (event.data?.kind === 'utkristi-preview-ready') setStatus('React preview ready');
+      if (event.data?.kind === 'utkristi-html-ready') setStatus('HTML preview ready');
       if (event.data?.kind === 'utkristi-preview-error') { setError(String(event.data.error)); setStatus(''); }
     }
     window.addEventListener('message', message);
     return () => window.removeEventListener('message', message);
   }, []);
 
-  const previewDocument = run?.markup ? frameHead.replace('<html>', '<html data-theme="' + run.theme + '">') + '<body>' + run.source + '</body></html>' : reactFrame;
+  const previewDocument = run?.markup ? htmlDocument(run.source, run.javascript ?? '', run.theme, run.motion, run.token) : reactFrame;
 
   function changeMode(next: Mode) {
     setMode(next);
-    void compile(next === 'react' ? reactCode : htmlCode, next, theme);
+    void compile(next === 'react' ? reactCode : next === 'html' ? htmlCode : jsCode, next, theme);
   }
 
   function runExample() {
@@ -129,13 +152,17 @@ export default function Playground({ component }: { component?: string }) {
   }
 
   function download() {
-    const url = URL.createObjectURL(new Blob([code], { type: 'text/plain;charset=utf-8' }));
+    const exported = mode === 'html' ? htmlDocument(htmlCode, jsCode, theme, motion) : code;
+    const url = URL.createObjectURL(new Blob([exported], { type: mode === 'html' ? 'text/html;charset=utf-8' : 'text/plain;charset=utf-8' }));
     const link = document.createElement('a');
     link.href = url;
     link.download = filename;
     link.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
+  const selectExample = (next: string) => {
+    window.location.hash = '/sandbox?' + new URLSearchParams({ component: next, theme, editor: mode, motion });
+  };
 
   return <article className="doc-article playground">
     <header className="doc-title"><span className="label">Build and test</span>
@@ -143,22 +170,27 @@ export default function Playground({ component }: { component?: string }) {
       <p className="lede">Edit a working example, run it in any theme, and copy the code into your app.</p>
     </header>
     <div className="playground-toolbar">
-      <label htmlFor={id + "-component"}>Example<Select id={id + "-component"} value={slug} onChange={(event) => {
-        window.location.hash = '/sandbox?' + new URLSearchParams({ component: event.target.value, theme });
-      }}>
+      <label htmlFor={id + "-component"}>Example<Select id={id + "-component"} value={parent} onChange={(event) => selectExample(event.target.value)}>
         <optgroup label="Components">{componentPages.map(([key, item]) => <option key={key} value={key}>{item.name}</option>)}</optgroup>
-        <optgroup label="Component variants">{componentPages.flatMap(([key, item]) => (variantSets[key] ?? []).map((variant) =>
-          <option key={variant} value={variant}>{item.name} / {variants[variant].name}</option>))}</optgroup>
         <optgroup label="Blocks">{blockPages.map(([key, item]) => <option key={key} value={key}>{item.name}</option>)}</optgroup>
       </Select></label>
+      {related.length > 0 && <label htmlFor={id + "-variant"}>Variant<Select id={id + "-variant"} value={slug} onChange={(event) => selectExample(event.target.value)}>
+        <option value={parent}>Default example</option>
+        {related.map((key) => <option key={key} value={key}>{variants[key].name}</option>)}
+      </Select></label>}
       <label htmlFor={id + "-theme"}>Theme<Select id={id + "-theme"} value={theme} onChange={(event) => {
         const next = event.target.value as ResolvedTheme;
         setTheme(next);
         void compile(code, mode, next);
       }}><option value="dark">Night</option><option value="light">Paper</option><option value="glass">Glass</option></Select></label>
-      <label htmlFor={id + "-mode"}>Editor<Select id={id + "-mode"} value={mode} onChange={(event) => changeMode(event.target.value as 'react' | 'html')}>
-        <option value="react">React / TSX</option><option value="html">HTML / CSS / JS</option>
+      <label htmlFor={id + "-mode"}>Editor<Select id={id + "-mode"} value={mode} onChange={(event) => changeMode(event.target.value as Mode)}>
+        <option value="react">React / TSX</option><option value="html">HTML / CSS</option><option value="js">JavaScript for HTML</option>
       </Select></label>
+      <label htmlFor={id + "-motion"}>Motion<Select id={id + "-motion"} value={motion} onChange={(event) => {
+        const next = event.currentTarget.value as PreviewMotion;
+        setMotion(next);
+        compile(code, mode, theme, next);
+      }}>{motionOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</Select></label>
     </div>
     <div className="playground-panes" role="group" aria-label="Workspace view">
       <Button size="sm" variant="quiet" aria-pressed={pane === 'source'} onClick={() => setPane('source')}>Source</Button>
@@ -192,7 +224,7 @@ export default function Playground({ component }: { component?: string }) {
         srcDoc={slug === 'typography' ? previewDocument.replace('</head>', specimenFonts + '</head>') : previewDocument}
         onLoad={() => {
           if (!run.markup) iframe.current?.contentWindow?.postMessage({
-            kind: 'utkristi-preview', code: run.source, theme: run.theme, token: run.token,
+            kind: 'utkristi-preview', code: run.source, theme: run.theme, motion: run.motion, token: run.token,
           }, '*');
         }} /> : !error && <Loader variant="brand" className="playground-loading" label="Preparing preview…" aria-hidden="true" />}
       </div>

@@ -3,6 +3,7 @@ import {
   type AnchorHTMLAttributes, type HTMLAttributes, type ReactNode,
 } from 'react';
 import { IconButton } from './Button.js';
+import { initDisclosures } from './dom.js';
 import { Icon } from './icons.js';
 import { Logo } from './Logo.js';
 import { Popover } from './Overlays.js';
@@ -20,6 +21,8 @@ export interface NavbarLink {
   icon?: ReactNode;
   /** Optional trailing badge, such as a count or "New". */
   badge?: ReactNode;
+  /** Group related destinations. Groups may contain further groups. */
+  children?: NavbarLink[];
 }
 type RenderLink = (link: NavbarLink, props: AnchorHTMLAttributes<HTMLAnchorElement>) => ReactNode;
 
@@ -33,6 +36,8 @@ export interface NavbarProps extends HTMLAttributes<HTMLElement> {
   renderLink?: RenderLink;
   right?: ReactNode;
   strip?: { left?: ReactNode; right?: ReactNode };
+  /** Keep the bar at the top of its scroll container. Defaults to true. */
+  sticky?: boolean;
   hideOnScroll?: boolean;
   /** Shows a search trigger in the bar and in the mobile sheet. */
   onSearch?: () => void;
@@ -55,6 +60,25 @@ function linkContent(link: NavbarLink) {
   </>;
 }
 
+function currentLink(link: NavbarLink): boolean {
+  return !!link.active || !!link.children?.some(currentLink);
+}
+
+function NavEntry({ link, renderLink, className, hidden, onSelect, nested }: {
+  link: NavbarLink; renderLink: RenderLink; className: string; hidden?: boolean; onSelect?: () => void; nested?: boolean;
+}) {
+  if (!link.children?.length) return renderLink(link, { className, 'aria-current': link.active ? 'page' : undefined,
+    tabIndex: hidden ? -1 : undefined, onClick: onSelect, children: linkContent(link) });
+  return <details data-ut-disclosure="" className={cx('navbar-disclosure', nested && 'navbar-disclosure-nested')}>
+    <summary className={cx(className, 'navbar-disclosure-trigger')} tabIndex={hidden ? -1 : undefined}
+      data-nav-current={currentLink(link) || undefined}>{linkContent(link)}<Icon name="chevronDown" size={14} /></summary>
+    <div className="pop navbar-submenu" data-ut-enter="">
+      {link.children.map((child) => <NavEntry key={child.href} link={child} renderLink={renderLink} nested
+        className="navbar-overflow-link" onSelect={onSelect} />)}
+    </div>
+  </details>;
+}
+
 function MobileSheet({ id, brand, links, renderLink, onSearch, searchLabel, sheetFoot, variant, onClose }: Pick<NavbarProps, 'brand' | 'onSearch' | 'sheetFoot' | 'variant'> & {
   id: string; links: NavbarLink[]; renderLink: RenderLink; searchLabel: string; onClose: () => void;
 }) {
@@ -63,6 +87,7 @@ function MobileSheet({ id, brand, links, renderLink, onSearch, searchLabel, shee
   const dock = variant === 'dock';
   useDialogFocus(ref, onClose, dock ? closeButton : undefined);
   useScrollLock(true);
+  useEffect(() => ref.current && initDisclosures(ref.current) || undefined, []);
   const content = <div id={id} ref={ref} role="dialog" aria-modal="true" aria-label="Menu" tabIndex={-1} className={cx('sheet', dock && 'sheet-dock')}>
     <div className="sheet-top" onClickCapture={(event) => {
       if (event.target instanceof Element && event.target.closest('a[href]')) onClose();
@@ -71,10 +96,13 @@ function MobileSheet({ id, brand, links, renderLink, onSearch, searchLabel, shee
       <Icon name="search" size={18} /><span>{searchLabel === 'Search' ? 'Search pages' : searchLabel}</span>
     </button>}
     <nav aria-label="Primary" className={cx('sheet-nav', !dock && 'sheet-lines')}>
-      {links.map((link, index) => <div key={link.href} style={{ '--d': `${80 + index * 60}ms` } as CSSVariables}>{renderLink(link, {
-        className: dock ? 'sheet-dock-link' : 'display', 'aria-current': link.active ? 'page' : undefined, onClick: onClose,
-        children: dock ? <span className="sheet-dock-link-main">{linkContent(link)}</span> : <span>{link.label}</span>,
-      })}</div>)}
+      {links.map((link, index) => <div key={link.href} style={{ '--d': `${80 + index * 60}ms` } as CSSVariables}>
+        {link.children?.length ? <NavEntry link={link} renderLink={renderLink} className="sheet-dock-link" onSelect={onClose} />
+          : renderLink(link, {
+            className: dock ? 'sheet-dock-link' : 'display', 'aria-current': link.active ? 'page' : undefined, onClick: onClose,
+            children: dock ? <span className="sheet-dock-link-main">{linkContent(link)}</span> : <span>{link.label}</span>,
+          })}
+      </div>)}
     </nav>
     {sheetFoot && <div className="sheet-foot">{sheetFoot}</div>}
   </div>;
@@ -84,7 +112,7 @@ function MobileSheet({ id, brand, links, renderLink, onSearch, searchLabel, shee
 }
 
 export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
-  { brand = <Logo size={28} />, variant = 'standard', links = [], renderLink = defaultLink, right, strip, hideOnScroll, onSearch,
+  { brand = <Logo size={28} />, variant = 'standard', links = [], renderLink = defaultLink, right, strip, sticky = true, hideOnScroll, onSearch,
     searchLabel = 'Search', searchShortcut, sheetFoot, collapseLinks, className, children, ...props }, ref,
 ) {
   const [open, setOpen] = useState(false);
@@ -100,7 +128,8 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
   const id = useId();
   const dock = variant === 'dock';
   const collapsible = dock && !!collapseLinks;
-  const activeIndex = links.findIndex((link) => link.active);
+  const activeIndex = links.findIndex(currentLink);
+  useEffect(() => bar.current && initDisclosures(bar.current) || undefined, []);
 
   useEffect(() => {
     let last = window.scrollY;
@@ -139,8 +168,8 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
     const nav = track.current;
     if (!nav || dock) return;
     const measure = () => {
-      const active = nav.querySelector<HTMLElement>('[aria-current="page"]');
-      setIndicator(active && active.offsetWidth ? { x: active.offsetLeft, w: active.offsetWidth } : null);
+      const active = nav.querySelector<HTMLElement>(':scope > [aria-current="page"], :scope > details > [data-nav-current]');
+      setIndicator(active && active.offsetWidth ? { x: active.getBoundingClientRect().left - nav.getBoundingClientRect().left, w: active.offsetWidth } : null);
     };
     measure();
     if (typeof ResizeObserver === 'undefined') return;
@@ -199,28 +228,19 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
       style={{ '--ut-ind-x': `${indicator.x}px`, '--ut-ind-w': `${indicator.w}px` } as CSSVariables} />}
     {links.map((link, index) => {
       const hidden = collapsible && index >= limit;
-      const anchor = renderLink(link, {
-      className: dock ? 'navbar-dock-link' : 'navbar-link',
-      'aria-current': link.active ? 'page' : undefined,
-      tabIndex: hidden ? -1 : undefined,
-      children: linkContent(link),
-      });
+      const anchor = <NavEntry link={link} renderLink={renderLink} className={dock ? 'navbar-dock-link' : 'navbar-link'} hidden={hidden} />;
       return collapsible ? <span className="navbar-fit-item" key={link.href} data-hidden={hidden || undefined}
         aria-hidden={hidden || undefined}>{anchor}</span> : <Fragment key={link.href}>{anchor}</Fragment>;
     })}
     {collapsible && <div className="navbar-more" data-hidden={!overflow.length || undefined}
-      aria-hidden={!overflow.length || undefined} data-current={overflow.some((link) => link.active) || undefined}>
+      aria-hidden={!overflow.length || undefined} data-current={overflow.some(currentLink) || undefined}>
       <Popover label="More navigation links" open={moreOpen && !!overflow.length} onOpenChange={setMoreOpen} align="end"
         trigger={<><Icon name="more-horizontal" size={20} /><span className="ut-sr-only">More navigation links</span></>}>
-        {overflow.map((link) => <Fragment key={link.href}>{renderLink(link, {
-          className: 'navbar-overflow-link',
-          'aria-current': link.active ? 'page' : undefined,
-          onClick: (event) => {
+        {overflow.map((link) => <NavEntry key={link.href} link={link} renderLink={renderLink} className="navbar-overflow-link"
+          onSelect={() => {
             setMoreOpen(false);
-            event.currentTarget.closest('.navbar-more')?.querySelector('button')?.focus();
-          },
-          children: linkContent(link),
-        })}</Fragment>)}
+            track.current?.querySelector<HTMLButtonElement>('.navbar-more button')?.focus();
+          }} />)}
       </Popover>
     </div>}
   </nav> : null;
@@ -232,7 +252,7 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
   </button>;
 
   return <>
-    <header {...props} ref={ref} className={cx('header', dock && 'header-dock', scrolled && 'is-scrolled', hideOnScroll && away && !open && 'is-away', className)}>
+    <header {...props} ref={ref} className={cx('header', !sticky && 'header-static', dock && 'header-dock', scrolled && 'is-scrolled', sticky && hideOnScroll && away && !open && 'is-away', className)}>
       {strip && <div className="strip"><div className="strip-inner"><div>{strip.left}</div><div>{strip.right}</div></div></div>}
       <div ref={bar} className={cx('navbar', dock && 'navbar-dock')} data-collapse-links={collapsible || undefined}><div className="navbar-inner">
         <div className="navbar-left">

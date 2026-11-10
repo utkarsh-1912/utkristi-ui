@@ -17,7 +17,7 @@ export function useDialogFocus(
     const previous = document.activeElement;
     const stops = () => Array.from(root.querySelectorAll<HTMLElement>(focusable)).filter(
       (element) => element.tabIndex >= 0 && !element.matches(':disabled, [aria-disabled="true"]') &&
-        !element.closest('[hidden], [inert], [aria-hidden="true"]') &&
+        !element.closest('[hidden], [inert], [aria-hidden="true"], details:not([open]) > :not(summary)') &&
         getComputedStyle(element).visibility !== 'hidden' && getComputedStyle(element).display !== 'none',
     );
     dialogs.push(root);

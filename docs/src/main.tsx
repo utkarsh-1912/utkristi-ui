@@ -8,6 +8,7 @@ import {
 import { blockPages, componentPages, examples, type Example } from './examples';
 import { blocks } from './blocks';
 import { variants, variantSets } from './variants';
+import { exampleMotion, motionOptions, type PreviewMotion } from './motion-options';
 import { FontDemo } from './catalog';
 import { CopyCode } from './CopyCode';
 import { DocsSearch } from './DocsSearch';
@@ -84,12 +85,14 @@ function route() {
   const [path, options] = location.hash.replace(/^#/, '').split('?');
   const requestedTheme = new URLSearchParams(options ?? location.search).get('theme');
   const theme = requestedTheme === 'dark' || requestedTheme === 'light' || requestedTheme === 'glass' ? requestedTheme : undefined;
-  return { path: path || '/overview', theme, sample: new URLSearchParams(options).get('component') ?? undefined } as const;
+  const params = new URLSearchParams(options);
+  return { path: path || '/overview', theme, sample: params.get('component') ?? undefined, variant: params.get('variant') ?? undefined,
+    editor: params.get('editor') ?? undefined, motion: params.get('motion') ?? undefined } as const;
 }
 
-function Frame({ theme, fixedTheme, children }: { theme: PreviewTheme; fixedTheme?: boolean; children: ReactNode }) {
+function Frame({ theme, fixedTheme, motion, children }: { theme: PreviewTheme; fixedTheme?: boolean; motion?: PreviewMotion; children: ReactNode }) {
   const panel = useRef<HTMLDivElement>(null);
-  return <div ref={panel} data-theme={theme} className="theme-preview">
+  return <div ref={panel} data-theme={theme} data-ut-motion={motion} className="theme-preview">
     <span className="label"><Dot static tone="off" /> {themeLabels[theme]}</span>
     <div className="preview-content">
       <ThemeProvider defaultTheme={theme} forcedTheme={fixedTheme ? theme : undefined} storageKey={null} target={() => panel.current}>
@@ -99,35 +102,45 @@ function Frame({ theme, fixedTheme, children }: { theme: PreviewTheme; fixedThem
   </div>;
 }
 
-function ExamplePreview({ example, initialTheme, description, preserveState, children }: {
-  example: Example; initialTheme: PreviewTheme; description?: string; preserveState?: boolean; children?: ReactNode;
+function ExamplePreview({ example, initialTheme, motion, description, preserveState, children }: {
+  example: Example; initialTheme: PreviewTheme; motion?: PreviewMotion; description?: string; preserveState?: boolean; children?: ReactNode;
 }) {
   const [previewTheme, setPreviewTheme] = useState(initialTheme);
+  const [override, setOverride] = useState<PreviewMotion>();
   const Preview = example.preview;
-  return <div className="docs-example">
+  return <div className="docs-example" onClickCapture={(event) => {
+    if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey || !(event.target instanceof Element)) return;
+    const link = event.target.closest<HTMLAnchorElement>('a[href^="#"]:not([href^="#/"])');
+    if (link) event.preventDefault();
+  }}>
     <div className="docs-example-toolbar">
       <div className="docs-example-title"><strong>Live preview</strong>{description && <span className="muted">{description}</span>}</div>
-      <div className="docs-example-controls">{children}<Select aria-label="Preview theme" value={previewTheme}
+    <div className="docs-example-controls">{children}{motion && <Select aria-label="Preview motion" value={override ?? motion}
+      onChange={(event) => setOverride(event.currentTarget.value as PreviewMotion)}>
+      {motionOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+    </Select>}<Select aria-label="Preview theme" value={previewTheme}
         onChange={(event) => setPreviewTheme(event.target.value as PreviewTheme)}>
         {themes.map((theme) => <option key={theme} value={theme}>{themeLabels[theme]}</option>)}
       </Select></div>
     </div>
-    <Frame key={preserveState ? undefined : previewTheme} theme={previewTheme} fixedTheme={preserveState}><Preview key={example.name} /></Frame>
+    <Frame key={preserveState ? undefined : previewTheme} theme={previewTheme} fixedTheme={preserveState} motion={override ?? motion}>
+      {motion ? <div key={example.name} data-ut-enter=""><Preview /></div> : <Preview key={example.name} />}
+    </Frame>
   </div>;
 }
 
-function ComponentPage({ slug }: { slug: keyof typeof examples }) {
+function ComponentPage({ slug, initialVariant }: { slug: keyof typeof examples; initialVariant?: string }) {
   const { resolvedTheme } = useTheme();
-  const [variant, setVariant] = useState<keyof typeof variants>();
   const example = examples[slug];
   const choices = variantSets[slug] ?? [];
+  const [variant, setVariant] = useState(() => choices.find((key) => key === initialVariant));
   const selected = variant ? variants[variant] : example;
   return <article className="doc-article">
     <PageTitle kicker="Components" title={example.name} detail={example.description} />
-    <ExamplePreview key={resolvedTheme} example={selected} initialTheme={resolvedTheme} description={variant ? selected.description : undefined}>
+    <ExamplePreview key={resolvedTheme} example={selected} initialTheme={resolvedTheme} motion={exampleMotion(variant ?? slug)} description={variant ? selected.description : undefined}>
       {choices.length > 0 && <Select aria-label="Example variant" value={variant ?? ''}
         onChange={(event) => setVariant(choices.find((key) => key === event.target.value))}>
-        <option value="">Default example</option>
+        <option value="">{slug === 'navbar' ? 'Default navbar' : 'Default example'}</option>
         {choices.map((key) => <option key={key} value={key}>{variants[key].name}</option>)}
       </Select>}
     </ExamplePreview>
@@ -398,7 +411,7 @@ function DocsThemeSelect({ previewTheme, releasePreviewTheme, className }: {
 }
 
 function App() {
-  const [{ path, theme, sample }, setRoute] = useState(route);
+  const [{ path, theme, sample, variant: selectedVariant, editor, motion }, setRoute] = useState(route);
   const [searchOpen, setSearchOpen] = useState(false);
   useEffect(() => {
     const update = () => { setRoute(route()); window.scrollTo(0, 0); };
@@ -436,12 +449,13 @@ function App() {
     '/blocks': <BlocksPage />,
     '/about': <About />, '/terms': <Terms />, '/privacy': <Privacy />,
     '/frameworks': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading integrations…" />}><Frameworks /></Suspense>,
-    '/sandbox': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading sandbox…" />}><Playground key={sample ?? 'carousel'} component={sample} /></Suspense>,
+    '/sandbox': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading sandbox…" />}><Playground key={sample ?? 'carousel'} component={sample}
+      editorMode={editor} initialMotion={motion} /></Suspense>,
   };
   const page = Object.hasOwn(pages, path) ? pages[path] : undefined;
   const errorPage = /^\/(?:error|500)(?:\.html)?\/?$/.test(path);
   const status = errorPage ? 'error' : !component && !block && !page ? 'missing' : undefined;
-  const content = component ? <ComponentPage key={component} slug={component} />
+  const content = component ? <ComponentPage key={component + (selectedVariant ?? '')} slug={component} initialVariant={selectedVariant} />
     : block ? <BlockPage key={block} slug={block} /> : status ? <DocsStatus status={status} /> : page;
   const sitePage = siteLinks.find(({ href }) => href === `#${path}`);
   const standalone = !!status || !!sitePage || path === '/overview' || path === '/showcase' || path === '/sandbox' || path === '/blocks' || path === '/icons' || !!block;

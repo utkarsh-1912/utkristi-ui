@@ -30,8 +30,9 @@ function Ready({ token }: { token: string }) {
 
 window.addEventListener('message', (event) => {
   if (event.source !== window.parent || event.data?.kind !== 'utkristi-preview') return;
-  const { code, theme, token } = event.data;
+  const { code, theme, motion, token } = event.data;
   try {
+    container.dataset.utMotion = motion;
     const module = { exports: {} as { default?: React.ComponentType<{ theme: kit.ResolvedTheme }> } };
     const requireModule = (id: string) => {
       if (!Object.hasOwn(modules, id)) throw new Error('Unsupported sandbox import: ' + id);
@@ -42,7 +43,7 @@ window.addEventListener('message', (event) => {
     if (!Example) throw new Error('Export a default React component.');
     root.render(<PreviewBoundary key={token} token={token}>
       <kit.ThemeProvider defaultTheme={theme} storageKey={null}><kit.ToastProvider>
-        <Example theme={theme} /><Ready token={token} />
+        <div data-ut-enter=""><Example theme={theme} /></div><Ready token={token} />
       </kit.ToastProvider></kit.ThemeProvider>
     </PreviewBoundary>);
   } catch (error) {

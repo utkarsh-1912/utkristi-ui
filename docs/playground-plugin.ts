@@ -127,6 +127,10 @@ function apiFor(docs: string, source: string, examples: ReturnType<typeof sample
 export function docsPlayground(docs: string, source: string): Plugin {
   const prefix = 'virtual:utkristi-';
   const worklistSource = join(docs, 'src', 'worklist-blocks.tsx');
+  const domPath = join(source, 'dom.ts');
+  const buildDom = async () => (await build({
+    entryPoints: [domPath], bundle: true, write: false, minify: true, format: 'iife', globalName: 'UtkristiDOM',
+  })).outputFiles[0].text;
   const registryPath = 'r/project-worklist.json';
   async function worklistRegistry() {
     const [packageFile, content] = await Promise.all([
@@ -149,8 +153,15 @@ export function docsPlayground(docs: string, source: string): Plugin {
     name: 'utkristi-docs-playground',
     async generateBundle() {
       this.emitFile({ type: 'asset', fileName: registryPath, source: await worklistRegistry() });
+      this.emitFile({ type: 'asset', fileName: 'utkristi-dom.js', source: await buildDom() });
     },
     configureServer(server) {
+      server.middlewares.use('/utkristi-dom.js', (_request, response, next) => {
+        void buildDom().then((javascript) => {
+          response.setHeader('Content-Type', 'text/javascript; charset=utf-8');
+          response.end(javascript);
+        }).catch(next);
+      });
       server.middlewares.use('/' + registryPath, (_request, response, next) => {
         void worklistRegistry().then((json) => {
           response.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -162,6 +173,7 @@ export function docsPlayground(docs: string, source: string): Plugin {
     async load(id) {
       if (id === '\0' + prefix + 'examples') {
         const registries = [['catalog', 'catalog'], ['examples', 'examples'], ['variants', 'variants'],
+          ['navbar-variants', 'navbarVariants'], ['component-variants', 'componentVariants'],
           ['blocks', 'blocks'], ['workflow-blocks', 'workflowBlocks'], ['worklist-blocks', 'worklistBlocks']];
         const entries = await Promise.all(registries.map(async ([file, name]) => {
           const path = join(docs, 'src', file + '.tsx');
@@ -174,17 +186,18 @@ export function docsPlayground(docs: string, source: string): Plugin {
       }
       if (id === '\0' + prefix + 'runtime') {
         const path = join(docs, 'src', 'playground-frame.tsx');
-        const result = await build({
+        this.addWatchFile(domPath);
+        const [result, dom] = await Promise.all([build({
           entryPoints: [path], alias: { '@utkristi/ui': join(source, 'index.ts') }, jsx: 'automatic',
           bundle: true, write: false, minify: true, format: 'iife', define: { 'process.env.NODE_ENV': '"production"' },
-        });
+        }), buildDom()]);
         for (const asset of [path, ...['tokens', 'base', 'components'].map((file) => join(source, '..', 'styles', file + '.css'))]) this.addWatchFile(asset);
         const css = await Promise.all(['tokens', 'base', 'components'].map((file) => readFile(join(source, '..', 'styles', file + '.css'), 'utf8')));
         const demoFiles = ['styles.css', 'enterprise.css'].map((file) => join(docs, 'src', file));
         for (const file of demoFiles) this.addWatchFile(file);
         const demos = await Promise.all(demoFiles.map((file) => readFile(file, 'utf8')));
         const styles = [...css, ...demos].join('\n').replace(/^@tailwind .*$/gm, '');
-        return `export const script = ${JSON.stringify(result.outputFiles[0].text)}; export const styles = ${JSON.stringify(styles)};`;
+        return `export const script = ${JSON.stringify(result.outputFiles[0].text)}; export const styles = ${JSON.stringify(styles)}; export const domScript = ${JSON.stringify(dom)};`;
       }
     },
   };

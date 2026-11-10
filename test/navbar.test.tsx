@@ -72,3 +72,26 @@ test('the bar search pill, link icons, badges, and scrolled state', async () => 
   await vi.waitFor(() => expect(header).toHaveClass('is-scrolled'));
   Object.defineProperty(window, 'scrollY', { configurable: true, value: 0 });
 });
+
+test('nested navbar groups dismiss one level at a time and return focus', async () => {
+  const user = userEvent.setup();
+  render(<Navbar sticky={false} links={[{ href: '#resources', label: 'Resources', children: [
+    { href: '#guides', label: 'Guides', children: [{ href: '#integration', label: 'Integration', active: true }] },
+  ] }]} />);
+  const header = screen.getByRole('banner');
+  expect(header).toHaveClass('header-static');
+  const resources = within(header).getByText('Resources').closest('summary')!;
+  await user.click(resources);
+  const guides = within(header).getByText('Guides').closest('summary')!;
+  await user.click(guides);
+  const integration = within(header).getByRole('link', { name: 'Integration' });
+  expect(integration).toHaveAttribute('aria-current', 'page');
+  integration.focus();
+  await user.keyboard('{Escape}');
+  expect(guides).toHaveFocus();
+  expect(guides.parentElement).not.toHaveAttribute('open');
+  expect(resources.parentElement).toHaveAttribute('open');
+  await user.keyboard('{Escape}');
+  expect(resources).toHaveFocus();
+  expect(resources.parentElement).not.toHaveAttribute('open');
+});

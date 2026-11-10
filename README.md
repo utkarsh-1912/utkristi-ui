@@ -95,6 +95,12 @@ Set `data-ut-radius="square"`, `"soft"`, `"round"`, or `"pill"` on a component o
 
 VideoPlayer uses browser controls by default. Custom mode adds themed playback, seeking, mute, and a captions selector for supplied tracks. Fullscreen appears when the browser allows it.
 
+Every component page includes selectable examples. Navbar links can contain nested `children`. Use `sticky` for scroll positioning, `onSearch` for a search trigger, `right` for a CTA, and the children slot for a second row.
+
+Add `data-ut-motion="fade"`, `"rise"`, `"scale"`, `"slide"`, or `"none"` to a scope. Mark a region with `data-ut-enter` to animate its entry. Set `--ut-motion-duration` to adjust the timing. The entry presets respect reduced motion.
+
+For standalone HTML, copy the example markup and initialize it with `initUI(document)` from `@utkristi/ui/dom`. The docs also offer a downloadable `utkristi-dom.js` script for use without a bundler. It supports marked disclosures, dialogs, tabs, toggles, copy actions, filtering, and carousel navigation. The sandbox includes separate React, HTML, and JavaScript editors. Downloading from its HTML editor includes the styles and runtime.
+
 Menus, tabs, segmented controls, and dialogs support keyboard navigation. Dialogs trap and restore focus. Decorative animations respect reduced motion, and the spinner keeps moving as a loading cue. The Night theme uses dark `--ut-on-bad` text on red fills to meet the 4.5:1 text contrast target.
 
 The standalone CSS requires `color-mix()`. Use Chrome or Edge 111+, Safari 16.2+, or Firefox 113+.

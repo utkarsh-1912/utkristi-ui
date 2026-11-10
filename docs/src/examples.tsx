@@ -11,6 +11,7 @@ import { logoWordmarkPath } from '../../src/react/logo-wordmark.js';
 import { catalog } from './catalog';
 import { blocks } from './blocks';
 import { variants, variantSets } from './variants';
+import { defaultNavbarHtml } from './navbar-variants';
 
 export interface Example {
   name: string;
@@ -123,7 +124,7 @@ export const examples = {
   tabs: {
     name: 'Tabs', description: 'Switch between panels with automatic or manual keyboard activation.',
     preview: () => <Tabs label="Workspace views" items={tabs} />,
-    html: '<div class="tabs" role="tablist"><button class="tab" role="tab" id="summary" aria-selected="true" aria-controls="summary-panel">Summary</button></div><div class="tab-panel" role="tabpanel" id="summary-panel" aria-labelledby="summary">Details</div>',
+    html: '<div class="tabs" data-ut-tabs role="tablist" aria-label="Workspace views"><button class="tab" role="tab" id="summary" aria-selected="true" aria-controls="summary-panel">Summary</button><button class="tab" role="tab" id="activity" aria-selected="false" aria-controls="activity-panel" tabindex="-1">Activity</button></div><div class="tab-panel" role="tabpanel" id="summary-panel" aria-labelledby="summary">Details</div><div class="tab-panel" role="tabpanel" id="activity-panel" aria-labelledby="activity" hidden>Recent changes</div>',
     jsx: '<Tabs label="Workspace views" items={[{ id: "summary", label: "Summary", content: "Details" }]} />',
   },
   menu: {
@@ -131,25 +132,25 @@ export const examples = {
     preview: () => <div className="sample-end"><Menu align="end" trigger={(props) => <Button {...props} variant="ghost" iconRight={<Ellipsis size={16} />}>Actions</Button>}
       items={[{ type: 'header', label: 'Workspace', sub: 'Studio' }, { label: 'Open', icon: <FolderOpen size={16} />, kbd: 'O' },
         { label: 'Copy link', icon: <Copy size={16} /> }, { type: 'separator' }, { label: 'Delete', icon: <Trash2 size={16} />, danger: true }]} /></div>,
-    html: '<div class="menu" role="menu" aria-label="Actions"><button class="menu-item" role="menuitem">Copy link</button><div class="menu-sep" role="separator"></div><button class="menu-item menu-item-danger" role="menuitem">Delete</button></div>',
+    html: '<details class="popover" data-ut-disclosure><summary class="btn btn-ghost">Actions</summary><div class="pop pop-left popover-panel"><a class="menu-item" href="#workspace">Open workspace</a><a class="menu-item" href="#settings">Settings</a></div></details>',
     jsx: '<Menu trigger={<button>Actions</button>} items={[{ label: "Copy link", onSelect: copyLink }]} />',
   },
   modal: {
     name: 'Modal', description: 'A themed portal with a focus trap and a mobile bottom sheet.',
     preview: ModalPreview,
-    html: '<div class="modal-backdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="rename"><header class="modal-head"><h3 class="modal-title" id="rename">Rename workspace</h3></header><div class="modal-body">Choose a name.</div></div></div>',
+    html: '<button class="btn btn-solid" type="button" data-ut-open-dialog="rename-workspace">Open dialog</button><dialog id="rename-workspace" class="modal ut-native-dialog" aria-labelledby="rename-title"><form method="dialog" class="modal-body"><h2 id="rename-title">Rename workspace</h2><label class="field">Name<input class="input" value="Studio" autofocus required></label><button class="btn btn-solid">Done</button></form></dialog>',
     jsx: '<Modal open={open} onClose={() => setOpen(false)} title="Rename workspace">Choose a name.</Modal>',
   },
   toast: {
     name: 'Toast', description: 'Transient messages with a live announcement and a pausable timer.',
     preview: ToastPreview,
-    html: '<div class="toast-region"><div class="toast" role="status"><strong class="toast-title">Workspace saved</strong><div class="toast-body">Your changes are synced.</div><span class="toast-track"></span></div></div>',
+    html: '<button class="btn btn-solid" type="button" id="show-saved" data-ut-reveal="saved-notice">Show saved notice</button><div id="saved-notice" class="alert" role="status" data-tone="ok" data-ut-enter data-ut-return-focus="show-saved" hidden><strong>Workspace saved</strong><button type="button" class="btn btn-ghost btn-sm" data-ut-dismiss="saved-notice">Dismiss</button></div>',
     jsx: 'const toast = useToast();\n<Button onClick={() => toast.show({ title: "Workspace saved", tone: "ok" })}>Save</Button>',
   },
   tooltip: {
     name: 'Tooltip', description: 'A short description shown on hover or keyboard focus.',
     preview: () => <Tooltip content="Copy workspace link"><Button variant="ghost" iconLeft={<Copy size={16} />}>Copy link</Button></Tooltip>,
-    html: '<button class="btn btn-ghost" data-tip="Copy workspace link">Copy link</button>',
+    html: '<button class="btn btn-ghost" type="button" title="Copy workspace link">Copy link</button>',
     jsx: '<Tooltip content="Copy workspace link"><Button variant="ghost">Copy link</Button></Tooltip>',
   },
   badge: {
@@ -199,9 +200,9 @@ export const examples = {
     jsx: '<EmptyState title="No rooms" action={<Button>Create room</Button>}><p>Your rooms will appear here.</p></EmptyState>',
   },
   navbar: {
-    name: 'Navbar', description: 'A full-width bar or inset dock with a quiet active marker, search, and a compact menu when space is limited.',
-    preview: () => <Navbar variant="dock" links={links} onSearch={() => {}} searchShortcut="⌘K" />,
-    html: '<header class="header header-dock"><div class="navbar navbar-dock"><div class="navbar-inner"><div class="navbar-left">Utkristi UI</div><nav class="navbar-links" aria-label="Primary"><a href="#/overview" class="navbar-dock-link" aria-current="page"><span class="navbar-link-label">Overview</span></a><a href="#/docs" class="navbar-dock-link"><span class="navbar-link-label">Docs</span><span class="navbar-link-badge">New</span></a></nav><div class="navbar-right"><button type="button" class="navbar-search" aria-label="Search">⌕<span class="navbar-search-text" aria-hidden="true">Search</span><kbd class="kbd navbar-search-kbd" aria-hidden="true">⌘K</kbd></button><button class="icon-btn burger" aria-label="Open menu">☰</button></div></div></div></header>',
+    name: 'Navbar', description: 'Responsive navigation with optional disclosures, sticky positioning, a section row, search, and actions.',
+    preview: () => <Navbar sticky={false} links={links} />,
+    html: defaultNavbarHtml,
     jsx: '<Navbar variant="dock" links={[{ href: "/", label: "Overview", active: true }, { href: "/docs", label: "Docs", badge: "New" }]} onSearch={openSearch} searchShortcut="⌘K" />',
   },
   footer: {
@@ -280,5 +281,5 @@ export const blockPages = Object.entries(blocks);
 export function examplePage(slug: string) {
   if (Object.hasOwn(blocks, slug)) return { href: `#/blocks/${slug}`, label: 'Block docs' };
   const parent = Object.entries(variantSets).find(([, values]) => values?.some((key) => key === slug))?.[0] ?? slug;
-  return { href: `#/components/${parent}`, label: 'Component docs' };
+  return { href: `#/components/${parent}${parent === slug ? '' : '?variant=' + encodeURIComponent(slug)}`, label: 'Component docs' };
 }

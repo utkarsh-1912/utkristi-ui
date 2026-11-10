@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Accordion, Alert, Button, Dialog, FileDropzone, Gallery, Icon, Progress } from '@utkristi/ui';
 import type { Example } from './examples';
+import { navbarVariants } from './navbar-variants';
+import { componentVariants } from './component-variants';
 
 function DropzoneExample() {
   const [files, setFiles] = useState<File[]>([]);
@@ -35,15 +37,17 @@ function GalleryLightbox() {
 }
 
 export const variants = {
+  ...navbarVariants,
+  ...componentVariants,
   'accordion-panel': { name: 'Panel with multiple sections', description: 'Give the accordion a surface and allow multiple sections to stay open.',
     preview: () => <Accordion appearance="panel" multiple defaultValue={['billing']} items={[
       { id: 'billing', label: 'Billing', content: 'Invoices are issued on the first of each month.' },
       { id: 'members', label: 'Team access', content: 'Admins can invite teammates from settings.' },
     ]} />, jsx: '', html: '<div class="accordion accordion-panel"><details open><summary>Billing</summary>Invoices are issued on the first of each month.</details><details><summary>Team access</summary>Admins can invite teammates from settings.</details></div>' },
   'file-dropzone': { name: 'Drag and drop', description: 'Select files with the native picker or drop them onto the target.',
-    preview: DropzoneExample, jsx: '', html: '<div class="file-dropzone"><label>Choose files <input class="file-input" type="file" multiple></label></div>' },
+    preview: DropzoneExample, jsx: '', html: '<div class="file-dropzone" data-ut-dropzone><label>Choose files <input class="file-input" type="file" multiple></label><p>Or drag files here.</p><p role="status">No files selected</p></div>' },
   'gallery-lightbox': { name: 'Gallery with lightbox', description: 'Open a preview and move between items without leaving the gallery.',
-    preview: GalleryLightbox, jsx: '', html: '<div class="media-gallery" data-columns="3"><figure><figcaption>Brand identity</figcaption></figure><figure><figcaption>Component library</figcaption></figure></div>' },
+    preview: GalleryLightbox, jsx: '', html: '<div class="media-gallery" data-columns="2"><button class="btn btn-ghost" type="button" data-ut-open-dialog="gallery-brand">Brand identity</button><button class="btn btn-ghost" type="button" data-ut-open-dialog="gallery-library">Component library</button></div><dialog class="modal ut-native-dialog" id="gallery-brand" aria-labelledby="gallery-brand-title"><div class="modal-body"><h2 id="gallery-brand-title">Brand identity</h2><p>Project logo and palette</p><form method="dialog"><button class="btn btn-ghost">Close</button></form></div></dialog><dialog class="modal ut-native-dialog" id="gallery-library" aria-labelledby="gallery-library-title"><div class="modal-body"><h2 id="gallery-library-title">Component library</h2><p>Interface components and tokens</p><form method="dialog"><button class="btn btn-ghost">Close</button></form></div></dialog>' },
   'alert-statuses': { name: 'Status and actions', description: 'Use different tones and offer a next step inside an alert.',
     preview: () => <div style={{ display: 'grid', gap: 10 }}><Alert title="Changes saved" tone="ok">Your workspace is up to date.</Alert>
       <Alert title="Storage almost full" tone="warn">Review your files before the next upload.</Alert>
@@ -58,6 +62,11 @@ export const variants = {
 } satisfies Record<string, Example>;
 
 export const variantSets: Partial<Record<string, (keyof typeof variants)[]>> = {
+  navbar: Object.keys(navbarVariants) as (keyof typeof navbarVariants)[],
   accordion: ['accordion-panel'], 'file-input': ['file-dropzone'], gallery: ['gallery-lightbox'],
   alert: ['alert-statuses'], button: ['button-states'], progress: ['progress-labelled'],
 };
+for (const key of Object.keys(componentVariants) as (keyof typeof componentVariants)[]) {
+  const component = key.split('--', 1)[0];
+  (variantSets[component] ??= []).push(key);
+}

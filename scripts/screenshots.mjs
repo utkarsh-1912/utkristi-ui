@@ -560,11 +560,19 @@ async function captureEdge() {
     })()`);
     await retry(() => evaluate('document.querySelector(".docs-example [role=status]")?.textContent === "1 file selected"'), 'dropzone accepts a file');
 
+    await load('/components/navbar?variant=navbar-multilevel&theme=glass', 'Navbar');
+    await retry(() => evaluate('document.querySelector(".docs-example select[aria-label=\'Example variant\']").value === "navbar-multilevel"'), 'navbar variant deep link');
+    await retry(() => evaluate('getComputedStyle(document.querySelector(".docs-example [data-ut-enter]")).animationName === "ut-appear-slide"'), 'variant entry motion');
+    await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+    await retry(() => evaluate('getComputedStyle(document.querySelector(".docs-example [data-ut-enter]")).animationName === "none"'), 'variant respects reduced motion');
+    await send('Emulation.setEmulatedMedia', { features: [] });
+
     await load('/getting-started', 'Getting started');
     const links = await evaluate(`Array.from(document.querySelectorAll('.doc-sidebar a'), link => [link.hash.slice(1), link.textContent])`);
     const routes = [['/overview', 'A design system for Utkristi.'], ['/showcase', 'Build together.'],
       ['/about', 'About'], ['/terms', 'Terms'], ['/privacy', 'Privacy'], ...blocks, ...links];
     const overflow = [];
+    let variantsChecked = 0;
     for (const [theme] of themes) {
       for (const [path, title] of routes) {
         await load(path + '?theme=' + theme, title);
@@ -572,9 +580,22 @@ async function captureEdge() {
         if (path.startsWith('/components/') || path.startsWith('/blocks/')) await retry(() => evaluate('!!document.querySelector(".component-api")'), path + ' generated example');
         const width = await evaluate('document.documentElement.scrollWidth');
         if (width > 375) overflow.push(path + ' (' + theme + ', ' + width + 'px)');
+        if (theme === 'dark' && path.startsWith('/components/')) {
+          const selector = '.docs-example select[aria-label="Example variant"]';
+          const choices = await evaluate(`[...document.querySelectorAll(${JSON.stringify(selector + ' option')})].map(option => option.value).filter(Boolean)`);
+          if (!choices.length) throw new Error('Missing component variants for ' + path);
+          for (const choice of choices) {
+            await selectOption(selector, choice);
+            await retry(() => evaluate(`!!document.querySelector(${JSON.stringify('a[href="#/sandbox?component=' + choice + '"]')})`), choice + ' sandbox source');
+            const actual = await evaluate('document.documentElement.scrollWidth');
+            if (actual > 375) overflow.push(choice + ' (' + actual + 'px at 375px)');
+            variantsChecked++;
+          }
+        }
       }
     }
     if (overflow.length) throw new Error(`Horizontal overflow at 375px: ${overflow.join(', ')}`);
+    process.stdout.write(`Verified ${variantsChecked} component variants at 375px.\n`);
     const responsiveRoutes = [
       ['/overview', 'A design system for Utkristi.'], ['/icons', 'Icons'], ['/tokens', 'Tokens'], ['/showcase', 'Build together.'],
       ['/components/command', 'Command'], ['/components/data-table', 'Data Table'], ['/components/file-input', 'File Input'],
@@ -790,6 +811,56 @@ async function captureEdge() {
       select.dispatchEvent(new Event("change", { bubbles: true }));
     })()`);
     await retry(() => evaluate('document.querySelector(".playground iframe")?.srcdoc.includes("carousel-viewport") && document.querySelector(".playground [role=status]")?.textContent === "HTML preview ready"'), 'HTML sandbox');
+    await load('/sandbox?component=navbar&editor=html&motion=fade&theme=glass', 'Sandbox');
+    await retry(() => evaluate('document.querySelector(".playground select[id$=-variant]")?.value === "navbar"'), 'navbar sandbox variants');
+    await selectOption('.playground select[id$="-variant"]', 'navbar-multilevel');
+    await retry(() => evaluate('document.querySelector("#sandbox-source")?.value.includes("Teams") && document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), 'HTML variant preserves editor selection');
+    const verifyHtmlScript = async (probe, name) => {
+      await selectOption('.playground select[id$="-mode"]', 'js');
+      await evaluate(`(() => {
+        window.utkristiVerificationResult = undefined;
+        const receive = event => {
+          if (event.source !== document.querySelector('.playground iframe')?.contentWindow ||
+            event.data?.kind !== 'utkristi-verification') return;
+          window.utkristiVerificationResult = { passed: event.data.passed, detail: event.data.detail };
+          window.removeEventListener('message', receive);
+        };
+        window.addEventListener('message', receive);
+      })()`);
+      await setSource(probe);
+      await evaluate('Array.from(document.querySelectorAll(".playground-actions button")).find(button => button.textContent.trim() === "Run").click()');
+      const result = await retry(() => evaluate('window.utkristiVerificationResult'), name);
+      if (!result.passed) throw new Error(name + ' failed inside the HTML frame: ' + JSON.stringify(result.detail));
+    };
+    await verifyHtmlScript(`requestAnimationFrame(() => {
+      const mobile = document.querySelector('.navbar-html-mobile');
+      if (getComputedStyle(mobile).display !== 'none') mobile.querySelector('summary').click();
+      const nav = getComputedStyle(mobile).display === 'none' ? document.querySelector('.navbar-links') : mobile;
+      const resources = [...nav.querySelectorAll('summary')].find(summary => summary.textContent.includes('Resources'));
+      resources.click();
+      const teams = [...resources.parentElement.querySelectorAll('summary')].find(summary => summary.textContent.includes('Teams'));
+      teams.click();
+      const target = teams.parentElement.querySelector('a');
+      target.focus();
+      target.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      const detail = { focus: document.activeElement === teams, inner: teams.parentElement.open,
+        outer: resources.parentElement.open, motion: document.documentElement.dataset.utMotion };
+      parent.postMessage({ kind: 'utkristi-verification', passed: detail.focus && !detail.inner && detail.outer &&
+        detail.motion === 'fade', detail }, '*');
+    });`, 'HTML nested disclosure, focus return and animation choice');
+    await load('/sandbox?component=file-dropzone&editor=html&theme=glass', 'Sandbox');
+    await retry(() => evaluate('document.querySelector("#sandbox-source")?.value.includes("data-ut-dropzone") && document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), 'HTML file drop preview');
+    await verifyHtmlScript(`
+      const files = new DataTransfer();
+      files.items.add(new File(['sample'], 'notes.txt'));
+      const zone = document.querySelector('[data-ut-dropzone]');
+      zone.dispatchEvent(new DragEvent('drop', { dataTransfer: files, bubbles: true, cancelable: true }));
+      const detail = { file: zone.querySelector('input').files[0]?.name, status: zone.querySelector('[role=status]').textContent };
+      parent.postMessage({ kind: 'utkristi-verification', passed: detail.file === 'notes.txt' && detail.status === '1 file selected', detail }, '*');
+    `, 'HTML dropzone behavior');
+    const standaloneDom = await fetch(url + '/utkristi-dom.js');
+    if (!standaloneDom.ok || !(await standaloneDom.text()).includes('UtkristiDOM')) throw new Error('Standalone script is unavailable');
+    process.stdout.write('Verified interactive HTML variants and JavaScript editing.\n');
     if (exceptions.length) throw new Error('Unhandled browser errors: ' + exceptions.join('\n'));
     await load('/components/not-a-real-component', 'Page not found');
     await retry(() => evaluate('document.activeElement?.matches(".docs-status h1") && !!document.querySelector(".docs-navbar")'), '404 focuses heading and keeps navigation');

@@ -5,6 +5,7 @@ import {
 } from '@utkristi/ui';
 import type { Example } from './examples';
 import { workflowBlocks } from './workflow-blocks';
+import { worklistBlocks } from './worklist-blocks';
 
 const stack: CSSProperties = { display: 'grid', gap: 16, minWidth: 0 };
 const actions: CSSProperties = { display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8 };
@@ -290,6 +291,7 @@ function ExecutionDesk() {
 
 export const blocks = {
   ...workflowBlocks,
+  ...worklistBlocks,
   'enterprise-landing': { name: 'Enterprise landing', category: 'Marketing',
     description: 'Product-led landing page with a release preview, trust strip, and a demo request flow.',
     preview: EnterpriseLanding, jsx: '',

@@ -36,6 +36,7 @@ export * from './Overlays.js';
 export * from './Inputs.js';
 export * from './Calendar.js';
 export * from './DataDisplay.js';
+export * from './Worklist.js';
 export * from './Resizable.js';
 export * from './Conversation.js';
 export * from './Questionnaire.js';

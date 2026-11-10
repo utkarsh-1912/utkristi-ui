@@ -162,6 +162,13 @@ function BlockPage({ slug }: { slug: keyof typeof blocks }) {
     <a href="#/blocks" className="link block-back"><Icon name="arrow-left" /> All blocks</a>
     <PageTitle kicker={`Blocks / ${block.category}`} title={block.name} detail={block.description} />
     <ExamplePreview key={resolvedTheme} example={block} initialTheme={resolvedTheme} preserveState={template} />
+    {slug === 'project-worklist' && <section className="example-source">
+      <h2>Installable source</h2>
+      <p className="muted">The registry item contains the sandbox source and pins the kit version used by this build.
+        Use its URL with <Code inline>shadcn add</Code> after the matching kit is released. During development,
+        use a locally packed kit and the React source below. Load the kit stylesheet in your app.</p>
+      <Button variant="ghost" href={`${import.meta.env.BASE_URL}r/project-worklist.json`}>Open registry item</Button>
+    </section>}
     <Suspense fallback={<Loader variant="brand" className="docs-loader-inline" label="Loading example source…" />}>
       <ComponentReference slug={slug} html={block.html} />
     </Suspense>

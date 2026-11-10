@@ -88,6 +88,8 @@ export const Chart = forwardRef<HTMLElement, ChartProps>(function Chart(
 export interface DataColumn<Row> extends TableColumn<Row> {
   sortValue?: (row: Row) => string | number;
   filterValue?: (row: Row) => string;
+  /** Enables server sorting without requiring a local value accessor. */
+  sortable?: boolean;
 }
 
 export type DataTableRowKey = ReturnType<TableProps<unknown>['getRowKey']>;
@@ -103,23 +105,45 @@ export interface DataTableSelection<Row> {
   selectPageLabel?: string;
 }
 
+export interface DataTableState {
+  query: string;
+  /** One-based page index. */
+  page: number;
+  sort?: { key: string; descending: boolean };
+}
+
+export interface DataTableRemote {
+  state: DataTableState;
+  onStateChange: (state: DataTableState) => void;
+  /** Total matching rows across all pages. Keep the last known count during a request. */
+  totalRows: number;
+  status?: 'idle' | 'loading' | 'refreshing' | 'error';
+  error?: ReactNode;
+  onRetry?: () => void;
+}
+
 export interface DataTableProps<Row> extends Omit<TableProps<Row>, 'columns'> {
   columns: DataColumn<Row>[]; pageSize?: number; searchLabel?: string;
   /** Enables row and current-page selection. Use stable, unique keys from the data. */
   selection?: DataTableSelection<Row>;
+  /** Treats rows as an already filtered, ordered, and paginated result. */
+  remote?: DataTableRemote;
 }
 
 const noSelection: readonly DataTableRowKey[] = [];
 
 export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize = 10,
-  searchLabel = 'Filter rows', selection, className, ...props }: DataTableProps<Row>) {
-  const [query, setQuery] = useState('');
-  const [page, setPage] = useState(1);
-  const [sort, setSort] = useState<{ key: string; descending: boolean }>();
+  searchLabel = 'Filter rows', selection, remote, className, ...props }: DataTableProps<Row>) {
+  const [local, setLocal] = useState<DataTableState>({ query: '', page: 1 });
+  const state = remote?.state ?? local;
+  const { query, page, sort } = state;
+  const update = remote?.onStateChange ?? setLocal;
+  const isRemote = remote !== undefined;
   const [selectedKeys, setSelectedKeys] = useControllable(selection?.selectedKeys,
     selection?.defaultSelectedKeys ?? noSelection, selection?.onSelectionChange);
   const selected = useMemo(() => new Set(selectedKeys), [selectedKeys]);
   const visible = useMemo(() => {
+    if (isRemote) return rows.map((row, index) => ({ row, index }));
     const column = columns.find(({ key }) => key === sort?.key);
     const filter = query.trim().toLocaleLowerCase();
     const accessor = column?.sortValue;
@@ -139,22 +163,23 @@ export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize 
       });
     }
     return matching;
-  }, [columns, query, rows, sort]);
+  }, [columns, isRemote, query, rows, sort]);
   const limit = Math.max(1, Number.isFinite(pageSize) ? Math.floor(pageSize) : 10);
-  const count = Math.max(1, Math.ceil(visible.length / limit));
-  const current = Math.min(page, count);
-  const pageRows = visible.slice((current - 1) * limit, current * limit).map(({ row, index }) => ({
-    row, key: getRowKey(row, index), selectable: selection ? selection.isRowSelectable?.(row) ?? true : false,
+  const count = Math.max(1, Math.ceil((remote?.totalRows ?? visible.length) / limit));
+  const current = Math.min(Math.max(page, 1), count);
+  const busy = remote?.status === 'loading' || remote?.status === 'refreshing';
+  const pageRows = (isRemote ? visible : visible.slice((current - 1) * limit, current * limit)).map(({ row, index }) => ({
+    row, key: getRowKey(row, index), selectable: !busy && (selection ? selection.isRowSelectable?.(row) ?? true : false),
   }));
   const prepared = columns.map((entry): TableColumn<typeof pageRows[number]> => {
     const cell = { ...entry, render: ({ row }: typeof pageRows[number]) => entry.render
       ? entry.render(row) : String(row[entry.key as keyof Row] ?? '') };
-    if (!entry.sortValue) return cell;
-    const state = sort?.key === entry.key ? sort.descending ? 'descending' : 'ascending' : undefined;
-    return { ...cell, label: entry.label ?? (typeof entry.header === 'string' ? entry.header : undefined), sort: state,
+    if (isRemote ? !(entry.sortable ?? Boolean(entry.sortValue)) : !entry.sortValue) return cell;
+    const direction = sort?.key === entry.key ? sort.descending ? 'descending' : 'ascending' : undefined;
+    return { ...cell, label: entry.label ?? (typeof entry.header === 'string' ? entry.header : undefined), sort: direction,
       header: <button type="button" className="data-sort"
-      onClick={() => { setSort({ key: entry.key, descending: state === 'ascending' }); setPage(1); }}>
-      {entry.header}<span aria-hidden="true">{state === 'ascending' ? '↑' : state === 'descending' ? '↓' : '↕'}</span>
+      onClick={() => update({ ...state, sort: { key: entry.key, descending: direction === 'ascending' }, page: 1 })}>
+      {entry.header}<span aria-hidden="true">{direction === 'ascending' ? '↑' : direction === 'descending' ? '↓' : '↕'}</span>
     </button> };
   });
   let pageCheckbox: ReactNode;
@@ -185,12 +210,19 @@ export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize 
     });
   }
   const search = <SearchInput aria-label={searchLabel} placeholder={searchLabel} value={query}
-    onChange={(event) => { setQuery(event.target.value); setPage(1); }} />;
+    onChange={(event) => update({ ...state, query: event.target.value, page: 1 })} />;
   return <div className={cx('data-table', className)}>
     {selection ? <div className="data-table-controls">{search}{pageCheckbox}</div> : search}
-    <Table {...props} columns={prepared} rows={pageRows} getRowKey={({ key }) => `${typeof key}:${key}`}
+    {busy && <p role="status" className="muted data-table-status">
+      {remote.status === 'loading' ? 'Loading rows…' : 'Updating rows…'}
+    </p>}
+    {remote?.status === 'error' && <div className="data-table-status">
+      <p role="alert">{remote.error ?? 'Could not load rows.'}</p>
+      {remote.onRetry && <button type="button" className="btn btn-sm" onClick={remote.onRetry}>Retry</button>}
+    </div>}
+    <Table {...props} aria-busy={isRemote ? busy : props['aria-busy']} columns={prepared} rows={pageRows} getRowKey={({ key }) => `${typeof key}:${key}`}
       onRowClick={onRowClick && (({ row }) => onRowClick(row))} />
-    {visible.length === 0 && <p role="status" className="muted">No matching rows.</p>}
-    {count > 1 && <Pagination page={current} totalPages={count} onPageChange={setPage} />}
+    {visible.length === 0 && !busy && remote?.status !== 'error' && <p role="status" className="muted">No matching rows.</p>}
+    {count > 1 && <Pagination page={current} totalPages={count} onPageChange={(page) => update({ ...state, page })} />}
   </div>;
 }

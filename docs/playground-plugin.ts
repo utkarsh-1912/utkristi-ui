@@ -126,12 +126,43 @@ function apiFor(docs: string, source: string, examples: ReturnType<typeof sample
 
 export function docsPlayground(docs: string, source: string): Plugin {
   const prefix = 'virtual:utkristi-';
+  const worklistSource = join(docs, 'src', 'worklist-blocks.tsx');
+  const registryPath = 'r/project-worklist.json';
+  async function worklistRegistry() {
+    const [packageFile, content] = await Promise.all([
+      readFile(join(source, '../../package.json'), 'utf8'),
+      readFile(worklistSource, 'utf8'),
+    ]);
+    const { name, version } = JSON.parse(packageFile);
+    const { code } = samples(worklistSource, content, 'worklistBlocks')['project-worklist'];
+    return JSON.stringify({
+      $schema: 'https://ui.shadcn.com/schema/registry-item.json',
+      name: 'project-worklist',
+      type: 'registry:block',
+      title: 'Project worklist',
+      description: 'Server-style pagination, filters, bulk actions and request recovery.',
+      dependencies: [`${name}@${version}`],
+      files: [{ path: 'registry/project-worklist.tsx', type: 'registry:component', content: `"use client";\n\n${code}\n` }],
+    }, null, 2);
+  }
   return {
     name: 'utkristi-docs-playground',
+    async generateBundle() {
+      this.emitFile({ type: 'asset', fileName: registryPath, source: await worklistRegistry() });
+    },
+    configureServer(server) {
+      server.middlewares.use('/' + registryPath, (_request, response, next) => {
+        void worklistRegistry().then((json) => {
+          response.setHeader('Content-Type', 'application/json; charset=utf-8');
+          response.end(json);
+        }).catch(next);
+      });
+    },
     resolveId(id) { if (id.startsWith(prefix)) return '\0' + id; },
     async load(id) {
       if (id === '\0' + prefix + 'examples') {
-        const registries = [['catalog', 'catalog'], ['examples', 'examples'], ['variants', 'variants'], ['blocks', 'blocks'], ['workflow-blocks', 'workflowBlocks']];
+        const registries = [['catalog', 'catalog'], ['examples', 'examples'], ['variants', 'variants'],
+          ['blocks', 'blocks'], ['workflow-blocks', 'workflowBlocks'], ['worklist-blocks', 'worklistBlocks']];
         const entries = await Promise.all(registries.map(async ([file, name]) => {
           const path = join(docs, 'src', file + '.tsx');
           this.addWatchFile(path);

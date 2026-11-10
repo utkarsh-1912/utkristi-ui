@@ -2,6 +2,7 @@ import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { once } from 'node:events';
+import { createRequire } from 'node:module';
 import { join, resolve, sep } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
@@ -15,6 +16,8 @@ const themes = [['dark', 'night'], ['light', 'paper'], ['glass', 'glass']];
 const viewport = { width: 1440, height: 1800 };
 const mobileViewport = { width: 390, height: 900 };
 const captureOnly = process.argv.includes('--capture-only');
+const verifyOnly = process.argv.includes('--verify-only');
+const require = createRequire(import.meta.url);
 
 async function run(args) {
   const child = spawn(process.execPath, [vite, ...args], { cwd: root, stdio: 'inherit', windowsHide: true });
@@ -112,6 +115,7 @@ async function captureEdge() {
     };
     const fontsReady = () => evaluate('Promise.race([document.fonts.ready.then(() => true), new Promise(resolve => setTimeout(resolve, 4000))])');
     const screenshot = async (file, fullPage = false) => {
+      if (verifyOnly) return;
       const clip = fullPage ? { x: 0, y: 0, width: viewport.width, height: Math.ceil((await send('Page.getLayoutMetrics')).cssContentSize.height), scale: 1 } : undefined;
       const { data } = await send('Page.captureScreenshot', { format: 'png', fromSurface: true, captureBeyondViewport: fullPage, clip });
       await writeFile(join(screenshots, `${file}.png`), Buffer.from(data, 'base64'));
@@ -171,7 +175,7 @@ async function captureEdge() {
     await retry(() => evaluate('!!document.querySelector(".sheet-dock [aria-current=page]")'), 'mobile navigation screenshot');
     await screenshot('mobile-menu');
     await evaluate(`document.querySelector('.sheet-dock [aria-label="Close menu"]').click()`);
-    process.stdout.write('Captured the overview, showcases, icon catalog, sandbox, enterprise templates, and both mobile views.\n');
+    if (!verifyOnly) process.stdout.write('Captured the overview, showcases, icon catalog, sandbox, enterprise templates, and both mobile views.\n');
     if (captureOnly) return;
     await send('Emulation.setEmulatedMedia', { features: [] });
 
@@ -399,6 +403,71 @@ async function captureEdge() {
     await evaluate('Array.from(document.querySelectorAll(".modal button")).find(button => button.textContent.trim() === "Delete projects").click()');
     await retry(() => evaluate('!document.querySelector(".docs-example input[aria-label=\'Select Testing workspace\']")'), 'bulk delete removes the selected row');
 
+    const clickExample = (label, scope = '.docs-example') => evaluate(`[...document.querySelectorAll(${JSON.stringify(scope + ' button')})]
+      .find((button) => button.textContent.trim() === ${JSON.stringify(label)}).click()`);
+    const firstProject = (name) => evaluate(`document.querySelector('.docs-example tbody tr')?.textContent.includes(${JSON.stringify(name)})`);
+    await load('/blocks/project-worklist?theme=glass', 'Project worklist');
+    await retry(() => firstProject('Atlas 001'), 'worklist first page');
+    await evaluate('document.querySelector(\'.docs-example input[aria-label="Select row 1"]\').click()');
+    await evaluate('document.querySelector(\'.docs-example button[aria-label="Next page"]\').click()');
+    await retry(() => firstProject('Atlas 009'), 'worklist remote pagination');
+    await clickExample('Simulate error');
+    await retry(() => evaluate('!!document.querySelector(".docs-example [role=alert]")'), 'recoverable worklist error');
+    if (!await firstProject('Atlas 009')) throw new Error('Worklist discarded the last successful result on error.');
+    await clickExample('Retry');
+    await retry(() => evaluate('!document.querySelector(".docs-example [role=alert]") && document.querySelector(".docs-example table")?.getAttribute("aria-busy") === "false"'), 'worklist retry');
+    await clickExample('Archive selected');
+    await retry(() => evaluate('document.activeElement?.textContent === "Cancel"'), 'bulk confirmation focuses cancel');
+    await clickExample('Archive projects', '.modal');
+    await retry(() => firstProject('Meridian 002'), 'bulk action updates the worklist');
+    await retry(() => evaluate('document.activeElement?.textContent === "Project worklist"'), 'bulk action returns focus to the worklist');
+    await evaluate(`(() => {
+      const mode = document.querySelectorAll('.docs-example .worklist-filters select')[1];
+      mode.value = 'slow';
+      mode.dispatchEvent(new Event('change', { bubbles: true }));
+    })()`);
+    const searchProject = (query) => evaluate(`(() => {
+      const input = document.querySelector('.docs-example input[type=search]');
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, ${JSON.stringify(query)});
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    })()`);
+    await searchProject('Horizon');
+    await retry(() => evaluate('document.querySelector(".docs-example table")?.getAttribute("aria-busy") === "true"'), 'slow request starts');
+    await evaluate(`(() => {
+      const mode = document.querySelectorAll('.docs-example .worklist-filters select')[1];
+      mode.value = 'normal';
+      mode.dispatchEvent(new Event('change', { bubbles: true }));
+    })()`);
+    await searchProject('Meridian');
+    await sleep(1200);
+    await retry(() => evaluate(`document.querySelector('.docs-example table')?.getAttribute('aria-busy') === 'false' &&
+      [...document.querySelectorAll('.docs-example tbody tr')].every((row) => row.textContent.includes('Meridian'))`), 'superseded request does not overwrite the latest query');
+
+    for (const [theme] of themes) {
+      await load('/blocks/audit-explorer?theme=' + theme, 'Audit explorer');
+      await clickExample('Columns');
+      await retry(() => evaluate('!!document.querySelector(".worklist-column-options input:disabled")'), 'protected audit column');
+      await evaluate('document.activeElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }))');
+      await retry(() => evaluate('document.activeElement?.textContent.trim() === "Columns"'), 'column chooser returns focus');
+      await evaluate(await readFile(require.resolve('axe-core/axe.min.js'), 'utf8'));
+      const violations = await evaluate(`axe.run('.docs-example', { runOnly: { type: 'tag',
+        values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] } }).then(({ violations }) =>
+          violations.map(({ id, nodes }) => [id, nodes.map(({ target }) => target)]))`);
+      if (violations.length) throw new Error('Audit explorer accessibility (' + theme + '): ' + JSON.stringify(violations));
+    }
+    await evaluate(`localStorage.setItem('utkristi-audit-view',
+      JSON.stringify({ version: 1, columns: ['retired', 'date'], range: { start: '2026-10-22', end: '2026-10-22' } }))`);
+    await load('/blocks/roles-and-access?theme=glass', 'Roles and access');
+    await evaluate('document.querySelector(".docs-example tbody tr").click()');
+    await retry(() => evaluate('document.querySelector(".sheet-panel select")?.disabled === true'), 'protected workspace owner');
+    await evaluate('document.querySelector(".sheet-panel button[aria-label=Close]").click()');
+    await load('/blocks/audit-explorer?theme=glass', 'Audit explorer');
+    await clickExample('Load saved view');
+    await retry(() => evaluate(`document.querySelector('.docs-example tbody')?.textContent.trim() === 'Invite accepted2026-10-22'
+      && document.querySelector('.docs-example th')?.textContent === 'Event'`), 'saved view restores date bounds and the required column');
+    await evaluate("localStorage.removeItem('utkristi-audit-view')");
+    process.stdout.write('Verified worklist recovery and selection, plus audit accessibility in all themes.\n');
+
     await load('/components/file-input?theme=glass', 'File Input');
     await evaluate(`(() => {
       const select = document.querySelector('select[aria-label="Example variant"]');
@@ -432,6 +501,7 @@ async function captureEdge() {
       ['/overview', 'A design system for Utkristi.'], ['/icons', 'Icons'], ['/tokens', 'Tokens'], ['/showcase', 'Build together.'],
       ['/components/command', 'Command'], ['/components/data-table', 'Data Table'], ['/components/file-input', 'File Input'],
       ['/sandbox?component=command', 'Sandbox'], ['/blocks', 'Blocks'], ['/blocks/project-directory', 'Project directory'],
+      ['/blocks/project-worklist', 'Project worklist'], ['/blocks/audit-explorer', 'Audit explorer'], ['/blocks/roles-and-access', 'Roles and access'],
       ['/blocks/enterprise-landing', 'Enterprise landing'], ['/blocks/execution-desk', 'Execution desk'],
       ['/blocks/metric-card', 'Metric card'], ['/frameworks', 'Frameworks'],
     ];
@@ -784,13 +854,14 @@ async function capturePlaywright() {
 }
 
 await run(['build', '--config', 'docs/vite.config.ts']);
-await mkdir(screenshots, { recursive: true });
+if (!verifyOnly) await mkdir(screenshots, { recursive: true });
 const server = spawn(process.execPath, [vite, 'preview', '--config', 'docs/vite.config.ts', '--host', '127.0.0.1', '--port', '4173', '--strictPort'],
   { cwd: root, stdio: 'inherit', windowsHide: true });
 const stopped = once(server, 'exit').catch(() => {});
 try {
   await retry(async () => !server.exitCode && (await fetch(url)).ok, 'Vite preview');
   if (existsSync(edge)) await captureEdge();
+  else if (verifyOnly) throw new Error('The docs browser verification suite requires Microsoft Edge.');
   else await capturePlaywright();
 } finally {
   server.kill();

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added controlled remote data tables, filter and bulk action bars, a column chooser, and an inclusive date range picker. Added worklist, audit, and access blocks with live docs, editable sources, and a registry item for the worklist.
+- Added CI checks for the package, production docs, and representative keyboard, accessibility, and responsive scenarios.
+
 - Added the branded loader, About, Terms, and Privacy pages. The docs display and use the package version in their install examples.
 
 - Added recovery for missing docs bundles, a route-level error view, and standalone 404 and 500 pages. Code blocks and the sandbox now use each appearance's surface and border tokens.

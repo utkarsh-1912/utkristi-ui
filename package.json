@@ -78,6 +78,8 @@
     "docs:preview": "vite preview --config docs/vite.config.ts",
     "screenshots": "node scripts/screenshots.mjs",
     "screenshots:capture": "node scripts/screenshots.mjs --capture-only",
+    "docs:verify": "node scripts/screenshots.mjs --verify-only",
+    "smoke:package": "node scripts/smoke-package.mjs",
     "docs:stress": "node scripts/screenshots.mjs --stress"
   },
   "peerDependencies": {
@@ -110,6 +112,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.4.0",
     "autoprefixer": "^10.4.21",
+    "axe-core": "^4.14.0",
     "esbuild": "^0.25.0",
     "eslint": "^9.25.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",

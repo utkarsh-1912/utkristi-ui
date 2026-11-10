@@ -1010,6 +1010,16 @@ input.switch { display: inline-block; margin: 0; }
 .data-table { display: grid; gap: 10px; min-inline-size: 0; }
 .data-table-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
 .data-table-controls .choice { cursor: pointer; }
+.data-table-status { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin: 0; }
+.data-table-status p { margin: 0; color: var(--ut-bad-ink); }
+.worklist-filters, .worklist-column-options { display: grid; gap: 10px; min-inline-size: 0; }
+.worklist-controls, .worklist-bulk { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; min-inline-size: 0; }
+.worklist-bulk:has(.worklist-controls) { padding: 8px 12px; border-radius: var(--ut-r-field); background: var(--ut-bg-2); }
+.worklist-chip { max-inline-size: 100%; white-space: normal; overflow-wrap: anywhere; }
+.worklist-dates { min-inline-size: 0; border: 0; padding: 0; margin: 0; }
+.worklist-dates legend { padding: 0; margin-block-end: 8px; }
+.worklist-dates .field { flex: 1 1 9rem; }
+.worklist-dates .input { inline-size: 100%; }
 .data-sort { display: inline-flex; gap: 4px; align-items: center; border: 0; padding: 0; color: inherit; background: none; font: inherit; cursor: pointer; text-transform: inherit; }
 .resizable { display: grid; grid-template-columns: minmax(0, var(--ut-split, 50%)) 10px minmax(0, 1fr); min-width: 0; border: 1px solid var(--ut-line); border-radius: var(--ut-r); }
 .resizable[data-orientation="vertical"] { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, var(--ut-split, 50%)) 10px minmax(0, 1fr); block-size: var(--ut-resizable-height, 12rem); }

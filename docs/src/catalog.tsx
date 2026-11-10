@@ -1,8 +1,8 @@
 import { useId, useState } from 'react';
 import {
   Accordion, Alert, AlertDialog, AspectRatio, Attachment, Avatar, Badge, Banner, BottomNavigation, Breadcrumb, Bubble, Button,
-  ButtonGroup, Calendar, Card, CardBody, Carousel, Chart, Checkbox, ClipboardButton, CodeBlock, Collapsible, Combobox,
-  Command, ContextMenu, DataTable, DatePicker, Dialog, Direction, Drawer, DropdownMenu, Empty,
+  BulkActionBar, ButtonGroup, Calendar, Card, CardBody, Carousel, Chart, Checkbox, ClipboardButton, CodeBlock, Collapsible, ColumnChooser, Combobox,
+  Command, ContextMenu, DataTable, DatePicker, DateRangePicker, Dialog, Direction, Drawer, DropdownMenu, Empty, FilterBar,
   DeviceMockup, Field, FileInput, FloatingInput, Gallery, HoverCard, Icon, IconPalettePicker, IconTile, Input, InputGroup, InputOTP, Item, Jumbotron, Label, ListGroup, Loader, Marker, MegaMenu, Menubar, Message, NumberInput, PhoneInput,
   MessageScroller, NativeSelect, NavigationMenu, Pagination, Popover, Progress, Questionnaire, Radio,
   QRCode, RadioGroup, Rating, Resizable, ScrollArea, Select, SelectMenu, Separator, Sheet, Sidebar, SpeedDial, Switch, Textarea, TimeInput, Timeline, Toggle, ToggleGroup, Trace, Typography, VideoPlayer,
@@ -14,6 +14,33 @@ const demo = (name: string, description: string, preview: Example['preview'], js
   ({ name, description, preview, jsx, html });
 
 const teams = ['Design', 'Engineering', 'Operations'].map((label) => ({ value: label.toLowerCase(), label }));
+const worklistColumns = [{ key: 'name', label: 'Project', required: true }, { key: 'team', label: 'Team' }];
+
+function ColumnsDemo() {
+  const [visible, setVisible] = useState(['name', 'team']);
+  return <><ColumnChooser columns={worklistColumns} visible={visible} onChange={setVisible} />
+    <p className="muted">Visible: {worklistColumns.filter(({ key }) => visible.includes(key)).map(({ label }) => label).join(', ')}</p></>;
+}
+
+function DateRangeDemo() {
+  const [value, setValue] = useState({ start: '', end: '' });
+  return <DateRangePicker value={value} onChange={setValue} />;
+}
+
+function FilterBarDemo() {
+  const [team, setTeam] = useState('Design');
+  return <FilterBar filters={team ? [{ id: 'team', label: team }] : []} onRemove={() => setTeam('')} onReset={() => setTeam('')}>
+    <Field label="Team"><Select value={team} onChange={(event) => setTeam(event.currentTarget.value)}>
+      <option value="">All teams</option><option>Design</option><option>Engineering</option>
+    </Select></Field>
+  </FilterBar>;
+}
+
+function BulkActionsDemo() {
+  const [count, setCount] = useState(3);
+  return <><Button variant="ghost" onClick={() => setCount(3)}>Select three rows</Button>
+    <BulkActionBar count={count} onClear={() => setCount(0)} /></>;
+}
 const slides = ['Studio', 'Build', 'Launch'].map((label, index) => ({
   id: label, label, content: <Card pane={index % 2 === 0}><CardBody className="catalog-slide">
     <span className="label">0{index + 1} / {teams[index].label}</span><strong>{label}</strong>
@@ -261,7 +288,15 @@ export const catalog = {
   'context-menu': demo('Context Menu', 'Open actions at the pointer or with the keyboard.',
     () => <MenuDemo kind="context" />, '<ContextMenu label="Workspace actions" items={items}>Open actions</ContextMenu>',
     '<div class="menu-anchor context-menu"><button class="context-trigger" aria-haspopup="menu" aria-expanded="false">Open actions</button></div>'),
-  'data-table': demo('Data Table', 'Filter, sort, and paginate rows. Pass selection={{}} for local selection, or use selectedKeys and onSelectionChange for app actions. Use stable row IDs so choices survive sorting and filtering. Select all affects the current page only.',
+  'bulk-action-bar': demo('Bulk Action Bar', 'Announce the selected row count, expose bulk commands, and clear the selection.',
+    BulkActionsDemo, '', '<div class="worklist-bulk" role="group" aria-label="Bulk actions"><span role="status">3 selected</span><button class="btn btn-sm">Clear selection</button></div>'),
+  'column-chooser': demo('Column Chooser', 'Choose which table columns are visible. Keep identifying columns visible with required.',
+    ColumnsDemo, '', '<div class="worklist-column-options"><label><input type="checkbox" checked disabled> Project</label><label><input type="checkbox" checked> Team</label></div>'),
+  'filter-bar': demo('Filter Bar', 'Group filter fields, display active filters, and remove them individually or together.',
+    FilterBarDemo, '', '<div class="worklist-filters" role="group" aria-label="Filters"><div class="worklist-controls"><button class="btn btn-sm">Remove Design</button><button class="btn btn-sm">Reset filters</button></div></div>'),
+  'date-range-picker': demo('Date Range Picker', 'Pick inclusive date-only bounds. Leave either bound blank for an open-ended range.',
+    DateRangeDemo, '', '<fieldset class="worklist-dates"><legend>Date range</legend><div class="worklist-controls"><label class="field">Start date<input class="input" type="date"></label><label class="field">End date<input class="input" type="date"></label></div></fieldset>'),
+  'data-table': demo('Data Table', 'Filter, sort, and paginate rows. Pass remote for a server-backed page and stable row IDs for selection across pages. Select all affects the current page only.',
     DataTableDemo,
     '<DataTable rows={rows} columns={columns} getRowKey={(row) => row.id} selection={{ selectedKeys, onSelectionChange: setSelectedKeys }} />',
     '<div class="data-table"><input class="input" type="search" aria-label="Filter rows"><table class="table"><thead><tr><th scope="col">Team</th></tr></thead><tbody><tr><td>Design</td></tr></tbody></table></div>'),

@@ -22,6 +22,15 @@ export default function ComponentReference({ slug, html }: { slug: string; html:
         ...(template ? [{ id: 'layout-css', label: 'Layout CSS', content: <CopyCode text={enterpriseStyles} language="CSS" /> }] : []),
       ]} />
     </div>
+    {slug === 'data-table' && <section className="example-source">
+      <h2>Server-backed tables</h2>
+      <p>Pass the current page in <Code inline>rows</Code>, a stable <Code inline>getRowKey</Code>, and
+        the full matching count in <Code inline>remote.totalRows</Code>. The table sends one-based page changes, queries,
+        and sorting through <Code inline>remote.onStateChange</Code>. Set <Code inline>sortable</Code> on server-sortable columns.</p>
+      <p>Keep request cancellation and error handling in your data layer. Keep the last result during a refresh,
+        reset the page when app filters change, and provide a retry callback for recoverable errors.</p>
+      <Button href="#/blocks/project-worklist" variant="ghost">Try the project worklist</Button>
+    </section>}
     {sample && <ComponentApi components={sample.components} />}
   </>;
 }

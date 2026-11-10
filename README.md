@@ -22,6 +22,8 @@ Utkristi UI is the shared design system for the Utkristi ecosystem. It includes 
 
 The docs include component variants and a Blocks library with working project management, account, settings, and pricing examples. Open any example in the sandbox to try it in Night, Paper, or Glass.
 
+The Project Worklist demonstrates a controlled remote `DataTable`, request cancellation, retries, and bulk actions. Audit Explorer adds date filtering, visible columns, and a saved view. Roles and Access demonstrates permission editing in a sheet. All three include editable TSX and API references. The docs build also emits the worklist source as `r/project-worklist.json` for use with the matching package build.
+
 Blocks also includes an enterprise landing page, a simulated execution desk, operational workflows, and custom cards. The enterprise templates support the Signal, Ledger, and Terminal presets. [Enterprise and theme research](https://github.com/utkarsh-1912/utkristi-ui/blob/main/docs/enterprise-research.md) · [Landing preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/enterprise-landing.png) · [Execution desk preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/execution-desk.png)
 
 ## Install

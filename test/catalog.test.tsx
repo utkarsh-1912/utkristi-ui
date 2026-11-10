@@ -3,9 +3,59 @@ import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { expect, test, vi } from 'vitest';
 import {
-  Accordion, AlertDialog, Calendar, Carousel, Combobox, Command, ContextMenu, DataTable, DatePicker,
+  Accordion, AlertDialog, Calendar, Carousel, ColumnChooser, Combobox, Command, ContextMenu, DataTable, DatePicker, DateRangePicker,
   InputOTP, Loader, Progress, Questionnaire, Resizable, SelectMenu, ToastProvider, useToast,
 } from '../src/react/index.js';
+
+test('remote tables preserve server order and expose request controls with stable page selection', async () => {
+  const user = userEvent.setup();
+  const change = vi.fn();
+  const retry = vi.fn();
+  const accessor = vi.fn((row: { id: number; name: string }) => row.name);
+  const rows = [{ id: 27, name: 'Zulu' }, { id: 21, name: 'Alpha' }];
+  const state = { query: 'query supplied to the server', page: 2 };
+  const view = (status: 'idle' | 'refreshing' | 'error') => <DataTable rows={rows}
+    columns={[{ key: 'name', header: 'Project', sortValue: accessor }]} getRowKey={(row) => row.id}
+    pageSize={2} selection={{ defaultSelectedKeys: [10] }}
+    remote={{ state, status, onStateChange: change, onRetry: retry, totalRows: 6 }} />;
+  const { rerender } = render(view('idle'));
+  expect(screen.getAllByRole('cell').map((cell) => cell.textContent)).toEqual(['', 'Zulu', '', 'Alpha']);
+  expect(accessor).not.toHaveBeenCalled();
+  await user.click(screen.getByRole('button', { name: 'Next page' }));
+  expect(change).toHaveBeenLastCalledWith({ ...state, page: 3 });
+  await user.click(screen.getByRole('button', { name: 'Project' }));
+  expect(change).toHaveBeenLastCalledWith({ ...state, page: 1, sort: { key: 'name', descending: false } });
+  await user.click(screen.getByRole('checkbox', { name: 'Select all on this page' }));
+  expect(screen.getByRole('checkbox', { name: 'Select row 27' })).toBeChecked();
+  rerender(view('refreshing'));
+  expect(screen.getByRole('table')).toHaveAttribute('aria-busy', 'true');
+  expect(screen.getByRole('checkbox', { name: 'Select row 27' })).toBeDisabled();
+  rerender(view('error'));
+  expect(screen.getByRole('alert')).toHaveTextContent('Could not load rows');
+  expect(screen.getByText('Zulu')).toBeVisible();
+  await user.click(screen.getByRole('button', { name: 'Retry' }));
+  expect(retry).toHaveBeenCalledOnce();
+});
+
+test('date bounds are inclusive and the column chooser protects the identifying column', async () => {
+  const user = userEvent.setup();
+  const change = vi.fn();
+  render(<><DateRangePicker min="2026-01-01" max="2026-12-31"
+    value={{ start: '2026-04-01', end: '2026-04-01' }} onChange={change} />
+    <ColumnChooser columns={[{ key: 'id', label: 'ID', required: true }, { key: 'owner', label: 'Owner' }]}
+      visible={['owner']} onChange={change} /></>);
+  expect(screen.getByLabelText('Start date')).toHaveAttribute('max', '2026-04-01');
+  expect(screen.getByLabelText('End date')).toHaveAttribute('min', '2026-04-01');
+  fireEvent.change(screen.getByLabelText('End date'), { target: { value: '2026-04-02' } });
+  expect(change).toHaveBeenLastCalledWith({ start: '2026-04-01', end: '2026-04-02' });
+  const columns = screen.getByRole('button', { name: 'Columns' });
+  await user.click(columns);
+  expect(screen.getByRole('checkbox', { name: 'ID' })).toBeDisabled();
+  await user.click(screen.getByRole('checkbox', { name: 'Owner' }));
+  expect(change).toHaveBeenLastCalledWith(['id']);
+  await user.keyboard('{Escape}');
+  expect(columns).toHaveFocus();
+});
 
 test('command runs the first enabled search match with Enter and preserves grouped keyboard order', async () => {
   const user = userEvent.setup();

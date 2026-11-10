@@ -9,9 +9,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="./mark.svg">
     <title>Utkristi UI · Ecosystem design system</title>
+    <style>
+      .docs-boot {
+        position: fixed; inset: 0; display: grid; place-content: center; justify-items: center; gap: 12px;
+        padding: 20px; text-align: center; background: var(--ut-bg, #0b0b0a); color: var(--ut-ink, #e8e6df);
+        font: 500 .875rem system-ui, sans-serif;
+      }
+      .docs-boot[hidden] { display: none; }
+      .docs-boot .brand-dot { fill: var(--ut-accent, #9cc3ff); }
+      .docs-boot a { color: inherit; text-decoration: underline; }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="docs-boot loader loader-brand" id="docs-boot-loader" role="status">
+        <svg class="brand-mark loader-mark" width="48" height="48" viewBox="0 0 32 32" aria-hidden="true">
+          <path class="brand-tile" fill="currentColor" d="M2.8 20.5 12.6 10.7a1.65 1.65 0 0 1 2.3 0l3.1 3.1a1.65 1.65 0 0 1 0 2.3l-9.8 9.8a1.65 1.65 0 0 1-2.3 0l-3.1-3.1a1.65 1.65 0 0 1 0-2.3Z"/>
+          <path class="brand-tile" fill="currentColor" transform="translate(11 2.5)" d="M2.8 20.5 12.6 10.7a1.65 1.65 0 0 1 2.3 0l3.1 3.1a1.65 1.65 0 0 1 0 2.3l-9.8 9.8a1.65 1.65 0 0 1-2.3 0l-3.1-3.1a1.65 1.65 0 0 1 0-2.3Z"/>
+          <path class="brand-dot" d="m21.4 6.3 3.5-3.5a1.25 1.25 0 0 1 1.8 0l3.5 3.5a1.25 1.25 0 0 1 0 1.8l-3.5 3.5a1.25 1.25 0 0 1-1.8 0l-3.5-3.5a1.25 1.25 0 0 1 0-1.8Z"/>
+        </svg>
+        <span class="loader-label">Opening Utkristi UI…</span>
+      </div>
+      <section class="docs-boot" id="docs-boot-error" role="alert" hidden>
+        <h1>This page couldn’t load</h1>
+        <a href="">Reload page</a>
+      </section>
+      <noscript>
+        <style>#docs-boot-loader { display: none; }</style>
+        <div class="docs-boot">Enable JavaScript to open the Utkristi UI documentation.</div>
+      </noscript>
+    </div>
+    <script>
+      window.addEventListener('error', function (event) {
+        if (!(event.target instanceof HTMLScriptElement) || event.target.type !== 'module') return;
+        const loading = document.getElementById('docs-boot-loader');
+        if (!loading) return;
+        loading.hidden = true;
+        document.getElementById('docs-boot-error').hidden = false;
+      }, true);
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -5,6 +5,7 @@ import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import { docsPlayground } from './playground-plugin';
 import { docsStatusRoutes } from './status-routes';
+import { themeScript } from '../src/react/theme/ThemeProvider';
 // @ts-expect-error The development preset is handwritten ESM.
 import preset from '../src/tailwind/preset.js';
 
@@ -15,7 +16,17 @@ export default defineConfig({
   root: docs,
   base: './',
   appType: 'mpa',
-  plugins: [react(), docsPlayground(docs, source), docsStatusRoutes],
+  plugins: [
+    react(),
+    docsPlayground(docs, source),
+    docsStatusRoutes,
+    {
+      name: 'utkristi-docs-initial-theme',
+      transformIndexHtml() {
+        return [{ tag: 'script', children: themeScript(), injectTo: 'head-prepend' }];
+      },
+    },
+  ],
   resolve: { alias: { '@utkristi/ui': `${source}index.ts` } },
   css: {
     postcss: { plugins: [tailwindcss({

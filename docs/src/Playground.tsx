@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { Button, Icon, Kbd, Select, type ResolvedTheme, useTheme } from '@utkristi/ui';
+import { Button, Icon, Kbd, Loader, Select, type ResolvedTheme, useTheme } from '@utkristi/ui';
 import { CopyAction } from './CopyCode';
 import { SourceEditor } from './SourceEditor';
 import { blockPages, componentPages, examplePage, sandboxExamples as previews } from './examples';
@@ -194,7 +194,7 @@ export default function Playground({ component }: { component?: string }) {
           if (!run.markup) iframe.current?.contentWindow?.postMessage({
             kind: 'utkristi-preview', code: run.source, theme: run.theme, token: run.token,
           }, '*');
-        }} /> : <p className="muted playground-loading">Preparing preview…</p>}
+        }} /> : !error && <Loader variant="brand" className="playground-loading" label="Preparing preview…" aria-hidden="true" />}
       </div>
       {error && <div role="alert" className="playground-error">{error}</div>}
       <div className="source-status"><span className="playground-run-status" role="status">{busy ? 'Compiling…' : status || (error ? 'Run failed' : 'Preparing preview…')}</span>

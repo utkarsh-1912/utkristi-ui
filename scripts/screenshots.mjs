@@ -81,16 +81,18 @@ async function captureEdge() {
     const exceptions = [];
     let fault;
     let faultRequests = 0;
+    let entryRequest;
     client = await connect(targets.find((target) => target.type === 'page').webSocketDebuggerUrl, ({ method, params }) => {
       if (method === 'Runtime.exceptionThrown') {
         const detail = params.exceptionDetails;
         exceptions.push(detail.exception?.description ?? detail.text);
       }
-      if (method === 'Fetch.requestPaused' && fault) {
+      if (method !== 'Fetch.requestPaused') return;
+      if (fault) {
         faultRequests++;
         client.send('Fetch.fulfillRequest', { requestId: params.requestId, ...fault })
           .catch((error) => exceptions.push(error.message));
-      }
+      } else entryRequest = params.requestId;
     });
     const { send } = client;
     await send('Runtime.enable');
@@ -115,6 +117,17 @@ async function captureEdge() {
       await writeFile(join(screenshots, `${file}.png`), Buffer.from(data, 'base64'));
     };
     await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+    await size(760, 480);
+    await send('Fetch.enable', { patterns: [{ urlPattern: '*/assets/index-*.js' }] });
+    try {
+      await send('Page.navigate', { url: `${url}/?loader-preview=1` });
+      await retry(() => entryRequest && evaluate('document.querySelector("#docs-boot-loader:not([hidden])")?.textContent.includes("Opening Utkristi UI")'), 'startup loader while app entry is pending');
+      await screenshot('loader');
+      await send('Fetch.continueRequest', { requestId: entryRequest });
+    } finally {
+      await send('Fetch.disable');
+    }
+    await retry(() => evaluate('!document.querySelector("#docs-boot-loader") && !!document.querySelector(".marketing-hero")'), 'startup loader hands off to the app');
     await size(viewport.width, viewport.height);
     for (const [theme, file] of themes) {
       await load(`/showcase?theme=${theme}`, 'Build together.');
@@ -163,6 +176,22 @@ async function captureEdge() {
     await send('Emulation.setEmulatedMedia', { features: [] });
 
     await size(1280, 860);
+    await load('/components/loader?theme=glass', 'Loader');
+    await retry(() => evaluate('getComputedStyle(document.querySelector(".docs-example .loader-brand .brand-tile")).animationName === "ut-loader-assemble"'), 'animated brand loader');
+    await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+    await retry(() => evaluate('getComputedStyle(document.querySelector(".docs-example .loader-brand .brand-tile")).animationName === "none"'), 'static brand loader with reduced motion');
+    await send('Emulation.setEmulatedMedia', { features: [] });
+    const { version } = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
+    await load('/overview', 'A design system for Utkristi.');
+    for (const [page, heading] of [['about', 'About'], ['terms', 'Terms'], ['privacy', 'Privacy']]) {
+      await evaluate(`document.querySelector('.docs-footer-links a[href="#/${page}"]').click()`);
+      await retry(() => evaluate(`document.querySelector('.site-info h1')?.textContent === '${heading}' &&
+        document.querySelector('.docs-footer-links [aria-current="page"]')?.textContent === '${heading}' &&
+        document.title === '${heading} · Utkristi UI'`), page + ' footer route');
+    }
+    await retry(() => evaluate(`document.querySelector('.docs-footer .footer-bottom').textContent.includes('Version ${version}')`), 'footer uses the package version');
+    await load('/getting-started', 'Getting started');
+    await retry(() => evaluate(`[...document.querySelectorAll('.code-example')].some(example => example.textContent.includes('unpkg.com/@utkristi/ui@${version}/utkristi-ui.css'))`), 'install snippet uses the package version');
     for (const [theme, themeKey] of themes) {
       await load('/showcase?theme=' + theme, 'Build together.');
       await retry(() => evaluate('!!document.querySelector(".showcase-icon-tray")'), 'showcase tray');
@@ -386,7 +415,8 @@ async function captureEdge() {
 
     await load('/getting-started', 'Getting started');
     const links = await evaluate(`Array.from(document.querySelectorAll('.doc-sidebar a'), link => [link.hash.slice(1), link.textContent])`);
-    const routes = [['/overview', 'A design system for Utkristi.'], ['/showcase', 'Build together.'], ...blocks, ...links];
+    const routes = [['/overview', 'A design system for Utkristi.'], ['/showcase', 'Build together.'],
+      ['/about', 'About'], ['/terms', 'Terms'], ['/privacy', 'Privacy'], ...blocks, ...links];
     const overflow = [];
     for (const [theme] of themes) {
       for (const [path, title] of routes) {
@@ -668,6 +698,14 @@ async function captureEdge() {
     } finally {
       await send('Fetch.disable');
     }
+    fault = { responseCode: 404, responseHeaders: [{ name: 'Cache-Control', value: 'no-store' }] };
+    await send('Fetch.enable', { patterns: [{ urlPattern: '*/assets/index-*.js' }] });
+    try {
+      await send('Page.navigate', { url: `${url}/?recovery-test=entry` });
+      await retry(() => evaluate('!!document.querySelector("#docs-boot-loader[hidden]") && !!document.querySelector("#docs-boot-error:not([hidden])")'), 'startup loader yields to the error page');
+    } finally {
+      await send('Fetch.disable');
+    }
     process.stdout.write('Verified standalone error pages, docs 404 routing, and recovery from a missing bundle and module error.\n');
     process.stdout.write('Verified React and HTML sandbox previews.\n');
     process.stdout.write(`Checked ${routes.length} docs routes in Night, Paper, and Glass at 375px.\n`);
@@ -688,6 +726,19 @@ async function capturePlaywright() {
   const browser = await chromium.launch();
   try {
     const page = await browser.newPage({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce' });
+    await page.setViewportSize({ width: 760, height: 480 });
+    let releaseEntry;
+    const entryGate = new Promise((resolve) => { releaseEntry = resolve; });
+    await page.route('**/assets/index-*.js', async (route) => { await entryGate; await route.continue(); });
+    try {
+      await page.goto(`${url}/?loader-preview=1`, { waitUntil: 'commit' });
+      await page.locator('#docs-boot-loader').waitFor();
+      await page.screenshot({ path: join(screenshots, 'loader.png'), timeout: 8000 });
+    } finally {
+      releaseEntry();
+      await page.unroute('**/assets/index-*.js');
+    }
+    await page.setViewportSize(viewport);
     for (const [theme, file] of themes) {
       await page.goto(`${url}/#/showcase?theme=${theme}`);
       await page.locator(`html[data-theme="${theme}"] .showcase`).waitFor();

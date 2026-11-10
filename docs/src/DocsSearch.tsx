@@ -19,6 +19,9 @@ const guideDetails: Record<string, string> = {
   Showcase: 'See the kit in a sample workspace.',
   Blocks: 'Try complete layouts and copy their source.',
   Frameworks: 'Use Utkristi CSS and native dialog behavior in Vue, Svelte, Angular, or HTML.',
+  About: 'Learn about Utkristi UI and its source repository.',
+  Terms: 'Read the MIT License and how the examples are provided.',
+  Privacy: 'Review browser storage, the sandbox, and hosting.',
 };
 
 const aliases: Record<string, string[]> = {
@@ -26,6 +29,8 @@ const aliases: Record<string, string[]> = {
   '#/icons': ['glyphs', 'svg', '3d'],
   '#/sandbox': ['playground', 'editor'],
   '#/frameworks': ['vue', 'svelte', 'angular', 'vanilla', 'html'],
+  '#/terms': ['license', 'mit'],
+  '#/privacy': ['data', 'storage'],
   '#/components/data-table': ['grid', 'rows'],
   '#/components/dialog': ['modal'],
   '#/components/command': ['palette', 'launcher'],

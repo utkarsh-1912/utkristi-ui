@@ -2,7 +2,7 @@ import { lazy, StrictMode, Suspense, useEffect, useId, useRef, useState, type Re
 import { createRoot } from 'react-dom/client';
 import { ArrowUpRight } from 'lucide-react';
 import {
-  Button, Code, Dot, Icon, IconPaletteProvider, Logo, SearchInput,
+  Button, Code, Dot, Icon, IconPaletteProvider, Loader, Logo, SearchInput,
   Select, Shell, Tabs, ThemeProvider, ThemeSelect, ToastProvider, useTheme, type Theme,
 } from '@utkristi/ui';
 import { blockPages, componentPages, examples, type Example } from './examples';
@@ -12,6 +12,8 @@ import { FontDemo } from './catalog';
 import { CopyCode } from './CopyCode';
 import { DocsSearch } from './DocsSearch';
 import { DocsErrorBoundary, DocsStatus } from './DocsStatus';
+import { About, Privacy, Terms } from './SiteInfo';
+import { version } from '../../package.json';
 import ShowcaseIconTray from './ShowcaseIconTray';
 import { TokensPaletteSection } from './TokensPaletteSection';
 import { MarketingHome, useMarketingMotion, WorkflowSection } from './Marketing';
@@ -37,6 +39,11 @@ const primaryIcons = {
   Overview: 'home', Install: 'download', Icons: 'palette', Components: 'layers', Blocks: 'grid', Sandbox: 'terminal', Frameworks: 'code',
 } as const;
 const showcaseLink = { href: '#/showcase', label: 'Showcase' };
+const siteLinks = [
+  { href: '#/about', label: 'About' },
+  { href: '#/terms', label: 'Terms' },
+  { href: '#/privacy', label: 'Privacy' },
+];
 const isMac = typeof navigator !== 'undefined' && /Mac|iP(hone|ad|od)/.test(navigator.platform);
 const guide = [
   { href: '#/getting-started', label: 'Getting started' },
@@ -124,7 +131,9 @@ function ComponentPage({ slug }: { slug: keyof typeof examples }) {
         {choices.map((key) => <option key={key} value={key}>{variants[key].name}</option>)}
       </Select>}
     </ExamplePreview>
-    <Suspense fallback={<p className="muted">Loading examples and props…</p>}><ComponentReference slug={variant ?? slug} html={selected.html} /></Suspense>
+    <Suspense fallback={<Loader variant="brand" className="docs-loader-inline" label="Loading examples and props…" />}>
+      <ComponentReference slug={variant ?? slug} html={selected.html} />
+    </Suspense>
     <DocsPagination links={componentLinks} current={`#/components/${slug}`} label="Component pagination" />
   </article>;
 }
@@ -153,7 +162,9 @@ function BlockPage({ slug }: { slug: keyof typeof blocks }) {
     <a href="#/blocks" className="link block-back"><Icon name="arrow-left" /> All blocks</a>
     <PageTitle kicker={`Blocks / ${block.category}`} title={block.name} detail={block.description} />
     <ExamplePreview key={resolvedTheme} example={block} initialTheme={resolvedTheme} preserveState={template} />
-    <Suspense fallback={<p className="muted">Loading example source…</p>}><ComponentReference slug={slug} html={block.html} /></Suspense>
+    <Suspense fallback={<Loader variant="brand" className="docs-loader-inline" label="Loading example source…" />}>
+      <ComponentReference slug={slug} html={block.html} />
+    </Suspense>
     <DocsPagination links={blockLinks} current={`#/blocks/${slug}`} label="Block pagination" />
   </article>;
 }
@@ -179,7 +190,7 @@ function GettingStarted() {
     <h2>Standalone CSS and fonts</h2>
     <CopyCode text={`import '@utkristi/ui/fonts.css';\nimport '@utkristi/ui/utkristi-ui.css';`} />
     <p>In HTML, load the same font stylesheet and CSS with link elements.</p>
-    <CopyCode text={`<link rel="stylesheet" href="https://unpkg.com/@utkristi/ui@0.1.0/fonts.css">\n<link rel="stylesheet" href="https://unpkg.com/@utkristi/ui@0.1.0/utkristi-ui.css">`} />
+    <CopyCode text={`<link rel="stylesheet" href="https://unpkg.com/@utkristi/ui@${version}/fonts.css">\n<link rel="stylesheet" href="https://unpkg.com/@utkristi/ui@${version}/utkristi-ui.css">`} />
     <h2>React</h2>
     <CopyCode text={`import { Button, ThemeProvider } from '@utkristi/ui';\nimport '@utkristi/ui/utkristi-ui.css';\n\nexport function App() {\n  return <ThemeProvider><Button>New workspace</Button></ThemeProvider>;\n}`} />
     <p><a className="link" href="#/frameworks">See HTML, Vue, Svelte, and Angular integrations <Icon name="arrow-right" /></a></p>
@@ -386,21 +397,24 @@ function App() {
   const block = path.startsWith('/blocks/') && Object.hasOwn(blocks, blockSlug) ? blockSlug as keyof typeof blocks : undefined;
   const pages: Record<string, ReactNode> = {
     '/overview': <MarketingHome />, '/getting-started': <GettingStarted />, '/theming': <Theming />,
-    '/tokens': <Tokens />, '/icons': <Suspense fallback={<p className="muted">Loading icon catalog…</p>}><IconsPage /></Suspense>, '/typography': <Typography />, '/showcase': <Showcase />,
+    '/tokens': <Tokens />, '/icons': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading icon catalog…" />}><IconsPage /></Suspense>, '/typography': <Typography />, '/showcase': <Showcase />,
     '/blocks': <BlocksPage />,
-    '/frameworks': <Suspense fallback={<p className="muted">Loading integrations…</p>}><Frameworks /></Suspense>,
-    '/sandbox': <Suspense fallback={<p className="muted">Loading sandbox…</p>}><Playground key={sample ?? 'carousel'} component={sample} /></Suspense>,
+    '/about': <About />, '/terms': <Terms />, '/privacy': <Privacy />,
+    '/frameworks': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading integrations…" />}><Frameworks /></Suspense>,
+    '/sandbox': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading sandbox…" />}><Playground key={sample ?? 'carousel'} component={sample} /></Suspense>,
   };
   const page = Object.hasOwn(pages, path) ? pages[path] : undefined;
   const errorPage = /^\/(?:error|500)(?:\.html)?\/?$/.test(path);
   const status = errorPage ? 'error' : !component && !block && !page ? 'missing' : undefined;
   const content = component ? <ComponentPage key={component} slug={component} />
     : block ? <BlockPage key={block} slug={block} /> : status ? <DocsStatus status={status} /> : page;
-  const standalone = !!status || path === '/overview' || path === '/showcase' || path === '/sandbox' || path === '/blocks' || path === '/icons' || !!block;
+  const sitePage = siteLinks.find(({ href }) => href === `#${path}`);
+  const standalone = !!status || !!sitePage || path === '/overview' || path === '/showcase' || path === '/sandbox' || path === '/blocks' || path === '/icons' || !!block;
   useEffect(() => {
     document.title = status === 'missing' ? 'Page not found · Utkristi UI'
-      : status === 'error' ? 'Something went wrong · Utkristi UI' : 'Utkristi UI · Ecosystem design system';
-  }, [status]);
+      : status === 'error' ? 'Something went wrong · Utkristi UI'
+        : sitePage ? `${sitePage.label} · Utkristi UI` : 'Utkristi UI · Ecosystem design system';
+  }, [status, sitePage]);
   const routeContent = <DocsErrorBoundary key={JSON.stringify([path, sample])}>{content}</DocsErrorBoundary>;
   function releasePreviewTheme() {
     const url = new URL(location.href);
@@ -436,12 +450,15 @@ function App() {
       columns: [{ title: 'Build', links: [guide[0], primary[3], primary[5], primary[6]] },
         { title: 'Design', links: [guide[1], guide[2], guide[3], guide[4]] }, { title: 'Explore', links: [primary[0], primary[4], showcaseLink] }],
       themeSwitch: <div className="docs-footer-appearance"><span className="label">Appearance</span>{themeSelect()}</div>,
-      bottom: <><span>Utkristi UI · MIT license</span><span>Version 0.1.0</span></>,
+      bottom: <><span>Utkristi UI · MIT license</span><nav className="docs-footer-links" aria-label="Site information">
+        {siteLinks.map(({ href, label }) => <a key={href} href={href} className="link"
+          aria-current={href === `#${path}` ? 'page' : undefined}>{label}</a>)}
+      </nav><span>Version {version}</span></>,
     }}>
       {standalone ? <>{routeContent}{!block && <DocsPagination links={guide} current={`#${path}`} label="Guide pagination" />}</> : <div className="doc-layout"><Sidebar path={path} />{component ? routeContent :
         <div className="docs-guide-content">{routeContent}<DocsPagination links={guide} current={`#${path}`} label="Guide pagination" /></div>}</div>}
     </Shell>
-    {searchOpen && <DocsSearch onClose={() => setSearchOpen(false)} pages={[...guide, primary[0], showcaseLink]} />}
+    {searchOpen && <DocsSearch onClose={() => setSearchOpen(false)} pages={[...guide, primary[0], showcaseLink, ...siteLinks]} />}
   </ToastProvider></IconPaletteProvider></ThemeProvider>;
 }
 

@@ -1,6 +1,7 @@
 import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { Skeleton } from './Skeleton.js';
 import { Spinner } from './Spinner.js';
+import { Logo } from './Logo.js';
 import { cx, type CSSVariables } from './utils/cx.js';
 
 export interface ProgressProps extends HTMLAttributes<HTMLDivElement> {
@@ -24,7 +25,7 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(function Progr
 
 export interface LoaderProps extends HTMLAttributes<HTMLDivElement> {
   label?: string;
-  variant?: 'spinner' | 'skeleton' | 'progress';
+  variant?: 'spinner' | 'skeleton' | 'progress' | 'brand';
   value?: number;
   children?: ReactNode;
 }
@@ -32,9 +33,11 @@ export interface LoaderProps extends HTMLAttributes<HTMLDivElement> {
 export const Loader = forwardRef<HTMLDivElement, LoaderProps>(function Loader(
   { label = 'Loading', variant = 'spinner', value, children, className, ...props }, ref,
 ) {
-  return <div {...props} ref={ref} className={cx('loader', variant === 'spinner' && 'loader-inline', className)}
+  return <div {...props} ref={ref} className={cx('loader', variant === 'spinner' && 'loader-inline',
+    variant === 'brand' && 'loader-brand', className)}
     role={variant === 'progress' ? undefined : 'status'}>
     {variant === 'spinner' && <Spinner aria-hidden="true" />}
+    {variant === 'brand' && <Logo compact size={48} className="loader-mark" aria-hidden="true" />}
     <span className="loader-label">{label}</span>
     {variant === 'skeleton' && (children ?? <div className="loader-skeleton">
       <Skeleton variant="text" /><Skeleton variant="text" width="64%" />

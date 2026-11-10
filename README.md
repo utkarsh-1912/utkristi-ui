@@ -10,6 +10,8 @@ Utkristi UI is the shared design system for the Utkristi ecosystem. It includes 
 
 [Sandbox editor preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/sandbox.png)
 
+[Branded startup loader](docs/screenshots/loader.png)
+
 | Night | Paper | Glass |
 | --- | --- | --- |
 | ![Night showcase](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/night.png) | ![Paper showcase](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/paper.png) | ![Glass showcase](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/glass.png) |

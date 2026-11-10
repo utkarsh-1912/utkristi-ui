@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 .docs-main { min-inline-size: 0; }
+.docs-loader { min-block-size: clamp(200px, 40vh, 360px); place-content: center; }
+.docs-loader-inline { --ut-loader-size: 24px; grid-auto-flow: column; justify-content: start; align-items: center; padding-block: 18px; }
+.site-info { max-inline-size: 720px; margin-inline: auto; }
+.site-info .code { white-space: pre-wrap; overflow-wrap: anywhere; }
 .docs-status {
   max-inline-size: 44rem;
   margin-inline: auto;
@@ -299,6 +303,7 @@
   .source-input textarea::selection { color: HighlightText; background: Highlight; }
 }
 .playground-error, .playground-loading { padding: 8px 13px; overflow-wrap: anywhere; }
+.playground-loading { margin: auto; }
 .playground-error { color: var(--ut-bad-ink); border-block-start: 1px solid var(--ut-line); font-family: var(--ut-font-mono); font-size: .875rem; }
 @media (max-width: 900px) {
   .playground-panes { display: flex; gap: 5px; margin-block-end: 10px; }
@@ -358,6 +363,7 @@
 .docs-footer .footer-cols { grid-template-columns: repeat(auto-fit, minmax(min(100%, 126px), 1fr)); gap: 20px 16px; }
 .docs-footer-appearance { display: grid; justify-items: start; gap: 10px; }
 .docs-footer .footer-bottom { border-block-start: 1px solid var(--ut-line); padding-block-start: 16px; }
+.docs-footer-links { display: flex; flex-wrap: wrap; gap: 7px 16px; }
 .docs-footer a { overflow-wrap: anywhere; }
 
 @media (prefers-reduced-motion: no-preference) {

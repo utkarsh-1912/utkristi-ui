@@ -310,10 +310,11 @@ export const catalog = {
   label: demo('Label', 'Connect a visible label to a form control.',
     LabelDemo, '<Label htmlFor="name">Workspace name</Label><Input id="name" />',
     '<label class="field-label" for="name">Workspace name</label><input id="name" class="input">'),
-  loader: demo('Loader', 'Compose spinner, skeleton, and progress loading states.',
-    () => <div className="sample-stack"><Loader label="Syncing workspace" /><Loader variant="skeleton" label="Loading notes" />
+  loader: demo('Loader', 'Use the animated Utkristi mark, a spinner, a skeleton, or a progress bar while content loads.',
+    () => <div className="sample-stack"><Loader variant="brand" label="Opening workspace…" />
+      <Loader label="Syncing workspace" /><Loader variant="skeleton" label="Loading notes" />
       <Loader variant="progress" label="Uploading" value={64} /></div>,
-    '<Loader variant="progress" label="Uploading" value={64} />',
+    '<Loader variant="brand" label="Opening workspace…" />',
     '<div class="loader loader-inline" role="status"><span class="spinner" aria-hidden="true"></span><span class="loader-label">Syncing workspace</span></div>'),
   marker: demo('Marker', 'An inline status note or labelled conversation divider.',
     () => <div className="sample-stack"><Marker variant="separator">Today</Marker><Marker variant="border" icon="✓">Workspace synced</Marker></div>,

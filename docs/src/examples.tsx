@@ -56,7 +56,7 @@ function ChoicePreview() {
 
 function FooterPreview() {
   return <Footer lede={<><b>Build together.</b> Make it yours.</>} word={<>Utkristi <span className="faint">UI</span></>}
-    bottom="Utkristi UI · 0.1.0" columns={[{ title: 'Explore', links }]} />;
+    bottom="Utkristi UI · MIT license" columns={[{ title: 'Explore', links }]} />;
 }
 
 export const examples = {
@@ -207,7 +207,7 @@ export const examples = {
     name: 'Footer', description: 'Link columns, an optional theme control, and a fitted wordmark.',
     preview: FooterPreview,
     html: '<footer class="footer"><div class="footer-inner"><div class="footer-top"><p class="lede">Build together.</p></div><div class="footer-bottom">Utkristi UI</div></div></footer>',
-    jsx: '<Footer lede="Build together." word="Utkristi UI" themeSwitch={<ThemeSwitch />} bottom="0.1.0" />',
+    jsx: '<Footer lede="Build together." word="Utkristi UI" themeSwitch={<ThemeSwitch />} bottom="MIT license" />',
   },
   shell: {
     name: 'Shell', description: 'Compose the header, page content, and footer.',

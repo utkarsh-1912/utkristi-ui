@@ -2,8 +2,12 @@
 
 ## Unreleased
 
+- Corrected navigation, connectivity, table, and spinner glyphs and deferred offscreen icon previews in the catalog.
+- Extended the Glass backdrop through the full page and tinted its raised surfaces.
+- Added a collapsible docs index, an on-page outline, and integration examples for 16 platforms.
+
 - Added component variants throughout the docs, including seven Navbar configurations. Navbar supports nested groups and explicit sticky positioning.
-- Added scoped entry animations, an expanded standalone DOM runtime, and separate HTML and JavaScript editors in the sandbox.
+- Added scoped entry animations, an expanded standalone DOM runtime, and a combined HTML, CSS, and JavaScript sandbox editor.
 
 - Added theme-independent corners and custom widths to buttons, cards, form controls, dialogs, and video. Glass now uses clearer frosted surfaces and an opaque reduced-transparency mode.
 - Added optional themed VideoPlayer controls with seeking, mute, captions, and fullscreen.

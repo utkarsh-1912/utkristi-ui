@@ -4,7 +4,7 @@ html {
   background-color: var(--ut-bg);
   background-image: var(--ut-canvas, none);
   background-repeat: no-repeat;
-  background-size: 100% 48rem;
+  background-size: 100% 100%;
   color: var(--ut-ink);
   font-family: var(--ut-font-text);
   font-stretch: 100%;

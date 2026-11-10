@@ -128,6 +128,8 @@ export function docsPlayground(docs: string, source: string): Plugin {
   const prefix = 'virtual:utkristi-';
   const worklistSource = join(docs, 'src', 'worklist-blocks.tsx');
   const domPath = join(source, 'dom.ts');
+  const cssFiles = ['tokens', 'base', 'components'].map((file) => join(source, '..', 'styles', file + '.css'));
+  const loadKitStyles = () => Promise.all(cssFiles.map((file) => readFile(file, 'utf8')));
   const buildDom = async () => (await build({
     entryPoints: [domPath], bundle: true, write: false, minify: true, format: 'iife', globalName: 'UtkristiDOM',
   })).outputFiles[0].text;
@@ -154,8 +156,15 @@ export function docsPlayground(docs: string, source: string): Plugin {
     async generateBundle() {
       this.emitFile({ type: 'asset', fileName: registryPath, source: await worklistRegistry() });
       this.emitFile({ type: 'asset', fileName: 'utkristi-dom.js', source: await buildDom() });
+      this.emitFile({ type: 'asset', fileName: 'utkristi-ui.css', source: (await loadKitStyles()).join('\n\n') });
     },
     configureServer(server) {
+      server.middlewares.use('/utkristi-ui.css', (_request, response, next) => {
+        void loadKitStyles().then((css) => {
+          response.setHeader('Content-Type', 'text/css; charset=utf-8');
+          response.end(css.join('\n\n'));
+        }).catch(next);
+      });
       server.middlewares.use('/utkristi-dom.js', (_request, response, next) => {
         void buildDom().then((javascript) => {
           response.setHeader('Content-Type', 'text/javascript; charset=utf-8');
@@ -191,8 +200,8 @@ export function docsPlayground(docs: string, source: string): Plugin {
           entryPoints: [path], alias: { '@utkristi/ui': join(source, 'index.ts') }, jsx: 'automatic',
           bundle: true, write: false, minify: true, format: 'iife', define: { 'process.env.NODE_ENV': '"production"' },
         }), buildDom()]);
-        for (const asset of [path, ...['tokens', 'base', 'components'].map((file) => join(source, '..', 'styles', file + '.css'))]) this.addWatchFile(asset);
-        const css = await Promise.all(['tokens', 'base', 'components'].map((file) => readFile(join(source, '..', 'styles', file + '.css'), 'utf8')));
+        for (const asset of [path, ...cssFiles]) this.addWatchFile(asset);
+        const css = await loadKitStyles();
         const demoFiles = ['styles.css', 'enterprise.css'].map((file) => join(docs, 'src', file));
         for (const file of demoFiles) this.addWatchFile(file);
         const demos = await Promise.all(demoFiles.map((file) => readFile(file, 'utf8')));

@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 .docs-main { min-inline-size: 0; }
+.icons-glyph-placeholder { inline-size: 24px; block-size: 24px; border-radius: 7px; background: var(--ut-tint); }
+.icons-glyph-placeholder[data-dimensional="true"] { inline-size: 36px; block-size: 36px; }
 .docs-loader { min-block-size: clamp(200px, 40vh, 360px); place-content: center; }
 .docs-loader-inline { --ut-loader-size: 24px; grid-auto-flow: column; justify-content: start; align-items: center; padding-block: 18px; }
 .site-info { max-inline-size: 720px; margin-inline: auto; }
@@ -25,10 +27,14 @@
 .docs-status p { max-inline-size: 44ch; margin: 0 auto; color: var(--ut-ink-2); }
 .docs-status-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-block-start: 24px; }
 .docs-status-root { min-block-size: 100vh; display: grid; align-items: center; }
-.doc-layout { display: grid; grid-template-columns: minmax(0, 216px) minmax(0, 1fr); gap: clamp(24px, 3.5vw, 52px); }
-.doc-sidebar { position: sticky; inset-block-start: 106px; align-self: start; min-inline-size: 0; }
-.doc-index { display: grid; grid-template-rows: auto minmax(0, 1fr); max-block-size: calc(100dvh - 122px); border: 1px solid var(--ut-line); border-radius: var(--ut-r); background: var(--ut-bg-2); }
-.doc-sidebar .doc-index-toggle { display: none; }
+.doc-layout { display: grid; grid-template: "index outline" auto "index content" 1fr / var(--docs-index-width, 216px) minmax(0, 1fr); gap: 14px clamp(22px, 3vw, 40px); }
+.doc-sidebar { grid-area: index; position: sticky; inset-block-start: 106px; align-self: start; min-inline-size: 0; }
+.doc-index { display: grid; grid-template-rows: auto minmax(0, 1fr); max-block-size: calc(100dvh - 178px); border: 1px solid var(--ut-line); border-radius: var(--ut-r); background: var(--ut-bg-2); margin-block-start: 8px; }
+.doc-sidebar .doc-index-toggle { display: flex; justify-content: start; inline-size: 100%; min-block-size: 44px; border-radius: var(--ut-r-field); padding-inline: 11px; }
+.doc-index-toggle > span { flex: 1; min-inline-size: 0; overflow-wrap: anywhere; text-align: start; }
+.doc-index-toggle small { display: none; }
+.doc-sidebar[data-open="false"] .doc-index { display: none; }
+.doc-sidebar[data-open="true"] .doc-index-toggle > svg:last-child { rotate: 180deg; }
 .doc-index-search { display: grid; gap: 10px; padding: 12px; border-block-end: 1px solid var(--ut-line); }
 .doc-sidebar nav { display: flex; flex-direction: column; overflow: auto; overscroll-behavior: contain; padding: 4px 9px 12px; }
 .doc-sidebar nav .label { margin: 14px 8px 6px; }
@@ -45,7 +51,33 @@
 .doc-article { min-width: 0; overflow-wrap: anywhere; }
 .doc-article h2 { font-weight: 600; font-size: 21px; letter-spacing: -.02em; margin-top: 32px; }
 .doc-article p { margin-block: 10px; }
-.docs-guide-content { min-inline-size: 0; }
+.docs-guide-content { grid-area: content; min-inline-size: 0; }
+.docs-guide-content :is(h2, h3)[id] { scroll-margin-block-start: 112px; }
+.doc-outline { grid-area: outline; align-self: start; min-inline-size: 0; }
+.doc-outline-title { display: none; }
+.doc-outline .doc-outline-toggle { display: flex; gap: 8px; min-block-size: 44px; border-radius: var(--ut-r-field); }
+.doc-outline[data-open="false"] nav { display: none; }
+.doc-outline nav { display: grid; gap: 4px; max-block-size: min(52dvh, 420px); overflow: auto; overscroll-behavior: contain; padding: 8px 3px 4px; }
+.doc-outline a { padding: 6px 8px; border-radius: 7px; color: var(--ut-ink-2); font-size: .875rem; overflow-wrap: anywhere; }
+.doc-outline a[data-nested] { padding-inline-start: 20px; }
+.doc-outline a:is(:hover, [aria-current="location"]) { background: var(--ut-tint); color: var(--ut-ink); }
+.framework-group { margin-block-start: 28px; }
+.framework-recipe { padding-block: 16px; border-block-end: 1px solid var(--ut-line); }
+.framework-recipe h3 { margin: 0; font-size: 1.125rem; }
+.framework-recipe summary { cursor: pointer; color: var(--ut-accent); font-weight: 600; }
+.framework-recipe-code { display: grid; gap: 12px; padding-block-start: 12px; }
+@media (min-width: 981px) {
+  .doc-layout:has(> .doc-sidebar[data-open="false"]) { --docs-index-width: 44px; }
+  .doc-sidebar[data-open="false"] .doc-index-toggle { justify-content: center; padding: 0; }
+  .doc-sidebar[data-open="false"] .doc-index-toggle :is(span, svg:last-child) { display: none; }
+}
+@media (min-width: 1240px) {
+  .doc-layout { grid-template: "index content outline" 1fr / var(--docs-index-width, 216px) minmax(0, 1fr) minmax(130px, 168px); }
+  .doc-outline { position: sticky; inset-block-start: 106px; }
+  .doc-outline-title { display: block; margin: 0 8px; }
+  .doc-outline .doc-outline-toggle { display: none; }
+  .doc-outline[data-open] nav { display: grid; max-block-size: calc(100dvh - 150px); }
+}
 .docs-pagination { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-block-start: clamp(28px, 6vw, 56px); }
 .docs-pagination a { display: flex; align-items: center; gap: 11px; min-inline-size: 0; min-block-size: 64px; padding: 10px 14px; border-radius: var(--ut-r-field); background: var(--ut-bg-2); color: var(--ut-ink); text-decoration: none; }
 .docs-pagination a:hover { background: var(--ut-tint); }
@@ -191,13 +223,14 @@
 .preview-content .navbar-search { width: 36px; padding: 0; justify-content: center; }
 .preview-content .navbar-search-text, .preview-content .navbar-search-kbd { display: none; }
 @media (max-width: 980px) {
-  .doc-layout { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .doc-layout { grid-template: "index" auto "outline" auto "content" 1fr / minmax(0, 1fr); gap: 12px; }
   .doc-sidebar { position: static; }
   .doc-sidebar .doc-index-toggle { display: flex; width: 100%; justify-content: start; min-block-size: 44px; gap: 10px; text-align: start; border-radius: var(--ut-r-field); white-space: normal; }
   .doc-index-toggle > span { flex: 1; min-inline-size: 0; overflow-wrap: anywhere; }
   .doc-index-toggle small { display: block; color: var(--ut-ink-2); font-size: .75rem; }
   .doc-index-toggle > svg:last-child { transition: transform .18s var(--ut-ease); }
-  .doc-sidebar[data-open="true"] .doc-index-toggle > svg:last-child { transform: rotate(180deg); }
+  .doc-outline .doc-outline-toggle { inline-size: 100%; justify-content: start; }
+  .doc-outline-toggle > svg:last-child { margin-inline-start: auto; }
   .doc-index { margin-block-start: 8px; max-block-size: min(420px, 62dvh); }
   .doc-sidebar[data-open="false"] .doc-index { display: none; }
   .doc-sidebar nav a { min-block-size: 40px; align-content: center; }
@@ -334,13 +367,18 @@
 .icons-empty { color: var(--ut-ink-2); }
 .icons-detail .modal-title { font-family: var(--ut-font-mono); overflow-wrap: anywhere; }
 .icons-detail-controls, .icons-detail-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-.icons-detail-controls label { display: grid; flex: 1 1 115px; gap: 4px; font-size: .82rem; }
+.icons-detail-controls { align-items: start; }
+.icons-detail-controls > label { display: grid; flex: 1 1 105px; gap: 4px; font-size: .82rem; }
+.icons-detail-palette { display: grid; flex: 2 1 300px; gap: 4px; min-inline-size: 0; font-size: .82rem; }
+.icons-detail-palette .icon-picker-swatches { min-block-size: 44px; gap: 6px; }
+.icons-detail-palette .icon-swatch { inline-size: 25px; block-size: 25px; }
+.icons-detail-actions { align-items: center; }
+.icons-detail-actions .btn { min-block-size: 36px; }
 .icons-detail-themes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .icons-detail-preview { display: grid; justify-items: center; gap: 8px; padding: 12px 4px; border-radius: var(--ut-r); }
 .icons-detail-glyph { display: grid; min-block-size: 80px; min-inline-size: 0; inline-size: 100%; place-items: center; }
 .icons-detail-glyph .icon { max-inline-size: 95%; block-size: auto; aspect-ratio: 1; }
 .icons-detail-extra > summary { cursor: pointer; color: var(--ut-ink-2); }
-.icons-detail-extra > .icon-picker { margin-block: 12px; }
 .icons-detail-extra .code { max-block-size: 15rem; overflow: auto; }
 @media (max-width: 640px) {
   .icons-toolbar { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }

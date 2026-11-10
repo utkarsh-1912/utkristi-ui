@@ -23,7 +23,9 @@ export const Table = forwardRef(function Table<Row>(
   { columns, rows, getRowKey, stack, caption, onRowClick, className, ...props }: TableProps<Row>, ref: ForwardedRef<HTMLTableElement>,
 ) {
   const alignment = (column: TableColumn<Row>) => cx((column.num || column.align === 'right') && 'num', column.align === 'center' && 'cell-center');
-  return <div className="table-wrap">
+  // Keep the scrolling region reachable by keyboard.
+  // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+  return <div className="table-wrap" tabIndex={0} role="region" aria-label={typeof caption === 'string' ? caption : 'Scrollable table'}>
     <table {...props} ref={ref} className={cx('table', stack && 'table-stack', className)}>
       {caption != null && <caption>{caption}</caption>}
       <thead><tr>{columns.map((column) => <th key={column.key} scope="col" aria-sort={column.sort} className={alignment(column)}>{column.header}</th>)}</tr></thead>

@@ -24,7 +24,6 @@ The docs include component variants and a Blocks library with working project ma
 
 The Project Worklist demonstrates a controlled remote `DataTable`, request cancellation, retries, and bulk actions. Audit Explorer adds date filtering, visible columns, and a saved view. Roles and Access demonstrates permission editing in a sheet. All three include editable TSX and API references. The docs build also emits the worklist source as `r/project-worklist.json` for use with the matching package build.
 
-Blocks also includes an enterprise landing page, a simulated execution desk, operational workflows, and custom cards. The enterprise templates support the Signal, Ledger, and Terminal presets. [Enterprise and theme research](https://github.com/utkarsh-1912/utkristi-ui/blob/main/docs/enterprise-research.md) · [Landing preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/enterprise-landing.png) · [Execution desk preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/execution-desk.png)
 
 ## Install
 
@@ -99,7 +98,7 @@ Every component page includes selectable examples. Navbar links can contain nest
 
 Add `data-ut-motion="fade"`, `"rise"`, `"scale"`, `"slide"`, or `"none"` to a scope. Mark a region with `data-ut-enter` to animate its entry. Set `--ut-motion-duration` to adjust the timing. The entry presets respect reduced motion.
 
-For standalone HTML, copy the example markup and initialize it with `initUI(document)` from `@utkristi/ui/dom`. The docs also offer a downloadable `utkristi-dom.js` script for use without a bundler. It supports marked disclosures, dialogs, tabs, toggles, copy actions, filtering, and carousel navigation. The sandbox includes separate React, HTML, and JavaScript editors. Downloading from its HTML editor includes the styles and runtime.
+For standalone HTML, use the markup, stylesheet, and runtime shown together in the HTML example. The sandbox’s HTML editor accepts markup, inline CSS, and inline JavaScript in one file. Its HTML download includes the styles and runtime.
 
 Menus, tabs, segmented controls, and dialogs support keyboard navigation. Dialogs trap and restore focus. Decorative animations respect reduced motion, and the spinner keeps moving as a loading cue. The Night theme uses dark `--ut-on-bad` text on red fills to meet the 4.5:1 text contrast target.
 

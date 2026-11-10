@@ -90,6 +90,7 @@ function IconDetails({ entry, initialStyle, onClose }: { entry: IconManifestEntr
       <label>Size<Select value={size} onChange={(event) => setSize(Number(event.target.value))}>
         {[16, 20, 24, 32, 48, 64, 96, 128].map((value) => <option key={value} value={value}>{value} px</option>)}
       </Select></label>
+      <div className="icons-detail-palette"><span>Colour</span><IconPalettePicker showPreview={false} /></div>
     </div>
     <div className="icons-detail-themes">
       {previewThemes.map((theme) => <div key={theme.id} data-theme={theme.id} className="theme-preview icons-detail-preview"
@@ -101,14 +102,13 @@ function IconDetails({ entry, initialStyle, onClose }: { entry: IconManifestEntr
     </div>
     <div className="icons-detail-actions">
       <CopyAction value={react} label="Copy React" onFailure={() => setCustomize(true)} />
-      {raster ? <Button variant="ghost" href={raster} download={`${entry.name}-${activeTheme.key}.png`} iconLeft={<Icon name="download" />}>Download PNG</Button> : <>
+      {raster ? <Button size="sm" variant="ghost" href={raster} download={`${entry.name}-${activeTheme.key}.png`} iconLeft={<Icon name="download" />}>Download PNG</Button> : <>
         <CopyAction value={readSvg} label="Copy SVG" />
-        <Button variant="ghost" onClick={downloadSvg} iconLeft={<Icon name="download" />}>Download SVG</Button>
+        <Button size="sm" variant="ghost" onClick={downloadSvg} iconLeft={<Icon name="download" />}>Download SVG</Button>
       </>}
     </div>
-    <details className="icons-detail-extra" open={customize} onToggle={(event) => setCustomize(event.currentTarget.open)}><summary>Colour palette and code examples</summary>
+    <details className="icons-detail-extra" open={customize} onToggle={(event) => setCustomize(event.currentTarget.open)}><summary>Code examples</summary>
       {customize && <>
-      <IconPalettePicker showPreview={false} />
       <Tabs label="Icon usage snippets" items={[
         { id: 'react', label: 'React', content: <CopyCode text={react} /> },
         { id: 'sprite', label: 'SVG sprite', content: <CopyCode text={`<svg width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true">\n  <use href="./icons/sprite.svg#ut-icon-${spriteStyle}-${entry.name}" />\n</svg>`} /> },
@@ -126,6 +126,8 @@ export default function IconsPage() {
   const [limit, setLimit] = useState(pageSize);
   const [selected, setSelected] = useState<IconManifestEntry>();
   const search = useRef<HTMLInputElement>(null);
+  const grid = useRef<HTMLDivElement>(null);
+  const [revealed, setRevealed] = useState<ReadonlySet<string>>(() => new Set());
 
   useEffect(() => {
     function focusSearch(event: KeyboardEvent) {
@@ -154,6 +156,28 @@ export default function IconsPage() {
       .sort((a, b) => a.rank - b.rank || a.entry.name.localeCompare(b.entry.name))
       .map(({ entry }) => entry);
   }, [group, query, supported]);
+  const visible = useMemo(() => filtered.slice(0, limit), [filtered, limit]);
+
+  useEffect(() => {
+    const cells = grid.current?.querySelectorAll<HTMLButtonElement>('[data-icon-name]');
+    if (!cells?.length) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setRevealed((previous) => new Set([...previous, ...visible.map(({ name }) => name)]));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      const entering = entries.filter(({ isIntersecting }) => isIntersecting);
+      if (!entering.length) return;
+      entering.forEach(({ target }) => observer.unobserve(target));
+      setRevealed((previous) => {
+        const next = new Set(previous);
+        entering.forEach(({ target }) => next.add((target as HTMLButtonElement).dataset.iconName!));
+        return next;
+      });
+    }, { rootMargin: '160px' });
+    cells.forEach((cell) => observer.observe(cell));
+    return () => observer.disconnect();
+  }, [visible]);
 
   function clearFilters() {
     setQuery('');
@@ -188,11 +212,14 @@ export default function IconsPage() {
       {(query || group || style !== 'line') && <Button size="sm" variant="plain" onClick={clearFilters}>Clear filters</Button>}
     </div>
     {!filtered.length && <p className="icons-empty">No matching icons. Try a shorter search or choose another category.</p>}
-    <div className="icons-catalog-grid">
-      {filtered.slice(0, limit).map((entry) => <button key={entry.name} type="button" className="icons-cell"
-        aria-haspopup="dialog" onClick={() => setSelected(entry)}>
-        <Icon name={entry.name as IconGlyphName} variant={style} size={style === '3d' || style === '2.5d' ? 36 : 24}
+    <div className="icons-catalog-grid" ref={grid}>
+      {visible.map((entry) => <button key={entry.name} type="button" className="icons-cell" data-icon-name={entry.name}
+        aria-haspopup="dialog" onClick={() => setSelected(entry)} onFocus={() => {
+          setRevealed((previous) => previous.has(entry.name) ? previous : new Set([...previous, entry.name]));
+        }}>
+        {revealed.has(entry.name) ? <Icon name={entry.name as IconGlyphName} variant={style} size={style === '3d' || style === '2.5d' ? 36 : 24}
           hue={style === '3d' || style === '2.5d' ? undefined : 'mono'} />
+          : <span className="icons-glyph-placeholder" aria-hidden="true" data-dimensional={style === '3d' || style === '2.5d'} />}
         <span className="icons-cell-name">{entry.name}</span>
       </button>)}
     </div>

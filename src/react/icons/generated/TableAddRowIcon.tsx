@@ -2,9 +2,9 @@ import { useId, type SVGProps } from 'react';
 
 export const TableAddRowIconData = {
   name: "table-add-row",
-  plate: "M2.5 3h19v14h-19ZM5 5.5h5v3h-5ZM12 5.5h7v3h-7ZM5 10.5h5v4h-5ZM12 10.5h7v4h-7ZM14 17h2v1.5h3v2h-3V22h-2v-1.5h-3v-2h3Z",
-  line: "M3 4h18v12H3zm0 6h18m-10-6v12m1 3h6m-3-2v4",
-  filled: "M2.5 3h19v14h-19ZM5 5.5h5v3h-5ZM12 5.5h7v3h-7ZM5 10.5h5v4h-5ZM12 10.5h7v4h-7ZM14 17h2v1.5h3v2h-3V22h-2v-1.5h-3v-2h3Z",
+  plate: "M2 3h20v11h-20ZM4.2 5.1h6.7v2.3h-6.7ZM13.1 5.1h6.7v2.3h-6.7ZM4.2 9.5h6.7v2.3h-6.7ZM13.1 9.5h6.7v2.3h-6.7ZM11 16h2v2h2v2h-2v2h-2v-2H9v-2h2Z",
+  line: "M3 4h18v9H3ZM3 8.5h18M12 4v9M9 19h6m-3-3v6",
+  filled: "M2 3h20v11h-20ZM4.2 5.1h6.7v2.3h-6.7ZM13.1 5.1h6.7v2.3h-6.7ZM4.2 9.5h6.7v2.3h-6.7ZM13.1 9.5h6.7v2.3h-6.7ZM11 16h2v2h2v2h-2v2h-2v-2H9v-2h2Z",
   detail: undefined,
   has3d: false,
 } as const;

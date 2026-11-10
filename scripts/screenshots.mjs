@@ -236,7 +236,7 @@ async function captureEdge() {
     await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-transparency', value: 'reduce' }] });
     await retry(() => evaluate(`(() => {
       const glass = getComputedStyle(document.querySelector('.shape-demo [data-theme="glass"] .card'));
-      return glass.backdropFilter === 'none' && glass.backgroundColor === 'rgb(252, 250, 254)';
+      return glass.backdropFilter === 'none' && glass.backgroundColor === 'rgb(240, 237, 250)';
     })()`), 'Glass respects reduced transparency');
     await send('Emulation.setEmulatedMedia', { features: [] });
 
@@ -341,6 +341,7 @@ async function captureEdge() {
     await selectOption('.docs-example select[aria-label="Metric period"]', 'month');
     await retry(() => evaluate('document.querySelector(".docs-example .stat").textContent.includes("97.6")'), 'metric card changes period');
 
+    await size(1440, 900);
     await load('/frameworks?theme=glass', 'Frameworks');
     await evaluate(`(() => {
       const trigger = document.querySelector('[data-ut-open-dialog]');
@@ -359,6 +360,17 @@ async function captureEdge() {
       !document.getElementById(document.activeElement.getAttribute('aria-controls')).hidden`), 'portable tabs support keyboard navigation');
     await evaluate(`[...document.querySelectorAll('[role=tab]')].find(tab => tab.textContent === 'Vue').click()`);
     await retry(() => evaluate(`document.querySelector('[role=tabpanel]:not([hidden]) .code')?.textContent.includes('onBeforeUnmount')`), 'framework code tab');
+    await retry(() => evaluate('document.querySelectorAll(".framework-recipe").length === 16'), 'integration catalog');
+    const kitAssets = await Promise.all(['utkristi-ui.css', 'utkristi-dom.js'].map((file) => fetch(url + '/' + file)));
+    if (kitAssets.some((asset) => !asset.ok)) throw new Error('Framework downloads are unavailable');
+    const assetCss = await kitAssets[0].text();
+    if (!assetCss.includes('background-size: 100% 100%')) throw new Error('The standalone CSS still has a fixed-height backdrop');
+    await evaluate(`document.querySelector('.doc-outline a[href*="section=mcp-ui"]').click()`);
+    await retry(() => evaluate(`location.hash.includes('section=mcp-ui') && document.activeElement?.id === 'mcp-ui' &&
+      document.querySelector('.doc-outline a[aria-current="location"]')?.textContent === 'MCP UI server'`), 'outline jumps and focuses a framework heading');
+    await evaluate('document.querySelector(".doc-index-toggle").click()');
+    await retry(() => evaluate('document.querySelector(".doc-index-toggle").getAttribute("aria-expanded") === "false" && getComputedStyle(document.querySelector(".doc-index")).display === "none"'), 'desktop index collapses');
+    await evaluate('document.querySelector(".doc-index-toggle").click()');
 
     await load('/showcase?theme=glass', 'Build together.');
     await retry(() => evaluate('document.querySelector(".docs-navbar select").value === "glass"'), 'theme dropdown reflects preview');
@@ -636,11 +648,22 @@ async function captureEdge() {
     })()`), 'sidebar current page has no outline or side rule');
     await size(375, 812);
     await load('/getting-started?theme=glass', 'Getting started');
+    await retry(() => evaluate(`(() => {
+      const search = document.querySelector('.docs-navbar .navbar-search');
+      const button = search.getBoundingClientRect();
+      const icon = search.querySelector('svg').getBoundingClientRect();
+      return Math.abs(button.x + button.width / 2 - icon.x - icon.width / 2) < 1 &&
+        Math.abs(button.y + button.height / 2 - icon.y - icon.height / 2) < 1;
+    })()`), 'compact navbar search is centered');
     await evaluate('document.querySelector(".doc-index-toggle").click()');
     await retry(() => evaluate('document.querySelector(".doc-index-toggle").getAttribute("aria-expanded") === "true"'), 'open mobile docs index');
     await evaluate(`document.querySelector('.doc-index a[href="#/components/command"]').click()`);
     await retry(() => evaluate('document.querySelector("h1")?.textContent === "Command" && document.querySelector(".doc-index-toggle").getAttribute("aria-expanded") === "false"'), 'mobile index navigation');
     await load('/icons?theme=glass', 'Icons');
+    await retry(() => evaluate('!!document.querySelector(".icons-cell svg") && !!document.querySelector(".icons-glyph-placeholder")'), 'only nearby glyphs render initially');
+    await evaluate('document.querySelector(".icons-cell:last-child").scrollIntoView({ block: "center" })');
+    await retry(() => evaluate('!!document.querySelector(".icons-cell:last-child svg")'), 'scrolling reveals an offscreen glyph');
+    await evaluate('window.scrollTo(0, 0)');
     await evaluate('window.dispatchEvent(new KeyboardEvent("keydown", { key: "/", bubbles: true, cancelable: true }))');
     await retry(() => evaluate('document.activeElement?.getAttribute("aria-label") === "Search icons"'), 'icon search shortcut');
     const searchIcon = (term) => evaluate(`(() => {
@@ -652,6 +675,11 @@ async function captureEdge() {
     await retry(() => evaluate('document.querySelector(".icons-cell")?.textContent.trim() === "api"'), 'exact icon match ranked first');
     await evaluate('(() => { const result = document.querySelector(".icons-cell"); result.focus(); result.click(); })()');
     await retry(() => evaluate('document.querySelector(".icons-detail .modal-title")?.textContent === "api"'), 'icon detail opens');
+    await retry(() => evaluate(`(() => {
+      const actions = [...document.querySelectorAll('.icons-detail-actions .btn')];
+      return actions.length === 3 && actions.every(action => action.offsetHeight === actions[0].offsetHeight) &&
+        !!document.querySelector('.icons-detail-controls .icon-swatch');
+    })()`), 'equal-height icon actions and palette in the main controls');
     await evaluate(`(() => {
       Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText(value) { window.copiedIcon = value; return Promise.resolve(); } } });
       Array.from(document.querySelectorAll('.icons-detail button')).find(button => button.textContent.trim() === 'Copy SVG').click();
@@ -816,7 +844,9 @@ async function captureEdge() {
     await selectOption('.playground select[id$="-variant"]', 'navbar-multilevel');
     await retry(() => evaluate('document.querySelector("#sandbox-source")?.value.includes("Teams") && document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), 'HTML variant preserves editor selection');
     const verifyHtmlScript = async (probe, name) => {
-      await selectOption('.playground select[id$="-mode"]', 'js');
+      if (await evaluate('!!document.querySelector(\'.playground select[id$="-mode"] option[value="js"]\')')) {
+        throw new Error('JavaScript should be edited in the combined HTML pane');
+      }
       await evaluate(`(() => {
         window.utkristiVerificationResult = undefined;
         const receive = event => {
@@ -827,12 +857,13 @@ async function captureEdge() {
         };
         window.addEventListener('message', receive);
       })()`);
-      await setSource(probe);
+      const source = await evaluate('document.querySelector("#sandbox-source").value');
+      await setSource(source + '\n<script>\nrequestAnimationFrame(() => {\n' + probe + '\n});\n</script>');
       await evaluate('Array.from(document.querySelectorAll(".playground-actions button")).find(button => button.textContent.trim() === "Run").click()');
       const result = await retry(() => evaluate('window.utkristiVerificationResult'), name);
       if (!result.passed) throw new Error(name + ' failed inside the HTML frame: ' + JSON.stringify(result.detail));
     };
-    await verifyHtmlScript(`requestAnimationFrame(() => {
+    await verifyHtmlScript(`
       const mobile = document.querySelector('.navbar-html-mobile');
       if (getComputedStyle(mobile).display !== 'none') mobile.querySelector('summary').click();
       const nav = getComputedStyle(mobile).display === 'none' ? document.querySelector('.navbar-links') : mobile;
@@ -847,7 +878,7 @@ async function captureEdge() {
         outer: resources.parentElement.open, motion: document.documentElement.dataset.utMotion };
       parent.postMessage({ kind: 'utkristi-verification', passed: detail.focus && !detail.inner && detail.outer &&
         detail.motion === 'fade', detail }, '*');
-    });`, 'HTML nested disclosure, focus return and animation choice');
+    `, 'HTML nested disclosure, focus return and animation choice');
     await load('/sandbox?component=file-dropzone&editor=html&theme=glass', 'Sandbox');
     await retry(() => evaluate('document.querySelector("#sandbox-source")?.value.includes("data-ut-dropzone") && document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), 'HTML file drop preview');
     await verifyHtmlScript(`
@@ -858,6 +889,26 @@ async function captureEdge() {
       const detail = { file: zone.querySelector('input').files[0]?.name, status: zone.querySelector('[role=status]').textContent };
       parent.postMessage({ kind: 'utkristi-verification', passed: detail.file === 'notes.txt' && detail.status === '1 file selected', detail }, '*');
     `, 'HTML dropzone behavior');
+    await load('/sandbox?component=table&editor=html', 'Sandbox');
+    await retry(() => evaluate('document.querySelector("#sandbox-source")?.value.includes("Contributors") && document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), 'HTML table preview');
+    await verifyHtmlScript(`
+      const region = document.querySelector('.table-wrap');
+      region.querySelector('td').textContent = 'LongUnbrokenIdentifier'.repeat(10);
+      region.focus();
+      region.scrollLeft = 120;
+      const detail = { scrolled: region.scrollLeft, focused: document.activeElement === region,
+        pageFits: document.documentElement.scrollWidth === document.documentElement.clientWidth };
+      parent.postMessage({ kind: 'utkristi-verification', passed: detail.scrolled > 0 && detail.focused && detail.pageFits, detail }, '*');
+    `, 'wide tables scroll inside the keyboard-focusable region');
+    await load('/sandbox?component=questionnaire&editor=html', 'Sandbox');
+    await retry(() => evaluate('document.querySelector("#sandbox-source")?.value.includes("workspace-survey") && document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), 'HTML form preview');
+    await verifyHtmlScript(`
+      const form = document.querySelector('#workspace-survey');
+      form.elements.workspace.value = 'Studio';
+      form.requestSubmit();
+      const detail = form.querySelector('output').value;
+      parent.postMessage({ kind: 'utkristi-verification', passed: detail === 'Saved workspace: Studio', detail }, '*');
+    `, 'HTML form submits locally in the sandbox');
     const standaloneDom = await fetch(url + '/utkristi-dom.js');
     if (!standaloneDom.ok || !(await standaloneDom.text()).includes('UtkristiDOM')) throw new Error('Standalone script is unavailable');
     process.stdout.write('Verified interactive HTML variants and JavaScript editing.\n');

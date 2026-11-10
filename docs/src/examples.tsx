@@ -84,7 +84,7 @@ export const examples = {
       { title: 'Open project', sub: 'Choose an existing workspace', icon: <FolderOpen size={16} /> },
       { title: 'Copy invite', sub: 'Share a link with your team', icon: <Copy size={16} /> },
     ]} />,
-    html: '<div class="split-button"><button class="btn btn-solid split-button-main">New room</button><button class="btn btn-solid split-button-toggle" aria-label="More actions" aria-haspopup="menu" aria-expanded="false">▾</button></div>',
+    html: '<div class="split-button"><button type="button" class="btn btn-solid split-button-main" data-ut-reveal="room-draft">New room</button><details class="popover" data-ut-disclosure><summary class="btn btn-solid split-button-toggle" aria-label="More actions">▾</summary><div class="pop pop-right"><a class="menu-item" href="#projects">Open project</a><a class="menu-item" href="#invites">Manage invites</a></div></details></div><p id="room-draft" role="status" data-ut-hidden hidden>Room draft created.</p>',
     jsx: '<SplitButton label="New room" items={[{ title: "Open project", sub: "Choose a workspace" }]} />',
   },
   card: {
@@ -112,13 +112,13 @@ export const examples = {
   slider: {
     name: 'Slider', description: 'A native range input with a value bubble and optional marks.',
     preview: () => <Slider label="Volume" defaultValue={40} marks={[0, 25, 50, 75, 100]} format={(value) => `${value}%`} />,
-    html: '<div class="slider" style="--p: 40%; --pn: .4"><div class="slider-rail"><input type="range" aria-label="Volume" value="40"><output class="slider-bubble">40%</output></div></div>',
+    html: '<div class="slider" id="volume" style="--p:40%; --pn:.4"><div class="slider-rail"><input type="range" aria-label="Volume" value="40"><output class="slider-bubble">40%</output></div></div>\n<script>\n  const volume = document.querySelector("#volume");\n  volume.querySelector("input").addEventListener("input", ({ target }) => {\n    const value = target.valueAsNumber;\n    volume.style.setProperty("--p", value + "%");\n    volume.style.setProperty("--pn", value / 100);\n    volume.querySelector("output").value = value + "%";\n  });\n</script>',
     jsx: '<Slider label="Volume" defaultValue={40} marks={[0, 25, 50, 75, 100]} format={(value) => `${value}%`} />',
   },
   segmented: {
     name: 'Segmented', description: 'A compact radio group for switching between related views.',
     preview: () => <Segmented aria-label="View" items={views} />,
-    html: '<div class="seg" role="radiogroup" aria-label="View"><button class="seg-item" role="radio" aria-checked="true">List</button><button class="seg-item" role="radio" aria-checked="false" tabindex="-1">Grid</button></div>',
+    html: '<div class="seg" role="radiogroup" aria-label="View" data-ut-choice><button class="seg-item" role="radio" aria-checked="true">List</button><button class="seg-item" role="radio" aria-checked="false" tabindex="-1">Grid</button></div>',
     jsx: '<Segmented aria-label="View" items={[{ id: "list", label: "List" }, { id: "grid", label: "Grid" }]} />',
   },
   tabs: {
@@ -163,7 +163,7 @@ export const examples = {
   chip: {
     name: 'Chip', description: 'Small pills for filters, tags, and removable selections.',
     preview: ChipPreview,
-    html: '<button class="chip chip-accent" aria-pressed="true">Pinned</button>',
+    html: '<button class="chip chip-accent" aria-pressed="true" data-ut-toggle>Pinned</button>',
     jsx: '<Chip accent pressed={pinned} onClick={() => setPinned(!pinned)}>Pinned</Chip>',
   },
   dot: {
@@ -190,7 +190,7 @@ export const examples = {
   table: {
     name: 'Table', description: 'Responsive data tables with right-aligned numeric columns.',
     preview: () => <Table rows={people} columns={columns} getRowKey={(row) => row.name} caption="Contributors" stack />,
-    html: '<div class="table-wrap"><table class="table"><caption>Contributors</caption><thead><tr><th scope="col">Name</th><th scope="col" class="num">Changes</th></tr></thead><tbody><tr><td>Asha Rao</td><td class="num">24</td></tr></tbody></table></div>',
+    html: '<div class="table-wrap" role="region" aria-label="Contributors" tabindex="0"><table class="table"><caption>Contributors</caption><thead><tr><th scope="col">Name</th><th scope="col" class="num">Changes</th></tr></thead><tbody><tr><td>Asha Rao</td><td class="num">24</td></tr></tbody></table></div>',
     jsx: '<Table rows={[{ name: "Asha Rao", changes: 24 }]} columns={[{ key: "name", header: "Name" }, { key: "changes", header: "Changes", num: true }]} getRowKey={(row) => row.name} stack />',
   },
   'empty-state': {
@@ -220,7 +220,7 @@ export const examples = {
   steps: {
     name: 'Steps', description: 'Numbered navigation with an optional timed progress fill.',
     preview: () => <Steps aria-label="Setup steps" items={[{ id: 'create', label: 'Create' }, { id: 'invite', label: 'Invite' }, { id: 'ship', label: 'Ship' }]} autoplay={5000} />,
-    html: '<div class="steps" style="--n: 2" role="radiogroup"><button class="step is-running" role="radio" aria-checked="true"><span class="label">01</span><b>Create</b></button><button class="step" role="radio" aria-checked="false" tabindex="-1"><span class="label">02</span><b>Invite</b></button></div>',
+    html: '<div class="steps" style="--n: 2" role="radiogroup" aria-label="Setup" data-ut-choice><button class="step" role="radio" aria-checked="true"><span class="label">01</span><b>Create</b></button><button class="step" role="radio" aria-checked="false" tabindex="-1"><span class="label">02</span><b>Invite</b></button></div>',
     jsx: '<Steps aria-label="Setup" items={[{ id: "create", label: "Create" }, { id: "invite", label: "Invite" }]} autoplay={5000} />',
   },
   stat: {
@@ -232,13 +232,13 @@ export const examples = {
   'theme-toggle': {
     name: 'ThemeToggle', description: 'Cycle through Night, Paper, and Glass with a single labelled button.',
     preview: () => <ThemeToggle />,
-    html: '<button class="icon-btn" aria-label="Switch to light theme">☀</button>',
+    html: '<button class="btn btn-ghost" id="cycle-theme" type="button">Cycle theme</button>\n<script>\n  const themes = ["dark", "light", "glass"];\n  document.querySelector("#cycle-theme").addEventListener("click", (event) => {\n    const root = document.documentElement;\n    const next = themes[(themes.indexOf(root.dataset.theme) + 1) % themes.length];\n    root.classList.remove(...themes);\n    root.classList.add(next);\n    root.dataset.theme = next;\n    event.currentTarget.textContent = "Cycle theme · " + next;\n  });\n</script>',
     jsx: '<ThemeToggle />',
   },
   'theme-switch': {
     name: 'ThemeSwitch', description: 'Select Dark, Light, Glass, or the operating-system preference.',
     preview: () => <ThemeSwitch />,
-    html: '<div class="seg" role="radiogroup" aria-label="Theme"><button class="seg-item" role="radio" aria-checked="true">Dark</button><button class="seg-item" role="radio" aria-checked="false" tabindex="-1">Light</button><button class="seg-item" role="radio" aria-checked="false" tabindex="-1">Glass</button><button class="seg-item" role="radio" aria-checked="false" tabindex="-1">Auto</button></div>',
+    html: '<label class="field">Theme<select class="select" data-ut-theme><option value="dark">Night</option><option value="light">Paper</option><option value="glass">Glass</option><option value="system">Auto</option></select></label>\n<script>\n  const themeSelect = document.querySelector("[data-ut-theme]");\n  themeSelect.value = document.documentElement.dataset.theme || "system";\n</script>',
     jsx: '<ThemeProvider><ThemeSwitch /></ThemeProvider>',
   },
   'rich-text': {

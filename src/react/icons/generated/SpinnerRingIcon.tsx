@@ -3,8 +3,8 @@ import { useId, type SVGProps } from 'react';
 export const SpinnerRingIconData = {
   name: "spinner-ring",
   plate: "M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z",
-  line: "M21 12a9 9 0 1 1-6.2-8.6",
-  filled: "M12 2a1 1 0 1 0 0 2 8 8 0 1 1-7.4 5 1 1 0 1 0-1.9-.7A10 10 0 1 0 12 2Z",
+  line: "M12 3a9 9 0 1 1-9 9",
+  filled: "M12 2a10 10 0 1 1-10 10 1.2 1.2 0 0 1 2.4 0A7.6 7.6 0 1 0 12 4.4a1.2 1.2 0 0 1 0-2.4Z",
   detail: undefined,
   has3d: false,
 } as const;

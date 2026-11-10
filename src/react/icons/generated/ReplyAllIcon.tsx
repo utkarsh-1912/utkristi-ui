@@ -2,9 +2,9 @@ import { useId, type SVGProps } from 'react';
 
 export const ReplyAllIconData = {
   name: "reply-all",
-  plate: "M7 5 1.5 11 7 17l1.4-1.5L4.5 11l3.9-4.5ZM12 4v4h2q8 0 8 9v2q-3-5-9-5h-1v4l-7-7Z",
-  line: "m7 7-4 4 4 4m4-9-5 5 5 5v-3h2q5 0 8 4v-3q-1-5-7-5h-3Z",
-  filled: "M7 5 1.5 11 7 17l1.4-1.5L4.5 11l3.9-4.5ZM12 4v4h2q8 0 8 9v2q-3-5-9-5h-1v4l-7-7Z",
+  plate: "M5.8 6.4 1.5 11l4.3 4.6 1.4-1.5L4.3 11l2.9-3.1ZM13 3.8v4h2c4.5 0 7 3 7 7.4v4.6c-2.4-3.7-5-5.6-8.3-5.6H13v4l-7.1-7.2Z",
+  line: "M6.5 7 2.5 11l4 4M12 5l-6 6 6 6v-4h2c3.5 0 5.5 2 7.5 5v-3c0-4-3-6-6.5-6h-3Z",
+  filled: "M5.8 6.4 1.5 11l4.3 4.6 1.4-1.5L4.3 11l2.9-3.1ZM13 3.8v4h2c4.5 0 7 3 7 7.4v4.6c-2.4-3.7-5-5.6-8.3-5.6H13v4l-7.1-7.2Z",
   detail: undefined,
   has3d: false,
 } as const;

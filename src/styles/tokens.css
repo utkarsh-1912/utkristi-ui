@@ -330,16 +330,16 @@
 
 .glass, [data-theme="glass"] {
   color-scheme: light;
-  --ut-bg: #F7F4FB;
-  --ut-code-bg: #F1EDF8;
-  --ut-code-bar: #FCFAFF;
+  --ut-bg: #ECECF7;
+  --ut-code-bg: #EAE7F5;
+  --ut-code-bar: #EFEDF8;
   --ut-code-line: var(--ut-line-2);
-  --ut-bg-2: rgba(250, 249, 255, .83);
-  --ut-bg-3: #EDE8F3;
-  --ut-raise: rgba(255, 255, 255, .86);
+  --ut-bg-2: rgba(240, 237, 253, .85);
+  --ut-bg-3: #E1E5F4;
+  --ut-raise: rgba(244, 245, 255, .87);
   --ut-ink: #202021;
   --ut-ink-2: #424149;
-  --ut-ink-3: #575362;
+  --ut-ink-3: #514B60;
   --ut-line: rgba(35, 30, 43, .19);
   --ut-line-2: rgba(35, 30, 43, .36);
   --ut-tint: rgba(75, 57, 100, .065);
@@ -370,13 +370,14 @@
   --ut-backdrop: rgba(30, 26, 38, .34);
   --ut-ring: color-mix(in srgb, var(--ut-accent) 20%, transparent);
   --ut-surface-filter: blur(22px) saturate(148%);
-  --ut-surface-sheen: linear-gradient(148deg, rgba(255, 255, 255, .54), transparent 53%, rgba(209, 204, 245, .17));
+  --ut-surface-sheen: linear-gradient(148deg, rgba(247, 249, 255, .44), transparent 53%, rgba(198, 190, 236, .21));
   --ut-surface-edge: inset 0 1px 0 rgba(255, 255, 255, .9), inset 0 0 0 1px rgba(255, 255, 255, .28);
   --ut-pane-sheen: linear-gradient(148deg, rgba(222, 210, 255, .13), transparent 58%);
   --ut-scrim-filter: blur(3px);
-  --ut-canvas: radial-gradient(ellipse at 84% 8%, rgba(167, 133, 235, .48), transparent 54%),
-    radial-gradient(ellipse at 6% 60%, rgba(180, 220, 126, .44), transparent 56%),
-    radial-gradient(ellipse at 96% 85%, rgba(125, 179, 235, .34), transparent 57%);
+  --ut-canvas: radial-gradient(ellipse 65% 38rem at 90% 4%, rgba(165, 149, 229, .44), transparent 100%),
+    radial-gradient(ellipse 60% 42rem at 2% 18%, rgba(186, 219, 154, .38), transparent 100%),
+    radial-gradient(ellipse 74% 55% at 99% 75%, rgba(141, 188, 231, .34), transparent 100%),
+    linear-gradient(158deg, #EAF0F9 0%, #EDE6F7 48%, #E6EDF8 100%);
   --ut-button-radius: 5px;
   --ut-navbar-bg: rgba(29, 26, 36, .82);
   --ut-navbar-filter: blur(18px) saturate(148%);
@@ -447,8 +448,8 @@
 
 @media (prefers-reduced-transparency: reduce) {
   .glass, [data-theme="glass"] {
-    --ut-bg-2: #FCFAFE;
-    --ut-raise: #FFFFFF;
+    --ut-bg-2: #F0EDFA;
+    --ut-raise: #F4F5FC;
     --ut-pane: #202021;
     --ut-backdrop: rgba(30, 26, 38, .62);
     --ut-navbar-bg: #202021;

@@ -12,6 +12,7 @@ import { exampleMotion, motionOptions, type PreviewMotion } from './motion-optio
 import { FontDemo } from './catalog';
 import { CopyCode } from './CopyCode';
 import { DocsSearch } from './DocsSearch';
+import DocsOutline from './DocsOutline';
 import { DocsErrorBoundary, DocsStatus } from './DocsStatus';
 import { About, Privacy, Terms } from './SiteInfo';
 import { version } from '../../package.json';
@@ -87,7 +88,7 @@ function route() {
   const theme = requestedTheme === 'dark' || requestedTheme === 'light' || requestedTheme === 'glass' ? requestedTheme : undefined;
   const params = new URLSearchParams(options);
   return { path: path || '/overview', theme, sample: params.get('component') ?? undefined, variant: params.get('variant') ?? undefined,
-    editor: params.get('editor') ?? undefined, motion: params.get('motion') ?? undefined } as const;
+    editor: params.get('editor') ?? undefined, motion: params.get('motion') ?? undefined, section: params.get('section') ?? undefined } as const;
 }
 
 function Frame({ theme, fixedTheme, motion, children }: { theme: PreviewTheme; fixedTheme?: boolean; motion?: PreviewMotion; children: ReactNode }) {
@@ -365,15 +366,24 @@ function Showcase() {
 
 function Sidebar({ path }: { path: string }) {
   const [query, setQuery] = useState('');
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(() => window.matchMedia('(min-width: 981px)').matches);
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 981px)');
+    const sync = () => setOpen(media.matches);
+    media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
   const id = useId();
   const current = componentPages.find(([slug]) => path === `/components/${slug}`)?.[1].name
     ?? guide.find(({ href }) => href === `#${path}`)?.label;
   const filter = query.trim().toLowerCase();
   const matches = componentPages.filter(([slug, item]) => `${slug} ${item.name}`.toLowerCase().includes(filter));
-  const close = () => { setOpen(false); setQuery(''); };
+  const close = () => {
+    if (window.matchMedia('(max-width: 980px)').matches) setOpen(false);
+    setQuery('');
+  };
   return <aside className="doc-sidebar" data-open={open}>
-    <Button className="doc-index-toggle" variant="ghost" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
+    <Button className="doc-index-toggle" variant="ghost" aria-label="Docs index" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
       <Icon name="list" /><span>Docs index{current && <small>{current}</small>}</span><Icon name="chevron-down" />
     </Button>
     <div className="doc-index" id={id}>
@@ -411,10 +421,15 @@ function DocsThemeSelect({ previewTheme, releasePreviewTheme, className }: {
 }
 
 function App() {
-  const [{ path, theme, sample, variant: selectedVariant, editor, motion }, setRoute] = useState(route);
+  const [{ path, theme, sample, variant: selectedVariant, editor, motion, section }, setRoute] = useState(route);
   const [searchOpen, setSearchOpen] = useState(false);
+  const docsContent = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const update = () => { setRoute(route()); window.scrollTo(0, 0); };
+    const update = () => {
+      const next = route();
+      setRoute(next);
+      if (!next.section) window.scrollTo(0, 0);
+    };
     window.addEventListener('hashchange', update);
     return () => window.removeEventListener('hashchange', update);
   }, []);
@@ -504,8 +519,15 @@ function App() {
           aria-current={href === `#${path}` ? 'page' : undefined}>{label}</a>)}
       </nav><span>Version {version}</span></>,
     }}>
-      {standalone ? <>{routeContent}{!block && <DocsPagination links={guide} current={`#${path}`} label="Guide pagination" />}</> : <div className="doc-layout"><Sidebar path={path} />{component ? routeContent :
-        <div className="docs-guide-content">{routeContent}<DocsPagination links={guide} current={`#${path}`} label="Guide pagination" /></div>}</div>}
+      {standalone ? <>{routeContent}{!block && <DocsPagination links={guide} current={`#${path}`} label="Guide pagination" />}</> :
+        <div className="doc-layout">
+          <Sidebar path={path} />
+          <DocsOutline key={path} content={docsContent} path={path} section={section} />
+          <div className="docs-guide-content" ref={docsContent}>
+            {routeContent}
+            {!component && <DocsPagination links={guide} current={`#${path}`} label="Guide pagination" />}
+          </div>
+        </div>}
     </Shell>
     {searchOpen && <DocsSearch onClose={() => setSearchOpen(false)} pages={[...guide, primary[0], showcaseLink, ...siteLinks]} />}
   </ToastProvider></IconPaletteProvider></ThemeProvider>;

@@ -16,17 +16,21 @@ export function initDialogs(root: Document | HTMLElement = document): () => void
   return () => root.removeEventListener('click', openDialog);
 }
 
-/** Activate server-rendered tabs marked with data-ut-tabs. */
+/** Activate server-rendered tabs and exclusive choice groups. */
 export function initTabs(root: Document | HTMLElement = document): () => void {
   const owner = root.ownerDocument ?? root as Document;
 
   function handleTab(event: Event) {
     if (event.defaultPrevented || !(event.target instanceof Element)) return;
-    const tab = event.target.closest<HTMLButtonElement>('button[role="tab"]');
-    const list = tab?.closest<HTMLElement>('[role="tablist"][data-ut-tabs]');
+    const tab = event.target.closest<HTMLButtonElement>('button[role="tab"], button[role="radio"]');
+    const listSelector = '[role="tablist"], [role="radiogroup"]';
+    const list = tab?.closest<HTMLElement>(listSelector);
     if (!tab || !list || !root.contains(list)) return;
-    const tabs = [...list.querySelectorAll<HTMLButtonElement>('button[role="tab"]')]
-      .filter((item) => item.closest('[role="tablist"]') === list);
+    const radio = list.getAttribute('role') === 'radiogroup';
+    if (!list.hasAttribute(radio ? 'data-ut-choice' : 'data-ut-tabs')) return;
+    const role = radio ? 'radio' : 'tab';
+    const tabs = [...list.querySelectorAll<HTMLButtonElement>(`button[role="${role}"]`)]
+      .filter((item) => item.closest(listSelector) === list);
     const enabled = tabs.filter((item) => !item.disabled && item.getAttribute('aria-disabled') !== 'true');
     const current = enabled.indexOf(tab);
     if (current < 0) return;
@@ -49,7 +53,7 @@ export function initTabs(root: Document | HTMLElement = document): () => void {
     for (const item of tabs) {
       const selected = item === next;
       item.tabIndex = selected ? 0 : -1;
-      item.setAttribute('aria-selected', String(selected));
+      item.setAttribute(radio ? 'aria-checked' : 'aria-selected', String(selected));
       const id = item.getAttribute('aria-controls');
       const panel = id ? owner.getElementById(id) : null;
       if (panel?.getAttribute('role') === 'tabpanel' && root.contains(panel)) panel.hidden = !selected;
@@ -102,15 +106,26 @@ export function initDisclosures(root: Document | HTMLElement = document): () => 
     }
     if (last?.contains(owner.activeElement)) last.querySelector<HTMLElement>(':scope > summary')?.focus();
   };
+  const context = (event: Event) => {
+    if (event.defaultPrevented || !(event.target instanceof Element)) return;
+    const summary = event.target.closest<HTMLElement>('details[data-ut-context] > summary');
+    const details = summary?.parentElement;
+    if (!(details instanceof HTMLDetailsElement) || !root.contains(details)) return;
+    event.preventDefault();
+    details.open = true;
+    details.querySelector<HTMLElement>('a[href], button:not(:disabled)')?.focus();
+  };
   owner.addEventListener('pointerdown', pointer);
   root.addEventListener('keydown', key);
   root.addEventListener('toggle', toggle, true);
   root.addEventListener('click', follow);
+  root.addEventListener('contextmenu', context);
   return () => {
     owner.removeEventListener('pointerdown', pointer);
     root.removeEventListener('keydown', key);
     root.removeEventListener('toggle', toggle, true);
     root.removeEventListener('click', follow);
+    root.removeEventListener('contextmenu', context);
   };
 }
 

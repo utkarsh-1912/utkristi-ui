@@ -13,16 +13,25 @@ const frameHead = '<!doctype html><html><head><meta charset="utf-8"><meta name="
   '<meta http-equiv="Content-Security-Policy" content="' + policy + '"><style>' +
   styles.replace(/<\/style/gi, '<\\/style') +
   'body{padding:16px;min-height:100vh}#playground{min-width:0}.sample-row{display:flex;flex-wrap:wrap;gap:8px}</style></head>';
-const reactFrame = frameHead + '<body><div id="playground"></div><script>' + script.replace(/<\/script/gi, '<\\/script') + '</script></body></html>';
+const previewLinks = `<script>
+  document.addEventListener('click', event => {
+    const link = event.target.closest?.('a[href]');
+    if (event.defaultPrevented || !link || link.hasAttribute('download')) return;
+    event.preventDefault();
+    const href = link.getAttribute('href');
+    if (href.startsWith('#')) document.getElementById(href.slice(1))?.scrollIntoView();
+  });
+</script>`;
+const reactFrame = frameHead + '<body>' + previewLinks + '<div id="playground"></div><script>' + script.replace(/<\/script/gi, '<\\/script') + '</script></body></html>';
 
 const specimenFonts = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&amp;family=Geist:wght@400..800&amp;family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400..800&amp;family=Newsreader:opsz,wght@6..72,400..700&amp;display=swap">';
 
-interface Run { token: string; source: string; theme: ResolvedTheme; motion: PreviewMotion; markup: boolean; javascript?: string }
-type Mode = 'react' | 'html' | 'js';
-const initialJavaScript = '// Add JavaScript for this HTML example. The kit initializes automatically.\n';
+interface Run { token: string; source: string; theme: ResolvedTheme; motion: PreviewMotion; markup: boolean }
+type Mode = 'react' | 'html';
+const legacyJavaScriptHint = '// Add JavaScript for this HTML example. The kit initializes automatically.';
 const safeScript = (source: string) => source.replace(/<\/script/gi, '<\\/script');
 
-function htmlDocument(source: string, javascript: string, theme: ResolvedTheme, motion: PreviewMotion, token?: string) {
+function htmlDocument(source: string, theme: ResolvedTheme, motion: PreviewMotion, token?: string) {
   const report = token ? `<script>
     let previewFailed = false;
     window.previewReport = (kind, error) => {
@@ -36,13 +45,21 @@ function htmlDocument(source: string, javascript: string, theme: ResolvedTheme, 
   const ready = token ? "<script>previewReport('utkristi-html-ready');</script>" : '';
   const head = token ? frameHead : frameHead.replace(/<meta http-equiv="Content-Security-Policy"[^>]*>/, '');
   return head.replace('<html>', `<html data-theme="${theme}" data-ut-motion="${motion}">`) +
-    '<body>' + report + '<div data-ut-enter>' + source + '</div><script>' + safeScript(domScript) +
-    '</script><script>UtkristiDOM.initUI(document);</script><script>' + safeScript(javascript) + '</script>' + ready + '</body></html>';
+    '<body>' + report + (token ? previewLinks : '') + '<script>' + safeScript(domScript) + '</script><div data-ut-enter>' + source +
+    '</div><script>UtkristiDOM.initUI(document);</script>' + ready + '</body></html>';
 }
 
-function draftKey(slug: string, mode: Mode) { return `utkristi-sandbox:v1:${slug}:${mode}`; }
+function draftKey(slug: string, mode: Mode) { return `utkristi-sandbox:${mode === 'html' ? 'v2' : 'v1'}:${slug}:${mode}`; }
 function readDraft(slug: string, mode: Mode, initial: string) {
-  try { return localStorage.getItem(draftKey(slug, mode)) ?? initial; } catch { return initial; }
+  try {
+    const saved = localStorage.getItem(draftKey(slug, mode));
+    if (saved !== null || mode !== 'html') return saved ?? initial;
+    const legacy = `utkristi-sandbox:v1:${slug}`;
+    const markup = localStorage.getItem(legacy + ':html') ?? initial;
+    const javascript = localStorage.getItem(legacy + ':js')?.trim();
+    return javascript && javascript !== legacyJavaScriptHint
+      ? `${markup}\n<script>\n${safeScript(javascript)}\n</script>` : markup;
+  } catch { return initial; }
 }
 
 export default function Playground({ component, editorMode, initialMotion }: { component?: string; editorMode?: string; initialMotion?: string }) {
@@ -58,10 +75,9 @@ export default function Playground({ component, editorMode, initialMotion }: { c
   const related = variantSets[parent] ?? [];
   const [theme, setTheme] = useState<ResolvedTheme>(resolvedTheme);
   const [motion, setMotion] = useState(() => motionOptions.find(([value]) => value === initialMotion)?.[0] ?? exampleMotion(slug));
-  const [mode, setMode] = useState<Mode>(editorMode === 'html' || editorMode === 'js' ? editorMode : 'react');
+  const [mode, setMode] = useState<Mode>(editorMode === 'html' || editorMode === 'js' ? 'html' : 'react');
   const [reactCode, setReactCode] = useState(() => readDraft(slug, 'react', examples[slug].code));
   const [htmlCode, setHtmlCode] = useState(() => readDraft(slug, 'html', example.html));
-  const [jsCode, setJsCode] = useState(() => readDraft(slug, 'js', initialJavaScript));
   const [run, setRun] = useState<Run>();
   const [status, setStatus] = useState('');
   const [busy, setBusy] = useState(false);
@@ -71,14 +87,14 @@ export default function Playground({ component, editorMode, initialMotion }: { c
   const editor = useRef<HTMLTextAreaElement>(null);
   const previewHeading = useRef<HTMLSpanElement>(null);
   const requested = useRef(0);
-  const code = mode === 'react' ? reactCode : mode === 'html' ? htmlCode : jsCode;
-  const initialSource = mode === 'react' ? examples[slug].code : mode === 'html' ? example.html : initialJavaScript;
-  const filename = slug + (mode === 'react' ? '.tsx' : mode === 'html' ? '.html' : '.js');
+  const code = mode === 'react' ? reactCode : htmlCode;
+  const initialSource = mode === 'react' ? examples[slug].code : example.html;
+  const filename = slug + (mode === 'react' ? '.tsx' : '.html');
   function update(next: string) {
-    (mode === 'react' ? setReactCode : mode === 'html' ? setHtmlCode : setJsCode)(next);
+    (mode === 'react' ? setReactCode : setHtmlCode)(next);
     try {
       const key = draftKey(slug, mode);
-      if (next === initialSource || next.length > 200_000) localStorage.removeItem(key);
+      if ((mode === 'react' && next === initialSource) || next.length > 200_000) localStorage.removeItem(key);
       else localStorage.setItem(key, next);
     } catch { /* Editing remains available without storage. */ }
   }
@@ -88,9 +104,8 @@ export default function Playground({ component, editorMode, initialMotion }: { c
     setExecuted({ code: source, mode: language });
     setError('');
     setStatus('');
-    if (language !== 'react') {
-      setRun({ token, source: language === 'html' ? source : htmlCode, javascript: language === 'js' ? source : jsCode,
-        theme: previewTheme, motion: previewMotion, markup: true });
+    if (language === 'html') {
+      setRun({ token, source, theme: previewTheme, motion: previewMotion, markup: true });
       setBusy(false);
       return;
     }
@@ -136,11 +151,11 @@ export default function Playground({ component, editorMode, initialMotion }: { c
     return () => window.removeEventListener('message', message);
   }, []);
 
-  const previewDocument = run?.markup ? htmlDocument(run.source, run.javascript ?? '', run.theme, run.motion, run.token) : reactFrame;
+  const previewDocument = run?.markup ? htmlDocument(run.source, run.theme, run.motion, run.token) : reactFrame;
 
   function changeMode(next: Mode) {
     setMode(next);
-    void compile(next === 'react' ? reactCode : next === 'html' ? htmlCode : jsCode, next, theme);
+    void compile(next === 'react' ? reactCode : htmlCode, next, theme);
   }
 
   function runExample() {
@@ -152,7 +167,7 @@ export default function Playground({ component, editorMode, initialMotion }: { c
   }
 
   function download() {
-    const exported = mode === 'html' ? htmlDocument(htmlCode, jsCode, theme, motion) : code;
+    const exported = mode === 'html' ? htmlDocument(htmlCode, theme, motion) : code;
     const url = URL.createObjectURL(new Blob([exported], { type: mode === 'html' ? 'text/html;charset=utf-8' : 'text/plain;charset=utf-8' }));
     const link = document.createElement('a');
     link.href = url;
@@ -184,7 +199,7 @@ export default function Playground({ component, editorMode, initialMotion }: { c
         void compile(code, mode, next);
       }}><option value="dark">Night</option><option value="light">Paper</option><option value="glass">Glass</option></Select></label>
       <label htmlFor={id + "-mode"}>Editor<Select id={id + "-mode"} value={mode} onChange={(event) => changeMode(event.target.value as Mode)}>
-        <option value="react">React / TSX</option><option value="html">HTML / CSS</option><option value="js">JavaScript for HTML</option>
+        <option value="react">React / TSX</option><option value="html">HTML / CSS / JS</option>
       </Select></label>
       <label htmlFor={id + "-motion"}>Motion<Select id={id + "-motion"} value={motion} onChange={(event) => {
         const next = event.currentTarget.value as PreviewMotion;
@@ -220,7 +235,7 @@ export default function Playground({ component, editorMode, initialMotion }: { c
         </Button>)}
       </div></div>
       <div className="playground-stage ut-scrollbar" data-viewport={viewport}>
-      {run ? <iframe key={run.token} ref={iframe} data-preview-run={run.token} title={example.name + ' sandbox preview'} sandbox="allow-scripts"
+      {run ? <iframe key={run.token} ref={iframe} data-preview-run={run.token} title={example.name + ' sandbox preview'} sandbox="allow-scripts allow-forms"
         srcDoc={slug === 'typography' ? previewDocument.replace('</head>', specimenFonts + '</head>') : previewDocument}
         onLoad={() => {
           if (!run.markup) iframe.current?.contentWindow?.postMessage({
@@ -233,7 +248,8 @@ export default function Playground({ component, editorMode, initialMotion }: { c
         <a className="link" href={docs.href}>{docs.label}</a></div>
     </section>
     </div>
-    <p className="playground-help muted"><span>{executed.code !== code || executed.mode !== mode ? 'Source changed. Run to update the preview.' : 'Drafts are kept in this browser.'}</span>
+    <p className="playground-help muted"><span>{executed.code !== code || executed.mode !== mode ? 'Source changed. Run to update the preview.'
+      : mode === 'html' ? 'Add CSS with a style tag and JavaScript with a script tag.' : 'Drafts are kept in this browser.'}</span>
       <span><Kbd>Ctrl / ⌘</Kbd> <Kbd>Enter</Kbd> Run example</span></p>
   </article>;
 }

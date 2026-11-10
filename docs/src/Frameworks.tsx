@@ -1,9 +1,10 @@
-import { useEffect, useId, useRef } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Tabs } from '@utkristi/ui';
 import { initUI } from '../../src/react/dom';
 import { CopyCode } from './CopyCode';
+import { frameworkRecipes, type FrameworkRecipe } from './framework-recipes';
 
-const markup = `<section data-theme="dark" data-ut-preset="ledger">
+const markup = `<section data-ut-preset="ledger">
   <button type="button" class="btn btn-solid"
     data-ut-open-dialog="workspace-details">Workspace details</button>
   <dialog class="modal ut-native-dialog" id="workspace-details"
@@ -100,6 +101,24 @@ export function WorkspaceDetails() {
   );
 }`;
 
+const integrations = frameworkRecipes({ markup, react, vue, svelte, angular });
+const groups = [...new Set(integrations.map(({ group }) => group))];
+
+function Integration({ recipe }: { recipe: FrameworkRecipe }) {
+  const [expanded, setExpanded] = useState(false);
+  return <article className="framework-recipe">
+    <h3 id={recipe.id}>{recipe.name}</h3>
+    <p>{recipe.description}</p>
+    <details onToggle={(event) => setExpanded(event.currentTarget.open)}>
+      <summary>View setup and example</summary>
+      {expanded && <div className="framework-recipe-code">
+        {recipe.files.map(({ name, code }) => <CopyCode key={name} text={code} language={name} />)}
+        <a className="link" href={recipe.source} target="_blank" rel="noreferrer">{recipe.name} documentation</a>
+      </div>}
+    </details>
+  </article>;
+}
+
 export default function Frameworks() {
   const root = useRef<HTMLDivElement>(null);
   const id = useId();
@@ -147,5 +166,15 @@ export default function Frameworks() {
     <p>Add this markup within the mounted region and call <code>initUI(root)</code> in place of <code>initDialogs(root)</code>.
       Tabs support arrow keys, Home, and End.</p>
     <CopyCode text={nativeTabs} language="HTML" />
+    <h2>Standalone assets</h2>
+    <p>Download the stylesheet and script for server templates and embedded views. Serve both files from the paths used by your integration.</p>
+    <div className="sample-row">
+      <a className="btn btn-ghost" href={`${import.meta.env.BASE_URL}utkristi-ui.css`} download>Download stylesheet</a>
+      <a className="btn btn-ghost" href={`${import.meta.env.BASE_URL}utkristi-dom.js`} download>Download JavaScript</a>
+    </div>
+    {groups.map((group) => <section key={group} className="framework-group">
+      <h2>{group}</h2>
+      {integrations.filter((recipe) => recipe.group === group).map((recipe) => <Integration key={recipe.id} recipe={recipe} />)}
+    </section>)}
   </article>;
 }

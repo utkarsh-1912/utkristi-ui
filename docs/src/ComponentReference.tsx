@@ -14,15 +14,15 @@ export default function ComponentReference({ slug, html }: { slug: string; html:
       <div className="doc-section-head"><div><span className="label">Implementation</span><h2>Use in your app</h2></div>
         <Button href={`#/sandbox?component=${slug}`} variant="ghost" iconRight={<ArrowUpRight size={16} />}>Open sandbox</Button></div>
       <Tabs label="Usage examples" defaultValue="react" items={[
-        { id: 'css', label: 'HTML', content: <><p className="muted">Use the kit stylesheet and the JavaScript tab to activate controls marked with <Code inline>data-ut-*</Code>.</p>
-          <CopyCode text={`<div data-ut-motion="${exampleMotion(slug)}" data-ut-enter>\n${html}\n</div>`} language="HTML" /></> },
-        { id: 'js', label: 'JavaScript', content: <><p className="muted">Run the initializer once after inserting the markup. The returned cleanup removes its event listeners.</p>
-          <CopyCode text={"import { initUI } from '@utkristi/ui/dom';\n\nconst dispose = initUI(document);"} language="JavaScript" />
-          <p><a className="link" href={`${import.meta.env.BASE_URL}utkristi-dom.js`} download>Download standalone script</a></p>
-          <CopyCode text={'<script src="./utkristi-dom.js"></script>\n<script>UtkristiDOM.initUI(document);</script>'} language="HTML" /></> },
+        { id: 'css', label: 'HTML / CSS / JS', content: <><p className="muted">Place the stylesheet and runtime beside the HTML file. The script activates controls marked with <Code inline>data-ut-*</Code>.</p>
+          <div className="sample-row">
+            <a className="link" href={`${import.meta.env.BASE_URL}utkristi-ui.css`} download>Download stylesheet</a>
+            <a className="link" href={`${import.meta.env.BASE_URL}utkristi-dom.js`} download>Download runtime</a>
+          </div>
+          <CopyCode text={`<link rel="stylesheet" href="./utkristi-ui.css">\n<script src="./utkristi-dom.js"></script>\n<div data-ut-motion="${exampleMotion(slug)}" data-ut-enter>\n${html}\n</div>\n<script>UtkristiDOM.initUI(document);</script>`} language="HTML / CSS / JS" /></> },
         { id: 'react', label: 'React', content: reactExample
           ? <><p className="muted">Install the kit and import its stylesheet once in your app. This example includes its data and theme providers.</p>
-            {template && <p className="muted">Copy the layout stylesheet from the CSS tab and import it beside this example.</p>}
+            {template && <p className="muted">Copy the stylesheet from the Layout CSS tab and import it beside this example.</p>}
             <CopyCode text={reactExample} language="TSX" /></>
           : <p className="muted">The React example is temporarily unavailable. See the HTML tab for the markup.</p> },
         { id: 'motion', label: 'Motion', content: <><p className="muted">Choose fade, rise, scale, slide, or none. The scope also sets the entry motion for supported overlays inside it.</p>

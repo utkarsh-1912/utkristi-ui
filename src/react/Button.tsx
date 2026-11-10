@@ -1,8 +1,9 @@
-import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type MouseEvent, type ReactNode } from 'react';
+import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
 import { Spinner } from './Spinner.js';
 import { assignRef, cx } from './utils/cx.js';
+import type { ComponentGeometry } from './utils/geometry.js';
 
-interface ButtonStyle {
+interface ButtonStyle extends ComponentGeometry {
   variant?: 'solid' | 'ghost' | 'quiet' | 'danger' | 'plain';
   size?: 'sm' | 'md' | 'lg';
   block?: boolean;
@@ -20,10 +21,20 @@ export type ButtonProps = ButtonStyle & (
 const variants = { solid: 'btn-solid', ghost: 'btn-ghost', quiet: 'btn-quiet', danger: 'btn-danger', plain: 'btn-plain' };
 const sizes = { sm: 'btn-sm', md: '', lg: 'btn-lg' };
 
+function buttonGeometry({ radius, inlineSize }: ComponentGeometry, style: CSSProperties | undefined) {
+  if (radius === undefined && inlineSize === undefined) return style;
+  // Keep joined corners under the control of ButtonGroup and SplitButton.
+  return {
+    '--ut-button-shape': typeof radius === 'number' ? `${radius}px` : radius,
+    inlineSize, ...style,
+  } as CSSProperties;
+}
+
 export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(function Button(
-  { variant = 'solid', size = 'md', block, loading, disabled, iconLeft, iconRight, children, className, ...props }, ref,
+  { variant = 'solid', size = 'md', block, loading, disabled, iconLeft, iconRight, children, className, radius, inlineSize, style, ...props }, ref,
 ) {
-  const classes = cx('btn', variants[variant], sizes[size], block && 'btn-block', className);
+  const classes = cx('btn', variants[variant], sizes[size], block && 'btn-block', inlineSize !== undefined && 'btn-fit', className);
+  const geometry = buttonGeometry({ radius, inlineSize }, style);
   const content = <>{loading ? <Spinner aria-hidden="true" /> : iconLeft}{children}{iconRight}</>;
   if (props.href !== undefined) {
     const { onClick, ...link } = props;
@@ -34,17 +45,17 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
     };
     return <a {...link} ref={(node) => assignRef(ref, node)} href={inactive ? undefined : link.href}
       role={inactive ? 'link' : link.role} aria-disabled={inactive || undefined} aria-busy={loading || props['aria-busy']}
-      onClick={click} className={classes}>{content}</a>;
+      onClick={click} className={classes} style={geometry}>{content}</a>;
   }
   const { type = 'button', onClick, ...button } = props;
   return <button {...button} ref={(node) => assignRef(ref, node)} type={type} disabled={disabled || loading}
     aria-busy={loading || props['aria-busy']} onClick={(event) => {
       if (props['aria-disabled'] === true || props['aria-disabled'] === 'true') event.preventDefault();
       else onClick?.(event);
-    }} className={classes}>{content}</button>;
+    }} className={classes} style={geometry}>{content}</button>;
 });
 
-export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, ComponentGeometry {
   label: string;
   variant?: 'icon' | 'circle';
   size?: 'sm' | 'md';
@@ -54,11 +65,11 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
 }
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
-  { label, variant = 'icon', size, pressed, tone, badge, className, children, type = 'button', ...props }, ref,
+  { label, variant = 'icon', size, pressed, tone, badge, className, children, radius, inlineSize, style, type = 'button', ...props }, ref,
 ) {
   return <button {...props} ref={ref} type={type} aria-label={label} aria-pressed={pressed ?? props['aria-pressed']}
     className={cx(variant === 'circle' ? 'btn-circle' : 'icon-btn', size === 'sm' && (variant === 'circle' ? 'btn-circle-sm' : 'icon-btn-sm'),
-      tone === 'danger' && 'icon-btn-danger', className)}>
+      tone === 'danger' && 'icon-btn-danger', className)} style={buttonGeometry({ radius, inlineSize }, style)}>
     {children}{badge && <span className="icon-btn-badge" aria-hidden="true">{badge === true ? null : badge}</span>}
   </button>;
 });

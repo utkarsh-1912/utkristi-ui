@@ -19,6 +19,10 @@ Utkristi UI is shared across the Utkristi ecosystem. The original Night and Pape
 | `.light-theme .ux` (paper) | `.light`, `.light-theme`, `[data-theme="light"]` |
 | `utils/theme.js` "system" | `[data-theme="system"]` plus `@media (prefers-color-scheme: light)` |
 
+Use `--ut-shape-radius` to set a corner radius independently of appearance. The
+`data-ut-radius` presets map `square`, `soft`, `round`, and `pill` to 0, 8, 18,
+and 999 pixels. Components use their existing radius tokens when no shape is set.
+
 ## Colour tokens
 
 Every value below was checked against `app.css` lines 9–99.

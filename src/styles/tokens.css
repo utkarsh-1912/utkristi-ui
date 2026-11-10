@@ -310,11 +310,16 @@
 .dark, .light, .light-theme, [data-theme="dark"], [data-theme="light"], [data-theme="system"] {
   --ut-surface-filter: initial;
   --ut-surface-sheen: initial;
+  --ut-surface-edge: initial;
+  --ut-pane-sheen: initial;
+  --ut-scrim-filter: initial;
   --ut-canvas: initial;
   --ut-button-radius: initial;
   --ut-solid-hover: initial;
   --ut-on-solid-hover: initial;
   --ut-navbar-bg: initial;
+  --ut-navbar-filter: initial;
+  --ut-navbar-sheen: initial;
   --ut-navbar-ink: initial;
   --ut-navbar-muted: initial;
   --ut-navbar-tint: initial;
@@ -326,12 +331,12 @@
 .glass, [data-theme="glass"] {
   color-scheme: light;
   --ut-bg: #F7F4FB;
-  --ut-code-bg: color-mix(in srgb, var(--ut-bg) 62%, var(--ut-bg-3));
-  --ut-code-bar: color-mix(in srgb, var(--ut-raise) 92%, var(--ut-bg));
+  --ut-code-bg: #F1EDF8;
+  --ut-code-bar: #FCFAFF;
   --ut-code-line: var(--ut-line-2);
-  --ut-bg-2: rgba(255, 255, 255, .82);
+  --ut-bg-2: rgba(250, 249, 255, .83);
   --ut-bg-3: #EDE8F3;
-  --ut-raise: rgba(255, 255, 255, .94);
+  --ut-raise: rgba(255, 255, 255, .86);
   --ut-ink: #202021;
   --ut-ink-2: #424149;
   --ut-ink-3: #575362;
@@ -346,7 +351,7 @@
   --ut-on-solid: #202021;
   --ut-solid-hover: #C1FF52;
   --ut-on-solid-hover: #202021;
-  --ut-pane: #202021;
+  --ut-pane: rgba(29, 26, 37, .88);
   --ut-pane-2: #303032;
   --ut-pane-ink: #FAF8FF;
   --ut-pane-ink-2: #D2CBD9;
@@ -361,14 +366,21 @@
   --ut-bad-ink: #A51B38;
   --ut-warn-ink: #814600;
   --ut-grain: .02;
-  --ut-shadow: 0 24px 64px -32px rgba(37, 26, 51, .38);
-  --ut-backdrop: rgba(30, 26, 38, .46);
+  --ut-shadow: 0 20px 44px -25px rgba(52, 36, 83, .38), 0 4px 14px -9px rgba(39, 28, 63, .24);
+  --ut-backdrop: rgba(30, 26, 38, .34);
   --ut-ring: color-mix(in srgb, var(--ut-accent) 20%, transparent);
-  --ut-surface-filter: blur(20px) saturate(125%);
-  --ut-surface-sheen: linear-gradient(153deg, rgba(255, 255, 255, .58), transparent 58%);
-  --ut-canvas: radial-gradient(ellipse at 84% 12%, rgba(179, 156, 215, .22), transparent 53%), radial-gradient(ellipse at 12% 46%, rgba(180, 215, 148, .20), transparent 53%);
+  --ut-surface-filter: blur(22px) saturate(148%);
+  --ut-surface-sheen: linear-gradient(148deg, rgba(255, 255, 255, .54), transparent 53%, rgba(209, 204, 245, .17));
+  --ut-surface-edge: inset 0 1px 0 rgba(255, 255, 255, .9), inset 0 0 0 1px rgba(255, 255, 255, .28);
+  --ut-pane-sheen: linear-gradient(148deg, rgba(222, 210, 255, .13), transparent 58%);
+  --ut-scrim-filter: blur(3px);
+  --ut-canvas: radial-gradient(ellipse at 84% 8%, rgba(167, 133, 235, .48), transparent 54%),
+    radial-gradient(ellipse at 6% 60%, rgba(180, 220, 126, .44), transparent 56%),
+    radial-gradient(ellipse at 96% 85%, rgba(125, 179, 235, .34), transparent 57%);
   --ut-button-radius: 5px;
-  --ut-navbar-bg: rgba(27, 27, 28, .94);
+  --ut-navbar-bg: rgba(29, 26, 36, .82);
+  --ut-navbar-filter: blur(18px) saturate(148%);
+  --ut-navbar-sheen: linear-gradient(170deg, rgba(240, 226, 255, .09), transparent 74%);
   --ut-navbar-ink: #FAF8FF;
   --ut-navbar-muted: #D2CBD9;
   --ut-navbar-tint: rgba(255, 255, 255, .11);
@@ -437,13 +449,25 @@
   .glass, [data-theme="glass"] {
     --ut-bg-2: #FCFAFE;
     --ut-raise: #FFFFFF;
+    --ut-pane: #202021;
+    --ut-backdrop: rgba(30, 26, 38, .62);
     --ut-navbar-bg: #202021;
     --ut-navbar-filter: none;
+    --ut-navbar-sheen: none;
     --ut-surface-filter: none;
     --ut-surface-sheen: none;
+    --ut-surface-edge: inset 0 0 0 0 transparent;
+    --ut-pane-sheen: none;
+    --ut-scrim-filter: none;
     --ut-canvas: none;
   }
 }
+
+/* Shape choices can sit on a single component or apply to a whole section. */
+[data-ut-radius="square"] { --ut-shape-radius: 0px; }
+[data-ut-radius="soft"] { --ut-shape-radius: 8px; }
+[data-ut-radius="round"] { --ut-shape-radius: 18px; }
+[data-ut-radius="pill"] { --ut-shape-radius: 999px; }
 
 /* Template presets resolve against the nearest appearance's palette. */
 [data-ut-preset="signal"] {

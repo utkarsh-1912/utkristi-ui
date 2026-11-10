@@ -3,6 +3,7 @@ import { createContext, forwardRef, useContext, type HTMLAttributes, type InputH
 import { Icon } from './icons.js';
 import { cx } from './utils/cx.js';
 import { useId } from './utils/useId.js';
+import { geometryStyle, type ComponentGeometry } from './utils/geometry.js';
 
 type ControlProps = Pick<InputHTMLAttributes<HTMLInputElement>, 'id' | 'required' | 'aria-describedby' | 'aria-invalid'>;
 const FieldContext = createContext<ControlProps>({});
@@ -42,28 +43,31 @@ export const Field = forwardRef<HTMLDivElement, FieldProps>(function Field(
   </div>;
 });
 
-export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(function Input({ className, ...props }, ref) {
+export type InputProps = InputHTMLAttributes<HTMLInputElement> & ComponentGeometry;
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ className, radius, inlineSize, style, ...props }, ref) {
   const field = useControl(props);
-  return <input {...props} {...field} ref={ref} className={cx('input', className)} />;
+  return <input {...props} {...field} ref={ref} className={cx('input', className)} style={geometryStyle({ radius, inlineSize }, style)} />;
 });
 
-export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSelectElement>>(function Select({ className, ...props }, ref) {
+export type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & ComponentGeometry;
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select({ className, radius, inlineSize, style, ...props }, ref) {
   const field = useControl(props);
-  return <select {...props} {...field} ref={ref} className={cx('select', className)} />;
+  return <select {...props} {...field} ref={ref} className={cx('select', className)} style={geometryStyle({ radius, inlineSize }, style)} />;
 });
 
-export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> { code?: boolean }
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({ className, code, ...props }, ref) {
+export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>, ComponentGeometry { code?: boolean }
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({ className, code, radius, inlineSize, style, ...props }, ref) {
   const field = useControl(props);
-  return <textarea {...props} {...field} ref={ref} className={cx('textarea', code && 'textarea-code', className)} />;
+  return <textarea {...props} {...field} ref={ref} className={cx('textarea', code && 'textarea-code', className)}
+    style={geometryStyle({ radius, inlineSize }, style)} />;
 });
 
-export interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> { icon?: ReactNode; shortcut?: ReactNode }
+export interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement>, ComponentGeometry { icon?: ReactNode; shortcut?: ReactNode }
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(function SearchInput(
-  { className, icon = <Icon name="search" />, shortcut, ...props }, ref,
+  { className, icon = <Icon name="search" />, shortcut, radius, inlineSize, ...props }, ref,
 ) {
   const field = useControl(props);
-  return <div className={cx('search', className)}>
+  return <div className={cx('search', className)} style={geometryStyle({ radius, inlineSize }, undefined)}>
     {icon}
     <input {...props} {...field} ref={ref} type="search" />
     {shortcut && <kbd className="kbd" aria-hidden="true">{shortcut}</kbd>}

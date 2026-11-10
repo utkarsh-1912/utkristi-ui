@@ -84,6 +84,17 @@ React and React DOM 18 or later are peer dependencies. Pass icons as React nodes
 
 Night is the default. Set `data-theme="light"` for Paper, `data-theme="dark"` for Night, or `data-theme="glass"` for Glass. Use `data-theme="system"` to follow the operating-system preference for Night and Paper. These selectors also work on nested surfaces. `ThemeProvider` persists the preference and applies the resolved theme to the root. Render `themeScript()` in the document head to set the theme before paint. Override `--ut-*` variables to customize a theme and use the `light:`, `night:`, and `glass:` Tailwind variants for local adjustments.
 
+Set `data-ut-radius="square"`, `"soft"`, `"round"`, or `"pill"` on a component or section in any theme. Use `--ut-shape-radius` for a custom value. In React, buttons, cards, inputs, dialogs, and video players accept `radius` and `inlineSize` as pixel numbers or CSS values. In HTML, set `inline-size` on the component and add `btn-fit` to let a fixed-width button wrap its label.
+
+```tsx
+<Button radius={0} inlineSize={176}>Create project</Button>
+<VideoPlayer src="/demo.mp4" controls="custom" radius={14} inlineSize="36rem">
+  <track kind="captions" src="/captions.vtt" srcLang="en" label="English" />
+</VideoPlayer>
+```
+
+VideoPlayer uses browser controls by default. Custom mode adds themed playback, seeking, mute, and a captions selector for supplied tracks. Fullscreen appears when the browser allows it.
+
 Menus, tabs, segmented controls, and dialogs support keyboard navigation. Dialogs trap and restore focus. Decorative animations respect reduced motion, and the spinner keeps moving as a loading cue. The Night theme uses dark `--ut-on-bad` text on red fills to meet the 4.5:1 text contrast target.
 
 The standalone CSS requires `color-mix()`. Use Chrome or Edge 111+, Safari 16.2+, or Firefox 113+.

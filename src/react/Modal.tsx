@@ -3,11 +3,12 @@ import { IconButton } from './Button.js';
 import { Icon } from './icons.js';
 import { assignRef, cx } from './utils/cx.js';
 import { useDialogFocus } from './utils/focus.js';
+import { geometryStyle, type ComponentGeometry } from './utils/geometry.js';
 import { Portal } from './utils/Portal.js';
 import { useId } from './utils/useId.js';
 import { useScrollLock } from './utils/useScrollLock.js';
 
-export interface ModalProps extends Omit<HTMLAttributes<HTMLElement>, 'title' | 'onSubmit'> {
+export interface ModalProps extends Omit<HTMLAttributes<HTMLElement>, 'title' | 'onSubmit'>, ComponentGeometry {
   open: boolean;
   onClose?: () => void;
   title: ReactNode;
@@ -23,7 +24,8 @@ export interface ModalProps extends Omit<HTMLAttributes<HTMLElement>, 'title' | 
 }
 
 const ModalContent = forwardRef<HTMLElement, Omit<ModalProps, 'open'>>(function ModalContent(
-  { onClose, title, description, label, footer, handle, wide, onSubmit, initialFocus, backdropClassName, dismissOnBackdrop = true, className, children, ...props }, ref,
+  { onClose, title, description, label, footer, handle, wide, onSubmit, initialFocus, backdropClassName, dismissOnBackdrop = true,
+    className, children, radius, inlineSize, style, ...props }, ref,
 ) {
   const scope = useRef<HTMLElement | null>(null);
   const id = useId();
@@ -50,6 +52,7 @@ const ModalContent = forwardRef<HTMLElement, Omit<ModalProps, 'open'>>(function 
     'aria-describedby': description != null ? `${id}-desc` : props['aria-describedby'],
     tabIndex: -1,
     className: cx('modal', wide && 'modal-wide', className),
+    style: geometryStyle({ radius, inlineSize }, style),
   };
   return <div className={cx('modal-backdrop', backdropClassName)} role="presentation" onMouseDown={(event) => {
     if (dismissOnBackdrop && event.target === event.currentTarget) onClose?.();

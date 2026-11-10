@@ -133,7 +133,10 @@
 }
 .theme-gallery, .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 248px), 1fr)); gap: 12px; }
 .overview-grid { margin-top: 44px; }
-.theme-preview { container-type: inline-size; padding: clamp(12px, 2vw, 24px); border-radius: var(--ut-r-lg); border: 1px solid var(--ut-line); background: var(--ut-bg); color: var(--ut-ink); min-width: 0; }
+.theme-preview { container-type: inline-size; padding: clamp(12px, 2vw, 24px); border-radius: var(--ut-r-lg); border: 1px solid var(--ut-line); background: var(--ut-bg) var(--ut-canvas, none); color: var(--ut-ink); min-width: 0; }
+.shape-demo { margin-block: 16px 24px; }
+.shape-demo-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: 8px 12px; }
+.shape-demo .card-body { display: grid; align-items: start; justify-items: start; gap: 14px; }
 .preview-content { margin-top: 24px; min-width: 0; }
 .preview-content .header-dock { padding: 0; }
 .preview-content .navbar-inner, .preview-content .strip-inner { padding-inline: 10px; }
@@ -179,12 +182,6 @@
 .showcase-icon-tray { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 106px), 1fr)); gap: 6px; margin: 0; padding: 0; list-style: none; }
 .showcase-icon-tray li { display: grid; justify-items: center; gap: 4px; padding: 8px 4px; border-radius: var(--ut-r-field); background: var(--ut-tint); font-size: .75rem; text-align: center; }
 .showcase-icon-preview { display: grid; place-items: center; block-size: 68px; }
-/* The Glass demos put translucent cards over a quiet lilac and green backdrop. */
-.theme-preview[data-theme="glass"] {
-  background-image: radial-gradient(ellipse at 0 100%, #dce7ce 0%, transparent 65%),
-    radial-gradient(ellipse at 90% 0, #ddd0ef 0%, transparent 70%);
-}
-
 @container (max-width: 380px) {
   .preview-content .navbar:not(.navbar-dock) .navbar-links { display: none; }
   .preview-content .navbar:not(.navbar-dock) .icon-btn.burger { display: inline-flex; }

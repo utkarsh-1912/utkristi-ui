@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added theme-independent corners and custom widths to buttons, cards, form controls, dialogs, and video. Glass now uses clearer frosted surfaces and an opaque reduced-transparency mode.
+- Added optional themed VideoPlayer controls with seeking, mute, captions, and fullscreen.
+
 - Added controlled remote data tables, filter and bulk action bars, a column chooser, and an inclusive date range picker. Added worklist, audit, and access blocks with live docs, editable sources, and a registry item for the worklist.
 - Added CI checks for the package, production docs, and representative keyboard, accessibility, and responsive scenarios.
 

@@ -1,8 +1,10 @@
-import { useId, useRef, useState, type HTMLAttributes, type InputHTMLAttributes, type ReactNode, type VideoHTMLAttributes } from 'react';
+import { useId, useRef, useState, type HTMLAttributes, type InputHTMLAttributes, type ReactNode } from 'react';
 import { Button, type ButtonProps } from './Button.js';
 import { Input } from './Field.js';
 import { Popover, type PopoverProps } from './Overlays.js';
 import { cx } from './utils/cx.js';
+
+export { VideoPlayer, type VideoPlayerProps } from './VideoPlayer.js';
 
 export interface BannerProps extends HTMLAttributes<HTMLElement> {
   action?: ReactNode;
@@ -191,10 +193,4 @@ export function Timeline({ entries, orientation = 'vertical', className, ...prop
       {detail && <div>{detail}</div>}
     </li>)}
   </ol>;
-}
-
-export function VideoPlayer({ className, controls = true, ...props }: VideoHTMLAttributes<HTMLVideoElement>) {
-  // Consumers supply language-appropriate caption tracks with their video source.
-  // eslint-disable-next-line jsx-a11y/media-has-caption
-  return <video {...props} controls={controls} className={cx('kit-video', className)} />;
 }

@@ -62,10 +62,11 @@ function FooterPreview() {
 export const examples = {
   ...catalog,
   button: {
-    name: 'Button', description: 'Pill buttons for primary, secondary, and destructive actions.',
+    name: 'Button', description: 'Primary, secondary, and destructive actions with adjustable corners and width.',
     preview: () => <div className="sample-row"><Button iconLeft={<Plus size={16} />}>Create</Button><Button variant="ghost">Preview</Button>
-      <Button variant="quiet">Later</Button><Button variant="danger">Remove</Button><Button loading>Saving</Button></div>,
-    html: '<button type="button" class="btn btn-solid">Create</button>',
+      <Button variant="quiet">Later</Button><Button variant="danger">Remove</Button><Button loading>Saving</Button>
+      <Button radius={0} inlineSize={160}>Square</Button><Button radius="999px" inlineSize={144}>Pill</Button></div>,
+    html: '<button type="button" class="btn btn-solid btn-fit" data-ut-radius="square" style="inline-size: 160px">Create</button>',
     jsx: '<Button iconLeft={<Plus size={16} />}>Create</Button>',
   },
   'icon-button': {

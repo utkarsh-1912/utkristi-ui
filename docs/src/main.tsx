@@ -2,7 +2,7 @@ import { lazy, StrictMode, Suspense, useEffect, useId, useRef, useState, type Re
 import { createRoot } from 'react-dom/client';
 import { ArrowUpRight } from 'lucide-react';
 import {
-  Button, Code, Dot, Icon, IconPaletteProvider, Loader, Logo, SearchInput,
+  Button, Card, CardBody, Code, Dot, Field, Icon, IconPaletteProvider, Input, Loader, Logo, SearchInput,
   Select, Shell, Tabs, ThemeProvider, ThemeSelect, ToastProvider, useTheme, type Theme,
 } from '@utkristi/ui';
 import { blockPages, componentPages, examples, type Example } from './examples';
@@ -212,6 +212,8 @@ function GettingStarted() {
 }
 
 function Theming() {
+  const [radius, setRadius] = useState('soft');
+  const [width, setWidth] = useState('11rem');
   return <article className="doc-article">
     <PageTitle kicker="Guide" title="Theming" detail="Night, Paper, and Glass share one set of components. Night is the default." />
     <div className="theme-gallery">{themes.map((theme) => <Frame key={theme} theme={theme}><Button>{themeLabels[theme]}</Button></Frame>)}</div>
@@ -221,6 +223,30 @@ function Theming() {
       <Code inline>data-theme="system"</Code> follows the operating-system colour preference.</p>
     <CopyCode text={`<section data-theme="glass">\n  <button class="btn btn-solid">Glass button</button>\n</section>`} />
     <p>Place <Code inline>{'<ThemeSelect />'}</Code> inside <Code inline>{'<ThemeProvider>'}</Code> to let people choose Night, Paper, Glass, or System and keep that preference across visits.</p>
+    <h2>Set corners and width</h2>
+    <p>Use <Code inline>data-ut-radius</Code> to set corners on a component or a section.
+      The same choices work in Night, Paper, and Glass. Set <Code inline>--ut-shape-radius</Code> for a custom value.</p>
+    <div className="shape-demo sample-stack">
+      <div className="shape-demo-controls">
+        <Field label="Corners"><Select value={radius} onChange={(event) => setRadius(event.currentTarget.value)}>
+          <option value="">Theme default</option><option value="square">Square</option><option value="soft">Soft</option>
+          <option value="round">Round</option><option value="pill">Pill</option>
+        </Select></Field>
+        <Field label="Button width"><Select value={width} onChange={(event) => setWidth(event.currentTarget.value)}>
+          <option value="">Fit content</option><option value="11rem">11 rem</option><option value="100%">Fill available space</option>
+        </Select></Field>
+      </div>
+      <div className="theme-gallery">{themes.map((theme) => <Frame key={theme} theme={theme}>
+        <Card data-ut-radius={radius || undefined}><CardBody>
+          <Input aria-label={`${themeLabels[theme]} project name`} placeholder="Project name" />
+          <Button inlineSize={width || undefined}>Create project</Button>
+        </CardBody></Card>
+      </Frame>)}</div>
+    </div>
+    <CopyCode text={'<section data-theme="dark" data-ut-radius="square">\n  <button class="btn btn-solid btn-fit" style="inline-size: 11rem">Create</button>\n</section>'} language="HTML" />
+    <p>React buttons, cards, form controls, dialogs, and VideoPlayer accept <Code inline>radius</Code> and <Code inline>inlineSize</Code>.
+      Use a number for pixels or a CSS value. With Tailwind, you can also use utilities such as <Code inline>rounded-none</Code> and <Code inline>w-44</Code>.</p>
+    <CopyCode text={'<Button radius={0} inlineSize={176}>Square in Night</Button>\n<Button radius="999px" inlineSize="100%">Pill in Glass</Button>'} language="TSX" />
     <h2>Avoid a theme flash</h2>
     <p>Render the result of <Code inline>themeScript()</Code> into an inline script in the document head.
       Pass the same storage key to the script and provider when you customize it.</p>
@@ -235,6 +261,8 @@ function Theming() {
       <Button href="#/blocks/execution-desk" variant="ghost">Execution desk</Button>
     </div>
     <CopyCode text={`[data-theme="light"] {\n  --ut-accent: #3450a4;\n  --ut-on-accent: #fff;\n}\n\n<p class="light:text-accent night:text-ink glass:text-accent">A themed label</p>`} />
+    <h2>Glass surfaces</h2>
+    <p>Glass shows its blur and edge highlights over a gradient or other backdrop. The kit switches to opaque surfaces when reduced transparency is requested.</p>
   </article>;
 }
 

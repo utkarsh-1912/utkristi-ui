@@ -1,4 +1,5 @@
 export * from './theme/ThemeProvider.js';
+export type { ComponentGeometry } from './utils/geometry.js';
 export * from './Button.js';
 export * from './Card.js';
 export * from './Choice.js';

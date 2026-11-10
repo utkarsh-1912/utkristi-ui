@@ -31,7 +31,10 @@ export default {
     serif: 'var(--ut-font-serif)',
   },
   fontStretch: { condensed: '62%', semi: '87.5%', normal: '100%' },
-  borderRadius: { ut: 'var(--ut-r)', 'ut-lg': 'var(--ut-r-lg)', field: 'var(--ut-r-field)', pill: '999px' },
+  borderRadius: {
+    ut: 'var(--ut-shape-radius, var(--ut-r))', 'ut-lg': 'var(--ut-shape-radius, var(--ut-r-lg))',
+    field: 'var(--ut-shape-radius, var(--ut-r-field))', pill: '999px',
+  },
   boxShadow: { ut: 'var(--ut-shadow)' },
   transitionTimingFunction: { ut: 'var(--ut-ease)', curve: 'var(--ut-curve)', 'inout-ut': 'var(--ut-inout)' },
   maxWidth: { page: 'var(--ut-max)' },

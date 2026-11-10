@@ -219,12 +219,90 @@ async function captureEdge() {
     await selectOption('.showcase-icon-card select', 'line');
     await retry(() => evaluate('document.querySelectorAll(".showcase-icon-tray .icon-line").length === 6'), 'tray style applies to all icons');
 
+    await load('/theming?theme=glass', 'Theming');
+    await selectOption('.shape-demo-controls .field:first-child select', 'square');
+    await retry(() => evaluate(`[...document.querySelectorAll('.shape-demo .preview-content button, .shape-demo .preview-content input')]
+      .every(control => getComputedStyle(control).borderTopLeftRadius === '0px')`), 'square controls in all themes');
+    await selectOption('.shape-demo-controls .field:first-child select', 'pill');
+    await selectOption('.shape-demo-controls .field:last-child select', '100%');
+    await retry(() => evaluate(`[...document.querySelectorAll('.shape-demo .preview-content button')].every(button =>
+      getComputedStyle(button).borderTopLeftRadius === '999px' &&
+      Math.abs(button.offsetWidth - button.previousElementSibling.offsetWidth) <= 1)`), 'pill and full width in all themes');
+    await retry(() => evaluate(`(() => {
+      const glass = document.querySelector('.shape-demo [data-theme="glass"] .card');
+      const night = document.querySelector('.shape-demo [data-theme="dark"] .card');
+      return getComputedStyle(glass).backdropFilter.includes('blur(') && getComputedStyle(night).backdropFilter === 'none';
+    })()`), 'Glass uses frost with a scoped fallback');
+    await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-transparency', value: 'reduce' }] });
+    await retry(() => evaluate(`(() => {
+      const glass = getComputedStyle(document.querySelector('.shape-demo [data-theme="glass"] .card'));
+      return glass.backdropFilter === 'none' && glass.backgroundColor === 'rgb(252, 250, 254)';
+    })()`), 'Glass respects reduced transparency');
+    await send('Emulation.setEmulatedMedia', { features: [] });
+
+    await load('/components/button?theme=glass', 'Button');
+    await retry(() => evaluate(`(() => {
+      const buttons = [...document.querySelectorAll('.docs-example .preview-content button')];
+      const square = buttons.find(button => button.textContent === 'Square');
+      const pill = buttons.find(button => button.textContent === 'Pill');
+      return square.offsetWidth === 160 && getComputedStyle(square).borderTopLeftRadius === '0px' &&
+        pill.offsetWidth === 144 && getComputedStyle(pill).borderTopLeftRadius === '999px';
+    })()`), 'per-button shape and width in Glass');
+
+    await load('/components/video?theme=glass', 'Video');
+    await retry(() => evaluate(`(() => {
+      const video = document.querySelector('.docs-example video');
+      return video.duration > 0 && !video.controls && !document.querySelector('.video-seek').disabled &&
+        !!document.querySelector('.video-controls button[aria-label="Play"] svg path');
+    })()`), 'custom player loads metadata');
+    await evaluate(`(() => {
+      const video = document.querySelector('.docs-example video');
+      video.loop = true;
+      document.querySelector('.video-controls button[aria-label="Play"]').click();
+    })()`);
+    await retry(() => evaluate('!!document.querySelector(\'.video-controls button[aria-label="Pause"]\') && document.querySelector(".docs-example video").currentTime > 0'), 'custom playback advances');
+    await evaluate(`document.querySelector('.video-controls button[aria-label="Pause"]').click()`);
+    await retry(() => evaluate('document.querySelector(".docs-example video").paused'), 'custom pause');
+    await evaluate('document.querySelector(".video-seek").focus()');
+    await send('Input.dispatchKeyEvent', { type: 'rawKeyDown', key: 'End', code: 'End', windowsVirtualKeyCode: 35 });
+    await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'End', code: 'End', windowsVirtualKeyCode: 35 });
+    await retry(() => evaluate('document.querySelector(".docs-example video").currentTime >= document.querySelector(".docs-example video").duration * .95'), 'keyboard seeking');
+    await evaluate(`document.querySelector('.video-controls button[aria-label="Unmute"]').click()`);
+    await retry(() => evaluate('!document.querySelector(".docs-example video").muted && !!document.querySelector(\'.video-controls button[aria-label="Mute"]\')'), 'custom mute toggle');
+    await evaluate(`document.querySelector('.docs-example video').addTextTrack('captions', 'English', 'en') && true`);
+    await retry(() => evaluate('!!document.querySelector(\'.video-controls select[aria-label="Captions"]\')'), 'caption track discovery');
+    await selectOption('.video-controls select[aria-label="Captions"]', '0');
+    await retry(() => evaluate('document.querySelector(".docs-example video").textTracks[0].mode === "showing"'), 'caption track selection');
+    if (await evaluate('document.fullscreenEnabled')) {
+      await send('Page.bringToFront');
+      const point = await evaluate(`(() => {
+        const button = document.querySelector('.video-controls button[aria-label="Fullscreen"]');
+        button.scrollIntoView({ block: 'center', behavior: 'instant' });
+        const rect = button.getBoundingClientRect();
+        return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+      })()`);
+      await send('Input.dispatchMouseEvent', { type: 'mousePressed', button: 'left', clickCount: 1, ...point });
+      await send('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'left', clickCount: 1, ...point });
+      const fullscreenResult = await retry(() => evaluate(`document.fullscreenElement?.matches('.video-frame') ? 'opened' :
+        document.querySelector('.video-notice')?.textContent`), 'custom fullscreen');
+      if (fullscreenResult !== 'opened') throw new Error(fullscreenResult);
+      await retry(() => evaluate('!!document.querySelector(\'.video-controls button[aria-label="Exit fullscreen"]\')'), 'custom fullscreen state');
+      await evaluate('document.exitFullscreen().then(() => true)');
+      await retry(() => evaluate('!document.fullscreenElement && !!document.querySelector(\'.video-controls button[aria-label="Fullscreen"]\')'), 'custom fullscreen exit');
+    }
+
     await load('/blocks/enterprise-landing?theme=glass', 'Enterprise landing');
     await selectOption('.ut-template select[aria-label="Template preset"]', 'ledger');
     await selectOption('.docs-example select[aria-label="Preview theme"]', 'light');
     await retry(() => evaluate('!!document.querySelector(\'.theme-preview[data-theme="light"] .ut-template[data-ut-preset="ledger"]\')'), 'appearance change preserves template preset');
-    await evaluate('document.querySelector(".ut-enterprise-intro .btn-solid").click()');
-    await retry(() => evaluate('!!document.querySelector(\'.ut-portal[data-theme="light"][data-ut-preset="ledger"] .modal\')'), 'template dialog carries scoped appearance');
+    await evaluate(`(() => {
+      document.querySelector('.ut-template').dataset.utRadius = 'square';
+      document.querySelector('.ut-enterprise-intro .btn-solid').click();
+    })()`);
+    await retry(() => evaluate(`(() => {
+      const modal = document.querySelector('.ut-portal[data-theme="light"][data-ut-preset="ledger"] .modal');
+      return modal && getComputedStyle(modal).borderTopLeftRadius === '0px';
+    })()`), 'template dialog carries scoped appearance and corners');
     await evaluate(`(() => {
       const form = document.querySelector('.modal form');
       form.elements.email.value = 'preview@example.test';
@@ -500,6 +578,7 @@ async function captureEdge() {
     const responsiveRoutes = [
       ['/overview', 'A design system for Utkristi.'], ['/icons', 'Icons'], ['/tokens', 'Tokens'], ['/showcase', 'Build together.'],
       ['/components/command', 'Command'], ['/components/data-table', 'Data Table'], ['/components/file-input', 'File Input'],
+      ['/theming', 'Theming'], ['/components/video', 'Video'],
       ['/sandbox?component=command', 'Sandbox'], ['/blocks', 'Blocks'], ['/blocks/project-directory', 'Project directory'],
       ['/blocks/project-worklist', 'Project worklist'], ['/blocks/audit-explorer', 'Audit explorer'], ['/blocks/roles-and-access', 'Roles and access'],
       ['/blocks/enterprise-landing', 'Enterprise landing'], ['/blocks/execution-desk', 'Execution desk'],

@@ -20,7 +20,7 @@ Utkristi UI is the shared design system for the Utkristi ecosystem. It includes 
 
 The docs include component variants and a Blocks library with working project management, account, settings, and pricing examples. Open any example in the sandbox to try it in Night, Paper, or Glass.
 
-Blocks also includes an enterprise landing page, a simulated execution desk, operational workflows, and custom cards. The enterprise templates support the Signal, Ledger, and Terminal presets. [Enterprise and theme research](docs/enterprise-research.md) · [Landing preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/enterprise-landing.png) · [Execution desk preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/execution-desk.png)
+Blocks also includes an enterprise landing page, a simulated execution desk, operational workflows, and custom cards. The enterprise templates support the Signal, Ledger, and Terminal presets. [Enterprise and theme research](https://github.com/utkarsh-1912/utkristi-ui/blob/main/docs/enterprise-research.md) · [Landing preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/enterprise-landing.png) · [Execution desk preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/execution-desk.png)
 
 ## Install
 
@@ -112,7 +112,7 @@ Run `npm run docs:stress` to repeat the Edge check. It sweeps the docs at 375px 
 
 [React code splitting](https://react.dev/reference/react/lazy) · [Long tasks and main-thread work](https://web.dev/articles/optimize-long-tasks) · [Animation rendering](https://web.dev/articles/animations-guide)
 
-See the [competitive audit and implementation roadmap](docs/competitive-audit.md) for gaps across app workflows, distribution, accessibility, and performance.
+See the [competitive audit and implementation roadmap](https://github.com/utkarsh-1912/utkristi-ui/blob/main/docs/competitive-audit.md) for gaps across app workflows, distribution, accessibility, and performance.
 
 ## Development
 
@@ -131,4 +131,4 @@ See the [competitive audit and implementation roadmap](docs/competitive-audit.md
 
 The screenshot script uses Playwright with Chromium when Edge is unavailable. Install them in that environment before running the script.
 
-[Design tokens and class map](DESIGN_TOKENS.md) · [Changelog](CHANGELOG.md) · [MIT license](LICENSE)
+[Design tokens and class map](https://github.com/utkarsh-1912/utkristi-ui/blob/main/DESIGN_TOKENS.md) · [Changelog](https://github.com/utkarsh-1912/utkristi-ui/blob/main/CHANGELOG.md) · [MIT license](https://github.com/utkarsh-1912/utkristi-ui/blob/main/LICENSE)

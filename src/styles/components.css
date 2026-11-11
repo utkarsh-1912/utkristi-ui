@@ -691,7 +691,6 @@ input.switch { display: inline-block; margin: 0; }
 .table-wrap[data-sticky-header] > .table > thead th { position: sticky; inset-block-start: 0; z-index: 1; background: var(--ut-raise); }
 .table[data-density="compact"] :is(th, td) { padding-block: 6px; }
 .table[data-density="comfortable"] :is(th, td) { padding-block: 14px; }
-.table-wrap > .table:not(.table-stack, .api-table) { inline-size: max-content; min-inline-size: 100%; }
 .table-wrap:focus-visible { outline-offset: -2px; }
 .table { width: 100%; border-collapse: collapse; text-align: left; }
 .table caption { padding: 0 0 8px; text-align: left; font-weight: 500; }
@@ -832,7 +831,8 @@ input.switch { display: inline-block; margin: 0; }
 .aspect-ratio > :where(img, video, iframe) { display: block; width: 100%; height: 100%; object-fit: cover; }
 .separator { background: var(--ut-line); block-size: 1px; inline-size: 100%; flex: none; }
 .separator[data-orientation="vertical"] { block-size: auto; inline-size: 1px; align-self: stretch; }
-:where(.ut-scrollbar, .scroll-area, .code, .table-wrap) { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+.table-wrap { scrollbar-width: thin; scrollbar-color: var(--ut-scroll-thumb, var(--ut-line-2)) var(--ut-scroll-track, transparent); }
+:where(.ut-scrollbar, .scroll-area, .code):not(.table-wrap) { scrollbar-width: thin; scrollbar-color: transparent transparent; }
 :where(.ut-scrollbar, .scroll-area, .code, .table-wrap):is(:hover, :focus-within) {
   scrollbar-color: var(--ut-scroll-thumb-hover, var(--ut-scroll-thumb, color-mix(in srgb, var(--ut-ink) 42%, var(--ut-bg)))) var(--ut-scroll-track, transparent);
 }

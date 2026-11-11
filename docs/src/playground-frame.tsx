@@ -12,6 +12,7 @@ const modules: Record<string, unknown> = {
 const container = document.getElementById('playground');
 if (!container) throw new Error('Preview mount is missing');
 const root = createRoot(container);
+let activeToken: string | undefined;
 
 function report(token: string, error: string) {
   window.parent.postMessage({ kind: 'utkristi-preview-error', token, error }, '*');
@@ -25,13 +26,37 @@ class PreviewBoundary extends Component<{ children: ReactNode; token: string }, 
 }
 
 function Ready({ token }: { token: string }) {
-  useEffect(() => { window.parent.postMessage({ kind: 'utkristi-preview-ready', token }, '*'); }, [token]);
+  useEffect(() => {
+    const hasContent = () => {
+      const content = container?.firstElementChild;
+      return !!(content && [...content.childNodes].some((node) => node.nodeType === Node.TEXT_NODE
+        ? node.textContent?.trim() : node instanceof Element && getComputedStyle(node).display !== 'none' &&
+          getComputedStyle(node).visibility !== 'hidden') || document.querySelector('.ut-portal > :not(.toast-region), .toast-region .toast'));
+    };
+    const finish = () => {
+      if (!hasContent()) report(token, 'The React component returned no visible content. Return markup from your component.');
+      else window.parent.postMessage({ kind: 'utkristi-preview-ready', token }, '*');
+    };
+    if (hasContent()) finish();
+    else {
+      const timeout = window.setTimeout(finish, 200);
+      return () => window.clearTimeout(timeout);
+    }
+  }, [token]);
   return null;
 }
+
+window.addEventListener('error', (event) => {
+  if (activeToken && event.message) report(activeToken, event.message);
+});
+window.addEventListener('unhandledrejection', (event) => {
+  if (activeToken) report(activeToken, String(event.reason));
+});
 
 window.addEventListener('message', (event) => {
   if (event.source !== window.parent || event.data?.kind !== 'utkristi-preview') return;
   const { code, theme, motion, token } = event.data;
+  activeToken = token;
   try {
     container.dataset.utMotion = motion;
     const module = { exports: {} as { default?: React.ComponentType<{ theme: kit.ResolvedTheme }> } };

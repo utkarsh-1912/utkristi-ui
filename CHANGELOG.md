@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added separate HTML, CSS, and JavaScript sandbox editors, automatic indentation, and preview error messages.
+
 - Added controlled table views, page-size selection, column visibility, translatable table controls, and scoped control density.
 
 - Removed the full icon catalog from control bundles and added an `@utkristi/ui/icons` entry and a CI bundle budget.

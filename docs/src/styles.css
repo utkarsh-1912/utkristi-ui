@@ -307,15 +307,17 @@
 .playground-head { min-block-size: 52px; padding: 8px 12px; }
 .playground-filename { display: flex; align-items: center; gap: 7px; min-inline-size: 0; overflow-wrap: anywhere; font: .76rem var(--ut-font-mono); }
 .playground-filename svg { flex: none; color: var(--ut-ink-2); }
-.source-editor { display: grid; block-size: clamp(280px, 52dvh, 510px); min-inline-size: 0; background: var(--ut-code-bg); border-block: 1px solid var(--ut-code-line); font: .8125rem/1.65 var(--ut-font-mono); }
+.playground-files { align-self: flex-start; margin: 0 12px 8px; }
+.source-editor { --source-inset-block: 14px; display: grid; block-size: clamp(280px, 52dvh, 510px); min-inline-size: 0; background: var(--ut-code-bg); border-block: 1px solid var(--ut-code-line); font: .8125rem/1.75 var(--ut-font-mono); }
 .source-input { position: relative; overflow: hidden; }
 .source-gutter { overflow: hidden; color: var(--ut-ink-2); text-align: right; user-select: none; background: var(--ut-code-bar); border-inline-end: 1px solid var(--ut-code-line); }
-.source-gutter > div { padding: 12px 9px 12px 0; }
+.source-gutter > div { padding: var(--source-inset-block) 9px var(--source-inset-block) 0; }
 .source-gutter span { display: block; }
 .source-gutter [data-current] { font-weight: 700; color: var(--ut-ink); }
-.source-input pre, .source-input textarea { box-sizing: border-box; position: absolute; inset: 0; inline-size: 100%; block-size: 100%; margin: 0; padding: 12px; font: inherit; letter-spacing: normal; white-space: pre; word-break: normal; overflow-wrap: normal; tab-size: 2; border: 0; background: transparent; text-align: left; direction: ltr; }
+.source-input pre, .source-input textarea { box-sizing: border-box; position: absolute; inset: 0; inline-size: 100%; block-size: 100%; margin: 0; padding: var(--source-inset-block) 16px; font: inherit; letter-spacing: normal; white-space: pre; word-break: normal; overflow-wrap: normal; tab-size: 2; border: 0; background: transparent; text-align: left; direction: ltr; }
 .source-input pre { pointer-events: none; }
 .source-input textarea { display: block; overflow: auto; resize: none; color: transparent; caret-color: var(--ut-ink); border-radius: 0; }
+.source-input textarea::placeholder { color: var(--ut-ink-2); }
 .source-input textarea::selection { color: transparent; background: color-mix(in srgb, var(--ut-accent) 30%, transparent); }
 .source-input textarea:focus-visible { outline: 1px solid var(--ut-focus, var(--ut-accent)); outline-offset: -1px; }
 .source-status, .playground-help { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 12px; font-size: .75rem; }
@@ -334,7 +336,8 @@
 }
 .playground-error, .playground-loading { padding: 8px 13px; overflow-wrap: anywhere; }
 .playground-loading { margin: auto; }
-.playground-error { color: var(--ut-bad-ink); border-block-start: 1px solid var(--ut-line); font-family: var(--ut-font-mono); font-size: .875rem; }
+.playground-error { display: grid; gap: 4px; margin-block-end: 12px; color: var(--ut-bad-ink); border: 1px solid var(--ut-line); border-radius: var(--ut-r-field); background: var(--ut-bg-2); font-size: .875rem; }
+.playground-error div { font-family: var(--ut-font-mono); white-space: pre-wrap; }
 @media (max-width: 900px) {
   .playground-panes { display: flex; gap: 5px; margin-block-end: 10px; }
   .playground-panes .btn { flex: 1; }

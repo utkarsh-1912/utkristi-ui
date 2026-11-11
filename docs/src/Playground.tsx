@@ -7,6 +7,7 @@ import { variants, variantSets } from './variants';
 import { examples } from 'virtual:utkristi-examples';
 import { script, styles, domScript } from 'virtual:utkristi-runtime';
 import { exampleMotion, motionOptions, type PreviewMotion } from './motion-options';
+import { joinWebSource, splitWebSource, webFiles, type WebFile, type WebSource } from './sandbox-source';
 
 const policy = "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline' https://fonts.googleapis.com; img-src data: blob:; media-src data: blob:; font-src data: https://fonts.gstatic.com; form-action 'none'; base-uri 'none'";
 const frameHead = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
@@ -39,14 +40,42 @@ function htmlDocument(source: string, theme: ResolvedTheme, motion: PreviewMotio
       if (kind === 'utkristi-preview-error') previewFailed = true;
       parent.postMessage({kind, token: ${JSON.stringify(token)}, error}, '*');
     };
-    addEventListener('error', event => previewReport('utkristi-preview-error', event.message));
+    addEventListener('error', event => previewReport('utkristi-preview-error', event.message || 'The preview could not run.'));
     addEventListener('unhandledrejection', event => previewReport('utkristi-preview-error', String(event.reason)));
   </script>` : '';
-  const ready = token ? "<script>previewReport('utkristi-html-ready');</script>" : '';
+  const ready = token ? `<script>
+    (() => {
+      const preview = document.getElementById('sandbox-content');
+      const rendered = node => node.nodeType === 3 ? node.textContent.trim() :
+        node.nodeType === 1 && !node.matches('script, style, link, meta, template') &&
+          getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden';
+      const hasContent = () => (preview && rendered(preview) && [...preview.childNodes].some(rendered)) ||
+        [...document.body.childNodes].some(node => node !== preview && rendered(node));
+      const finish = () => {
+        if (previewFailed) return;
+        if (hasContent()) previewReport('utkristi-html-ready');
+        else previewReport('utkristi-preview-error', 'The HTML preview is empty. Add markup or render content from JavaScript.');
+      };
+      if (hasContent()) finish();
+      else setTimeout(finish, 200);
+    })();
+  </script>` : '';
   const head = token ? frameHead : frameHead.replace(/<meta http-equiv="Content-Security-Policy"[^>]*>/, '');
   return head.replace('<html>', `<html data-theme="${theme}" data-ut-motion="${motion}">`) +
-    '<body>' + report + (token ? previewLinks : '') + '<script>' + safeScript(domScript) + '</script><div data-ut-enter>' + source +
+    '<body>' + report + (token ? previewLinks : '') + '<script>' + safeScript(domScript) + '</script><div id="sandbox-content" data-ut-enter>' + source +
     '</div><script>UtkristiDOM.initUI(document);</script>' + ready + '</body></html>';
+}
+
+function readWebDraft(slug: string, starter: WebSource, original: string) {
+  try {
+    const stored = localStorage.getItem(`utkristi-sandbox:v3:${slug}:web`);
+    if (stored) {
+      const parsed = JSON.parse(stored) as WebSource;
+      if (parsed && webFiles.every((file) => typeof parsed[file] === 'string') && webFiles.some((file) => parsed[file].trim())) return parsed;
+    }
+  } catch { /* Fall back to the previous draft format. */ }
+  const legacy = readDraft(slug, 'html', original);
+  return legacy === original ? starter : splitWebSource(legacy);
 }
 
 function draftKey(slug: string, mode: Mode) { return `utkristi-sandbox:${mode === 'html' ? 'v2' : 'v1'}:${slug}:${mode}`; }
@@ -76,9 +105,11 @@ export default function Playground({ component, editorMode, initialMotion }: { c
   const related = variantSets[parent] ?? [];
   const [theme, setTheme] = useState<ResolvedTheme>(resolvedTheme);
   const [motion, setMotion] = useState(() => motionOptions.find(([value]) => value === initialMotion)?.[0] ?? exampleMotion(slug));
-  const [mode, setMode] = useState<Mode>(editorMode === 'html' || editorMode === 'js' ? 'html' : 'react');
+  const [mode, setMode] = useState<Mode>(webFiles.includes(editorMode as WebFile) ? 'html' : 'react');
+  const [webFile, setWebFile] = useState<WebFile>(editorMode === 'js' || editorMode === 'css' ? editorMode : 'html');
   const [reactCode, setReactCode] = useState(() => readDraft(slug, 'react', examples[slug].code));
-  const [htmlCode, setHtmlCode] = useState(() => readDraft(slug, 'html', example.html));
+  const [webStarter] = useState(() => splitWebSource(example.html, true));
+  const [webCode, setWebCode] = useState(() => readWebDraft(slug, webStarter, example.html));
   const [run, setRun] = useState<Run>();
   const [status, setStatus] = useState('');
   const [busy, setBusy] = useState(false);
@@ -88,23 +119,36 @@ export default function Playground({ component, editorMode, initialMotion }: { c
   const editor = useRef<HTMLTextAreaElement>(null);
   const previewHeading = useRef<HTMLSpanElement>(null);
   const requested = useRef(0);
+  const failed = useRef<string>();
+  const htmlCode = joinWebSource(webCode);
+  const source = mode === 'react' ? reactCode : webCode[webFile];
   const code = mode === 'react' ? reactCode : htmlCode;
-  const initialSource = mode === 'react' ? examples[slug].code : example.html;
-  const filename = slug + (mode === 'react' ? '.tsx' : '.html');
+  const initialSource = mode === 'react' ? examples[slug].code : webStarter[webFile];
+  const filename = slug + (mode === 'react' ? '.tsx' : '.' + webFile);
   function update(next: string) {
-    (mode === 'react' ? setReactCode : setHtmlCode)(next);
+    const updatedWeb = { ...webCode, [webFile]: next };
+    if (mode === 'react') setReactCode(next);
+    else setWebCode(updatedWeb);
     try {
-      const key = draftKey(slug, mode);
-      if ((mode === 'react' && next === initialSource) || next.length > 200_000) localStorage.removeItem(key);
-      else localStorage.setItem(key, next);
+      const key = mode === 'react' ? draftKey(slug, mode) : `utkristi-sandbox:v3:${slug}:web`;
+      const saved = mode === 'react' ? next : JSON.stringify(updatedWeb);
+      if ((mode === 'react' && next === initialSource) || saved.length > 200_000) localStorage.removeItem(key);
+      else localStorage.setItem(key, saved);
     } catch { /* Editing remains available without storage. */ }
   }
   const compiler = useRef<Worker | null>(null);
   function compile(source: string, language: Mode, previewTheme: ResolvedTheme, previewMotion = motion) {
     const token = String(++requested.current);
+    failed.current = undefined;
     setExecuted({ code: source, mode: language });
     setError('');
     setStatus('');
+    setRun(undefined);
+    if (!source.trim()) {
+      setBusy(false);
+      setError(language === 'react' ? 'Add a React component before running the preview.' : 'Add HTML or JavaScript before running the preview.');
+      return;
+    }
     if (language === 'html') {
       setRun({ token, source, theme: previewTheme, motion: previewMotion, markup: true });
       setBusy(false);
@@ -142,11 +186,32 @@ export default function Playground({ component, editorMode, initialMotion }: { c
   }, []);
 
   useEffect(() => {
+    if (status || error) return;
+    const token = requested.current;
+    const timeout = window.setTimeout(() => {
+      if (requested.current !== token || (pane === 'source' && window.matchMedia('(max-width: 900px)').matches)) return;
+      requested.current++;
+      compiler.current?.terminate();
+      compiler.current = null;
+      setBusy(false);
+      setRun(undefined);
+      setError('The preview did not start. Check your code and run it again.');
+    }, 15_000);
+    return () => window.clearTimeout(timeout);
+  }, [busy, error, pane, run, status]);
+
+  useEffect(() => {
     function message(event: MessageEvent) {
       if (event.source !== iframe.current?.contentWindow || event.data?.token !== String(requested.current)) return;
+      if (event.data?.kind === 'utkristi-preview-error') {
+        failed.current = event.data.token;
+        setError(String(event.data.error));
+        setStatus('');
+        return;
+      }
+      if (event.data?.token === failed.current) return;
       if (event.data?.kind === 'utkristi-preview-ready') setStatus('React preview ready');
       if (event.data?.kind === 'utkristi-html-ready') setStatus('HTML preview ready');
-      if (event.data?.kind === 'utkristi-preview-error') { setError(String(event.data.error)); setStatus(''); }
     }
     window.addEventListener('message', message);
     return () => window.removeEventListener('message', message);
@@ -173,12 +238,12 @@ export default function Playground({ component, editorMode, initialMotion }: { c
     const url = URL.createObjectURL(new Blob([exported], { type: mode === 'html' ? 'text/html;charset=utf-8' : 'text/plain;charset=utf-8' }));
     const link = document.createElement('a');
     link.href = url;
-    link.download = filename;
+    link.download = mode === 'html' ? slug + '.html' : filename;
     link.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   const selectExample = (next: string) => {
-    window.location.hash = '/sandbox?' + new URLSearchParams({ component: next, theme, editor: mode, motion });
+    window.location.hash = '/sandbox?' + new URLSearchParams({ component: next, theme, editor: mode === 'html' ? webFile : mode, motion });
   };
 
   return <article className="doc-article playground">
@@ -213,19 +278,26 @@ export default function Playground({ component, editorMode, initialMotion }: { c
       <Button size="sm" variant="quiet" aria-pressed={pane === 'source'} onClick={() => setPane('source')}>Source</Button>
       <Button size="sm" variant="quiet" aria-pressed={pane === 'preview'} onClick={() => setPane('preview')}>Preview</Button>
     </div>
+    {error && <div role="alert" className="playground-error"><strong>Preview failed</strong><div>{error}</div></div>}
     <div className="playground-workspace" data-pane={pane}>
     <section className="playground-editor" aria-label="Source editor">
       <div className="playground-head"><label className="playground-filename" htmlFor="sandbox-source"><Icon name="code" size={16} />{filename}</label>
         <div className="playground-actions">
-          <Button size="sm" variant="quiet" disabled={code === initialSource} onClick={() => {
-            update(initialSource); void compile(initialSource, mode, theme);
+          <Button size="sm" variant="quiet" disabled={source === initialSource} onClick={() => {
+            update(initialSource);
+            compile(mode === 'react' ? initialSource : joinWebSource({ ...webCode, [webFile]: initialSource }), mode, theme);
           }}>Reset</Button>
-          <CopyAction key={filename} value={code} onFailure={() => { editor.current?.focus(); editor.current?.select(); }} />
+          <CopyAction key={filename} value={source} onFailure={() => { editor.current?.focus(); editor.current?.select(); }} />
           <Button size="sm" variant="quiet" title="Download source" aria-label="Download source" onClick={download}><Icon name="download" size={16} /></Button>
           <Button size="sm" loading={busy} onClick={runExample} iconLeft={<Icon name="arrow-right" size={15} />}>Run</Button>
         </div>
       </div>
-      <SourceEditor key={filename} input={editor} source={code} onChange={update} onRun={runExample} />
+      {mode === 'html' && <div className="playground-files button-group" role="group" aria-label="Source files">
+        {webFiles.map((file) => <Button key={file} size="sm" variant={file === webFile ? 'solid' : 'quiet'}
+          aria-pressed={file === webFile} onClick={() => setWebFile(file)}>{file.toUpperCase()}</Button>)}
+      </div>}
+      <SourceEditor key={filename} input={editor} source={source} onChange={update} onRun={runExample}
+        placeholder={mode === 'html' && webFile !== 'html' ? `Add ${webFile === 'js' ? 'JavaScript' : 'CSS'} for this example` : undefined} />
     </section>
     <section className="playground-result" aria-label="Preview">
       <div className="playground-head"><span className="label" ref={previewHeading} tabIndex={-1}>Live preview</span>
@@ -245,13 +317,12 @@ export default function Playground({ component, editorMode, initialMotion }: { c
           }, '*');
         }} /> : !error && <Loader variant="brand" className="playground-loading" label="Preparing preview…" aria-hidden="true" />}
       </div>
-      {error && <div role="alert" className="playground-error">{error}</div>}
       <div className="source-status"><span className="playground-run-status" role="status">{busy ? 'Compiling…' : status || (error ? 'Run failed' : 'Preparing preview…')}</span>
         <a className="link" href={docs.href}>{docs.label}</a></div>
     </section>
     </div>
     <p className="playground-help muted"><span>{executed.code !== code || executed.mode !== mode ? 'Source changed. Run to update the preview.'
-      : mode === 'html' ? 'Add CSS with a style tag and JavaScript with a script tag.' : 'Drafts are kept in this browser.'}</span>
+      : mode === 'html' ? 'Run previews all three files together.' : 'Drafts are kept in this browser.'}</span>
       <span><Kbd>Ctrl / ⌘</Kbd> <Kbd>Enter</Kbd> Run example</span></p>
   </article>;
 }

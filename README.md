@@ -108,7 +108,7 @@ Every component page includes selectable examples. Navbar links can contain nest
 
 Add `data-ut-motion="fade"`, `"rise"`, `"scale"`, `"slide"`, or `"none"` to a scope. Mark a region with `data-ut-enter` to animate its entry. Set `--ut-motion-duration` to adjust the timing. The entry presets respect reduced motion.
 
-For standalone HTML, use the markup, stylesheet, and runtime shown together in the HTML example. The sandbox’s HTML editor accepts markup, inline CSS, and inline JavaScript in one file. Its HTML download includes the styles and runtime.
+The sandbox has separate HTML, CSS, and JavaScript editors. Run combines all three in one preview, and the HTML download includes the code, stylesheet, and runtime.
 
 Menus, tabs, segmented controls, and dialogs support keyboard navigation. Dialogs trap and restore focus. Decorative animations respect reduced motion, and the spinner keeps moving as a loading cue. The Night theme uses dark `--ut-on-bad` text on red fills to meet the 4.5:1 text contrast target.
 

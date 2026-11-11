@@ -860,7 +860,7 @@ async function captureEdge() {
     await retry(() => evaluate('document.querySelector("#sandbox-source")?.value.includes("Teams") && document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), 'HTML variant preserves editor selection');
     const verifyHtmlScript = async (probe, name) => {
       if (await evaluate('!!document.querySelector(\'.playground select[id$="-mode"] option[value="js"]\')')) {
-        throw new Error('JavaScript should be edited in the combined HTML pane');
+        throw new Error('JavaScript should be offered in the source-file group');
       }
       await evaluate(`(() => {
         window.utkristiVerificationResult = undefined;
@@ -924,6 +924,37 @@ async function captureEdge() {
       const detail = form.querySelector('output').value;
       parent.postMessage({ kind: 'utkristi-verification', passed: detail === 'Saved workspace: Studio', detail }, '*');
     `, 'HTML form submits locally in the sandbox');
+    await load('/sandbox?component=data-table--page-size&editor=html', 'Sandbox');
+    await retry(() => evaluate('document.querySelector("#sandbox-source")?.value.includes("configurable-projects") && document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), 'configurable table HTML source');
+    await verifyHtmlScript(`
+      const root = document.querySelector('#configurable-projects');
+      const picker = root.querySelector('select');
+      picker.value = '2';
+      picker.dispatchEvent(new Event('change'));
+      root.querySelector('[type=checkbox]').click();
+      const detail = { visible: root.querySelectorAll('tbody tr:not([hidden])').length,
+        ownerHidden: root.querySelector('th[data-owner]').hidden, fieldHeight: picker.offsetHeight };
+      parent.postMessage({ kind: 'utkristi-verification', passed: detail.visible === 2 && detail.ownerHidden && detail.fieldHeight === 40, detail }, '*');
+    `, 'HTML table changes page size and column visibility');
+    await load('/sandbox?component=button&editor=html', 'Sandbox');
+    await retry(() => evaluate('document.querySelector(".playground-filename")?.textContent === "button.html"'), 'HTML file editor');
+    await setSource('<div id="file-test">Three files</div>');
+    const chooseFile = (name) => evaluate(`[...document.querySelectorAll('.playground-files button')].find(button => button.textContent === ${JSON.stringify(name)}).click()`);
+    const runEditor = () => evaluate(`[...document.querySelectorAll('.playground-actions button')].find(button => button.textContent.trim() === 'Run').click()`);
+    await chooseFile('CSS');
+    await setSource('#file-test { color: rgb(12, 34, 56); }');
+    await chooseFile('JS');
+    await setSource('throw new Error("Sandbox script failed");');
+    await runEditor();
+    await retry(() => evaluate('document.querySelector(".playground [role=alert]")?.textContent.includes("Sandbox script failed")'), 'JavaScript error is visible');
+    await setSource('if (getComputedStyle(document.querySelector("#file-test")).color !== "rgb(12, 34, 56)") throw new Error("Missing stylesheet");');
+    await runEditor();
+    await retry(() => evaluate('document.querySelector(".playground-run-status")?.textContent === "HTML preview ready" && !document.querySelector(".playground [role=alert]")'), 'all three web files run together after fixing an error');
+    await load('/sandbox?component=badge&editor=react', 'Sandbox');
+    await retry(() => evaluate('document.querySelector(".playground-filename")?.textContent === "badge.tsx" && document.querySelector(".playground-run-status")?.textContent === "React preview ready"'), 'React source editor');
+    await setSource('export default function Example() { return null; }');
+    await runEditor();
+    await retry(() => evaluate('document.querySelector(".playground [role=alert]")?.textContent.includes("returned no visible content")'), 'empty React output shows an error');
     const standaloneDom = await fetch(url + '/utkristi-dom.js');
     if (!standaloneDom.ok || !(await standaloneDom.text()).includes('UtkristiDOM')) throw new Error('Standalone script is unavailable');
     process.stdout.write('Verified interactive HTML variants and JavaScript editing.\n');

@@ -17,11 +17,12 @@ export const HighlightedCode = memo(function HighlightedCode({ source }: { sourc
   return <>{parts}</>;
 });
 
-export function SourceEditor({ source, onChange, onRun, input }: {
+export function SourceEditor({ source, onChange, onRun, input, placeholder }: {
   source: string;
   onChange: (code: string) => void;
   onRun: () => void;
   input: RefObject<HTMLTextAreaElement>;
+  placeholder?: string;
 }) {
   const hint = useId();
   const highlight = useRef<HTMLPreElement>(null);
@@ -46,6 +47,27 @@ export function SourceEditor({ source, onChange, onRun, input }: {
       onRun();
       return;
     }
+    const editor = event.currentTarget;
+    const insert = (text: string) => {
+      // Preserve native undo where the browser supports editable commands.
+      if (!document.execCommand('insertText', false, text)) {
+        editor.setRangeText(text, editor.selectionStart, editor.selectionEnd, 'end');
+        onChange(editor.value);
+        moveCaret(editor);
+      }
+    };
+    if (event.key === 'Enter' && !event.altKey && !event.shiftKey) {
+      const before = editor.value.slice(0, editor.selectionStart);
+      const line = before.slice(before.lastIndexOf('\n') + 1);
+      const indentation = line.match(/^[ \t]*/)?.[0] ?? '';
+      const openTag = /<([a-z][\w:-]*)\b[^<>]*>$/i.exec(line.trimEnd());
+      const opensElement = openTag && !/\/>$/.test(openTag[0]) &&
+        !/^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i.test(openTag[1]);
+      const extra = /[{[(]$/.test(line.trimEnd()) || opensElement ? '  ' : '';
+      event.preventDefault();
+      insert('\n' + indentation + extra);
+      return;
+    }
     if (event.key === 'Escape') { allowTab.current = true; return; }
     if (event.key !== 'Tab') { allowTab.current = false; return; }
     if (event.shiftKey || event.ctrlKey || event.metaKey || event.altKey || allowTab.current) {
@@ -53,13 +75,7 @@ export function SourceEditor({ source, onChange, onRun, input }: {
       return;
     }
     event.preventDefault();
-    // Chromium and Firefox preserve native undo when inserting into a textarea this way.
-    if (!document.execCommand('insertText', false, '  ')) {
-      const editor = event.currentTarget;
-      editor.setRangeText('  ', editor.selectionStart, editor.selectionEnd, 'end');
-      onChange(editor.value);
-      moveCaret(editor);
-    }
+    insert('  ');
   }
   return <>
     <div className="source-editor" style={{ gridTemplateColumns: `calc(${String(lines.length).length}ch + 22px) minmax(0, 1fr)` }}>
@@ -68,7 +84,7 @@ export function SourceEditor({ source, onChange, onRun, input }: {
       </div></div>
       <div className="source-input">
         <pre ref={highlight} aria-hidden="true"><HighlightedCode source={source} />{'\n'}</pre>
-        <textarea ref={input} id="sandbox-source" className="ut-scrollbar" wrap="off" value={source}
+        <textarea ref={input} id="sandbox-source" className="ut-scrollbar" wrap="off" value={source} placeholder={placeholder}
           aria-describedby={hint} onScroll={(event) => sync(event.currentTarget)} onSelect={(event) => moveCaret(event.currentTarget)}
           onChange={(event) => { onChange(event.target.value); moveCaret(event.target); }}
           onKeyDown={handleKey} onBlur={() => { allowTab.current = false; }}

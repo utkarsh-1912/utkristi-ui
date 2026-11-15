@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Added enterprise application primitives: `Table` / `DataTable` row expansion (`renderExpandedRow`, `expandedRowKeys`), inline cell editing with async `validate` / `onCellEdit`, windowed `virtualize` (`aria-rowcount` / `aria-rowindex`), and `gridNavigation`; `SidebarProvider`, `useSidebar`, `SidebarSection`, and `SidebarDrawer` with `localStorage` persistence; `Fieldset`, `Form`, `useAsyncValidation`, `Calendar` range highlighting, and `DateRangeCalendar` with `locale`, `showTime`, and `useFormReset`; plus `overlayStack` top-down Escape ordering and collision-aware `Popover` `computePlacement`.
+- Added automated `axe-core` accessibility tests (`test/a11y.test.tsx`), enterprise interaction tests (`test/enterprise.test.tsx`), performance benchmark suite (`npm run bench`), `MIGRATION.md`, and `SUPPORT.md`.
+- Redesigned the landing page (`docs/src/Marketing.tsx`) with an interactive Night/Paper/Glass preview, verified metrics strip, and application primitives grid; fixed `scripts/screenshots.mjs` CSS backdrop check, HTML/CSS/JS sandbox theme/card rendering, and `Pagination` / `DataTable` footer layout.
+
 - Reworked all component reference pages around named usage examples, separate web source files, source-derived API defaults, and searchable sandbox examples.
 - Removed decorative colored active edges from workspace navigation, navbar, tabs, and toast.
 - Added alert surfaces/actions/dismissal, sidebar collapse modes and edge triggers, vertical and pill tabs, separated accordions, card surfaces, and table striping/borders/empty content.

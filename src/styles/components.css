@@ -1146,8 +1146,8 @@ input.switch { display: inline-block; margin: 0; }
 .data-table-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
 .data-table-footer, .data-table-page-size { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
 .data-table-page-size .select { inline-size: auto; font-size: inherit; }
-.data-table-footer { font-size: .875rem; }
-.data-table-footer .pagination { margin-inline-start: auto; }
+.data-table-footer { justify-content: space-between; font-size: .875rem; }
+.data-table-footer .pagination { margin-inline-start: 0; }
 .data-table-controls .choice { cursor: pointer; }
 .data-table-status { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin: 0; }
 .data-table-status[hidden] { display: none; }

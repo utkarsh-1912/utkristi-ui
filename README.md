@@ -157,7 +157,7 @@ See the [competitive audit and implementation roadmap](https://github.com/utkars
 
 The screenshot script uses Playwright with Chromium when Edge is unavailable. Install them in that environment before running the script.
 
-[Design tokens and class map](https://github.com/utkarsh-1912/utkristi-ui/blob/main/DESIGN_TOKENS.md) · [Changelog](https://github.com/utkarsh-1912/utkristi-ui/blob/main/CHANGELOG.md) · [MIT license](https://github.com/utkarsh-1912/utkristi-ui/blob/main/LICENSE)
+[Design tokens and class map](https://github.com/utkarsh-1912/utkristi-ui/blob/main/DESIGN_TOKENS.md) · [Migration guide](https://github.com/utkarsh-1912/utkristi-ui/blob/main/MIGRATION.md) · [Support & compatibility](https://github.com/utkarsh-1912/utkristi-ui/blob/main/SUPPORT.md) · [Changelog](https://github.com/utkarsh-1912/utkristi-ui/blob/main/CHANGELOG.md) · [MIT license](https://github.com/utkarsh-1912/utkristi-ui/blob/main/LICENSE)
 
 ## Component reference and variants
 

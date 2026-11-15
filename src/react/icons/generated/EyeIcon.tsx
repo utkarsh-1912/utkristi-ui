@@ -6,7 +6,7 @@ export const EyeIconData = {
   line: "M2.5 12C5 7 8.2 5 12 5s7 2 9.5 7c-2.5 5-5.7 7-9.5 7s-7-2-9.5-7Zm9.5 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
   filled: "M12 4C7.6 4 4 6.4 1.4 11.5a1.1 1.1 0 0 0 0 1C4 17.6 7.6 20 12 20s8-2.4 10.6-7.5a1.1 1.1 0 0 0 0-1C20 6.4 16.4 4 12 4Zm0 4.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

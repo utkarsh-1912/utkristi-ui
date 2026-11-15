@@ -6,7 +6,7 @@ export const CloseIconData = {
   line: "m18 6-12 12M6 6l12 12",
   filled: "M5.3 5.3a1 1 0 0 1 1.4 0L12 10.6l5.3-5.3a1 1 0 1 1 1.4 1.4L13.4 12l5.3 5.3a1 1 0 0 1-1.4 1.4L12 13.4l-5.3 5.3a1 1 0 0 1-1.4-1.4L10.6 12 5.3 6.7a1 1 0 0 1 0-1.4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

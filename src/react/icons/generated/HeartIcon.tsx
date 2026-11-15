@@ -6,7 +6,7 @@ export const HeartIconData = {
   line: "M12 20.5C5.5 15.5 3 12.2 3 8.5A5 5 0 0 1 12 5.6a5 5 0 0 1 9 2.9c0 3.7-2.5 7-9 12Z",
   filled: "M12 4.8A6 6 0 0 0 2 8.5c0 4.2 2.8 7.8 9.4 12.8a1 1 0 0 0 1.2 0C19.2 16.3 22 12.7 22 8.5a6 6 0 0 0-10-3.7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

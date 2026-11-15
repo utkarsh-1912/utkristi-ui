@@ -6,7 +6,7 @@ export const ReplyIconData = {
   line: "M10 5 3 11l7 6v-4h3c4 0 6 2 8 5v-3c0-4-3-6-7-6h-4Z",
   filled: "M11 3.5v4.3h3c5 0 8 3 8 7.6v4.8c-2.4-3.8-5.1-6-9.2-6H11v4.3L2.5 11Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

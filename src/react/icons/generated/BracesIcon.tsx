@@ -6,7 +6,7 @@ export const BracesIconData = {
   line: "M9 4H8Q6 4 6 7v2q0 3-2 3 2 0 2 3v2q0 3 2 3h1m6-16h1q2 0 2 3v2q0 3 2 3-2 0-2 3v2q0 3-2 3h-1",
   filled: "M9 3v3H8q-1 0-1 2v1q0 2-1 3 1 1 1 3v1q0 2 1 2h1v3H8q-4 0-4-5v-1q0-1.5-2-1.5v-3Q4 10.5 4 9V8q0-5 4-5Zm6 0h1q4 0 4 5v1q0 1.5 2 1.5v3q-2 0-2 1.5v1q0 5-4 5h-1v-3h1q1 0 1-2v-1q0-2 1-3-1-1-1-3V8q0-2-1-2h-1Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

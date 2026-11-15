@@ -6,7 +6,7 @@ export const WebhookIconData = {
   line: "M12 7v5l-5 4m5-4 5 4M9 5a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM3 18a3 3 0 1 1 6 0 3 3 0 0 1-6 0Zm12 0a3 3 0 1 1 6 0 3 3 0 0 1-6 0Z",
   filled: "M15 5a3 3 0 1 1 -6 0a3 3 0 1 1 6 0ZM9 18a3 3 0 1 1 -6 0a3 3 0 1 1 6 0ZM21 18a3 3 0 1 1 -6 0a3 3 0 1 1 6 0ZM11 8h2v3.4l4.5 3.3-1.3 1.7-4.2-3.1-4.2 3.1-1.3-1.7 4.5-3.3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

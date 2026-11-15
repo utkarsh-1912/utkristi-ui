@@ -6,7 +6,7 @@ export const DatabaseLockIconData = {
   line: "M16 6c0 2-3 3-6 3S4 8 4 6s3-3 6-3 6 1 6 3v5M4 6v12c0 2 3 3 6 3m-6-9c0 2 3 3 6 3m3 1h8v5h-8zm2 0v-2a2 2 0 0 1 4 0v2",
   filled: "M10 2c4 0 7 1.7 7 4v3q-2 0-3 2-5 0-11-3V6c0-2.3 3-4 7-4ZM3 10q3 2 8 2h2v2l-1 1q-6 0-9-2Zm0 5q3 2 8 2v4q-6 0-8-3Zm12 0v-1a2 2 0 0 1 4 0v1h2v7h-8v-7Zm1.3 0h1.4v-1a.7.7 0 1 0-1.4 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

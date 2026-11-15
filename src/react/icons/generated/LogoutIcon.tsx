@@ -6,7 +6,7 @@ export const LogoutIconData = {
   line: "M9 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4m7 13 5-5-5-5m5 5H9",
   filled: "M5 3h4a1 1 0 1 1 0 2H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h4a1 1 0 1 1 0 2H5a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Zm10.3 3.3a1 1 0 0 1 1.4 0l5 5a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.4-1.4L18.6 13H9a1 1 0 1 1 0-2h9.6l-3.3-3.3a1 1 0 0 1 0-1.4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

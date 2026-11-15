@@ -6,7 +6,7 @@ export const ChipIconData = {
   line: "M6 6h12v12H6zm3-3v3m6-3v3m-6 12v3m6-3v3M3 9h3m-3 6h3m12-6h3m-3 6h3m-11-4h4v4h-4z",
   filled: "M5 5h14v14h-14ZM10 10h4v4h-4ZM8 2h2v3h-2ZM14 2h2v3h-2ZM8 19h2v3h-2ZM14 19h2v3h-2ZM2 8h3v2h-3ZM2 14h3v2h-3ZM19 8h3v2h-3ZM19 14h3v2h-3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

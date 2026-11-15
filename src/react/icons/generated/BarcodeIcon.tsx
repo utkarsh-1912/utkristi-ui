@@ -6,7 +6,7 @@ export const BarcodeIconData = {
   line: "M4 5v14m3-14v14m4-14v14m3-14v14m3-14v14m3-14v14",
   filled: "M3 4h2v16h-2ZM6 4h2v16h-2ZM10 4h2v16h-2ZM13 4h1v16h-1ZM16 4h2v16h-2ZM20 4h1v16h-1Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const PauseIconData = {
   line: "M7 5v14m10-14v14",
   filled: "M5 4h5v16h-5ZM14 4h5v16h-5Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const ExportDataIconData = {
   line: "M4 4h16v8M4 4v16h9M4 9h16m-10 0v11m8-5v6m-3-3 3 3 3-3",
   filled: "M3 3h18v9h-3v-2h-6v8h1v3H3Zm3 3v2h12V6Zm0 4v8h3v-8Zm11 4h2v4l1.5-1.5L22 18l-4 4-4-4 1.5-1.5L17 18Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

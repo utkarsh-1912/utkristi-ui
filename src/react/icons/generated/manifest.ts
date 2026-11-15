@@ -25,8 +25,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "arrow-right",
@@ -44,8 +53,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "arrow-up",
@@ -62,8 +80,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "arrow-down",
@@ -80,8 +107,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "arrow-up-right",
@@ -99,8 +135,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chevron-down",
@@ -118,8 +163,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chevron-up",
@@ -136,8 +190,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chevron-left",
@@ -154,8 +217,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chevron-right",
@@ -172,8 +244,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "menu",
@@ -190,8 +271,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "close",
@@ -209,8 +299,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "more-horizontal",
@@ -228,8 +327,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "more-vertical",
@@ -247,8 +355,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "home",
@@ -294,8 +411,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "plus",
@@ -312,8 +438,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "minus",
@@ -330,8 +465,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "check",
@@ -349,8 +493,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "search",
@@ -368,8 +521,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "filter",
@@ -386,8 +548,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "sort",
@@ -404,8 +575,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "edit",
@@ -423,8 +603,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "copy",
@@ -440,8 +629,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "paste",
@@ -457,8 +655,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "trash",
@@ -476,8 +683,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "undo",
@@ -494,8 +710,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "redo",
@@ -511,8 +736,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "refresh",
@@ -529,8 +763,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "download",
@@ -547,8 +790,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "upload",
@@ -592,8 +844,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "link",
@@ -610,8 +871,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "pin",
@@ -628,8 +898,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "star",
@@ -646,8 +925,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "heart",
@@ -664,8 +952,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bookmark",
@@ -682,8 +979,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "info",
@@ -700,8 +1006,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "warning",
@@ -718,8 +1033,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "error",
@@ -737,8 +1061,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "success",
@@ -782,8 +1115,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "lock",
@@ -827,8 +1169,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "eye",
@@ -846,8 +1197,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "eye-off",
@@ -864,8 +1224,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bell",
@@ -909,8 +1278,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "clock",
@@ -928,8 +1306,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "spinner-ring",
@@ -946,8 +1333,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "offline",
@@ -964,8 +1360,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "sun",
@@ -983,8 +1388,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "moon",
@@ -1001,8 +1415,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "system",
@@ -1020,8 +1443,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "palette",
@@ -1095,8 +1527,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "brush",
@@ -1114,8 +1555,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "glass-sparkle",
@@ -1133,8 +1583,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "room",
@@ -1233,8 +1692,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "people",
@@ -1280,8 +1748,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chat",
@@ -1354,8 +1831,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "mic",
@@ -1373,8 +1859,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "mic-off",
@@ -1390,8 +1885,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "camera",
@@ -1408,8 +1912,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "camera-off",
@@ -1425,8 +1938,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "screen-share",
@@ -1443,8 +1965,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "whiteboard",
@@ -1546,8 +2077,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "focus",
@@ -1565,8 +2105,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "command",
@@ -1584,8 +2133,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "layers",
@@ -1602,8 +2160,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "code",
@@ -1621,8 +2188,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "terminal",
@@ -1667,8 +2243,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "stop",
@@ -1685,8 +2270,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bug",
@@ -1704,8 +2298,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "branch",
@@ -1722,8 +2325,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "commit",
@@ -1740,8 +2352,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "merge",
@@ -1758,8 +2379,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "pull-request",
@@ -1776,8 +2406,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "github",
@@ -1794,8 +2433,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "file",
@@ -1812,8 +2460,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "file-code",
@@ -1831,8 +2488,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "folder",
@@ -1876,8 +2542,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "add-file",
@@ -1893,8 +2568,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "add-folder",
@@ -1910,8 +2594,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "save",
@@ -1928,8 +2621,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "database",
@@ -1975,8 +2677,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "package",
@@ -2049,8 +2760,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "video",
@@ -2067,8 +2787,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "music",
@@ -2085,8 +2814,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "document",
@@ -2132,8 +2870,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chart-bar",
@@ -2150,8 +2897,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chart-line",
@@ -2168,8 +2924,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "kanban",
@@ -2187,8 +2952,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "list",
@@ -2205,8 +2979,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "grid",
@@ -2223,8 +3006,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "quote",
@@ -2241,8 +3033,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "user",
@@ -2260,8 +3061,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "user-plus",
@@ -2278,8 +3088,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "logout",
@@ -2295,8 +3114,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "login",
@@ -2312,8 +3140,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "key",
@@ -2331,8 +3168,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "shield",
@@ -2377,8 +3223,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "gift",
@@ -2478,8 +3333,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "laptop",
@@ -2495,8 +3359,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "phone",
@@ -2513,8 +3386,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "tablet",
@@ -2530,8 +3412,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "cloud",
@@ -2576,8 +3467,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "battery",
@@ -2594,8 +3494,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "power",
@@ -2612,8 +3521,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "globe",
@@ -2659,8 +3577,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "x-social",
@@ -2675,8 +3602,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
     "styles": [
       "line"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "linkedin",
@@ -2691,8 +3627,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
     "styles": [
       "line"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "discord",
@@ -2707,8 +3652,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
     "styles": [
       "line"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "youtube",
@@ -2723,8 +3677,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
     "styles": [
       "line"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "text-bold",
@@ -2740,8 +3703,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "text-italic",
@@ -2757,8 +3729,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "text-underline",
@@ -2774,8 +3755,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "text-strikethrough",
@@ -2791,8 +3781,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "align-start",
@@ -2808,8 +3807,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "align-center",
@@ -2825,8 +3833,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "align-end",
@@ -2842,8 +3859,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "align-justify",
@@ -2859,8 +3885,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "indent-increase",
@@ -2876,8 +3911,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "indent-decrease",
@@ -2893,8 +3937,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "list-numbered",
@@ -2910,8 +3963,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "list-checklist",
@@ -2927,8 +3989,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "heading-one",
@@ -2944,8 +4015,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "heading-two",
@@ -2961,8 +4041,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "highlighter",
@@ -2978,8 +4067,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "clear-formatting",
@@ -2996,8 +4094,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "git-fork",
@@ -3013,8 +4120,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "code-review",
@@ -3030,8 +4146,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "braces",
@@ -3047,8 +4172,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "regex",
@@ -3064,8 +4198,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "webhook",
@@ -3081,8 +4224,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "deploy",
@@ -3099,8 +4251,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "code-test",
@@ -3117,8 +4278,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "variable",
@@ -3134,8 +4304,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "diff",
@@ -3152,8 +4331,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "server-rack",
@@ -3170,8 +4358,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "database-search",
@@ -3187,8 +4384,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "file-diff",
@@ -3204,8 +4410,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "code-compare",
@@ -3221,8 +4436,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "database-lock",
@@ -3238,8 +4462,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chart-donut",
@@ -3255,8 +4488,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chart-area",
@@ -3273,8 +4515,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chart-scatter",
@@ -3290,8 +4541,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chart-bars-horizontal",
@@ -3307,8 +4567,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "trend-up",
@@ -3324,8 +4593,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "trend-down",
@@ -3341,8 +4619,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "dashboard-layout",
@@ -3358,8 +4645,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "table-add-row",
@@ -3375,8 +4671,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "table-add-column",
@@ -3392,8 +4697,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "pivot-table",
@@ -3409,8 +4723,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "export-data",
@@ -3426,8 +4749,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "filter-off",
@@ -3443,8 +4775,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "activity-pulse",
@@ -3461,8 +4802,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "gauge",
@@ -3478,8 +4828,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "shopping-cart",
@@ -3495,8 +4854,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "shopping-bag",
@@ -3512,8 +4880,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "storefront",
@@ -3529,8 +4906,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "receipt",
@@ -3546,8 +4932,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "wallet",
@@ -3563,8 +4958,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "coins",
@@ -3580,8 +4984,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bank",
@@ -3597,8 +5010,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "price-tag",
@@ -3614,8 +5036,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "percent-off",
@@ -3631,8 +5062,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "truck",
@@ -3648,8 +5088,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "parcel-check",
@@ -3665,8 +5114,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "barcode",
@@ -3682,8 +5140,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "scan-corners",
@@ -3699,8 +5166,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "refund",
@@ -3716,8 +5192,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "mail",
@@ -3733,8 +5218,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "mail-open",
@@ -3750,8 +5244,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "inbox",
@@ -3767,8 +5270,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "send",
@@ -3784,8 +5296,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "reply",
@@ -3801,8 +5322,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "reply-all",
@@ -3818,8 +5348,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "megaphone",
@@ -3835,8 +5374,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "video-off",
@@ -3852,8 +5400,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "headphones",
@@ -3869,8 +5426,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "volume-up",
@@ -3886,8 +5452,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "volume-mute",
@@ -3903,8 +5478,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "pause",
@@ -3920,8 +5504,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "skip-next",
@@ -3937,8 +5530,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "skip-previous",
@@ -3954,8 +5556,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bluetooth",
@@ -3971,8 +5582,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "ethernet",
@@ -3988,8 +5608,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "usb",
@@ -4005,8 +5634,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "plug",
@@ -4022,8 +5660,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "printer",
@@ -4039,8 +5686,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "keyboard",
@@ -4056,8 +5712,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "mouse",
@@ -4073,8 +5738,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chip",
@@ -4090,8 +5764,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "hard-drive",
@@ -4107,8 +5790,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "monitor-play",
@@ -4124,8 +5816,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "battery-charge",
@@ -4141,8 +5842,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "signal-bars",
@@ -4158,8 +5868,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "plug-off",
@@ -4175,8 +5894,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "shield-check",
@@ -4192,8 +5920,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "shield-alert",
@@ -4209,8 +5946,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "fingerprint",
@@ -4226,8 +5972,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "scan-face",
@@ -4243,8 +5998,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "user-check",
@@ -4260,8 +6024,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "user-off",
@@ -4277,8 +6050,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "badge-verified",
@@ -4294,8 +6076,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "key-round",
@@ -4311,8 +6102,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "id-card",
@@ -4328,8 +6128,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "accessibility",
@@ -4345,8 +6154,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "eye-scan",
@@ -4362,8 +6180,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "keyboard-focus",
@@ -4380,8 +6207,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "sidebar-left",
@@ -4397,8 +6233,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "sidebar-right",
@@ -4414,8 +6259,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "panel-top",
@@ -4431,8 +6285,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "panel-bottom",
@@ -4448,8 +6311,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "columns-two",
@@ -4465,8 +6337,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "columns-three",
@@ -4482,8 +6363,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "fullscreen",
@@ -4499,8 +6389,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "fullscreen-exit",
@@ -4516,8 +6415,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "window-stack",
@@ -4533,8 +6441,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "split-view",
@@ -4550,8 +6467,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "expand-all",
@@ -4567,8 +6493,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "collapse-all",
@@ -4584,8 +6519,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "map-pin",
@@ -4601,8 +6545,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "map-route",
@@ -4618,8 +6571,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "compass",
@@ -4635,8 +6597,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "navigation-pointer",
@@ -4652,8 +6623,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "building",
@@ -4669,8 +6649,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "warehouse",
@@ -4686,8 +6675,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "car",
@@ -4703,8 +6701,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "train",
@@ -4720,8 +6727,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bus",
@@ -4737,8 +6753,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bike",
@@ -4754,8 +6779,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "flag",
@@ -4771,8 +6805,17 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "signpost",
@@ -4787,7 +6830,178 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "microsoft",
+    "group": "Brands",
+    "keywords": [
+      "microsoft",
+      "company",
+      "brand",
+      "logo"
+    ],
+    "description": "Microsoft company mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "adobe",
+    "group": "Brands",
+    "keywords": [
+      "adobe",
+      "company",
+      "brand",
+      "logo"
+    ],
+    "description": "Adobe company mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "vercel",
+    "group": "Brands",
+    "keywords": [
+      "vercel",
+      "company",
+      "brand",
+      "logo"
+    ],
+    "description": "Vercel company mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "netflix",
+    "group": "Brands",
+    "keywords": [
+      "netflix",
+      "company",
+      "brand",
+      "logo"
+    ],
+    "description": "Netflix company mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "figma",
+    "group": "Brands",
+    "keywords": [
+      "figma",
+      "company",
+      "brand",
+      "logo"
+    ],
+    "description": "Figma company mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "linear",
+    "group": "Brands",
+    "keywords": [
+      "linear",
+      "company",
+      "brand",
+      "logo"
+    ],
+    "description": "Linear company mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   }
 ] as const;

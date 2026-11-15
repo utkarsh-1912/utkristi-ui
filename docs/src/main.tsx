@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { ArrowUpRight } from 'lucide-react';
 import {
   Button, Card, CardBody, Code, Dot, Field, Icon, IconPaletteProvider, Input, Loader, Logo, SearchInput,
-  Select, Shell, Tabs, ThemeProvider, ThemeSelect, ToastProvider, useTheme, type Theme,
+  Select, Shell, Tabs, ThemeProvider, ThemeSelect, ToastProvider, useTheme, isResolvedTheme, themeIds as themes, themeLabel, type Theme,
 } from '@utkristi/ui';
 import { blockPages, componentPages, examples, type Example } from './examples';
 import { blocks } from './blocks';
@@ -78,14 +78,12 @@ function DocsPagination({ links, current, label }: {
   </nav>;
 }
 
-const themeLabels = { dark: 'Night', light: 'Paper', glass: 'Glass' } as const;
-const themes = ['dark', 'light', 'glass'] as const;
 type PreviewTheme = typeof themes[number];
 
 function route() {
   const [path, options] = location.hash.replace(/^#/, '').split('?');
   const requestedTheme = new URLSearchParams(options ?? location.search).get('theme');
-  const theme = requestedTheme === 'dark' || requestedTheme === 'light' || requestedTheme === 'glass' ? requestedTheme : undefined;
+  const theme = isResolvedTheme(requestedTheme) ? requestedTheme : undefined;
   const params = new URLSearchParams(options);
   return { path: path || '/overview', theme, sample: params.get('component') ?? undefined, variant: params.get('variant') ?? undefined,
     editor: params.get('editor') ?? undefined, motion: params.get('motion') ?? undefined, section: params.get('section') ?? undefined } as const;
@@ -94,7 +92,7 @@ function route() {
 function Frame({ theme, fixedTheme, motion, children }: { theme: PreviewTheme; fixedTheme?: boolean; motion?: PreviewMotion; children: ReactNode }) {
   const panel = useRef<HTMLDivElement>(null);
   return <div ref={panel} data-theme={theme} data-ut-motion={motion} className="theme-preview">
-    <span className="label"><Dot static tone="off" /> {themeLabels[theme]}</span>
+    <span className="label"><Dot static tone="off" /> {themeLabel(theme)}</span>
     <div className="preview-content">
       <ThemeProvider defaultTheme={theme} forcedTheme={fixedTheme ? theme : undefined} storageKey={null} target={() => panel.current}>
         <ToastProvider>{children}</ToastProvider>
@@ -121,7 +119,7 @@ function ExamplePreview({ example, initialTheme, motion, description, preserveSt
       {motionOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
     </Select>}<Select aria-label="Preview theme" value={previewTheme}
         onChange={(event) => setPreviewTheme(event.target.value as PreviewTheme)}>
-        {themes.map((theme) => <option key={theme} value={theme}>{themeLabels[theme]}</option>)}
+        {themes.map((theme) => <option key={theme} value={theme}>{themeLabel(theme)}</option>)}
       </Select></div>
     </div>
     <Frame key={preserveState ? undefined : previewTheme} theme={previewTheme} fixedTheme={preserveState} motion={override ?? motion}>
@@ -229,17 +227,28 @@ function Theming() {
   const [radius, setRadius] = useState('soft');
   const [width, setWidth] = useState('11rem');
   return <article className="doc-article">
-    <PageTitle kicker="Guide" title="Theming" detail="Night, Paper, and Glass share one set of components. Night is the default." />
-    <div className="theme-gallery">{themes.map((theme) => <Frame key={theme} theme={theme}><Button>{themeLabels[theme]}</Button></Frame>)}</div>
+    <PageTitle kicker="Guide" title="Theming" detail="Built-in appearances share one set of components. Night is the default." />
+    <div className="theme-gallery">{themes.map((theme) => <Frame key={theme} theme={theme}><Button>{themeLabel(theme)}</Button></Frame>)}</div>
     <h2>Set the theme</h2>
-    <p>Use <Code inline>data-theme="dark"</Code>, <Code inline>data-theme="light"</Code>, or <Code inline>data-theme="glass"</Code> on the root or a nested panel.
+    <p>Set <Code inline>data-theme</Code> on the root or a nested panel. For example, use <Code inline>data-theme="trading"</Code> for dense market screens.
       The <Code inline>.dark</Code>, <Code inline>.light</Code>, <Code inline>.light-theme</Code>, and <Code inline>.glass</Code> selectors are aliases.
       <Code inline>data-theme="system"</Code> follows the operating-system colour preference.</p>
     <CopyCode text={`<section data-theme="glass">\n  <button class="btn btn-solid">Glass button</button>\n</section>`} />
-    <p>Place <Code inline>{'<ThemeSelect />'}</Code> inside <Code inline>{'<ThemeProvider>'}</Code> to let people choose Night, Paper, Glass, or System and keep that preference across visits.</p>
+    <h2>Trading and Snow</h2>
+    <p>Choose a composition with <Code inline>{'<Workspace variant="trading" />'}</Code> for an icon rail,
+      <Code inline>terminal</Code> for command tabs, <Code inline>studio</Code> for spacious creative tools, or
+      <Code inline>office</Code> for labelled business navigation. Pair them with any theme.
+      <a href="#/components/workspace"> Explore workspace layouts</a>.</p>
+    <p>Trading defaults to compact controls. Pair market colors with signs and arrows, and set <Code inline>data-ut-market="blue-orange"</Code> for the alternate market palette.</p>
+    <CopyCode text={`<div data-theme="trading" data-ut-market="blue-orange">
+  <span class="market-price market-up flash-up" aria-label="Up 1.24 percent">▲ +1.24%</span>
+  <span class="market-price market-down" aria-label="Down 0.73 percent">▼ −0.73%</span>
+</div>`} />
+    <p>Snow can include a decorative, pointer-transparent snowfall layer. Add <Code inline>{'<div class="snowfall" aria-hidden="true"></div>'}</Code> inside a Snow page to opt in.</p>
+    <p>Place <Code inline>{'<ThemeSelect />'}</Code> inside <Code inline>{'<ThemeProvider>'}</Code> to let people choose a built-in appearance or follow their system and keep that preference across visits.</p>
     <h2>Set corners and width</h2>
     <p>Use <Code inline>data-ut-radius</Code> to set corners on a component or a section.
-      The same choices work in Night, Paper, and Glass. Set <Code inline>--ut-shape-radius</Code> for a custom value.</p>
+      The same choices work across the built-in themes. Set <Code inline>--ut-shape-radius</Code> for a custom value.</p>
     <div className="shape-demo sample-stack">
       <div className="shape-demo-controls">
         <Field label="Corners"><Select value={radius} onChange={(event) => setRadius(event.currentTarget.value)}>
@@ -252,7 +261,7 @@ function Theming() {
       </div>
       <div className="theme-gallery">{themes.map((theme) => <Frame key={theme} theme={theme}>
         <Card data-ut-radius={radius || undefined}><CardBody>
-          <Input aria-label={`${themeLabels[theme]} project name`} placeholder="Project name" />
+          <Input aria-label={`${themeLabel(theme)} project name`} placeholder="Project name" />
           <Button inlineSize={width || undefined}>Create project</Button>
         </CardBody></Card>
       </Frame>)}</div>
@@ -280,9 +289,12 @@ function Theming() {
   </article>;
 }
 
-const palettes = [...tokenCSS.matchAll(/(?:\[data-theme="(?:dark|light|glass)"\])\s*\{([^}]+)\}/g)].map(([, text]) =>
-  Object.fromEntries([...text.matchAll(/--ut-([\w-]+):\s*([^;]+);/g)].map(([, key, value]) => [key, value])),
-).filter((palette) => Object.hasOwn(palette, 'on-solid'));
+const paletteBlocks = [...tokenCSS.matchAll(/\[data-theme="([\w-]+)"\]\s*\{([^}]+)\}/g)]
+  .map(([, id, declarations]) => [id, Object.fromEntries([...declarations.matchAll(/--ut-([\w-]+):\s*([^;]+);/g)]
+    .map(([, key, value]) => [key, value]))] as const)
+  .filter(([, palette]) => Object.hasOwn(palette, 'on-solid'));
+const palettesByTheme = Object.fromEntries(paletteBlocks);
+const palettes = themes.map((theme) => palettesByTheme[theme]);
 function color(value: string) {
   return value.startsWith('#') ? value.slice(1).match(/../g)!.map((channel) => Number.parseInt(channel, 16))
     : value.match(/[\d.]+/g)!.map(Number);
@@ -311,23 +323,23 @@ function Tokens() {
     ratios: palettes.map((palette) => `${ratio(palette[fg], palette[bg], palette.bg).toFixed(2)}:1`),
   }));
   return <article className="doc-article">
-    <PageTitle kicker="Guide" title="Tokens" detail="The same custom properties drive all three themes, the CSS bundle, and the Tailwind plugin." />
+    <PageTitle kicker="Guide" title="Tokens" detail="The same custom properties drive all themes, the CSS bundle, and the Tailwind plugin." />
     <div className="swatches">{colors.map((name) => <div key={name} className="swatch-row">
       <Code inline>--ut-{name}</Code>
       {themes.map((theme, i) => <div key={theme} className="swatch" data-theme={theme}>
-        <span style={{ backgroundColor: `var(--ut-${name})` }} aria-hidden="true" /><small><span className="sr-only">{themeLabels[theme]} </span>{palettes[i][name]}</small>
+        <span style={{ backgroundColor: `var(--ut-${name})` }} aria-hidden="true" /><small><span className="sr-only">{themeLabel(theme)} </span>{palettes[i][name]}</small>
       </div>)}
     </div>)}</div>
     <h2>Contrast</h2>
     <p>Ratios composite translucent colours over the theme canvas. The mark is checked as a UI colour.</p>
     <ContrastTable rows={rows} />
-    <TokensPaletteSection ratio={ratio} />
+    <TokensPaletteSection ratio={ratio} palettes={palettesByTheme} />
   </article>;
 }
 
 function ContrastTable({ rows }: { rows: Array<{ pair: string; ratios: string[] }> }) {
   return <div className="table-wrap"><table className="table"><thead><tr><th scope="col">Pair</th>
-    {themes.map((theme) => <th key={theme} scope="col" className="num">{themeLabels[theme]}</th>)}</tr></thead>
+    {themes.map((theme) => <th key={theme} scope="col" className="num">{themeLabel(theme)}</th>)}</tr></thead>
     <tbody>{rows.map(({ pair, ratios }) => <tr key={pair}><td>{pair}</td>{themes.map((theme, i) => <td key={theme} className="num">{ratios[i]}</td>)}</tr>)}</tbody>
   </table></div>;
 }
@@ -464,7 +476,7 @@ function App() {
     '/blocks': <BlocksPage />,
     '/about': <About />, '/terms': <Terms />, '/privacy': <Privacy />,
     '/frameworks': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading integrations…" />}><Frameworks /></Suspense>,
-    '/sandbox': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading sandbox…" />}><Playground key={sample ?? 'carousel'} component={sample}
+    '/sandbox': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading sandbox…" />}><Playground key={JSON.stringify([sample ?? 'carousel', editor, motion])} component={sample}
       editorMode={editor} initialMotion={motion} /></Suspense>,
   };
   const page = Object.hasOwn(pages, path) ? pages[path] : undefined;

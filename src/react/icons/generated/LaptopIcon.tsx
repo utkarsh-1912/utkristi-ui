@@ -6,7 +6,7 @@ export const LaptopIconData = {
   line: "M4 5h16a1 1 0 0 1 1 1v9H3V6a1 1 0 0 1 1-1Zm-2 13h20",
   filled: "M4 4h16a2 2 0 0 1 2 2v9H2V6a2 2 0 0 1 2-2Zm-2 13h20a1 1 0 1 1 0 2H2a1 1 0 1 1 0-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

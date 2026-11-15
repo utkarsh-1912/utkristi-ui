@@ -6,7 +6,7 @@ export const RefreshIconData = {
   line: "M20 11a8 8 0 0 0-14.5-4.5L4 8m0-4v4h4M4 13a8 8 0 0 0 14.5 4.5L20 16m0 4v-4h-4",
   filled: "M12 3a9 9 0 0 1 8.9 7.8 1 1 0 1 1-2 .3A7 7 0 0 0 6.3 7H8a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1V4a1 1 0 1 1 2 0v1.5A9 9 0 0 1 12 3Zm-8.9 9.9a1 1 0 0 1 2-.3A7 7 0 0 0 17.7 17H16a1 1 0 1 1 0-2h4a1 1 0 0 1 1 1v4a1 1 0 1 1-2 0v-1.5A9 9 0 0 1 3.1 12.9Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

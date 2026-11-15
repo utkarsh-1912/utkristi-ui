@@ -6,7 +6,7 @@ export const IdCardIconData = {
   line: "M3 5h18v14H3zm7 7a2 2 0 1 0-4 0 2 2 0 0 0 4 0Zm-5 5q3-4 6 0m2-7h5m-5 4h5",
   filled: "M5 4h14q2 0 2 2v12q0 2-2 2H5q-2 0-2-2V6q0-2 2-2ZM10 10.5a2 2 0 1 1 -4 0a2 2 0 1 1 4 0ZM13 9h5v2h-5ZM13 13h5v2h-5ZM5 17q3-5 6 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

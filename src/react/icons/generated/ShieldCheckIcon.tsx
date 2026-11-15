@@ -6,7 +6,7 @@ export const ShieldCheckIconData = {
   line: "M12 3 4 6v5c0 5 3 8 8 10 5-2 8-5 8-10V6l-8-3Zm-4 9 3 3 5-6",
   filled: "M12 2 3 5.5V11q0 7 9 11 9-4 9-11V5.5Zm-5 10 1.5-1.5 2.5 2.5 4.8-5 1.5 1.5-6.3 6.6Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

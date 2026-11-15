@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Button, Icon } from '@utkristi/ui';
+import { Button, Icon, iconManifest, themes } from '@utkristi/ui';
 import { blocks } from './blocks';
 
 export function useMarketingMotion() {
@@ -20,9 +20,10 @@ export function useMarketingMotion() {
 }
 
 const featured = [
-  ['enterprise-landing', 'Marketing', 'A product landing page with a release preview and demo request.'],
-  ['project-directory', 'Operations', 'A searchable directory with editing and bulk actions.'],
-  ['execution-desk', 'Trading', 'An order blotter with linked routes and fills.'],
+  ['execution-desk', 'Trading', 'An order blotter with compact icon controls and linked routes and fills.'],
+  ['console-workspace', 'Terminal', 'A local command console with history and service status.'],
+  ['creative-workspace', 'Studio', 'Visual asset selection and an editable inspector.'],
+  ['office-workspace', 'Operations', 'A daily task list and team directory with labelled navigation.'],
 ] as const;
 
 export function WorkflowSection() {
@@ -59,7 +60,7 @@ export function MarketingHome() {
       <div className="marketing-hero-copy">
         <span className="label">Utkristi UI</span>
         <h1 id="marketing-title">A design system for Utkristi.</h1>
-        <p>Build apps and websites with shared components, working layouts, and a theme that fits your product.</p>
+        <p>Build trading workstations, creative tools, and business apps with purpose-specific layouts, accessible controls, and twelve coordinated themes.</p>
         <div className="marketing-actions">
           <Button href="#/getting-started" iconRight={<Icon name="arrow-right" />}>Get started</Button>
           <a href="#/components/button" className="marketing-link">Explore components</a>
@@ -73,11 +74,26 @@ export function MarketingHome() {
         <h2 id="theme-story">Choose the right appearance</h2>
         <a href="#/theming" className="marketing-link">Read the theme guide <Icon name="arrow-right" /></a>
       </div>
-      <div className="marketing-appearances"><p>Try the same workspace in Night, Paper, or Glass.</p>
-        <div>{[['dark', 'Night'], ['light', 'Paper'], ['glass', 'Glass']].map(([theme, label]) =>
+      <div className="marketing-appearances"><p>Choose a palette for your product and a workspace layout for the way people use it. Compact icon rails, command tabs, studio tools, and office navigation share the same component APIs.</p>
+        <div>{themes.map(({ id: theme, label }) =>
           <a key={theme} href={`#/showcase?theme=${theme}`} className="marketing-appearance">
             <span data-theme={theme} aria-hidden="true"><i /></span>{label}<Icon name="arrow-up-right" size={14} />
           </a>)}</div>
+      </div>
+    </section>
+    <section className="marketing-section" aria-labelledby="icon-story" data-reveal>
+      <div className="marketing-section-intro"><span className="label">Icons</span>
+        <h2 id="icon-story">From toolbar to feature artwork</h2>
+        <a href="#/icons" className="marketing-link">Explore {iconManifest.length} icons <Icon name="arrow-right" /></a>
+      </div>
+      <div>
+        <div className="marketing-icon-samples" aria-hidden="true">
+          <Icon name="table" size={32} /><Icon name="settings" variant="filled" size={36} />
+          <Icon name="palette" variant="duotone" size={48} />
+          <Icon name="rocket" variant="2.5d" hue="violet" size={72} />
+          <Icon name="database" variant="3d" hue="teal" size={88} />
+        </div>
+        <p>Use line icons in dense controls, duotone in feature cards, and dimensional artwork in empty states and onboarding. The catalog includes searchable company marks and live color controls.</p>
       </div>
     </section>
   </article>;

@@ -1,19 +1,16 @@
-import { Code, iconHues, iconPaletteTable } from '@utkristi/ui';
+import { Code, iconHues, themes } from '@utkristi/ui';
 
 export function TokensPaletteSection({
-  ratio,
+  ratio, palettes,
 }: {
+  palettes: Record<string, Record<string, string>>;
   ratio: (fg: string, bg: string, canvas: string) => number;
 }) {
-  const themeOrder = [
-    { key: 'night', label: 'Night', bg: '#0B0B0A', ink: '#E8E6DF' },
-    { key: 'paper', label: 'Paper', bg: '#F5F7FB', ink: '#0E1A33' },
-    { key: 'glass', label: 'Glass', bg: '#F7F4FB', ink: '#202021' },
-  ] as const;
+  const themeOrder = themes;
 
   return (
     <section aria-label="Icon colour palette tokens">
-      <h2>Icon Palette (8 hues × 3 themes × 6 roles)</h2>
+      <h2>Icon palette</h2>
       <p>
         Every preset hue provides <Code inline>base</Code>, <Code inline>shade</Code>, <Code inline>hi</Code>,{' '}
         <Code inline>tint</Code>, <Code inline>stroke</Code>, and <Code inline>on</Code> roles. In Night and Paper,{' '}
@@ -37,14 +34,17 @@ export function TokensPaletteSection({
           <tbody>
             {iconHues.flatMap((hueName) =>
               themeOrder.map((t) => {
-                const roles = iconPaletteTable[t.key][hueName];
-                const resolvedStroke = roles.stroke.startsWith('var(') ? t.ink : roles.stroke;
-                const strokeRatio = ratio(resolvedStroke, t.bg, t.bg);
-                const onRatio = ratio(roles.on, roles.base, t.bg);
+                const palette = palettes[t.id];
+                const bg = palette.bg;
+                const [base, shade, hi, stroke, on] = ['base', 'shade', 'hi', 'stroke', 'on'].map((role) => palette['hue-' + hueName + '-' + role]);
+                const roles = { base, shade, hi, stroke, on };
+                const resolvedStroke = roles.stroke.startsWith('var(') ? palette.ink : roles.stroke;
+                const strokeRatio = ratio(resolvedStroke, bg, bg);
+                const onRatio = ratio(roles.on, roles.base, bg);
                 const strokePass = strokeRatio >= 3;
                 const onPass = onRatio >= 4.5;
                 return (
-                  <tr key={`${hueName}-${t.key}`}>
+                  <tr key={`${hueName}-${t.id}`}>
                     <td><Code inline>{hueName}</Code></td>
                     <td>{t.label}</td>
                     <td>

@@ -6,7 +6,7 @@ export const ScanFaceIconData = {
   line: "M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4M9 10h.01m6 0h.01m-6 4q3 3 6 0",
   filled: "M3 3h6v2H5v4H3Zm12 0h6v6h-2V5h-4ZM3 15h2v4h4v2H3Zm16 0h2v6h-6v-2h4ZM8 13l1.7-.8q2.3 3 4.6 0l1.7.8q-4 6-8 0ZM10.15 9.5a1.15 1.15 0 1 1 -2.3 0a1.15 1.15 0 1 1 2.3 0ZM16.15 9.5a1.15 1.15 0 1 1 -2.3 0a1.15 1.15 0 1 1 2.3 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

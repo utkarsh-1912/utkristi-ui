@@ -6,7 +6,7 @@ export const TrainIconData = {
   line: "M7 4h10q2 0 2 2v9q0 2-2 2H7q-2 0-2-2V6q0-2 2-2Zm-2 8h14m-10 5-3 4m9-4 3 4m-10-6h.01m8 0h.01",
   filled: "M7 3h10q3 0 3 3v9q0 2.6-2.5 3l2 3h-3l-2-3h-5l-2 3h-3l2-3Q4 17.6 4 15V6q0-3 3-3Zm0 3v5h10V6ZM9 14.5a1 1 0 1 1 -2 0a1 1 0 1 1 2 0ZM17 14.5a1 1 0 1 1 -2 0a1 1 0 1 1 2 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

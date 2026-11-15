@@ -6,7 +6,7 @@ export const CallLeaveIconData = {
   line: "M3 13.5c4.5-4.5 13.5-4.5 18 0l-1.8 2.8a1.5 1.5 0 0 1-1.8.5l-2.9-1.2a1.5 1.5 0 0 1-.9-1.4V12a10 10 0 0 0-3.2 0v2.2a1.5 1.5 0 0 1-.9 1.4l-2.9 1.2a1.5 1.5 0 0 1-1.8-.5L3 13.5Z",
   filled: "M12 9c4 0 7.7 1.3 10.2 3.8a1 1 0 0 1 .1 1.3l-1.8 2.8a2.5 2.5 0 0 1-3 .8L14.6 16a2.5 2.5 0 0 1-1.5-2.3v-1.5a9 9 0 0 0-2.2 0v1.5a2.5 2.5 0 0 1-1.5 2.3l-2.9 1.2a2.5 2.5 0 0 1-3-.8l-1.8-2.8a1 1 0 0 1 .1-1.3C4.3 10.3 8 9 12 9Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

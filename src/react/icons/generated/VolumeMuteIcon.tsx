@@ -6,7 +6,7 @@ export const VolumeMuteIconData = {
   line: "M4 9h4l5-4v14l-5-4H4zm12 1 4 4m0-4-4 4",
   filled: "M3 8h4l7-5v18l-7-5H3Zm12 1 1.5-1.5L19 10l2.5-2.5L23 9l-2.5 2.5L23 14l-1.5 1.5L19 13l-2.5 2.5L15 14l2.5-2.5Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

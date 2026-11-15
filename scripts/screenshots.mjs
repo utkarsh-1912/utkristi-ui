@@ -13,10 +13,14 @@ const screenshots = join(root, 'docs', 'screenshots');
 const url = 'http://127.0.0.1:4173';
 const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
 const themes = [['dark', 'night'], ['light', 'paper'], ['glass', 'glass']];
+const newThemes = ['trading', 'snow', 'aurora', 'sepia', 'midnight', 'forest', 'sunset', 'high-contrast', 'terminal'];
 const viewport = { width: 1440, height: 1800 };
 const mobileViewport = { width: 390, height: 900 };
 const captureOnly = process.argv.includes('--capture-only');
 const verifyOnly = process.argv.includes('--verify-only');
+const themesOnly = process.argv.includes('--themes-only');
+const workspacesOnly = process.argv.includes('--workspaces-only');
+const reuseBuild = process.argv.includes('--reuse-build');
 const require = createRequire(import.meta.url);
 
 async function run(args) {
@@ -122,6 +126,68 @@ async function captureEdge() {
     };
     // Keep motion assertions independent of the runner's OS accessibility settings.
     const setMotion = (value) => send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value }] });
+    if (workspacesOnly) {
+      await setMotion('reduce');
+      const samples = [
+        ['execution-desk', 'trading', 'Execution desk'],
+        ['console-workspace', 'terminal', 'Operations console'],
+        ['creative-workspace', 'aurora', 'Creative studio'],
+        ['office-workspace', 'snow', 'Team operations'],
+      ];
+      for (const [slug, theme, title] of samples) {
+        await size(1440, 1000);
+        await load('/blocks/' + slug + '?theme=' + theme, title);
+        await fontsReady();
+        await screenshot(slug);
+        {
+          await evaluate('document.querySelectorAll(".workspace-navigation button")[1].click()');
+          await retry(() => evaluate('document.querySelectorAll(".workspace-navigation button")[1].getAttribute("aria-current") === "page"'), slug + ' navigation');
+        }
+        await size(375, 830);
+        await retry(() => evaluate('document.documentElement.scrollWidth <= innerWidth'), slug + ' mobile width');
+        await screenshot(slug + '-mobile');
+        process.stdout.write('Checked ' + slug + ' at desktop and mobile widths.\n');
+      }
+      await size(1440, 1000);
+      await load('/overview?theme=glass', 'A design system for Utkristi.');
+      await fontsReady();
+      await screenshot('overview', true);
+      await load('/icons?theme=glass', 'Icons');
+      await retry(() => evaluate('!!document.querySelector(".icons-cell")'), 'expanded icon catalog');
+      await screenshot('icons');
+      await load('/sandbox?component=workspace&theme=trading', 'Sandbox');
+      await retry(() => evaluate('document.querySelector(".playground-run-status")?.textContent === "React preview ready"'), 'workspace sandbox');
+      await screenshot('workspace-sandbox');
+      for (const slug of ['workspace', 'console-workspace', 'creative-workspace', 'office-workspace']) {
+        await load('/sandbox?component=' + slug + '&editor=html&theme=snow', 'Sandbox');
+        await retry(() => evaluate('document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), slug + ' HTML sandbox');
+      }
+      if (exceptions.length) throw new Error(exceptions.join('\n'));
+      return;
+    }
+    if (themesOnly) {
+      await setMotion('reduce');
+      for (const [theme, file] of [...themes, ...newThemes.map((id) => [id, id])]) {
+        await size(1440, 1000);
+        await load(`/showcase?theme=${theme}`, 'Build together.');
+        await retry(() => evaluate(`document.documentElement.dataset.theme === '${theme}' && !!document.querySelector('.showcase-icon-tray')`), theme + ' showcase');
+        await fontsReady();
+        await screenshot('theme-' + file);
+        await size(375, 830);
+        await retry(() => evaluate('document.documentElement.scrollWidth <= innerWidth'), theme + ' mobile width');
+        if (['glass', 'aurora', 'snow'].includes(theme)) {
+          await send('Emulation.setEmulatedMedia', { features: [
+            { name: 'prefers-reduced-motion', value: 'reduce' },
+            { name: 'prefers-reduced-transparency', value: 'reduce' },
+          ] });
+          await retry(() => evaluate('getComputedStyle(document.documentElement).getPropertyValue("--ut-surface-filter").trim() === "none"'), theme + ' opaque fallback');
+          await setMotion('reduce');
+        }
+        if (exceptions.length) throw new Error(theme + ': ' + exceptions.join('\n'));
+        process.stdout.write('Checked ' + theme + ' at desktop and 375px mobile widths.\n');
+      }
+      return;
+    }
     await setMotion('reduce');
     await size(760, 480);
     await send('Fetch.enable', { patterns: [{ urlPattern: '*/assets/index-*.js' }] });
@@ -1028,12 +1094,13 @@ async function captureEdge() {
     process.stdout.write(`Checked ${routes.length} docs routes in Night, Paper, and Glass at 375px.\n`);
     process.stdout.write(`Checked ${responsiveRoutes.length} key routes at 320, 390, 768, 981, 1024, and 1440px in all themes.\n`);
   } finally {
+    if (client) await Promise.race([client.send('Browser.close').catch(() => {}), sleep(1500)]);
     client?.close();
-    browser.kill();
+    if (!await Promise.race([exited.then(() => true), sleep(1500, false)])) browser.kill();
     await exited;
     const absoluteProfile = resolve(profile);
     if (absoluteProfile.startsWith(join(resolve(root), '.edge-preview-')) && !absoluteProfile.slice(resolve(root).length + 1).includes(sep)) {
-      await rm(absoluteProfile, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+      await rm(absoluteProfile, { recursive: true, force: true, maxRetries: 10, retryDelay: 250 });
     }
   }
 }
@@ -1100,15 +1167,15 @@ async function capturePlaywright() {
   }
 }
 
-await run(['build', '--config', 'docs/vite.config.ts']);
+if (!reuseBuild) await run(['build', '--config', 'docs/vite.config.ts']);
 if (!verifyOnly) await mkdir(screenshots, { recursive: true });
 const server = spawn(process.execPath, [vite, 'preview', '--config', 'docs/vite.config.ts', '--host', '127.0.0.1', '--port', '4173', '--strictPort'],
   { cwd: root, stdio: 'inherit', windowsHide: true });
 const stopped = once(server, 'exit').catch(() => {});
 try {
-  await retry(async () => !server.exitCode && (await fetch(url)).ok, 'Vite preview');
+  await retry(async () => !server.exitCode && (await fetch(url)).ok, 'Vite preview', 240);
   if (existsSync(edge)) await captureEdge();
-  else if (verifyOnly) throw new Error('The docs browser verification suite requires Microsoft Edge.');
+  else if (verifyOnly || themesOnly || workspacesOnly) throw new Error('The docs browser verification suite requires Microsoft Edge.');
   else await capturePlaywright();
 } finally {
   server.kill();

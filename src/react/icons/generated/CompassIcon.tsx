@@ -6,7 +6,7 @@ export const CompassIconData = {
   line: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm4 5-2 6-6 2 2-6Z",
   filled: "M22 12a10 10 0 1 1 -20 0a10 10 0 1 1 20 0ZM20 12a8 8 0 1 1 -16 0a8 8 0 1 1 16 0ZM17 7l-2.4 7.6L7 17l2.4-7.6Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

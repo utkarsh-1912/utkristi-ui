@@ -6,7 +6,7 @@ export const MailIconData = {
   line: "M4 5h16v14H4zm0 0 8 7 8-7",
   filled: "M5 4h14q2 0 2 2v12q0 2-2 2H5q-2 0-2-2V6q0-2 2-2ZM5 6l7 6 7-6v2l-7 6-7-6Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

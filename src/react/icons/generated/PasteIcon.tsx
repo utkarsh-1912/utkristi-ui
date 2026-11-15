@@ -6,7 +6,7 @@ export const PasteIconData = {
   line: "M9 4h6v3H9V4ZM8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2",
   filled: "M9 2h6a1 1 0 0 1 1 1v1h2a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h2V3a1 1 0 0 1 1-1Zm1 2v2h4V4h-4Zm-1 7h6v2H9v-2Zm0 4h4v2H9v-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

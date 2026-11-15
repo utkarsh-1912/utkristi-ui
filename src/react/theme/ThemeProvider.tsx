@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { isTheme, themeIds, type ResolvedTheme, type Theme } from './themes.js';
 
-export type ResolvedTheme = 'dark' | 'light' | 'glass';
-export type Theme = ResolvedTheme | 'system';
+export { themes, themeIds, themeLabel, isTheme, isResolvedTheme, iconThemeKey, type ResolvedTheme, type Theme } from './themes.js';
 interface ThemeContextValue {
   theme: Theme;
   resolvedTheme: ResolvedTheme;
@@ -11,10 +11,6 @@ interface ThemeContextValue {
 const storage = 'utkristi-theme';
 const mediaQuery = '(prefers-color-scheme: light)';
 const ThemeContext = createContext<ThemeContextValue | null>(null);
-
-function isTheme(value: unknown): value is Theme {
-  return value === 'dark' || value === 'light' || value === 'glass' || value === 'system';
-}
 
 export interface ThemeProviderProps {
   children: ReactNode;
@@ -52,9 +48,7 @@ export function ThemeProvider({ children, defaultTheme = 'dark', storageKey = st
     const element = typeof target === 'function' ? target() : target === undefined ? document.documentElement : target;
     if (!element) return;
     element.dataset.theme = resolvedTheme;
-    element.classList.toggle('light', resolvedTheme === 'light');
-    element.classList.toggle('dark', resolvedTheme === 'dark');
-    element.classList.toggle('glass', resolvedTheme === 'glass');
+    for (const id of themeIds) element.classList.toggle(id, id === resolvedTheme);
   }, [loadedKey, resolvedTheme, storageKey, target]);
 
   return <ThemeContext.Provider value={{ theme: forcedTheme ?? theme, resolvedTheme, setTheme(next) {
@@ -71,5 +65,6 @@ export function useTheme() {
 
 export function themeScript(key = storage) {
   const literal = JSON.stringify(key).replace(/</g, '\\u003c');
-  return `(()=>{let t;try{t=localStorage.getItem(${literal})}catch{}const d=t==="glass"?"glass":t==="light"||(t==="system"&&window.matchMedia?.("${mediaQuery}").matches)?"light":"dark";const e=document.documentElement;e.dataset.theme=d;e.classList.toggle("light",d==="light");e.classList.toggle("dark",d==="dark");e.classList.toggle("glass",d==="glass")})()`;
+  const ids = JSON.stringify(themeIds);
+  return `(()=>{let t;try{t=localStorage.getItem(${literal})}catch{}const a=${ids};const d=t==="system"?(window.matchMedia?.("${mediaQuery}").matches?"light":"dark"):a.includes(t)?t:"dark";const e=document.documentElement;e.dataset.theme=d;for(const n of a)e.classList.toggle(n,n===d)})()`;
 }

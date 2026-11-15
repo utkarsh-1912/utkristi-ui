@@ -6,7 +6,7 @@ export const WifiIconData = {
   line: "M2 8.5a15 15 0 0 1 20 0M5 12a10.5 10.5 0 0 1 14 0m-10.5 3.5a6 6 0 0 1 7 0M12 19h.01",
   filled: "M12 4.5c4 0 7.8 1.5 10.7 4.2a1 1 0 0 1-1.4 1.4 13.8 13.8 0 0 0-18.6 0 1 1 0 0 1-1.4-1.4A15.8 15.8 0 0 1 12 4.5Zm0 4.5c2.8 0 5.5 1 7.6 3a1 1 0 0 1-1.4 1.5 9.3 9.3 0 0 0-12.4 0 1 1 0 1 1-1.4-1.5A11.3 11.3 0 0 1 12 9Zm0 4.5c1.6 0 3.1.6 4.3 1.7a1 1 0 1 1-1.4 1.5 4.3 4.3 0 0 0-5.8 0 1 1 0 0 1-1.4-1.5A6.3 6.3 0 0 1 12 13.5Zm0 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

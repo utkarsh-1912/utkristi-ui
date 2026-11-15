@@ -6,7 +6,7 @@ export const WarningIconData = {
   line: "M10.3 4.5a2 2 0 0 1 3.4 0l7 12.5a2 2 0 0 1-1.7 3H5a2 2 0 0 1-1.7-3l7-12.5ZM12 9v4m0 4h.01",
   filled: "M9.4 4a3 3 0 0 1 5.2 0l7 12.5A3 3 0 0 1 19 21H5a3 3 0 0 1-2.6-4.5L9.4 4ZM11 9v4a1 1 0 1 0 2 0V9a1 1 0 1 0-2 0Zm1 7a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

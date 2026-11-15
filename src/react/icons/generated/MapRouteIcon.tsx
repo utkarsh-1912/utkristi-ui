@@ -6,7 +6,7 @@ export const MapRouteIconData = {
   line: "M5 5h3v3H5zm11 11h3v3h-3zM8 6.5h7a3 3 0 0 1 0 6H9a2.5 2.5 0 0 0 0 5h7",
   filled: "M3 4h6v5h-6ZM15 15h6v6h-6ZM9 5.5h6a4 4 0 0 1 0 8H9a1.5 1.5 0 0 0 0 3h6v2H9a3.5 3.5 0 0 1 0-7h6a2 2 0 0 0 0-4H9Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

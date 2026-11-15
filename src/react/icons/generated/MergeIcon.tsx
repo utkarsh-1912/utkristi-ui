@@ -6,7 +6,7 @@ export const MergeIconData = {
   line: "M6 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm0 0v12m0-9a6 6 0 0 0 6 6h3m3 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
   filled: "M6 2a4 4 0 0 1 1 7.9V12a5 5 0 0 0 5 5h2.1a4 4 0 1 1 0 2H12a7 7 0 0 1-5-2.1V21a1 1 0 1 1-2 0V9.9A4 4 0 0 1 6 2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

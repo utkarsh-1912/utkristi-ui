@@ -6,7 +6,7 @@ export const ServerRackIconData = {
   line: "M4 4h16v7H4zm0 9h16v7H4zm3-5h.01m-.01 8h.01m4-8h6m-6 8h6",
   filled: "M3 3h18v8h-18ZM8 7a1 1 0 1 1 -2 0a1 1 0 1 1 2 0ZM11 6h7v2h-7ZM3 13h18v8h-18ZM8 17a1 1 0 1 1 -2 0a1 1 0 1 1 2 0ZM11 16h7v2h-7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

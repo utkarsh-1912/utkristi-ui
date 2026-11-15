@@ -6,7 +6,7 @@ export const EditIconData = {
   line: "M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5Z",
   filled: "M15.8 2.8a3.1 3.1 0 0 1 4.4 4.4L8.7 18.7a1 1 0 0 1-.5.3l-4 1a1 1 0 0 1-1.2-1.2l1-4a1 1 0 0 1 .3-.5L15.8 2.8Zm-2.1 3.5L6 14v2h2l7.7-7.7-2-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const DashboardLayoutIconData = {
   line: "M3 4h18v16H3zm0 5h18m-10 0v11",
   filled: "M5 4h14q2 0 2 2v12q0 2-2 2H5q-2 0-2-2V6q0-2 2-2ZM6 6h12v2h-12ZM6 10h4v7h-4ZM12 10h6v7h-6Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

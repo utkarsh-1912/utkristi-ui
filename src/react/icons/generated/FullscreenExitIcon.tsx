@@ -6,7 +6,7 @@ export const FullscreenExitIconData = {
   line: "M4 9h5V4m11 5h-5V4M9 20v-5H4m11 5v-5h5",
   filled: "M7 3h3v7H3V7h4Zm7 0h3v4h4v3h-7ZM3 14h7v7H7v-4H3Zm11 0h7v3h-4v4h-3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

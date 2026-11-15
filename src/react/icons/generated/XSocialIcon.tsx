@@ -6,7 +6,7 @@ export const XSocialIconData = {
   line: "M4 4h4.5l4 5.6L17 4h3l-6.2 7.6L20.5 20H16l-4.4-6-4.9 6H3.8l6.5-7.9L4 4Z",
   filled: "M4 4h4.5l4 5.6L17 4h3l-6.2 7.6L20.5 20H16l-4.4-6-4.9 6H3.8l6.5-7.9L4 4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

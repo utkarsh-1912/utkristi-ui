@@ -6,7 +6,7 @@ export const DeployIconData = {
   line: "M7 10a5 5 0 0 1 10-1 4.5 4.5 0 0 1 0 9H7a4 4 0 1 1 0-8Zm5 7v-7m-3 3 3-3 3 3",
   filled: "M7 9a5.4 5.4 0 0 1 10.3-1.4A5.6 5.6 0 0 1 17 19H7A5 5 0 1 1 7 9Zm1.4 3.5 1.5 1.5 1.1-1.2V17h2v-4.2l1.1 1.2 1.5-1.5L12 9Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

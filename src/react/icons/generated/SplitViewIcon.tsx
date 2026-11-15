@@ -6,7 +6,7 @@ export const SplitViewIconData = {
   line: "M3 4h18v16H3zm9 0v16M6 8h3m6 0h3",
   filled: "M5 4h14q2 0 2 2v12q0 2-2 2H5q-2 0-2-2V6q0-2 2-2ZM5 6h6v12h-6ZM13 6h6v12h-6ZM6 7h4v2h-4ZM14 7h4v2h-4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

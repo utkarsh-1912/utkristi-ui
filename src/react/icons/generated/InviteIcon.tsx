@@ -6,7 +6,7 @@ export const InviteIconData = {
   line: "M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm0 2 8 5 8-5",
   filled: "M4 5h16a3 3 0 0 1 3 3v.4l-11 6.8L1 8.4V8a3 3 0 0 1 3-3Zm-3 5.7 10.5 6.5a1 1 0 0 0 1 0L23 10.7V16a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3v-5.3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

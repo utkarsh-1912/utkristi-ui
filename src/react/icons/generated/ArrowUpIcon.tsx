@@ -6,7 +6,7 @@ export const ArrowUpIconData = {
   line: "M12 19V5m-7 7 7-7 7 7",
   filled: "M11.3 4.3a1 1 0 0 1 1.4 0l7 7a1 1 0 1 1-1.4 1.4L13 7.4V19a1 1 0 1 1-2 0V7.4l-5.3 5.3a1 1 0 0 1-1.4-1.4l7-7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

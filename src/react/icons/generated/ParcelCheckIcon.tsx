@@ -6,7 +6,7 @@ export const ParcelCheckIconData = {
   line: "M4 7l8-4 8 4v10l-8 4-8-4Zm0 0 8 4 8-4m-8 4v10m1-7 2 2 3-4",
   filled: "M12 2 21 6.5v11L12 22l-9-4.5v-11Zm0 2.4L6.5 7 12 9.8 17.5 7ZM5 9v7l6 3v-7Zm8.3 4.5-1.3 1.4 2.8 2.8 4.2-4.5-1.4-1.3-2.8 3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

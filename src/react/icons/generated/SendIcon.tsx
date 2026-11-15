@@ -6,7 +6,7 @@ export const SendIconData = {
   line: "m3 10 18-6-6 16-4-7-8-3zm8 3 10-9",
   filled: "M2 9.6 22 3l-6.8 19L11 14l-9-4.4Zm4 .4 5.8 2.3 5.8-5.7Zm7 3.5 2 3.6 3.1-8.3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

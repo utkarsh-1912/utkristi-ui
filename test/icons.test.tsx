@@ -3,10 +3,18 @@ import { join } from 'node:path';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { expect, test } from 'vitest';
+import { iconThemeKey, themes } from '../src/react/theme/themes.js';
 import {
   deriveCustomPalette, Icon, iconHues, iconManifest, IconPalettePicker, IconPaletteProvider,
   iconPaletteScript, iconPaletteTable, IconTile, ThemeProvider, useIconPalette, wcagContrast,
 } from '../src/react/index.js';
+
+test.each(themes)('$label maps to compatible icon artwork and custom hue roles', ({ id, scheme }) => {
+  expect(iconThemeKey(id)).toBe(id === 'glass' ? 'glass' : scheme === 'light' ? 'paper' : 'night');
+  expect(Object.keys(iconPaletteTable[id])).toHaveLength(iconHues.length);
+  const roles = deriveCustomPalette('#929292', id);
+  expect(wcagContrast(roles.on, roles.base)).toBeGreaterThanOrEqual(4.5);
+});
 
 function toPascalCase(kebab: string) {
   return kebab.split('-').map((part) => part[0].toUpperCase() + part.slice(1)).join('') + 'Icon';
@@ -28,16 +36,19 @@ test('every manifest entry has its line, filled, duotone, and 2.5D / 3D files wh
   const files = (...parts: string[]) => new Set(readdirSync(join(...parts)));
   const styles = ['line', 'filled', 'duotone', '2.5d'].map((style) => ({ style, files: files('dist', 'icons', 'svg', style) }));
   const generated = files('src', 'react', 'icons', 'generated');
-  const renders = [['night', 'blue'], ['paper', 'blue'], ['glass', 'lime']].map(([theme, hue]) => ({
-    theme, files: files('icons', '3d', 'render', theme, hue),
-  }));
+  const renders = ['night', 'paper', 'glass'].flatMap((theme) => iconHues.map((hue) => ({
+    theme: theme + '/' + hue, files: files('icons', '3d', 'render', theme, hue),
+  })));
   for (const entry of iconManifest) {
     for (const { style, files } of styles) {
       if (style !== '2.5d' || entry.has3d) expect(files.has(`${entry.name}.svg`), `${entry.name} ${style}`).toBe(true);
     }
     expect(generated.has(`${toPascalCase(entry.name)}.tsx`), entry.name).toBe(true);
     if (entry.has3d) {
-      for (const { theme, files } of renders) expect(files.has(`${entry.name}@1x.png`), `${entry.name} ${theme} 3d`).toBe(true);
+      for (const { theme, files } of renders) {
+        expect(files.has(`${entry.name}@1x.png`), `${entry.name} ${theme} 1x`).toBe(true);
+        expect(files.has(`${entry.name}@2x.png`), `${entry.name} ${theme} 2x`).toBe(true);
+      }
     }
   }
   expect(existsSync(join('dist', 'icons', 'sprite.svg'))).toBe(true);
@@ -131,7 +142,7 @@ test('picker supports arrow keys, persists across remount, and derives stroke an
   const hexInput = screen.getByRole('textbox', { name: 'Custom hex colour' });
   await user.clear(hexInput);
   await user.type(hexInput, '#E8F0FE');
-  expect(screen.getByRole('status')).toHaveTextContent(/Too light for paper/i);
+  expect(screen.getByRole('status')).toHaveTextContent(/contrast in Paper, so the outline uses theme ink/i);
 
   first.unmount();
   document.documentElement.removeAttribute('data-icon-hue');

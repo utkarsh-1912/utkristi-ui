@@ -6,7 +6,7 @@ export const ClearFormattingIconData = {
   line: "M4 5h13m-6 0L7 18m-3 0h7m4-3 5 5m0-5-5 5",
   filled: "M3 4h15v3h-15ZM11 6h3l-4 12h2v2H3v-2h4.4Zm4 7.5 2.5 2.5 2.5-2.5 1.7 1.7-2.5 2.5 2.5 2.5L20 22l-2.5-2.5L15 22l-1.7-1.8 2.5-2.5-2.5-2.5Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

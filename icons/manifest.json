@@ -15,8 +15,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "arrow-right",
@@ -34,8 +43,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "arrow-up",
@@ -52,8 +70,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "arrow-down",
@@ -70,8 +97,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "arrow-up-right",
@@ -89,8 +125,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chevron-down",
@@ -108,8 +153,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chevron-up",
@@ -126,8 +180,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chevron-left",
@@ -144,8 +207,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chevron-right",
@@ -162,8 +234,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "menu",
@@ -180,8 +261,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "close",
@@ -199,8 +289,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "more-horizontal",
@@ -218,8 +317,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "more-vertical",
@@ -237,8 +345,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "home",
@@ -284,8 +401,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "plus",
@@ -302,8 +428,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "minus",
@@ -320,8 +455,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "check",
@@ -339,8 +483,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "search",
@@ -358,8 +511,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "filter",
@@ -376,8 +538,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "sort",
@@ -394,8 +565,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "edit",
@@ -413,8 +593,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "copy",
@@ -430,8 +619,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "paste",
@@ -447,8 +645,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "trash",
@@ -466,8 +673,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "undo",
@@ -484,8 +700,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "redo",
@@ -501,8 +726,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "refresh",
@@ -519,8 +753,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "download",
@@ -537,8 +780,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "upload",
@@ -582,8 +834,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "link",
@@ -600,8 +861,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "pin",
@@ -618,8 +888,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "star",
@@ -636,8 +915,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "heart",
@@ -654,8 +942,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bookmark",
@@ -672,8 +969,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "info",
@@ -690,8 +996,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "warning",
@@ -708,8 +1023,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "error",
@@ -727,8 +1051,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "success",
@@ -772,8 +1105,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "lock",
@@ -817,8 +1159,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "eye",
@@ -836,8 +1187,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "eye-off",
@@ -854,8 +1214,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bell",
@@ -899,8 +1268,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "clock",
@@ -918,8 +1296,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "spinner-ring",
@@ -936,8 +1323,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "offline",
@@ -954,8 +1350,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "sun",
@@ -973,8 +1378,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "moon",
@@ -991,8 +1405,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "system",
@@ -1010,8 +1433,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "palette",
@@ -1085,8 +1517,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "brush",
@@ -1104,8 +1545,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "glass-sparkle",
@@ -1123,8 +1573,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "room",
@@ -1223,8 +1682,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "people",
@@ -1270,8 +1738,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chat",
@@ -1344,8 +1821,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "mic",
@@ -1363,8 +1849,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "mic-off",
@@ -1380,8 +1875,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "camera",
@@ -1398,8 +1902,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "camera-off",
@@ -1415,8 +1928,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "screen-share",
@@ -1433,8 +1955,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "whiteboard",
@@ -1536,8 +2067,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "focus",
@@ -1555,8 +2095,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "command",
@@ -1574,8 +2123,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "layers",
@@ -1592,8 +2150,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "code",
@@ -1611,8 +2178,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "terminal",
@@ -1657,8 +2233,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "stop",
@@ -1675,8 +2260,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bug",
@@ -1694,8 +2288,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "branch",
@@ -1712,8 +2315,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "commit",
@@ -1730,8 +2342,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "merge",
@@ -1748,8 +2369,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "pull-request",
@@ -1766,8 +2396,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "github",
@@ -1784,8 +2423,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "file",
@@ -1802,8 +2450,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "file-code",
@@ -1821,8 +2478,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "folder",
@@ -1866,8 +2532,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "add-file",
@@ -1883,8 +2558,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "add-folder",
@@ -1900,8 +2584,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "save",
@@ -1918,8 +2611,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "database",
@@ -1965,8 +2667,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "package",
@@ -2039,8 +2750,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "video",
@@ -2057,8 +2777,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "music",
@@ -2075,8 +2804,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "document",
@@ -2122,8 +2860,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chart-bar",
@@ -2140,8 +2887,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chart-line",
@@ -2158,8 +2914,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "kanban",
@@ -2177,8 +2942,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "list",
@@ -2195,8 +2969,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "grid",
@@ -2213,8 +2996,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "quote",
@@ -2231,8 +3023,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "user",
@@ -2250,8 +3051,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "user-plus",
@@ -2268,8 +3078,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "logout",
@@ -2285,8 +3104,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "login",
@@ -2302,8 +3130,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "key",
@@ -2321,8 +3158,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "shield",
@@ -2367,8 +3213,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "gift",
@@ -2468,8 +3323,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "laptop",
@@ -2485,8 +3349,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "phone",
@@ -2503,8 +3376,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "tablet",
@@ -2520,8 +3402,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "cloud",
@@ -2566,8 +3457,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "battery",
@@ -2584,8 +3484,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "power",
@@ -2602,8 +3511,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "globe",
@@ -2649,8 +3567,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "x-social",
@@ -2665,8 +3592,17 @@
     "styles": [
       "line"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "linkedin",
@@ -2681,8 +3617,17 @@
     "styles": [
       "line"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "discord",
@@ -2697,8 +3642,17 @@
     "styles": [
       "line"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "youtube",
@@ -2713,8 +3667,17 @@
     "styles": [
       "line"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "text-bold",
@@ -2730,8 +3693,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "text-italic",
@@ -2747,8 +3719,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "text-underline",
@@ -2764,8 +3745,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "text-strikethrough",
@@ -2781,8 +3771,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "align-start",
@@ -2798,8 +3797,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "align-center",
@@ -2815,8 +3823,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "align-end",
@@ -2832,8 +3849,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "align-justify",
@@ -2849,8 +3875,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "indent-increase",
@@ -2866,8 +3901,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "indent-decrease",
@@ -2883,8 +3927,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "list-numbered",
@@ -2900,8 +3953,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "list-checklist",
@@ -2917,8 +3979,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "heading-one",
@@ -2934,8 +4005,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "heading-two",
@@ -2951,8 +4031,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "highlighter",
@@ -2968,8 +4057,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "clear-formatting",
@@ -2986,8 +4084,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "git-fork",
@@ -3003,8 +4110,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "code-review",
@@ -3020,8 +4136,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "braces",
@@ -3037,8 +4162,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "regex",
@@ -3054,8 +4188,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "webhook",
@@ -3071,8 +4214,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "deploy",
@@ -3089,8 +4241,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "code-test",
@@ -3107,8 +4268,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "variable",
@@ -3124,8 +4294,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "diff",
@@ -3142,8 +4321,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "server-rack",
@@ -3160,8 +4348,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "database-search",
@@ -3177,8 +4374,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "file-diff",
@@ -3194,8 +4400,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "code-compare",
@@ -3211,8 +4426,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "database-lock",
@@ -3228,8 +4452,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chart-donut",
@@ -3245,8 +4478,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chart-area",
@@ -3263,8 +4505,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chart-scatter",
@@ -3280,8 +4531,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chart-bars-horizontal",
@@ -3297,8 +4557,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "trend-up",
@@ -3314,8 +4583,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "trend-down",
@@ -3331,8 +4609,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "dashboard-layout",
@@ -3348,8 +4635,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "table-add-row",
@@ -3365,8 +4661,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "table-add-column",
@@ -3382,8 +4687,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "pivot-table",
@@ -3399,8 +4713,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "export-data",
@@ -3416,8 +4739,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "filter-off",
@@ -3433,8 +4765,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "activity-pulse",
@@ -3451,8 +4792,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "gauge",
@@ -3468,8 +4818,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "shopping-cart",
@@ -3485,8 +4844,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "shopping-bag",
@@ -3502,8 +4870,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "storefront",
@@ -3519,8 +4896,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "receipt",
@@ -3536,8 +4922,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "wallet",
@@ -3553,8 +4948,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "coins",
@@ -3570,8 +4974,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bank",
@@ -3587,8 +5000,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "price-tag",
@@ -3604,8 +5026,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "percent-off",
@@ -3621,8 +5052,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "truck",
@@ -3638,8 +5078,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "parcel-check",
@@ -3655,8 +5104,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "barcode",
@@ -3672,8 +5130,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "scan-corners",
@@ -3689,8 +5156,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "refund",
@@ -3706,8 +5182,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "mail",
@@ -3723,8 +5208,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "mail-open",
@@ -3740,8 +5234,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "inbox",
@@ -3757,8 +5260,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "send",
@@ -3774,8 +5286,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "reply",
@@ -3791,8 +5312,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "reply-all",
@@ -3808,8 +5338,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "megaphone",
@@ -3825,8 +5364,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "video-off",
@@ -3842,8 +5390,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "headphones",
@@ -3859,8 +5416,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "volume-up",
@@ -3876,8 +5442,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "volume-mute",
@@ -3893,8 +5468,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "pause",
@@ -3910,8 +5494,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "skip-next",
@@ -3927,8 +5520,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "skip-previous",
@@ -3944,8 +5546,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bluetooth",
@@ -3961,8 +5572,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "ethernet",
@@ -3978,8 +5598,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "usb",
@@ -3995,8 +5624,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "plug",
@@ -4012,8 +5650,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "printer",
@@ -4029,8 +5676,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "keyboard",
@@ -4046,8 +5702,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "mouse",
@@ -4063,8 +5728,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "chip",
@@ -4080,8 +5754,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "hard-drive",
@@ -4097,8 +5780,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "monitor-play",
@@ -4114,8 +5806,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "battery-charge",
@@ -4131,8 +5832,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "signal-bars",
@@ -4148,8 +5858,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "plug-off",
@@ -4165,8 +5884,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "shield-check",
@@ -4182,8 +5910,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "shield-alert",
@@ -4199,8 +5936,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "fingerprint",
@@ -4216,8 +5962,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "scan-face",
@@ -4233,8 +5988,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "user-check",
@@ -4250,8 +6014,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "user-off",
@@ -4267,8 +6040,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "badge-verified",
@@ -4284,8 +6066,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "key-round",
@@ -4301,8 +6092,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "id-card",
@@ -4318,8 +6118,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "accessibility",
@@ -4335,8 +6144,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "eye-scan",
@@ -4352,8 +6170,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "keyboard-focus",
@@ -4370,8 +6197,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "sidebar-left",
@@ -4387,8 +6223,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "sidebar-right",
@@ -4404,8 +6249,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "panel-top",
@@ -4421,8 +6275,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "panel-bottom",
@@ -4438,8 +6301,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "columns-two",
@@ -4455,8 +6327,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "columns-three",
@@ -4472,8 +6353,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "fullscreen",
@@ -4489,8 +6379,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "fullscreen-exit",
@@ -4506,8 +6405,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "window-stack",
@@ -4523,8 +6431,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "split-view",
@@ -4540,8 +6457,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "expand-all",
@@ -4557,8 +6483,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "collapse-all",
@@ -4574,8 +6509,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "map-pin",
@@ -4591,8 +6535,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "map-route",
@@ -4608,8 +6561,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "compass",
@@ -4625,8 +6587,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "navigation-pointer",
@@ -4642,8 +6613,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "building",
@@ -4659,8 +6639,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "warehouse",
@@ -4676,8 +6665,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "car",
@@ -4693,8 +6691,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "train",
@@ -4710,8 +6717,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bus",
@@ -4727,8 +6743,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "bike",
@@ -4744,8 +6769,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "flag",
@@ -4761,8 +6795,17 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   },
   {
     "name": "signpost",
@@ -4777,7 +6820,178 @@
       "filled",
       "duotone"
     ],
-    "has3d": false,
-    "hues3d": []
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "microsoft",
+    "group": "Brands",
+    "keywords": [
+      "microsoft",
+      "company",
+      "brand",
+      "logo"
+    ],
+    "description": "Microsoft company mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "adobe",
+    "group": "Brands",
+    "keywords": [
+      "adobe",
+      "company",
+      "brand",
+      "logo"
+    ],
+    "description": "Adobe company mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "vercel",
+    "group": "Brands",
+    "keywords": [
+      "vercel",
+      "company",
+      "brand",
+      "logo"
+    ],
+    "description": "Vercel company mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "netflix",
+    "group": "Brands",
+    "keywords": [
+      "netflix",
+      "company",
+      "brand",
+      "logo"
+    ],
+    "description": "Netflix company mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "figma",
+    "group": "Brands",
+    "keywords": [
+      "figma",
+      "company",
+      "brand",
+      "logo"
+    ],
+    "description": "Figma company mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "linear",
+    "group": "Brands",
+    "keywords": [
+      "linear",
+      "company",
+      "brand",
+      "logo"
+    ],
+    "description": "Linear company mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   }
 ]

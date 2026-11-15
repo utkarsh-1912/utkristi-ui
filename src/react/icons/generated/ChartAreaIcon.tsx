@@ -6,7 +6,7 @@ export const ChartAreaIconData = {
   line: "M4 5v14h16M7 16l4-5 3 2 5-7v10Z",
   filled: "M3 4h2v14h16v3H3Zm4 12 4-6 3 2 6-8v12Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

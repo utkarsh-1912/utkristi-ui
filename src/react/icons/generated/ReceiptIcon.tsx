@@ -6,7 +6,7 @@ export const ReceiptIconData = {
   line: "M6 3h12v18l-3-2-3 2-3-2-3 2zm3 5h6m-6 4h6m-6 4h3",
   filled: "M5 2h14v20l-3.5-2-3.5 2-3.5-2L5 22Zm3 4v2h8V6Zm0 4v2h8v-2Zm0 4v2h4v-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

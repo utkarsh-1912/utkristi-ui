@@ -1,4 +1,4 @@
-import { forwardRef, type HTMLAttributes, type LabelHTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useId, useState, type HTMLAttributes, type LabelHTMLAttributes, type ReactNode } from 'react';
 import { cx, type CSSVariables } from './utils/cx.js';
 import { Button } from './Button.js';
 
@@ -110,11 +110,38 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
   </nav>;
 });
 
-export const Sidebar = forwardRef<HTMLElement, HTMLAttributes<HTMLElement> & {
-  heading?: ReactNode; collapsed?: boolean;
-}>(function Sidebar({ heading, collapsed, className, children, ...props }, ref) {
-  return <aside {...props} ref={ref} className={cx('sidebar', className)} data-collapsed={collapsed || undefined}>
-    {heading != null && <div className="sidebar-heading">{heading}</div>}
-    <div className="sidebar-content" hidden={collapsed}>{children}</div>
+export interface SidebarProps extends HTMLAttributes<HTMLElement> {
+  heading?: ReactNode;
+  variant?: 'panel' | 'rail';
+  collapsible?: boolean;
+  collapsed?: boolean;
+  defaultCollapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
+  toggleLabel?: string;
+}
+
+export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar({
+  heading, variant = 'panel', collapsible = false, collapsed, defaultCollapsed = false,
+  onCollapsedChange, toggleLabel = 'Toggle sidebar navigation', className, children, ...props
+}, ref) {
+  const contentId = useId();
+  const [localCollapsed, setLocalCollapsed] = useState(defaultCollapsed);
+  const isCollapsed = collapsed ?? localCollapsed;
+  return <aside {...props} ref={ref} className={cx('sidebar', variant === 'rail' && 'sidebar-rail', className)}
+    data-collapsed={isCollapsed || undefined}>
+    {collapsible ? <div className="sidebar-header">
+      {heading != null && <div className="sidebar-heading">{heading}</div>}
+      <Button variant="ghost" size="sm" className="sidebar-toggle" type="button"
+        aria-label={toggleLabel} aria-expanded={!isCollapsed} aria-controls={contentId}
+        onClick={() => {
+          if (collapsed === undefined) setLocalCollapsed(!isCollapsed);
+          onCollapsedChange?.(!isCollapsed);
+        }}>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+          <path d="m4 6 4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </Button>
+    </div> : heading != null && <div className="sidebar-heading">{heading}</div>}
+    <div className="sidebar-content" id={contentId} hidden={isCollapsed}>{children}</div>
   </aside>;
 });

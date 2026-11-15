@@ -6,7 +6,7 @@ export const MouseIconData = {
   line: "M6 10a6 6 0 0 1 12 0v5a6 6 0 0 1-12 0Zm6-6v6",
   filled: "M12 3a7 7 0 0 1 7 7v5a7 7 0 1 1-14 0v-5a7 7 0 0 1 7-7Zm-1 2v6h2V5Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

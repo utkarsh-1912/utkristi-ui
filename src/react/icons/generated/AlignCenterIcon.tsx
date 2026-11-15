@@ -6,7 +6,7 @@ export const AlignCenterIconData = {
   line: "M4 6h16M7 10h10M4 14h16M7 18h10",
   filled: "M3 5h18v2h-18ZM6 9h12v2h-12ZM3 13h18v2h-18ZM6 17h12v2h-12Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

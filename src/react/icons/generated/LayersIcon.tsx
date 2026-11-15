@@ -6,7 +6,7 @@ export const LayersIconData = {
   line: "m12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5",
   filled: "M11.5 2.1a1 1 0 0 1 1 0l9 5a1 1 0 0 1 0 1.8l-9 5a1 1 0 0 1-1 0l-9-5a1 1 0 0 1 0-1.8l9-5ZM3.5 11.1l8.5 4.7 8.5-4.7a1 1 0 1 1 1 1.8l-9 5a1 1 0 0 1-1 0l-9-5a1 1 0 1 1 1-1.8Zm0 4 8.5 4.7 8.5-4.7a1 1 0 1 1 1 1.8l-9 5a1 1 0 0 1-1 0l-9-5a1 1 0 1 1 1-1.8Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

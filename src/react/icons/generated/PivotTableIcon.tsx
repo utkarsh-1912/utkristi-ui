@@ -6,7 +6,7 @@ export const PivotTableIconData = {
   line: "M4 4h16v16H4zm0 6h16m-10 0v10m3-5h4m-2-2v4",
   filled: "M5 3h14q2 0 2 2v14q0 2-2 2H5q-2 0-2-2V5q0-2 2-2ZM6 6h12v2h-12ZM6 10h3v8h-3ZM13 12h2v2h2v2h-2v2h-2v-2h-2v-2h2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

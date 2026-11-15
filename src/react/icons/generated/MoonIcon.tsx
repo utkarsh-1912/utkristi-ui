@@ -6,7 +6,7 @@ export const MoonIconData = {
   line: "M20.9 13.34A9 9 0 0 1 10.66 3.1 9 9 0 1 0 20.9 13.34Z",
   filled: "M11.2 2.2a1 1 0 0 1 .7 1.3A7 7 0 0 0 19.5 12a1 1 0 0 1 1.3.7A9.9 9.9 0 1 1 9.9 2a1 1 0 0 1 1.3.2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

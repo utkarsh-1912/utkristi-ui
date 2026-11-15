@@ -6,7 +6,7 @@ export const StorefrontIconData = {
   line: "M4 8 6 4h12l2 4v3H4zm1 3v9h14v-9m-9 9v-5h4v5",
   filled: "M5 3h14l3 6v3h-2v9H4v-9H2V9Zm1 9v7h3v-5h6v5h3v-7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

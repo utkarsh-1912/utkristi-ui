@@ -6,7 +6,7 @@ export const SignalBarsIconData = {
   line: "M4 19v-4m5 4v-7m5 7V8m5 11V4",
   filled: "M3 14h3v6h-3ZM8 11h3v9h-3ZM13 7h3v13h-3ZM18 3h3v17h-3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

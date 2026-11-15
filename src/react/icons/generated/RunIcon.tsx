@@ -6,7 +6,7 @@ export const RunIconData = {
   line: "m6 4 14 8-14 8V4Z",
   filled: "M5.5 3.1a1 1 0 0 1 1 0l14 8a1 1 0 0 1 0 1.8l-14 8A1 1 0 0 1 5 20V4a1 1 0 0 1 .5-.9Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

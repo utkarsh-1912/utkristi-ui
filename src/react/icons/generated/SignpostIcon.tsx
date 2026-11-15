@@ -6,7 +6,7 @@ export const SignpostIconData = {
   line: "M12 3v18M5 6h12l4 3-4 3H5zm14 8H8l-4 3 4 3h11z",
   filled: "M11 2h2v3h4l5 4-5 4h-4v1h7v7h-7v1h-2v-1H8l-6-4 6-3h3v-1H4V5h7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

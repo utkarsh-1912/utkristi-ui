@@ -1,6 +1,6 @@
 # Utkristi UI
 
-Utkristi UI is the shared design system for the Utkristi ecosystem. It includes Night, Paper, and Glass themes, CSS custom properties, a Tailwind CSS 3.4 preset and plugin, a standalone stylesheet, and typed React components.
+Utkristi UI is the shared design system for the Utkristi ecosystem. It includes twelve built-in themes, CSS custom properties, a Tailwind CSS 3.4 preset and plugin, a standalone stylesheet, and typed React components.
 
 [Marketing overview preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/overview.png)
 
@@ -14,13 +14,57 @@ Utkristi UI is the shared design system for the Utkristi ecosystem. It includes 
 
 | Night | Paper | Glass |
 | --- | --- | --- |
-| ![Night showcase](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/night.png) | ![Paper showcase](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/paper.png) | ![Glass showcase](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/glass.png) |
+| ![Night showcase](docs/screenshots/theme-night.png) | ![Paper showcase](docs/screenshots/theme-paper.png) | ![Glass showcase](docs/screenshots/theme-glass.png) |
+
+[Trading](docs/screenshots/theme-trading.png) · [Snow](docs/screenshots/theme-snow.png) · [Aurora](docs/screenshots/theme-aurora.png) · [Sepia](docs/screenshots/theme-sepia.png) · [Midnight](docs/screenshots/theme-midnight.png) · [Forest](docs/screenshots/theme-forest.png) · [Sunset](docs/screenshots/theme-sunset.png) · [High Contrast](docs/screenshots/theme-high-contrast.png) · [Terminal](docs/screenshots/theme-terminal.png)
 
 | Mobile docs | Mobile navigation |
 | --- | --- |
 | ![Mobile Glass docs with the index and Command preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/mobile-docs.png) | ![Compact mobile navigation panel in Glass](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/mobile-menu.png) |
 
-The docs include component variants and a Blocks library with working project management, account, settings, and pricing examples. Open any example in the sandbox to try it in Night, Paper, or Glass.
+Choose Night, Paper, Glass, Trading, Snow, Aurora, Sepia, Midnight, Forest, Sunset, High Contrast, or Terminal. The same theme IDs work in React, standalone CSS, and Tailwind.
+
+| Workspace variant | Component layout | Example |
+| --- | --- | --- |
+| `trading` | Narrow icon rail, compact content padding, squared frame | Execution desk with density, refresh, and filter controls |
+| `terminal` | Horizontal command navigation, monospace content | Operations console with local command history |
+| `studio` | Spacious navigation and content area | Creative studio with asset selection and inspector |
+| `office` | Labelled sidebar and responsive mobile navigation | Daily tasks and a team directory |
+
+[Execution desk preview](docs/screenshots/execution-desk.png) · [Operations console preview](docs/screenshots/console-workspace.png) · [Creative studio preview](docs/screenshots/creative-workspace.png) · [Team operations preview](docs/screenshots/office-workspace.png) · [Workspace sandbox](docs/screenshots/workspace-sandbox.png)
+
+Select layout and palette independently. A Trading layout can use Snow, and a Studio layout can use Aurora. Open **Workspace** in the component docs to compare the four layouts and edit their React or standalone HTML examples.
+
+~~~tsx
+import { Icon, Workspace } from '@utkristi/ui';
+
+<Workspace
+  title="Execution"
+  variant="trading"
+  defaultActiveId="orders"
+  navigation={[
+    { id: 'orders', label: 'Orders', icon: <Icon name="table" />, content: <OrderBlotter /> },
+    { id: 'activity', label: 'Activity', icon: <Icon name="history" />, content: <Activity /> },
+  ]}
+  status="Sample market data"
+/>
+~~~
+
+Supply unique, stable navigation IDs. Use `activeId` and `onActiveChange` when routing is controlled by the application. The workspace mounts the active destination. Keep persistent form state in the parent when users need to retain it across destinations.
+
+For compact horizontal navigation, set `presentation="icons"` on `Navbar` and supply an `icon` and meaningful `label` on each link. Text appears on hover and keyboard focus, remains available to assistive technology, and stays visible in mobile navigation.
+
+The icon catalog contains 262 interface icons and company marks, with 2.5D SVG and raster 3D coverage for every entry. Microsoft, Adobe, Vercel, Netflix, Figma, and Linear join the existing social marks. Company marks identify their respective owners and imply no affiliation with Utkristi.
+
+~~~tsx
+<Icon name="settings" variant="2.5d" hue="violet" size={64} />
+<Icon name="database" variant="3d" hue="teal" size={96} />
+<Icon name="microsoft" variant="filled" label="Microsoft" size={24} />
+~~~
+
+The software clay renderer generates PNG assets at 96px and 160px in eight hues with Night, Paper, and Glass lighting. Additional appearances reuse the compatible light or dark lighting. Custom colors use live SVG extrusion. AVIF and WebP sources are included when those encoded assets are available. Large artwork is intended for feature cards and empty states, while line icons work at toolbar sizes.
+
+The docs include component variants and a Blocks library with working project management, account, settings, and pricing examples. Open any example in the sandbox to try it in any built-in theme.
 
 The Project Worklist demonstrates a controlled remote `DataTable`, request cancellation, retries, and bulk actions. Audit Explorer adds date filtering, visible columns, and a saved view. Roles and Access demonstrates permission editing in a sheet. All three include editable TSX and API references. The docs build also emits the worklist source as `r/project-worklist.json` for use with the matching package build.
 
@@ -116,7 +160,7 @@ The standalone CSS requires `color-mix()`. Use Chrome or Edge 111+, Safari 16.2+
 
 ## Component catalog
 
-The docs show the component catalog in Night, Paper, and Glass. Use React for stateful behavior or the CSS classes and Tailwind utilities to build native HTML compositions. Utkristi’s components have their own APIs and reuse the same theme tokens across apps.
+The docs show the component catalog in all built-in themes. Use React for stateful behavior or the CSS classes and Tailwind utilities to build native HTML compositions. Utkristi’s components have their own APIs and reuse the same theme tokens across apps.
 
 Use `Typography` with `typeface="archivo"`, `"geist"`, `"inter"`, `"manrope"`, or `"serif"` (Newsreader). Import `@utkristi/ui/fonts.css` to load the web fonts, or override the font tokens for your app. Tailwind also exposes `font-geist`, `font-inter`, `font-manrope`, and `font-serif`.
 
@@ -159,6 +203,8 @@ See the [competitive audit and implementation roadmap](https://github.com/utkars
 | `npm run docs:preview` | Preview the documentation build |
 | `npm run docs:stress` | Run browser checks and exercise repeated sandbox runs under CPU throttling |
 | `npm run screenshots` | Capture all three themes in headless Edge, sweep every docs route at 375px, and check key pages from 320px to 1440px |
+| `node scripts/screenshots.mjs --themes-only` | Capture all twelve theme showcases and check each at 375px in headless Edge |
+| `node scripts/screenshots.mjs --workspaces-only` | Verify workspace navigation at desktop and mobile widths, check the workspace sandbox, and refresh marketing screenshots |
 | `npm run screenshots:capture` | Refresh the overview, showcases, icon catalog, sandbox, and mobile screenshots |
 
 The screenshot script uses Playwright with Chromium when Edge is unavailable. Install them in that environment before running the script.

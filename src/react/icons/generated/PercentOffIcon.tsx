@@ -6,7 +6,7 @@ export const PercentOffIconData = {
   line: "M5 19 19 5M4 7a3 3 0 1 0 6 0 3 3 0 0 0-6 0Zm10 10a3 3 0 1 0 6 0 3 3 0 0 0-6 0Z",
   filled: "M3.5 19 19 3.5 20.5 5 5 20.5ZM11 7a4 4 0 1 1 -8 0a4 4 0 1 1 8 0ZM8.6 7a1.6 1.6 0 1 1 -3.2 0a1.6 1.6 0 1 1 3.2 0ZM21 17a4 4 0 1 1 -8 0a4 4 0 1 1 8 0ZM18.6 17a1.6 1.6 0 1 1 -3.2 0a1.6 1.6 0 1 1 3.2 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

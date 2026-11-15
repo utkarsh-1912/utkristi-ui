@@ -6,7 +6,7 @@ export const PlugOffIconData = {
   line: "M9 5v4m6-4v5m-7 0h8v3a4 4 0 0 1-8 0zm4 7v4M3 3l18 18",
   filled: "M8 4h2v5h4V4h2v5h2v4a6 6 0 0 1-5 5.9V22h-2v-3.1A6 6 0 0 1 6 13V9h2ZM2 3.6 3.6 2 22 20.4 20.4 22Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

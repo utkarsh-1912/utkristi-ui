@@ -6,7 +6,7 @@ export const TrendUpIconData = {
   line: "m3 17 6-6 4 4 7-9m-6 0h6v6",
   filled: "M2 17l7-7 4 4 5-6h-4V5h8v8h-3V9.5l-6 8-4-4-5 5Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

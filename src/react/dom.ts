@@ -1,3 +1,5 @@
+import { isTheme, themeIds } from './theme/themes.js';
+
 /** Connect data-ut-open-dialog buttons to native dialogs within this root. */
 export function initDialogs(root: Document | HTMLElement = document): () => void {
   const owner = root.ownerDocument ?? root as Document;
@@ -196,10 +198,10 @@ export function initActions(root: Document | HTMLElement = document): () => void
   const change = (event: Event) => {
     const select = event.target;
     if (!(select instanceof HTMLSelectElement) || !select.hasAttribute('data-ut-theme')) return;
-    if (!['dark', 'light', 'glass', 'system'].includes(select.value)) return;
+    if (!isTheme(select.value)) return;
     const target = select.closest<HTMLElement>('[data-theme]') ?? owner.documentElement;
     target.dataset.theme = select.value;
-    for (const theme of ['dark', 'light', 'glass']) target.classList.toggle(theme, theme === select.value);
+    for (const theme of themeIds) target.classList.toggle(theme, theme === select.value);
   };
   root.addEventListener('click', click);
   root.addEventListener('input', input);

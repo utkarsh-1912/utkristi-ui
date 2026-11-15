@@ -6,7 +6,7 @@ export const ListChecklistIconData = {
   line: "M4 6l1.7 1.7L8 5m3 1h9M4 12l1.7 1.7L8 11m3 1h9M4 18l1.7 1.7L8 17m3 1h9",
   filled: "M11 5h10v2h-10ZM11 11h10v2h-10ZM11 17h10v2h-10ZM3 5l2.6 1.5L8 3l1.8 1.5L5.8 9 3 6.9Zm0 6 2.6 1.5L8 9l1.8 1.5-4 4.5L3 12.9Zm0 6 2.6 1.5L8 15l1.8 1.5-4 4.5L3 18.9Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const ApiIconData = {
   line: "M7 5 3 12l4 7m10-14 4 7-4 7M10 8v3m4-3v3m-5 0h6v2a3 3 0 0 1-6 0v-2Zm3 5v3",
   filled: "M6.3 4 8 5l-4 7 4 7-1.7 1-4.6-8 4.6-8Zm11.4 0 4.6 8-4.6 8-1.7-1 4-7-4-7 1.7-1ZM9 7h2v3h2V7h2v3h1v3a4 4 0 0 1-3 3.9V20h-2v-3.1A4 4 0 0 1 8 13v-3h1V7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

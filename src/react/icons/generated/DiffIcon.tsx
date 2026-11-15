@@ -6,7 +6,7 @@ export const DiffIconData = {
   line: "M5 4h14v16H5zm0 8h14M9 8h6m-3-2v4m-3 6h6",
   filled: "M5 3h14q2 0 2 2v14q0 2-2 2H5q-2 0-2-2V5q0-2 2-2ZM7 7h10v2h-10ZM11 5h2v2h-2ZM11 9h2v1.5h-2ZM5 11.5h14v1h-14ZM7 15h10v2h-10Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

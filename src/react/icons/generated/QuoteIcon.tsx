@@ -6,7 +6,7 @@ export const QuoteIconData = {
   line: "M10 11H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v6c0 2.5-1.5 4-4 4m13-6h-4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v6c0 2.5-1.5 4-4 4",
   filled: "M6 5h3a2 2 0 0 1 2 2v6c0 3-2 5-5 5a1 1 0 1 1 0-2c1.8 0 3-1 3-3v-1H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm9 0h3a2 2 0 0 1 2 2v6c0 3-2 5-5 5a1 1 0 1 1 0-2c1.8 0 3-1 3-3v-1h-3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

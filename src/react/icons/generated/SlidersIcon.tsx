@@ -6,7 +6,7 @@ export const SlidersIconData = {
   line: "M4 7h9m4 0h3M13 5v4M4 12h3m4 0h9M7 10v4M4 17h11m4 0h1m-5-2v4",
   filled: "M13 4a1 1 0 0 1 1 1v1h6a1 1 0 1 1 0 2h-6v1a1 1 0 1 1-2 0V8H4a1 1 0 1 1 0-2h8V5a1 1 0 0 1 1-1ZM7 9a1 1 0 0 1 1 1v1h12a1 1 0 1 1 0 2H8v1a1 1 0 1 1-2 0v-1H4a1 1 0 1 1 0-2h2v-1a1 1 0 0 1 1-1Zm8 5a1 1 0 0 1 1 1v1h4a1 1 0 1 1 0 2h-4v1a1 1 0 1 1-2 0v-1H4a1 1 0 1 1 0-2h10v-1a1 1 0 0 1 1-1Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

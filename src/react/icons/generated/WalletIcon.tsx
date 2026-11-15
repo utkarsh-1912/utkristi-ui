@@ -6,7 +6,7 @@ export const WalletIconData = {
   line: "M3 7a3 3 0 0 1 3-3h12v3m-15 0h18v13H3zm18 5h-6v4h6m-3-2h.01",
   filled: "M3 5q0-2 3-2h13v3H5v1h16v4h-6q-2 0-2 2v2q0 2 2 2h6v4H3Zm12 8h6v2h-6Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

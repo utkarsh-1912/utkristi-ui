@@ -6,7 +6,7 @@ export const SortIconData = {
   line: "m4 8 3-3 3 3M7 5v14m13-3-3 3-3-3m3 3V5",
   filled: "M6.3 4.3a1 1 0 0 1 1.4 0l3 3a1 1 0 0 1-1.4 1.4L8 7.4V19a1 1 0 1 1-2 0V7.4L4.7 8.7a1 1 0 0 1-1.4-1.4l3-3ZM17 4a1 1 0 0 1 1 1v11.6l1.3-1.3a1 1 0 1 1 1.4 1.4l-3 3a1 1 0 0 1-1.4 0l-3-3a1 1 0 1 1 1.4-1.4l1.3 1.3V5a1 1 0 0 1 1-1Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

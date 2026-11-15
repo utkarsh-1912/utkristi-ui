@@ -11,7 +11,7 @@ const blocks = blockPages.map(([slug, { name, description, category }]) => ({ hr
 const guideDetails: Record<string, string> = {
   Overview: 'Explore the shared design system.',
   'Getting started': 'Install the kit and add it to your first app.',
-  Theming: 'Use Night, Paper, Glass, or your own theme.',
+  Theming: 'Use a built-in appearance or create your own theme.',
   Tokens: 'Browse colours, spacing, and contrast.',
   Icons: 'Find SVG icons and dimensional artwork.',
   Typography: 'Compare typefaces and reading styles.',

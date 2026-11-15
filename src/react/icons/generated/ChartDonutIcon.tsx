@@ -6,7 +6,7 @@ export const ChartDonutIconData = {
   line: "M12 3a9 9 0 1 0 9 9h-5a4 4 0 1 1-4-4Zm4 1a8 8 0 0 1 4 4h-4Z",
   filled: "M11 2v6a4 4 0 1 0 5 5h6a10 10 0 1 1-11-11Zm3 .2A10 10 0 0 1 21.8 10H14Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

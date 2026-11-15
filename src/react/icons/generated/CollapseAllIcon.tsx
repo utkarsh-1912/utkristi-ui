@@ -6,7 +6,7 @@ export const CollapseAllIconData = {
   line: "M4 5h16M4 12h16M4 19h16m-9-2 2-2 2 2m-4-7 2-2 2 2",
   filled: "M3 4h18v2h-18ZM3 11h18v2h-18ZM3 19h18v2h-18ZM9 10l3-3 3 3h-2l-1-1.2-1 1.2Zm0 7 3-3 3 3h-2l-1-1.2-1 1.2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

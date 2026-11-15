@@ -6,7 +6,7 @@ export const KeyIconData = {
   line: "m14.5 9.5 6.5-6.5m-2 2 2 2m-4.5.5 2 2M8 10a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z",
   filled: "M20.3 2.3a1 1 0 0 1 1.4 1.4L20.4 5l1.3 1.3a1 1 0 0 1-1.4 1.4L19 6.4l-1.1 1.1 1.3 1.3a1 1 0 0 1-1.4 1.4l-1.3-1.3-3 3a6 6 0 1 1-1.4-1.4l8.2-8.2ZM8 13a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -1,3 +1,4 @@
+import { themes } from '@utkristi/ui';
 import { useState } from 'react';
 import {
   Accordion, AlertDialog, AspectRatio, Attachment, Avatar, AvatarGroup, Badge, Banner, Breadcrumb, Bubble, Button, ButtonGroup,
@@ -112,6 +113,11 @@ const horizontalTrackHtml = `<div class="carousel"><div class="carousel-viewport
   <div class="carousel-slide">Discover</div><div class="carousel-slide">Plan</div><div class="carousel-slide">Launch</div>
 </div><div class="sample-row"><button class="btn btn-ghost" type="button" data-ut-track="variant-track" data-ut-step="previous">Previous</button>
 <button class="btn btn-ghost" type="button" data-ut-track="variant-track">Next</button></div></div>`;
+
+const themeSelectMarkup = `<label class="field">Theme<select class="select" data-ut-theme>
+  ${themes.map(({ id, label }) => `<option value="${id}">${label}</option>`).join("\n  ")}
+  <option value="system">Auto</option>
+</select></label>`;
 
 export const componentVariants = {
   'button--full-width': example('Full-width action', 'Stretch a primary action to the width of its form.',
@@ -296,10 +302,10 @@ export const componentVariants = {
     () => <Stat value="97.4" suffix="%" label="Delivery success" desc="Last 30 days" />,
     '<div class="stat"><span class="label">Delivery success</span><strong class="stat-value">97.4%</strong><p>Last 30 days</p></div>'),
   'theme-toggle--select': example('Theme dropdown', 'Choose any appearance from a compact native select.',
-    () => <ThemeSelect />, '<label class="field">Theme<select class="select" data-ut-theme><option value="dark">Night</option><option value="light">Paper</option><option value="glass">Glass</option></select></label>'),
+    () => <ThemeSelect />, themeSelectMarkup),
   'theme-switch--settings': example('Theme switch in settings', 'Present the theme controls inside a settings panel.',
     () => <Card><CardBody><h3>Appearance</h3><ThemeSwitch /></CardBody></Card>,
-    '<section class="card card-body"><h3>Appearance</h3><label class="field">Theme<select class="select" data-ut-theme><option value="dark">Night</option><option value="light">Paper</option><option value="glass">Glass</option></select></label></section>'),
+    `<section class="card card-body"><h3>Appearance</h3>${themeSelectMarkup}</section>`),
   'rich-text--checklist': example('Structured release notes', 'Render headings, lists, and inline code in a note.',
     () => <RichText text={'## Release checklist\n\n- Run `npm test`\n- Publish the package'} />,
     '<article class="rt"><h2>Release checklist</h2><ul><li>Run <code>npm test</code></li><li>Publish the package</li></ul></article>'),

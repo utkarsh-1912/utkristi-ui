@@ -6,7 +6,7 @@ export const CarIconData = {
   line: "m5 11 2-5h10l2 5M4 11h16v6H4zm2 6v3m12-3v3m-11-6h.01m10 0h.01",
   filled: "M4 10 6 5h12l2 5h1v8h-2v3h-2v-3H7v3H5v-3H3v-8Zm2.2 0h11.6l-1.2-3H7.4ZM8 14a1 1 0 1 1 -2 0a1 1 0 1 1 2 0ZM18 14a1 1 0 1 1 -2 0a1 1 0 1 1 2 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

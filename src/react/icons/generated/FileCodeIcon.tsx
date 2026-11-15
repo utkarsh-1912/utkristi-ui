@@ -6,7 +6,7 @@ export const FileCodeIconData = {
   line: "M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Zm0 0v5h5m-9 5-2 2 2 2m4-4 2 2-2 2",
   filled: "M7 2h7.4a2 2 0 0 1 1.4.6l3.6 3.6a2 2 0 0 1 .6 1.4V19a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3Zm3.7 10.3a1 1 0 0 0-1.4 0l-2 2a1 1 0 0 0 0 1.4l2 2a1 1 0 0 0 1.4-1.4L9.4 15l1.3-1.3a1 1 0 0 0 0-1.4Zm2.6 0a1 1 0 0 0 0 1.4l1.3 1.3-1.3 1.3a1 1 0 0 0 1.4 1.4l2-2a1 1 0 0 0 0-1.4l-2-2a1 1 0 0 0-1.4 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

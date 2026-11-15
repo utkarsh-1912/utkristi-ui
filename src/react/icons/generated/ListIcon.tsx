@@ -6,7 +6,7 @@ export const ListIconData = {
   line: "M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01",
   filled: "M4 4.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM8 5h12a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2Zm-4 5.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM8 11h12a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2Zm-4 5.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM8 17h12a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

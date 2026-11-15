@@ -6,7 +6,7 @@ export const ChartBarsHorizontalIconData = {
   line: "M4 4v16h16M8 7h7m-7 5h11m-11 5h5",
   filled: "M3 3h2v16h16v2H3ZM7 5h9v3h-9ZM7 10h13v3h-13ZM7 15h7v3h-7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

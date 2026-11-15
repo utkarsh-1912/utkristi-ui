@@ -6,7 +6,7 @@ export const UnlockIconData = {
   line: "M6 11h12a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2Zm2 0V7a4 4 0 0 1 7.5-2M12 15v2",
   filled: "M12 2a5 5 0 0 1 4.6 3 1 1 0 1 1-1.8.8A3 3 0 0 0 9 7v3h9a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3h1V7a5 5 0 0 1 5-5Zm0 12a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

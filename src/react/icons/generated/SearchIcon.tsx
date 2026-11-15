@@ -6,7 +6,7 @@ export const SearchIconData = {
   line: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm9 16-4.35-4.35",
   filled: "M11 3a8 8 0 1 0 4.9 14.3l3.4 3.4a1 1 0 0 0 1.4-1.4l-3.4-3.4A8 8 0 0 0 11 3Zm-5 8a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const FileDiffIconData = {
   line: "M6 3h8l4 4v14H6zm8 0v5h4M9 12h6m-3-2v4m-3 3h6",
   filled: "M5 2h10l4 4v16H5Zm9 2v4h3Zm-5 7v2h2v2h2v-2h2v-2h-2V9h-2v2Zm0 6v2h6v-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

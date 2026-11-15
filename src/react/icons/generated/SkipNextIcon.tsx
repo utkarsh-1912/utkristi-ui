@@ -6,7 +6,7 @@ export const SkipNextIconData = {
   line: "m5 5 11 7-11 7zm13 0v14",
   filled: "M4 4v16l13-8Zm14 0h3v16h-3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

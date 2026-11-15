@@ -6,7 +6,7 @@ export const ShoppingBagIconData = {
   line: "M5 8h14l2 13H3zm4 2V6a3 3 0 0 1 6 0v4",
   filled: "M4 7h3V6a5 5 0 0 1 10 0v1h3l2 15H2Zm5 0h6V6a3 3 0 0 0-6 0Zm0 2v3h2V9Zm4 0v3h2V9Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

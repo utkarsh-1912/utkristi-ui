@@ -6,7 +6,7 @@ export const HistoryIconData = {
   line: "M3 12a9 9 0 1 0 3-6.7L3 8m0-4v4h4m5-1v5l3 2",
   filled: "M12 2a10 10 0 1 1-9.5 13.1 1 1 0 1 1 1.9-.6A8 8 0 1 0 6.3 6.3L5 7.6H7a1 1 0 1 1 0 2H3a1 1 0 0 1-1-1V4.6a1 1 0 1 1 2 0V6A10 10 0 0 1 12 2Zm1 5v4.5l2.6 1.7a1 1 0 1 1-1.1 1.7l-3-2A1 1 0 0 1 11 12V7a1 1 0 1 1 2 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

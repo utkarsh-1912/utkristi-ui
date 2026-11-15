@@ -6,7 +6,7 @@ export const BadgeVerifiedIconData = {
   line: "M12 3l3 2 4 .5.5 4L22 12l-2.5 2.5-.5 4-4 .5-3 2-3-2-4-.5-.5-4L2 12l2.5-2.5.5-4L9 5Zm-3 9 2 2 4-4",
   filled: "M12 2l3.3 2.2 4.6.6.6 4.4L23 12l-2.5 2.8-.6 4.4-4.6.6L12 22l-3.3-2.2-4.6-.6-.6-4.4L1 12l2.5-2.8.6-4.4 4.6-.6Zm-4 10 3 3.2 5.2-5.3-1.4-1.4-3.8 3.8-1.6-1.7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const PinIconData = {
   line: "M9 4h6l1 6 3 3v2H5v-2l3-3 1-6ZM12 15v6",
   filled: "M8 3h8a1 1 0 0 1 1 1.2l-.9 5.4 2.6 2.6a1 1 0 0 1 .3.7v2a1 1 0 0 1-1 1h-5v5a1 1 0 1 1-2 0v-5H6a1 1 0 0 1-1-1v-2a1 1 0 0 1 .3-.7l2.6-2.6L7 4.2A1 1 0 0 1 8 3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const IndentDecreaseIconData = {
   line: "M4 5h16m-9 5h9m-9 4h9M4 19h16M7 9l-3 3 3 3",
   filled: "M3 4h18v2h-18ZM11 9h10v2h-10ZM11 13h10v2h-10ZM3 18h18v2h-18ZM8 8l-5 4 5 4V8Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

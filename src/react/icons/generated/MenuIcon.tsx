@@ -6,7 +6,7 @@ export const MenuIconData = {
   line: "M4 6h16M4 12h16M4 18h16",
   filled: "M4 5h16a1 1 0 1 1 0 2H4a1 1 0 1 1 0-2Zm0 6h16a1 1 0 1 1 0 2H4a1 1 0 1 1 0-2Zm0 6h16a1 1 0 1 1 0 2H4a1 1 0 1 1 0-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

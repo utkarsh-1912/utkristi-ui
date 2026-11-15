@@ -6,7 +6,7 @@ export const MusicIconData = {
   line: "M9 18V5l11-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm11-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z",
   filled: "M20.8 2.2A1 1 0 0 0 19.8 2l-11 2A1 1 0 0 0 8 5v9.5A4 4 0 1 0 10 18V8.8l9-1.6v5.3A4 4 0 1 0 21 16V3a1 1 0 0 0-.2-.8Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

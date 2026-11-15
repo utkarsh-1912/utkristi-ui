@@ -6,7 +6,7 @@ export const TextBoldIconData = {
   line: "M8 4h4.5a4 4 0 0 1 0 8H8m0-8v16h5.5a4 4 0 0 0 0-8H8",
   filled: "M6 3h6.4a5 5 0 0 1 3.8 8.2A5.2 5.2 0 0 1 13.8 21H6Zm3.5 3v4h2.8a2 2 0 1 0 0-4Zm0 7v5h3.9a2.5 2.5 0 1 0 0-5Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

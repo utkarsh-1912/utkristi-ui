@@ -6,7 +6,7 @@ export const BrushIconData = {
   line: "m18.4 3.6 2 2L11 15l-2-2 9.4-9.4ZM11 15c0 2.5-1.8 4.5-4.5 4.5-1.2 0-2.3-.5-3-1.3.9-.3 1.5-1.2 1.5-2.2 0-1.7 1.3-3 3-3l3 2Z",
   filled: "M17.7 2.9a1.5 1.5 0 0 1 2.1 0l1.3 1.3a1.5 1.5 0 0 1 0 2.1L12 15.4l-3.4-3.4 9.1-9.1ZM8 13c2.2 0 4 1.8 4 4 0 2.5-2.1 4-5 4-1.6 0-3-.6-3.8-1.6a.8.8 0 0 1 .4-1.3c1-.3 1.4-1 1.4-2.1 0-1.7 1.3-3 3-3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

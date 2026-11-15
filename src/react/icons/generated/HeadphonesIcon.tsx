@@ -6,7 +6,7 @@ export const HeadphonesIconData = {
   line: "M4 13v-2a8 8 0 0 1 16 0v2m-16 0h4v7H6q-2 0-2-2Zm16 0h-4v7h2q2 0 2-2Z",
   filled: "M3 11a9 9 0 0 1 18 0v7a3 3 0 0 1-3 3h-3v-9h3v-1a6 6 0 1 0-12 0v1h3v9H6a3 3 0 0 1-3-3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const LinkedinIconData = {
   line: "M16 8a6 6 0 0 1 6 6v6h-4v-6a2 2 0 0 0-4 0v6h-4v-6a6 6 0 0 1 6-6ZM2 9h4v11H2V9Zm2-5a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z",
   filled: "M16 8a6 6 0 0 1 6 6v6h-4v-6a2 2 0 0 0-4 0v6h-4v-6a6 6 0 0 1 6-6ZM2 9h4v11H2V9Zm2-5a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

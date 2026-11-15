@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { Button, Icon, Kbd, Loader, Select, type ResolvedTheme, useTheme } from '@utkristi/ui';
+import { Button, Icon, Kbd, Loader, Select, type ResolvedTheme, themes, useTheme } from '@utkristi/ui';
 import { CopyAction } from './CopyCode';
 import { SourceEditor } from './SourceEditor';
 import { blockPages, componentPages, examplePage, sandboxExamples as previews } from './examples';
@@ -264,7 +264,7 @@ export default function Playground({ component, editorMode, initialMotion }: { c
         const next = event.target.value as ResolvedTheme;
         setTheme(next);
         void compile(code, mode, next);
-      }}><option value="dark">Night</option><option value="light">Paper</option><option value="glass">Glass</option></Select></label>
+      }}>{themes.map(({ id, label }) => <option key={id} value={id}>{label}</option>)}</Select></label>
       <label htmlFor={id + "-mode"}>Editor<Select id={id + "-mode"} value={mode} onChange={(event) => changeMode(event.target.value as Mode)}>
         <option value="react">React / TSX</option><option value="html">HTML / CSS / JS</option>
       </Select></label>

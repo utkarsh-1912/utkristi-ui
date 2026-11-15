@@ -6,7 +6,7 @@ export const CodeIconData = {
   line: "m8 8-4 4 4 4m8-8 4 4-4 4m-2-10-4 12",
   filled: "M14.9 5.3a1 1 0 0 1 .6 1.3l-4 12a1 1 0 1 1-1.9-.6l4-12a1 1 0 0 1 1.3-.7ZM8.7 7.3a1 1 0 0 1 0 1.4L5.4 12l3.3 3.3a1 1 0 0 1-1.4 1.4l-4-4a1 1 0 0 1 0-1.4l4-4a1 1 0 0 1 1.4 0Zm6.6 0a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1 0 1.4l-4 4a1 1 0 0 1-1.4-1.4l3.3-3.3-3.3-3.3a1 1 0 0 1 0-1.4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

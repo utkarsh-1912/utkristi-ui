@@ -6,7 +6,7 @@ export const TextUnderlineIconData = {
   line: "M6 4v7a6 6 0 0 0 12 0V4M4 21h16",
   filled: "M4.5 3h3.3v8a4.2 4.2 0 0 0 8.4 0V3h3.3v8a7.5 7.5 0 1 1-15 0ZM3 19.5h18V22H3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

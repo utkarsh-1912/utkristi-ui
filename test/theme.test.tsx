@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { expect, test, vi } from 'vitest';
-import { ThemeProvider, ThemeSwitch, ThemeToggle, themeScript, useTheme } from '../src/react/index.js';
+import { ThemeProvider, ThemeSelect, ThemeSwitch, ThemeToggle, themes, themeScript, useTheme } from '../src/react/index.js';
 
 function Probe() {
   const { theme, resolvedTheme, setTheme } = useTheme();
@@ -50,7 +50,19 @@ test('Glass persists, applies before paint, and can be left from the toggle', as
   document.documentElement.removeAttribute('data-theme');
   new Function(themeScript())();
   expect(document.documentElement).toHaveAttribute('data-theme', 'glass');
-  await user.click(screen.getByRole('button', { name: 'Switch to dark theme' }));
-  expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+  await user.click(screen.getByRole('button', { name: 'Switch to Trading theme' }));
+  expect(document.documentElement).toHaveAttribute('data-theme', 'trading');
   expect(document.documentElement).not.toHaveClass('glass');
+});
+
+test.each(themes)('$label is selectable, persists and applies before paint', async ({ id }) => {
+  const user = userEvent.setup();
+  const view = render(<ThemeProvider defaultTheme={id === 'dark' ? 'light' : 'dark'}><ThemeSelect /></ThemeProvider>);
+  await user.selectOptions(screen.getByRole('combobox', { name: 'Theme' }), id);
+  expect(localStorage.getItem('utkristi-theme')).toBe(id);
+  expect(document.documentElement).toHaveClass(id);
+  view.unmount();
+  document.documentElement.removeAttribute('data-theme');
+  new Function(themeScript())();
+  expect(document.documentElement).toHaveAttribute('data-theme', id);
 });

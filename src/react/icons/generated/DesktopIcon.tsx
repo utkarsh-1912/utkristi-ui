@@ -6,7 +6,7 @@ export const DesktopIconData = {
   line: "M3 4h18a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm5 16h8m-4-4v4",
   filled: "M3 3h18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-8v2h3a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h3v-2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

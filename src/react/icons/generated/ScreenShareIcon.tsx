@@ -6,7 +6,7 @@ export const ScreenShareIconData = {
   line: "M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm5 6 3-3 3 3m-3-3v6m-4 7h8",
   filled: "M4 3h16a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Zm8.7 3.3a1 1 0 0 0-1.4 0l-3 3a1 1 0 0 0 1.4 1.4L11 9.4V13a1 1 0 1 0 2 0V9.4l1.3 1.3a1 1 0 0 0 1.4-1.4l-3-3ZM8 19h8a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

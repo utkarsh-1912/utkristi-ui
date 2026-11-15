@@ -6,7 +6,7 @@ export const HighlighterIconData = {
   line: "M5 19h10m-9-3 4-7 5 3-4 7-5-3Zm4-7 2-4 5 3-2 4",
   filled: "M6 18.5 12 3l7 4-8 13H4v-1.5Zm6-10.7-.9 1.9 4.2 2.4 1-1.9Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -5,10 +5,11 @@ import { fileURLToPath } from 'node:url';
 import { iconsPart1 } from './icon-catalog-part1.mjs';
 import { iconsPart2 } from './icon-catalog-part2.mjs';
 import { iconsPart3 } from './icon-catalog-part3.mjs';
+import { brandIcons } from './icon-catalog-brands.mjs';
 import { buildClayGeometry, shadeClayRender } from './render-clay-3d.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const allIcons = [...iconsPart1, ...iconsPart2, ...iconsPart3];
+const allIcons = [...iconsPart1, ...iconsPart2, ...iconsPart3, ...brandIcons].map((icon) => ({ ...icon, has3d: true }));
 if (new Set(allIcons.map(({ name }) => name)).size !== allIcons.length) throw new Error('Duplicate icon names in the catalog.');
 const dimensionalViewBox = '-2 -2 31 31';
 const allHues = ['blue', 'lime', 'violet', 'teal', 'amber', 'coral', 'rose', 'graphite'];

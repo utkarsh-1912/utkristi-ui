@@ -6,7 +6,7 @@ export const BusIconData = {
   line: "M6 4h12q2 0 2 2v12H4V6q0-2 2-2ZM4 12h16M7 18v3m10-3v3m-9-6h.01m8 0h.01",
   filled: "M6 3h12q3 0 3 3v13h-3v3h-2v-3H8v3H6v-3H3V6q0-3 3-3Zm0 3v5h12V6ZM8.2 15a1.2 1.2 0 1 1 -2.4 0a1.2 1.2 0 1 1 2.4 0ZM18.2 15a1.2 1.2 0 1 1 -2.4 0a1.2 1.2 0 1 1 2.4 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const MinusIconData = {
   line: "M5 12h14",
   filled: "M5 11h14a1 1 0 1 1 0 2H5a1 1 0 1 1 0-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

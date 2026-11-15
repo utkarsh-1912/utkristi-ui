@@ -6,7 +6,7 @@ export const PresenceCursorIconData = {
   line: "m4 4 15 6.5-6.8 2.2L10 19.5 4 4Zm8.2 8.7 5.3 5.3",
   filled: "M3.3 3.3a1 1 0 0 1 1.1-.2l15 6.5a1 1 0 0 1-.1 1.9l-6.1 2 3.5 3.5a1 1 0 0 1-1.4 1.4l-3.5-3.5-2 6.1a1 1 0 0 1-1.9.1l-6.5-15a1 1 0 0 1 .2-1.1Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

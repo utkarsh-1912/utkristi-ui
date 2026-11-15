@@ -6,7 +6,7 @@ export const CommandIconData = {
   line: "M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3Z",
   filled: "M6 2a4 4 0 0 0 0 8h2v4H6a4 4 0 1 0 4 4v-2h4v2a4 4 0 1 0 4-4h-2v-4h2a4 4 0 1 0-4-4v2h-4V6a4 4 0 0 0-4-4Zm2 6H6a2 2 0 1 1 2-2v2Zm2 2h4v4h-4v-4Zm-2 6v2a2 2 0 1 1-2-2h2Zm8-8V6a2 2 0 1 1 2 2h-2Zm0 8h2a2 2 0 1 1-2 2v-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

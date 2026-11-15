@@ -6,7 +6,7 @@ import {
   DeviceMockup, Field, FileInput, FloatingInput, Gallery, HoverCard, Icon, IconPalettePicker, IconTile, Input, InputGroup, InputOTP, Item, Jumbotron, Label, ListGroup, Loader, Marker, MegaMenu, Menubar, Message, NumberInput, PhoneInput,
   MessageScroller, NativeSelect, NavigationMenu, Pagination, Popover, Progress, Questionnaire, Radio,
   QRCode, RadioGroup, Rating, Resizable, ScrollArea, Select, SelectMenu, Separator, Sheet, Sidebar, SpeedDial, Switch, Textarea, TimeInput, Timeline, Toggle, ToggleGroup, Trace, Typography, VideoPlayer,
-  type DataColumn, type DataTableRowKey, type Typeface, useToast,
+  Workspace, type DataColumn, type DataTableRowKey, type Typeface, useToast,
 } from '@utkristi/ui';
 import type { Example } from './examples';
 
@@ -15,6 +15,21 @@ const demo = (name: string, description: string, preview: Example['preview'], js
 
 const teams = ['Design', 'Engineering', 'Operations'].map((label) => ({ value: label.toLowerCase(), label }));
 const worklistColumns = [{ key: 'name', label: 'Project', required: true }, { key: 'team', label: 'Team' }];
+
+function WorkspaceDemo() {
+  const [variant, setVariant] = useState<'trading' | 'terminal' | 'studio' | 'office'>('trading');
+  return <div style={{ display: 'grid', gap: 16 }}>
+    <Field label="Workspace layout"><Select value={variant} onChange={(event) => setVariant(event.target.value as typeof variant)}>
+      <option value="trading">Trading — icon rail</option><option value="terminal">Terminal — command tabs</option>
+      <option value="studio">Studio — spacious navigation</option><option value="office">Office — labelled sidebar</option>
+    </Select></Field>
+    <Workspace title="Operations" variant={variant} status="Sample workspace" navigation={[
+      { id: 'orders', label: 'Orders', icon: <Icon name="table" />, content: <div><h3>Orders</h3><p>12 open orders awaiting review.</p></div> },
+      { id: 'activity', label: 'Activity', icon: <Icon name="history" />, content: <div><h3>Activity</h3><p>The latest reconciliation completed at 09:42.</p></div> },
+      { id: 'settings', label: 'Settings', icon: <Icon name="settings" />, content: <Field label="Workspace name"><Input defaultValue="Operations" /></Field> },
+    ]} />
+  </div>;
+}
 
 function ColumnsDemo() {
   const [visible, setVisible] = useState(['name', 'team']);
@@ -120,11 +135,8 @@ function DataTableDemo() {
   </>;
 }
 function SidebarDemo() {
-  const [collapsed, setCollapsed] = useState(false);
-  const id = useId();
-  return <Sidebar collapsed={collapsed} heading={<Button variant="plain" size="sm" aria-controls={id}
-    aria-expanded={!collapsed} onClick={() => setCollapsed(!collapsed)}>Workspace {collapsed ? '+' : '−'}</Button>}>
-    <nav id={id} aria-label="Workspace"><a href="#/overview" aria-current="page">Overview</a><a href="#/showcase">Showcase</a></nav>
+  return <Sidebar heading="Workspace" collapsible>
+    <nav aria-label="Workspace"><a href="#/overview" aria-current="page">Overview</a><a href="#/showcase">Showcase</a></nav>
   </Sidebar>;
 }
 function QuestionnaireDemo() {
@@ -164,6 +176,35 @@ const panelMarkup = (type: string, side = '') =>
   `<div class="modal-backdrop ${side ? 'sheet-backdrop' : ''}"><section class="modal ${side ? 'sheet-panel' : ''}"${side ? ` data-side="${side}"` : ''} role="${type}" aria-label="Settings"><div class="modal-body">Settings</div></section></div>`;
 
 export const catalog = {
+  workspace: demo('Workspace', 'Choose an icon rail, command tabs, studio navigation, or a labelled office sidebar. Layout and palette can be selected independently.',
+    WorkspaceDemo, '', `<section class="workspace" data-variant="trading">
+  <header class="workspace-header"><strong>Operations</strong></header>
+  <div class="workspace-layout">
+    <nav class="workspace-navigation" aria-label="Workspace">
+      <button type="button" data-view="orders" aria-label="Orders" title="Orders" aria-current="page">▦<span class="workspace-navigation-label">Orders</span></button>
+      <button type="button" data-view="activity" aria-label="Activity" title="Activity">◷<span class="workspace-navigation-label">Activity</span></button>
+    </nav>
+    <div class="workspace-content">
+      <section data-panel="orders" aria-label="Orders"><h3>Orders</h3><p>12 open orders awaiting review.</p></section>
+      <section data-panel="activity" aria-label="Activity" hidden><h3>Activity</h3><p>Reconciliation completed at 09:42.</p></section>
+    </div>
+  </div>
+</section>
+<script>
+document.querySelectorAll('.workspace').forEach(workspace => {
+  workspace.querySelectorAll('[data-view]').forEach(button => {
+    button.addEventListener('click', () => {
+      workspace.querySelectorAll('[data-view]').forEach(item => {
+        if (item === button) item.setAttribute('aria-current', 'page');
+        else item.removeAttribute('aria-current');
+      });
+      workspace.querySelectorAll('[data-panel]').forEach(panel => {
+        panel.hidden = panel.dataset.panel !== button.dataset.view;
+      });
+    });
+  });
+});
+</script>`),
   banner: demo('Banner', 'Show an announcement with an optional action and dismiss control.', BannerDemo,
     '<Banner onDismiss={dismiss}>Workspace update</Banner>', '<aside class="kit-banner"><div>Workspace update</div></aside>'),
   'bottom-navigation': demo('Bottom Navigation', 'Show frequently used destinations with a visible current page.',
@@ -422,8 +463,13 @@ export const catalog = {
     '<Separator decorative={false} />', '<div class="separator" role="separator" aria-orientation="horizontal"></div>'),
   sheet: demo('Sheet', 'An edge-aligned modal panel.',
     () => <OverlayDemo kind="sheet" />, '<Sheet open={open} onClose={close} title="Settings" side="end">Workspace settings</Sheet>', panelMarkup('dialog', 'end')),
-  sidebar: demo('Sidebar', 'A navigation panel that can collapse.',
-    SidebarDemo, '<Sidebar heading="Workspace" collapsed={collapsed}><a href="/">Overview</a></Sidebar>',
+  sidebar: demo('Sidebar', 'Use collapsible for a built-in toggle. Use the rail variant in a responsive app layout for sticky desktop navigation and an inline panel on mobile.',
+    SidebarDemo, `<Sidebar heading="Workspace" collapsible>
+  <nav aria-label="Workspace">
+    <a href="/overview" aria-current="page">Overview</a>
+    <a href="/projects">Projects</a>
+  </nav>
+</Sidebar>`,
     '<aside class="sidebar"><details open><summary class="sidebar-heading">Workspace</summary><nav class="sidebar-content" aria-label="Workspace"><a href="#overview">Overview</a></nav></details></aside>'),
   switch: demo('Switch', 'Turn a preference on or off with a labelled switch.',
     () => <Switch label="Send workspace updates" defaultChecked />, '<Switch label="Send workspace updates" defaultChecked />',

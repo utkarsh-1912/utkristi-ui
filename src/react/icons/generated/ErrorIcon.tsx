@@ -6,7 +6,7 @@ export const ErrorIconData = {
   line: "M8.3 3h7.4L21 8.3v7.4L15.7 21H8.3L3 15.7V8.3L8.3 3ZM15 9l-6 6m0-6 6 6",
   filled: "M8 2h8l6 6v8l-6 6H8l-6-6V8l6-6Zm1.7 6.3a1 1 0 0 0-1.4 1.4L10.6 12l-2.3 2.3a1 1 0 1 0 1.4 1.4L12 13.4l2.3 2.3a1 1 0 0 0 1.4-1.4L13.4 12l2.3-2.3a1 1 0 0 0-1.4-1.4L12 10.6 9.7 8.3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

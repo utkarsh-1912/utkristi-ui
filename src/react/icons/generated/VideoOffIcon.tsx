@@ -6,7 +6,7 @@ export const VideoOffIconData = {
   line: "M4 6h12v12H4zm12 4 5-3v10l-5-3M3 3l18 18",
   filled: "M3 5h14v4l5-3v13l-5-3v3H3Zm-1-1 1.7-1.7 18 18-1.7 1.7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

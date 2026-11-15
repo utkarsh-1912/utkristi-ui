@@ -6,7 +6,7 @@ export const TruckIconData = {
   line: "M3 6h11v10H3zm11 3h4l3 4v3h-7m-8 3h.01m12 0h.01",
   filled: "M2 5h13v3h4l3 4v5h-1.5a3 3 0 0 0-5 0h-7a3 3 0 0 0-5 0H2Zm13 5v4h5v-1l-2.4-3ZM8 19a2 2 0 1 1 -4 0a2 2 0 1 1 4 0ZM20 19a2 2 0 1 1 -4 0a2 2 0 1 1 4 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

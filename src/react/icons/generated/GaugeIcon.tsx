@@ -6,7 +6,7 @@ export const GaugeIconData = {
   line: "M4 18a9 9 0 1 1 16 0H4zm8-3 4-5m-9 5h.01m5-8h.01m5 8h.01",
   filled: "M3.2 19a10 10 0 1 1 17.6 0Zm2.4-3h12.8a7 7 0 0 0-12.8 0Zm5 0 5.4-6 1.4 1.4-4.5 5.2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

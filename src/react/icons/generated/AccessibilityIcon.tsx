@@ -6,7 +6,7 @@ export const AccessibilityIconData = {
   line: "M12 4h.01M4 9l8 2 8-2m-8 2v4m0 0-4 6m4-6 4 6",
   filled: "M14 4a2 2 0 1 1 -4 0a2 2 0 1 1 4 0ZM3 8l9 2 9-2 .5 2-7.8 2v3.3l3.9 5.4-2 1.4-3.6-5-3.6 5-2-1.4 3.9-5.4V12l-7.8-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

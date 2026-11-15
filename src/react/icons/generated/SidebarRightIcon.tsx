@@ -6,7 +6,7 @@ export const SidebarRightIconData = {
   line: "M3 4h18v16H3zm12 0v16",
   filled: "M5 4h14q2 0 2 2v12q0 2-2 2H5q-2 0-2-2V6q0-2 2-2ZM5 6h8v12h-8ZM16 6h3v12h-3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

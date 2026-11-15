@@ -6,7 +6,7 @@ export const FolderOpenIconData = {
   line: "M3 19V6a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v2M3 19l2.2-8h16.3L19.3 19H3Z",
   filled: "M5 3h4.2a2 2 0 0 1 1.4.6L12 5h6a3 3 0 0 1 3 3v1H4.5L2 18V6a3 3 0 0 1 3-3Zm.2 8h16.3a1 1 0 0 1 1 1.3l-2.2 7A1 1 0 0 1 19.3 20H3a1 1 0 0 1-1-1.3l2.2-7A1 1 0 0 1 5.2 11Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const RedoIconData = {
   line: "M20 9H10a5 5 0 0 0 0 10h5m5-10-4-4m4 4-4 4",
   filled: "M15.3 4.3a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1 0 1.4l-4 4a1 1 0 0 1-1.4-1.4L17.6 10H10a4 4 0 0 0 0 8h5a1 1 0 1 1 0 2h-5a6 6 0 1 1 0-12h7.6l-2.3-2.3a1 1 0 0 1 0-1.4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

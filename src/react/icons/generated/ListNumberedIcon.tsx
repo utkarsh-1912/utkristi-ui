@@ -6,7 +6,7 @@ export const ListNumberedIconData = {
   line: "M10 6h10m-10 6h10m-10 6h10M4 5l1-1v4m-1 3q3-1 3 1l-3 2h3m-3 3h2l1 1-1 1 1 1-1 1H4",
   filled: "M9 5h12v2h-12ZM9 11h12v2h-12ZM9 17h12v2h-12ZM3 4l3-1v5H4V5H3Zm0 6h4v3H5v1h2v1H3v-3h2v-1H3Zm0 7h4v5H3v-1h2v-1H4v-1h1v-1H3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

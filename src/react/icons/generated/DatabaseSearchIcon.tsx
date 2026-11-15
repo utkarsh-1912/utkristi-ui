@@ -6,7 +6,7 @@ export const DatabaseSearchIconData = {
   line: "M16 6c0 2-3 3-6 3S4 8 4 6s3-3 6-3 6 1 6 3v5M4 6v12c0 2 3 3 6 3m-6-9c0 2 3 3 6 3m3 1a3 3 0 1 0 6 0 3 3 0 0 0-6 0Zm5 2 3 3",
   filled: "M10 2c4 0 7 1.7 7 4v4.5h-2.4Q13 10 10 10 6 10 3 8V6c0-2.3 3-4 7-4ZM3 10q3 2 7 2h2.2A5 5 0 0 0 11 15q-5 0-8-2Zm0 5q3 2 8 2 .2 2 2 4-1.2 1-3 1c-4 0-7-1.7-7-4Zm13-3a4 4 0 0 1 3.5 6l2.5 2.5L20.5 22 18 19.5a4 4 0 1 1-2-7.5Zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

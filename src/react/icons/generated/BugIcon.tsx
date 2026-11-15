@@ -6,7 +6,7 @@ export const BugIconData = {
   line: "M8 9a4 4 0 0 1 8 0v5a4 4 0 0 1-8 0V9Zm-4 4h4m8 0h4M5 8l3 2m11-2-3 2M5 18l3-2m11 2-3-2M9 5l1 2m5-2-1 2",
   filled: "M8.9 3.6a1 1 0 0 1 1.3.4l.8 1.3a5 5 0 0 1 2 0l.8-1.3a1 1 0 1 1 1.7 1l-.6 1A5 5 0 0 1 17 9l2.4-1.6a1 1 0 1 1 1.2 1.6L17 11.4V12h3a1 1 0 1 1 0 2h-3v.6l3.6 2.4a1 1 0 0 1-1.2 1.6L16.8 17a5 5 0 0 1-9.6 0l-2.6 1.6a1 1 0 0 1-1.2-1.6L7 14.6V14H4a1 1 0 1 1 0-2h3v-.6L3.4 9a1 1 0 1 1 1.2-1.6L7 9a5 5 0 0 1 2.1-3l-.6-1a1 1 0 0 1 .4-1.4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

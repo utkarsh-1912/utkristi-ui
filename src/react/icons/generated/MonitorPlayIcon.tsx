@@ -6,7 +6,7 @@ export const MonitorPlayIconData = {
   line: "M3 4h18v13H3zm9 13v4m-4 0h8m-6-13 5 3-5 3Z",
   filled: "M2.5 3h19v15H13v2h4v2H7v-2h4v-2H2.5Zm7 4v8l6-4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

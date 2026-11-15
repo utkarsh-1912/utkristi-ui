@@ -6,7 +6,7 @@ export const TextStrikethroughIconData = {
   line: "M17 6q-1-2-5-2-5 0-5 3 0 2 3 3m4 4q4 1 4 3 0 3-6 3-4 0-6-2M3 12h18",
   filled: "M17.8 7.7H15q-.7-1.8-3.3-1.8-2.3 0-2.3 1.3 0 .9 1.5 1.4H7q-1-1.1-1-2.3C6 3.8 8.4 3 12 3q4.7 0 5.8 4.7ZM6 16h3q1 2 3.7 2 2.4 0 2.4-1.2 0-1-1.6-1.5H18q.8.9.8 2.2c0 2.6-2.6 3.5-6.1 3.5q-5.3 0-6.7-5ZM3 10.6h18v2.8H3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

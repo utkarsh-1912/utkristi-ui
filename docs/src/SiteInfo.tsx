@@ -25,7 +25,10 @@ export function About() {
     description="Utkristi UI is the shared design system for the Utkristi ecosystem.">
     <h2>What’s included</h2>
     <p>The kit brings together React components, a standalone stylesheet, design tokens, an icon library, and a Tailwind preset.
-      Night, Paper, and Glass use the same component APIs. Signal, Ledger, and Terminal add scoped accent and shape presets.</p>
+      All built-in themes use the same component APIs. Signal, Ledger, and Terminal add scoped accent and shape presets.</p>
+    <p>Workspace layouts adapt navigation and spacing to the task. Trading uses an icon rail, Terminal uses command tabs,
+      Studio gives visual assets more room, and Office keeps section labels visible. The icon catalog includes interface glyphs,
+      company marks, recolorable 2.5D SVGs, and raster 3D artwork.</p>
     <h2>Learn by building</h2>
     <p>Browse components and complete layouts, then open an example in the sandbox to edit its source and try it in a different appearance.</p>
     <div className="sample-row">

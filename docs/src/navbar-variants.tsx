@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Button, Dialog, Navbar, ScrollArea, SearchInput, type NavbarLink } from '@utkristi/ui';
+import { Button, Dialog, Icon, Navbar, ScrollArea, SearchInput, type NavbarLink } from '@utkristi/ui';
 import type { Example } from './examples';
 
 const baseLinks: NavbarLink[] = [
@@ -58,6 +58,12 @@ const navbarExample = (name: string, description: string, preview: Example['prev
   ({ name, description, preview, html, jsx: '' });
 
 export const navbarVariants = {
+  'navbar-icons': navbarExample('Workstation icon navigation', 'Compact navigation with text on hover and keyboard focus. Links without icons keep their labels.',
+    () => <Navbar sticky={false} presentation="icons" brand={<strong>Execution</strong>} links={[
+      { href: '#orders', label: 'Orders', icon: <Icon name="table" />, active: true },
+      { href: '#analytics', label: 'Analytics', icon: <Icon name="chart-line" /> },
+      { href: '#settings', label: 'Settings', icon: <Icon name="settings" /> },
+    ]} />, '<header class="header header-static"><div class="navbar" data-presentation="icons"><div class="navbar-inner"><strong>Execution</strong><nav class="navbar-links" aria-label="Primary"><a class="navbar-link" href="#orders" aria-current="page"><span class="navbar-link-icon" aria-hidden="true">▦</span><span class="navbar-link-label">Orders</span></a><a class="navbar-link" href="#analytics"><span class="navbar-link-icon" aria-hidden="true">↗</span><span class="navbar-link-label">Analytics</span></a></nav></div></div></header>'),
   'navbar-dock': navbarExample('Floating dock', 'Center links in an inset bar and move crowded links into an overflow menu.',
     () => <Navbar variant="dock" collapseLinks sticky={false} links={baseLinks} />, htmlNavbar(baseLinks, { dock: true })),
   'navbar-dropdown': navbarExample('Navbar with dropdown', 'Group related destinations in a disclosure.',

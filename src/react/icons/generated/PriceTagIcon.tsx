@@ -6,7 +6,7 @@ export const PriceTagIconData = {
   line: "M3 5h8l9 9-6 6-9-9V5zm4 3h.01",
   filled: "M2 4h9.5L22 14.5 14.5 22 4 11.5V6H2Zm6 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

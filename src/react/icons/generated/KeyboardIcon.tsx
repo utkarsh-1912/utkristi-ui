@@ -6,7 +6,7 @@ export const KeyboardIconData = {
   line: "M3 7h18v10H3zm4 3h.01m3 0h.01m4 0h.01m3 0h.01m-8 4h6",
   filled: "M3 6h18q1 0 1 1v10q0 1-1 1H3q-1 0-1-1V7q0-1 1-1ZM6 9h2v2h-2ZM9 9h2v2h-2ZM13 9h2v2h-2ZM16 9h2v2h-2ZM8 13h8v2h-8Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

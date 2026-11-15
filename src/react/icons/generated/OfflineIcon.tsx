@@ -6,7 +6,7 @@ export const OfflineIconData = {
   line: "M3 3l18 18M3 9a14 14 0 0 1 3-1.8M10.5 6.2A14 14 0 0 1 21 9M6 13a9 9 0 0 1 3.3-1.7m6.5.3A9 9 0 0 1 18 13m-9 3.5a4.5 4.5 0 0 1 3-1.1M12 20h.01",
   filled: "M2.3 3.9 3.9 2.3l17.8 17.8-1.6 1.6ZM2.2 8.2q1.3-1 2.8-1.7l1.7 1.7q-1.6.7-3.1 1.8Zm7-3.1q6.8-1 12.6 3.1L20.4 10Q16.2 7 11.3 7.2ZM5.3 12q1.4-1.1 3-1.7l1.8 1.8q-1.9.4-3.4 1.7Zm10.6-.9q1.5.5 2.8 1.5l-.8 1Zm-7.5 4.5q1.5-1.1 3.2-1.2l1.8 1.8q-2.1-.2-3.6 1.2ZM12 18.4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

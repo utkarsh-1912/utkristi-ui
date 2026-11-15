@@ -6,7 +6,7 @@ export const CodeReviewIconData = {
   line: "M8 6 4 10l4 4m8-8 4 4-4 4m-5 2 3 3 6-5",
   filled: "M7.5 4 9 5.8 5 10l4 4.2L7.5 16l-5.5-6 5.5-6ZM16.5 4 22 10l-4 4-1.8-1.5L19 10l-4-4.2L16.5 4Zm-6 11.3 3 2.7 6.8-5.5L22 14.6 13.5 22l-4.8-5Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

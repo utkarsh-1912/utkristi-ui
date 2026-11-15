@@ -6,18 +6,20 @@ import { LayersIconData } from './icons/generated/LayersIcon.js';
 import { MoonIconData } from './icons/generated/MoonIcon.js';
 import { SunIconData } from './icons/generated/SunIcon.js';
 import { Segmented, type SegmentedProps } from './Segmented.js';
-import { useTheme, type Theme } from './theme/ThemeProvider.js';
+import { useTheme } from './theme/ThemeProvider.js';
+import { themeIds, themes, type Theme } from './theme/themes.js';
 
 export const ThemeToggle = forwardRef<HTMLButtonElement, Omit<IconButtonProps, 'label'>>(function ThemeToggle({ onClick, ...props }, ref) {
   const { resolvedTheme, setTheme } = useTheme();
-  const next = resolvedTheme === 'dark' ? 'light' : resolvedTheme === 'light' ? 'glass' : 'dark';
-  return <IconButton {...props} ref={ref} label={`Switch to ${next} theme`} onClick={(event) => {
+  const next = themes[(themeIds.indexOf(resolvedTheme) + 1) % themes.length];
+  const glyph = next.id === 'dark' ? MoonIconData : next.id === 'light' ? SunIconData : LayersIconData;
+  return <IconButton {...props} ref={ref} label={`Switch to ${next.label} theme`} onClick={(event) => {
     onClick?.(event);
-    if (!event.defaultPrevented) setTheme(next);
-  }}><ControlIcon glyph={next === 'glass' ? LayersIconData : next === 'light' ? SunIconData : MoonIconData} size={18} /></IconButton>;
+    if (!event.defaultPrevented) setTheme(next.id);
+  }}><ControlIcon glyph={glyph} size={18} /></IconButton>;
 });
 
-const items = [{ id: 'dark', label: 'Dark' }, { id: 'light', label: 'Light' }, { id: 'glass', label: 'Glass' }, { id: 'system', label: 'Auto' }];
+const items = [...themes.map(({ id, label }) => ({ id, label })), { id: 'system', label: 'Auto' }];
 export const ThemeSwitch = forwardRef<HTMLDivElement, Omit<SegmentedProps, 'items' | 'value' | 'defaultValue' | 'onChange'>>(
   function ThemeSwitch(props, ref) {
     const { theme, setTheme } = useTheme();
@@ -35,9 +37,7 @@ export const ThemeSelect = forwardRef<HTMLSelectElement, ThemeSelectProps>(funct
     onChange?.(event);
     if (!event.defaultPrevented) setTheme(event.target.value as Theme);
   }}>
-    <option value="dark">Night</option>
-    <option value="light">Paper</option>
-    <option value="glass">Glass</option>
+    {themes.map(({ id, label }) => <option key={id} value={id}>{label}</option>)}
     <option value="system">System</option>
   </Select>;
 });

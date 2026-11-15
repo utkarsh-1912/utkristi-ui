@@ -6,7 +6,7 @@ export const EthernetIconData = {
   line: "M4 7h16v10H4zm4 10v3m8-3v3m-8-9h.01m4 0h.01m4 0h.01",
   filled: "M3 6h18v12h-18ZM7 10h2v2h-2ZM11 10h2v2h-2ZM15 10h2v2h-2ZM7 18h2v3h-2ZM15 18h2v3h-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

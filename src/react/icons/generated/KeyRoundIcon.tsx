@@ -6,7 +6,7 @@ export const KeyRoundIconData = {
   line: "M7 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm3 7 8 8 3-3m-6 0 2-2",
   filled: "M7 3a5 5 0 0 1 4.7 6.7L22 20l-2 2-3-3-2 2-2-2 2-2-5.3-5.3A5 5 0 1 1 7 3Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

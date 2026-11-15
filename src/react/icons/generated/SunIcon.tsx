@@ -6,7 +6,7 @@ export const SunIconData = {
   line: "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-6v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42m0-14.14-1.42 1.42m-11.3 11.3-1.42 1.42",
   filled: "M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0-6a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V2a1 1 0 0 1 1-1Zm0 18a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1ZM2 11h2a1 1 0 1 1 0 2H2a1 1 0 1 1 0-2Zm18 0h2a1 1 0 1 1 0 2h-2a1 1 0 1 1 0-2ZM4.2 4.2a1 1 0 0 1 1.4 0L7 5.6A1 1 0 0 1 5.6 7L4.2 5.6a1 1 0 0 1 0-1.4Zm12.8 12.8a1 1 0 0 1 1.4 0l1.4 1.4a1 1 0 0 1-1.4 1.4L17 18.4a1 1 0 0 1 0-1.4Zm2.8-12.8a1 1 0 0 1 0 1.4L18.4 7A1 1 0 0 1 17 5.6l1.4-1.4a1 1 0 0 1 1.4 0ZM7 17a1 1 0 0 1 0 1.4l-1.4 1.4a1 1 0 0 1-1.4-1.4L5.6 17A1 1 0 0 1 7 17Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 31 31" fill="none">
+  <defs>
+    <linearGradient id="ut-2d5-align-start-face" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--ut-icon-hi)" />
+      <stop offset="55%" stop-color="var(--ut-icon-base)" />
+      <stop offset="100%" stop-color="var(--ut-icon-shade)" />
+    </linearGradient>
+    <filter id="ut-2d5-align-start-shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="var(--ut-icon-shadow, rgba(0,0,0,.35))" />
+    </filter>
+  </defs>
+  <path fill="var(--ut-icon-shadow, rgba(0,0,0,.35))" fill-rule="evenodd" transform="translate(0 2)" filter="url(#ut-2d5-align-start-shadow)" d="M3 5h18v2h-18ZM3 9h11v2h-11ZM3 13h18v2h-18ZM3 17h11v2h-11Z" />
+  <g class="icon-2d5-ext" fill="var(--ut-icon-shade)">
+    <path transform="translate(2.25 2.25)" fill-rule="evenodd" clip-rule="evenodd" d="M3 5h18v2h-18ZM3 9h11v2h-11ZM3 13h18v2h-18ZM3 17h11v2h-11Z" />
+    <path transform="translate(1.5 1.5)" fill-rule="evenodd" clip-rule="evenodd" d="M3 5h18v2h-18ZM3 9h11v2h-11ZM3 13h18v2h-18ZM3 17h11v2h-11Z" />
+    <path transform="translate(0.75 0.75)" fill-rule="evenodd" clip-rule="evenodd" d="M3 5h18v2h-18ZM3 9h11v2h-11ZM3 13h18v2h-18ZM3 17h11v2h-11Z" />
+    <path class="icon-2d5-ext-extra" transform="translate(3 3)" fill-rule="evenodd" clip-rule="evenodd" d="M3 5h18v2h-18ZM3 9h11v2h-11ZM3 13h18v2h-18ZM3 17h11v2h-11Z" />
+  </g>
+  <path fill="url(#ut-2d5-align-start-face)" stroke="var(--ut-icon-hi)" stroke-opacity=".7" stroke-width=".75" fill-rule="evenodd" clip-rule="evenodd" d="M3 5h18v2h-18ZM3 9h11v2h-11ZM3 13h18v2h-18ZM3 17h11v2h-11Z" />
+</svg>

@@ -6,7 +6,7 @@ export const ChevronUpIconData = {
   line: "m18 15-6-6-6 6",
   filled: "M11.3 8.3a1 1 0 0 1 1.4 0l6 6a1 1 0 0 1-1.4 1.4L12 10.4l-5.3 5.3a1 1 0 0 1-1.4-1.4l6-6Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

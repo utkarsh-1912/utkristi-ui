@@ -6,7 +6,7 @@ export const ChartLineIconData = {
   line: "M4 4v16h16M7 15l4-4 3 3 5-6",
   filled: "M4 3a1 1 0 0 1 1 1v11.6l5.3-5.3a1 1 0 0 1 1.4 0l2.2 2.2 4.3-5.1a1 1 0 1 1 1.6 1.2l-5 6a1 1 0 0 1-1.5.1L11 12.4 6.4 17H20a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

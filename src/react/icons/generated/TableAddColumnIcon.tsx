@@ -6,7 +6,7 @@ export const TableAddColumnIconData = {
   line: "M4 3h9v18H4ZM8.5 3v18M4 12h9M16 12h6m-3-3v6",
   filled: "M3 2h11v20h-11ZM5.1 4.2h2.3v6.7h-2.3ZM9.5 4.2h2.3v6.7h-2.3ZM5.1 13.1h2.3v6.7h-2.3ZM9.5 13.1h2.3v6.7h-2.3ZM18 9h2v2h2v2h-2v2h-2v-2h-2v-2h2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

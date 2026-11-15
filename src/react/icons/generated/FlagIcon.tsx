@@ -6,7 +6,7 @@ export const FlagIconData = {
   line: "M5 21V4q4-2 7 1t7 1v9q-4 2-7-1t-7-1",
   filled: "M4 3q5-2 8 1t8 1v11q-5 2-8-1t-6-1v8H4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const FullscreenIconData = {
   line: "M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5",
   filled: "M3 3h7v2H5v5H3Zm11 0h7v7h-2V5h-5ZM3 14h2v5h5v2H3Zm16 0h2v7h-7v-2h5Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

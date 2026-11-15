@@ -6,7 +6,7 @@ export const CreditCardIconData = {
   line: "M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Zm-1 4h20M7 15h3",
   filled: "M5 3h14a3 3 0 0 1 3 3v2H2V6a3 3 0 0 1 3-3ZM2 10h20v8a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-8Zm5 4a1 1 0 1 0 0 2h3a1 1 0 1 0 0-2H7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

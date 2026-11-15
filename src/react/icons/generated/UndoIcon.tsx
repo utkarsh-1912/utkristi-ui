@@ -6,7 +6,7 @@ export const UndoIconData = {
   line: "M4 9h10a5 5 0 0 1 0 10H9M4 9l4-4M4 9l4 4",
   filled: "M7.3 4.3a1 1 0 0 1 1.4 1.4L6.4 8H14a6 6 0 1 1 0 12H9a1 1 0 1 1 0-2h5a4 4 0 0 0 0-8H6.4l2.3 2.3a1 1 0 0 1-1.4 1.4l-4-4a1 1 0 0 1 0-1.4l4-4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

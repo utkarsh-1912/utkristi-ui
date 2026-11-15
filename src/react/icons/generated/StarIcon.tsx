@@ -6,7 +6,7 @@ export const StarIconData = {
   line: "m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z",
   filled: "M11.1 2.5a1 1 0 0 1 1.8 0l2.6 5.3 5.8.8a1 1 0 0 1 .6 1.7l-4.2 4.1 1 5.8a1 1 0 0 1-1.5 1.1L12 18.5l-5.2 2.8a1 1 0 0 1-1.5-1.1l1-5.8-4.2-4.1a1 1 0 0 1 .6-1.7l5.8-.8 2.6-5.3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

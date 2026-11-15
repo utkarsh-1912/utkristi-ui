@@ -6,7 +6,7 @@ export const NavigationPointerIconData = {
   line: "m4 11 16-7-7 16-2-7Z",
   filled: "M2.5 10.5 22 2l-8.5 19.5-3-7.5Zm5 0 4.5 1.7 1.5 4.4 4.3-10.2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

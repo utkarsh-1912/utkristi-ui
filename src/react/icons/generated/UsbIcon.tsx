@@ -6,7 +6,7 @@ export const UsbIconData = {
   line: "M12 3v17m0-17-2 2m2-2 2 2M7 8v3l5 3m5-4v4l-5 3m3-8h4v3h-4zM5 7h4v3H5z",
   filled: "M12 2l4 5h-3v5l3-2h-1V7h5v5h-2v2l-5 3v4h-2v-7l-5-3v-1H4V6h5v4H8l3 2V7H8Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const GlassSparkleIconData = {
   line: "m12 3 2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3Zm6 13 1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1 1-2.5Z",
   filled: "M11.1 2.6a1 1 0 0 1 1.8 0l2.1 5.4 5.4 2.1a1 1 0 0 1 0 1.8L15 14l-2.1 5.4a1 1 0 0 1-1.8 0L9 14l-5.4-2.1a1 1 0 0 1 0-1.8L9 8l2.1-5.4Zm6.9 12.9.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9.9-2.1Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

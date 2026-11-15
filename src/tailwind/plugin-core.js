@@ -16,7 +16,9 @@ export function createPlugin({ tokens, base, components }) {
       matchUtilities({ stretch: (value) => ({ fontStretch: value }) }, { values: theme('fontStretch') });
       addVariant('light', light);
       addVariant('night', night);
-      addVariant('glass', '&:where(.glass, .glass *, [data-theme="glass"], [data-theme="glass"] *)');
+      for (const name of ['glass', 'aurora', 'snow', 'trading', 'sepia', 'midnight', 'forest', 'sunset', 'high-contrast', 'terminal']) {
+        addVariant(name, `&:where(.${name}, .${name} *, [data-theme="${name}"], [data-theme="${name}"] *)`);
+      }
     },
     () => ({ theme: { extend } }),
   );

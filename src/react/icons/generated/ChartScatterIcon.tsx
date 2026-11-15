@@ -6,7 +6,7 @@ export const ChartScatterIconData = {
   line: "M4 4v16h16M8 15h.01m4-5h.01m4 3h.01m3-7h.01",
   filled: "M3 3h2.5v15.5H21V21H3ZM9.6 15a1.6 1.6 0 1 1 -3.2 0a1.6 1.6 0 1 1 3.2 0ZM13.6 10a1.6 1.6 0 1 1 -3.2 0a1.6 1.6 0 1 1 3.2 0ZM17.6 13a1.6 1.6 0 1 1 -3.2 0a1.6 1.6 0 1 1 3.2 0ZM20.6 6a1.6 1.6 0 1 1 -3.2 0a1.6 1.6 0 1 1 3.2 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

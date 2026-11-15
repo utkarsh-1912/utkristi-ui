@@ -6,7 +6,7 @@ export const HeadingTwoIconData = {
   line: "M4 5v14m8-14v14M4 12h8m3-3a3 3 0 0 1 6 0c0 2-3 4-6 8v2h6",
   filled: "M3 4h3v16h-3ZM10 4h3v16h-3ZM6 10.5h4v3h-4ZM14.5 9a4 4 0 0 1 8 0q0 2.2-3 5l-2 2.5h5V20h-8v-3.6L18 12q1.6-1.8 1.6-3a1.1 1.1 0 0 0-2.2 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

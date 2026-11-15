@@ -3,6 +3,7 @@ import {
   type HTMLAttributes, type KeyboardEvent, type ReactNode, type SVGProps,
 } from 'react';
 import { useTheme, type ResolvedTheme } from './theme/ThemeProvider.js';
+import { iconThemeKey, themeLabel, themes } from './theme/themes.js';
 import { cx, type CSSVariables } from './utils/cx.js';
 import { iconGlyphs, type IconGlyphName } from './icons/generated/index.js';
 import { iconManifest, type IconManifestEntry } from './icons/generated/manifest.js';
@@ -26,7 +27,8 @@ export interface IconHueRoles {
   readonly on: string;
 }
 
-export const iconPaletteTable: Record<'night' | 'paper' | 'glass', Record<IconPresetHue, IconHueRoles>> = {
+type IconPalette = Record<IconPresetHue, IconHueRoles>;
+const rasterPalettes: Record<'night' | 'paper' | 'glass', IconPalette> = {
   night: {
     blue:     { base: '#9CC3FF', shade: '#5B8DEF', hi: '#D6E6FF', tint: 'rgba(156, 195, 255, .16)', stroke: '#9CC3FF', on: '#0B0B0A' },
     lime:     { base: '#C6F36B', shade: '#8DBA2E', hi: '#E9FFC2', tint: 'rgba(198, 243, 107, .14)', stroke: '#C6F36B', on: '#0B0B0A' },
@@ -58,6 +60,9 @@ export const iconPaletteTable: Record<'night' | 'paper' | 'glass', Record<IconPr
     graphite: { base: '#D9D6E0', shade: '#8C8899', hi: '#F3F1F7', tint: 'rgba(35, 30, 43, .08)', stroke: 'var(--ut-ink)', on: '#202021' },
   },
 };
+
+const themePalettes = Object.fromEntries(themes.map(({ id }) => [id, rasterPalettes[iconThemeKey(id)]])) as Record<ResolvedTheme, IconPalette>;
+export const iconPaletteTable = { ...rasterPalettes, ...themePalettes };
 
 function parseHexRgb(hex: string): [number, number, number] {
   const clean = hex.trim().replace(/^#/, '');
@@ -96,7 +101,10 @@ export interface DerivedCustomPalette {
 const themeBackgrounds: Record<ResolvedTheme, string> = {
   dark: '#0B0B0A',
   light: '#F5F7FB',
-  glass: '#F7F4FB',
+  glass: '#E9E6F6',
+  trading: '#0B1017', snow: '#EDF3F9', aurora: '#100E20', sepia: '#F5EFE3',
+  midnight: '#000000', forest: '#0C1410', sunset: '#FFF6F0',
+  'high-contrast': '#000000', terminal: '#101411',
 };
 
 export function deriveCustomPalette(hex: string, theme: ResolvedTheme = 'dark'): DerivedCustomPalette {
@@ -113,9 +121,7 @@ export function deriveCustomPalette(hex: string, theme: ResolvedTheme = 'dark'):
   if (theme === 'glass') {
     note = 'Glass uses charcoal ink for outlines and your custom hue for fills.';
   } else if (!passesStroke) {
-    note = theme === 'light'
-      ? `Too light for paper (${contrastWithBg.toFixed(1)}:1), the outline will use ink.`
-      : `Too dark for night (${contrastWithBg.toFixed(1)}:1), the outline will use ink.`;
+    note = `The hue has ${contrastWithBg.toFixed(1)}:1 contrast in ${themeLabel(theme)}, so the outline uses theme ink.`;
   }
   return {
     base,
@@ -318,7 +324,7 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
 
   // Determine if 3D raster can be used or if we swap to 2.5D layered SVG
   if (variant === '3d') {
-    const themeKey = resolvedTheme === 'light' ? 'paper' : resolvedTheme === 'glass' ? 'glass' : 'night';
+    const themeKey = iconThemeKey(resolvedTheme);
     const defaultThemeHue: IconPresetHue = resolvedTheme === 'glass' ? 'lime' : 'blue';
     const rasterHue: IconPresetHue | null = !normalizedHue
       ? defaultThemeHue

@@ -6,7 +6,7 @@ export const LoginIconData = {
   line: "M15 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4m-5-3 5-5-5-5m5 5H3",
   filled: "M15 3h4a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-4a1 1 0 1 1 0-2h4a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-4a1 1 0 1 1 0-2ZM9.3 6.3a1 1 0 0 1 1.4 0l5 5a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.4-1.4L12.6 13H3a1 1 0 1 1 0-2h9.6L9.3 7.7a1 1 0 0 1 0-1.4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

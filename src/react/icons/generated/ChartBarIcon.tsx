@@ -6,7 +6,7 @@ export const ChartBarIconData = {
   line: "M4 20h16M7 20v-6m5 6V6m5 14v-9",
   filled: "M12 5a1 1 0 0 1 1 1v13h3v-8a1 1 0 1 1 2 0v8h2a1 1 0 1 1 0 2H4a1 1 0 1 1 0-2h2v-5a1 1 0 1 1 2 0v5h3V6a1 1 0 0 1 1-1Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

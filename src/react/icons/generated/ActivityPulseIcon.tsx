@@ -6,7 +6,7 @@ export const ActivityPulseIconData = {
   line: "M3 12h4l3-7 4 14 3-7h4",
   filled: "M2 11h4.4L10 2l4.2 14L16.3 11H22v2.6h-4l-4 8.4L9.8 8.7 8 13.6H2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

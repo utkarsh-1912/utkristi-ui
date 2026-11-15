@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Button, Icon, IconPalettePicker, Modal, SearchInput, Select, Tabs,
-  icon3dRenders, iconHues, iconManifest, useIconPalette, useTheme,
+  icon3dRenders, iconHues, iconManifest, iconThemeKey, themes, useIconPalette, useTheme,
   type IconGlyphName, type IconManifestEntry, type IconVariant,
 } from '@utkristi/ui';
 import { CopyAction, CopyCode } from './CopyCode';
@@ -10,11 +10,7 @@ const styles: ReadonlyArray<{ id: IconVariant; label: string }> = [
   { id: 'line', label: 'Line' }, { id: 'filled', label: 'Filled' }, { id: 'duotone', label: 'Duotone' },
   { id: '2.5d', label: '2.5D' }, { id: '3d', label: '3D' },
 ];
-const previewThemes = [
-  { id: 'dark', key: 'night', label: 'Night' },
-  { id: 'light', key: 'paper', label: 'Paper' },
-  { id: 'glass', key: 'glass', label: 'Glass' },
-] as const;
+const previewThemes = themes.map((theme) => ({ ...theme, key: iconThemeKey(theme.id) }));
 const groups = [...new Set(iconManifest.map(({ group }) => group))].sort();
 const pageSize = 72;
 
@@ -191,7 +187,7 @@ export default function IconsPage() {
     <header className="icons-heading">
       <span className="label">Utkristi design system</span>
       <h1 className="display display-xl">Icons</h1>
-      <p className="lede">Browse {iconManifest.length} original glyphs. Select an icon to preview it in three themes, copy it, or download it.</p>
+      <p className="lede">Browse {iconManifest.length} interface icons and company marks. Preview line, filled, duotone, 2.5D, and 3D artwork across all themes, then copy or download it.</p>
     </header>
     <div className="icons-toolbar">
       <SearchInput ref={search} aria-label="Search icons" placeholder="Search icons by name or keyword…" shortcut="/"

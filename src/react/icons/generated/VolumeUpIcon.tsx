@@ -6,7 +6,7 @@ export const VolumeUpIconData = {
   line: "M4 9h4l5-4v14l-5-4H4zm12 0q3 3 0 6m2-8q5 5 0 10",
   filled: "M3 8h4l7-5v18l-7-5H3Zm12.4 1 1.6-1.4q4 4.4 0 8.8L15.4 15q3-3 0-6Zm3-2.6L20 5q6 7 0 14l-1.6-1.4q5-5.6 0-11.2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const MapPinIconData = {
   line: "M12 3a6 6 0 0 0-6 6c0 4 6 11 6 11s6-7 6-11a6 6 0 0 0-6-6Zm0 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z",
   filled: "M12 2a7 7 0 0 1 7 7c0 4.3-7 13-7 13S5 13.3 5 9a7 7 0 0 1 7-7ZM14.75 9a2.75 2.75 0 1 1 -5.5 0a2.75 2.75 0 1 1 5.5 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const WindowStackIconData = {
   line: "M3 8h14v12H3zm4-4h14v12h-4",
   filled: "M6 3h16v14h-4v-2h2V5H6Zm-4 4h16v14H2Zm2 2v10h12V9Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

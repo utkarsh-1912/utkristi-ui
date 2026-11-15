@@ -6,7 +6,7 @@ export const KeyboardFocusIconData = {
   line: "M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4m-7-7h6v5H9z",
   filled: "M3 3h6v2H5v4H3Zm12 0h6v6h-2V5h-4ZM3 15h2v4h4v2H3Zm16 0h2v6h-6v-2h4ZM8 9h8v6H8Zm2 2v2h4v-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

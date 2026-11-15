@@ -6,7 +6,7 @@ export const ShareIconData = {
   line: "M18 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM6 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm12 7a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM8.6 13.5l6.8 4m0-11-6.8 4",
   filled: "M18 2a4 4 0 0 0-3.5 6l-5.6 3.3a4 4 0 1 0 0 1.4l5.6 3.3a4 4 0 1 0 1-1.7L9.9 11a4 4 0 0 0 0-.1l5.6-3.2A4 4 0 1 0 18 2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

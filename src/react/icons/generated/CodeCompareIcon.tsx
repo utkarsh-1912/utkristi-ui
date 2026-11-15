@@ -6,7 +6,7 @@ export const CodeCompareIconData = {
   line: "M7 4v16m10-16v16M7 8h8m-3-3 3 3-3 3m5 5H9m3-3-3 3 3 3",
   filled: "M5 3h3v18h-3ZM16 3h3v18h-3ZM8 7h4V4l4 4-4 4V9H8Zm8 8h-4v-3l-4 4 4 4v-3h4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

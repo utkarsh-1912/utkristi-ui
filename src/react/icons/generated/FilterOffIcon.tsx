@@ -6,7 +6,7 @@ export const FilterOffIconData = {
   line: "M4 5h16l-6 7v5l-4 2v-6L4 5Zm0-2 16 18",
   filled: "M2 4h20l-6 7-6-7h6l-2 3 1.5 1.5L18 6H8l6 7v5l-5 3v-8Zm1-2 19 19-1.5 1.5-19-19Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

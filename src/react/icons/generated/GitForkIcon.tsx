@@ -6,7 +6,7 @@ export const GitForkIconData = {
   line: "M6 6v5q0 3 3 3h6q3 0 3-3V6m-6 8v4M4 4h4v3H4zm12 0h4v3h-4zm-6 14h4v3h-4z",
   filled: "M3 3h6v5h-6ZM15 3h6v5h-6ZM9 17h6v5h-6ZM5 8h2v3q0 2 2 2h6q2 0 2-2V8h2v3q0 4-4 4h-2v2h-2v-2H9q-4 0-4-4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const BellOffIconData = {
   line: "m3 3 18 18M8.7 4a6 6 0 0 1 9.3 5v4.3M6 8.5V14l-2 2v1h13m-7 3a2 2 0 0 0 4 0",
   filled: "M3.7 2.3a1 1 0 0 0-1.4 1.4l3 3A7 7 0 0 0 5 9v4.6l-1.7 1.7A1 1 0 0 0 3 16v1a1 1 0 0 0 1 1h13.6l2.7 2.7a1 1 0 0 0 1.4-1.4l-18-18ZM9.2 19a3 3 0 0 0 5.6 0H9.2ZM12 2a7 7 0 0 1 7 7v4.2l-9.2-9.2A7 7 0 0 1 12 2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

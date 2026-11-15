@@ -6,7 +6,7 @@ export const RefundIconData = {
   line: "M5 10a8 8 0 1 1 1 7M5 5v5h5m2-2v8m-2-6h4m-4 4h4",
   filled: "M3 4h2.8v3a9 9 0 1 1-.7 11.2L7.5 17a6.2 6.2 0 1 0 1.7-8H11v2.8H3Zm8 3h2v2h2v2h-4v1h4v4h-2v2h-2v-2H9v-2h4v-1H9V9h2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

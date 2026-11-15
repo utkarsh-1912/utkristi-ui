@@ -1,7 +1,8 @@
+import { consoleWorkspaceHtml, studioWorkspaceHtml, officeWorkspaceHtml } from './workspace-html';
 import { useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import {
   Alert, Badge, Button, Card, CardBody, CardHeader, Checkbox, DataTable, Dialog, Empty, Field,
-  Icon, Input, ScrollArea, Select, Switch, Tabs, type DataTableRowKey, useToast,
+  Icon, IconButton, Input, ScrollArea, Select, Switch, Tabs, Workspace, type DataTableRowKey, useToast,
 } from '@utkristi/ui';
 import type { Example } from './examples';
 import { workflowBlocks } from './workflow-blocks';
@@ -239,8 +240,12 @@ function ExecutionDesk() {
   const [stale, setStale] = useState(false);
   const rows = sampleOrders.filter((order) => !status || order.status === status);
   const order = rows.find((item) => item.id === selected) ?? rows[0];
-  return <TemplateSurface name="Execution workstation" preset="terminal"
-    controls={<Switch label="Compact rows" checked={compact} onCheckedChange={setCompact} />}>
+  const controls = <div role="group" aria-label="Workstation controls">
+      <IconButton label={compact ? 'Use comfortable rows' : 'Use compact rows'} aria-pressed={compact} onClick={() => setCompact(!compact)}><Icon name="table" /></IconButton>
+      <IconButton label="Refresh simulated snapshot" onClick={() => setStale(false)}><Icon name="refresh" /></IconButton>
+      <IconButton label="Clear status filter" disabled={!status} onClick={() => setStatus('')}><Icon name="filter-off" /></IconButton>
+    </div>;
+  const blotter =
     <div className="ut-desk" data-density={compact ? 'compact' : 'comfortable'}>
       <div className="ut-desk-summary">
         <div><span className="label">Execution / equities</span><h2>Order blotter</h2></div>
@@ -285,11 +290,87 @@ function ExecutionDesk() {
       </div>
       <div className="ut-desk-foot"><span>Sample orders and prices</span>
         <Switch label="Simulate stale data" checked={stale} onCheckedChange={setStale} /></div>
-    </div>
-  </TemplateSurface>;
+    </div>;
+  return <Workspace title="Execution workstation" variant="trading" actions={controls}
+    status={stale ? 'Simulated snapshot stale' : 'Sample orders and prices'} navigation={[
+      { id: 'orders', label: 'Order blotter', icon: <Icon name="table" />, content: blotter },
+      { id: 'fills', label: 'Recent fills', icon: <Icon name="history" />, content: <DataTable
+        aria-label="Recent simulated fills" rows={sampleOrders.flatMap((item) => item.fills.map((fill) => ({ ...fill, symbol: item.symbol, id: item.id + fill.time })))}
+        getRowKey={(fill) => fill.id} columns={[
+          { key: 'time', header: 'Time' }, { key: 'symbol', header: 'Symbol' },
+          { key: 'quantity', header: 'Quantity', num: true },
+          { key: 'price', header: 'Price', num: true, render: (fill) => '$' + orderPrice.format(fill.price) },
+        ]} /> },
+      { id: 'settings', label: 'Desk settings', icon: <Icon name="sliders" />, content: <div style={stack}>
+        <h3>Desk settings</h3><Switch label="Compact rows" checked={compact} onCheckedChange={setCompact} />
+        <Switch label="Simulate stale data" checked={stale} onCheckedChange={setStale} />
+      </div> },
+    ]} />;
+}
+
+function ConsoleWorkspace() {
+  const [command, setCommand] = useState('');
+  const [lines, setLines] = useState(['Local demo console. Type help for available commands.']);
+  function runCommand(event: React.FormEvent) {
+    event.preventDefault();
+    const value = command.trim();
+    if (!value) return;
+    if (value === 'clear') setLines([]);
+    else setLines((previous) => [...previous.slice(-98), '> ' + value,
+      value === 'help' ? 'Commands: help, status, clear' : value === 'status' ? 'Build passed. 3 services healthy. Sample data.' : 'Unknown command. Type help.']);
+    setCommand('');
+  }
+  return <Workspace title="Operations console" variant="terminal" status="Local simulation" navigation={[
+    { id: 'console', label: 'Console', icon: <Icon name="terminal" />, content: <div style={stack}>
+      <div role="log" aria-label="Command output" style={{ maxHeight: 240, overflow: 'auto' }}>
+        {lines.map((line, index) => <pre key={index} style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{line}</pre>)}
+      </div>
+      <form onSubmit={runCommand} style={actions}><Field label="Command"><Input value={command} onChange={(event) => setCommand(event.target.value)} autoComplete="off" spellCheck={false} /></Field><Button type="submit">Run</Button></form>
+    </div> },
+    { id: 'services', label: 'Services', icon: <Icon name="server-rack" />, content: <div style={stack}>
+      {['API gateway', 'Event worker', 'Search index'].map((service) => <div key={service} style={actions}><strong>{service}</strong><Badge tone="ok">Healthy</Badge></div>)}
+    </div> },
+  ]} />;
+}
+
+function StudioWorkspace() {
+  const [assets, setAssets] = useState(['Brand identity', 'Launch artwork', 'Product interface']);
+  const [selected, setSelected] = useState(0);
+  const asset = assets[selected];
+  return <Workspace title="Creative studio" variant="studio" status={asset + ' selected'} navigation={[
+    { id: 'assets', label: 'Assets', icon: <Icon name="palette" />, content: <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: 16 }}>
+      {assets.map((name, index) => <Button key={index} variant="ghost"
+        aria-pressed={selected === index} onClick={() => setSelected(index)}
+        style={{ display: 'grid', height: 'auto', minHeight: 180, gridTemplateRows: '80px auto', justifyItems: 'center', gap: 16, padding: 24, whiteSpace: 'normal' }}>
+        <Icon name={(['palette', 'rocket', 'layers'] as const)[index]} variant="2.5d" size={64} />{name}
+      </Button>)}
+    </div> },
+    { id: 'inspector', label: 'Inspector', icon: <Icon name="sliders" />, content: <div style={stack}>
+      <h3>{asset}</h3><Field label="Asset name"><Input value={asset} onChange={(event) => setAssets((previous) => previous.map((name, index) => index === selected ? event.target.value : name))} /></Field>
+      <p className="muted">Changes apply to this local preview.</p>
+    </div> },
+  ]} />;
+}
+
+function OfficeWorkspace() {
+  const [done, setDone] = useState<string[]>([]);
+  const tasks = ['Review supplier invoice', 'Approve access request', 'Prepare weekly report'];
+  return <Workspace title="Team operations" variant="office" status={`${done.length} of ${tasks.length} tasks complete`} navigation={[
+    { id: 'tasks', label: 'My tasks', icon: <Icon name="list-checklist" />, content: <div style={stack}>
+      <h3>Today</h3>{tasks.map((task) => <Checkbox key={task} label={task} checked={done.includes(task)}
+        onChange={(event) => setDone((previous) => event.target.checked ? [...previous, task] : previous.filter((value) => value !== task))} />)}
+    </div> },
+    { id: 'team', label: 'Team', icon: <Icon name="people" />, content: <div style={stack}><h3>Operations team</h3><p>Asha Rao · Finance</p><p>Nora Chen · Platform</p><p>Mika Laurent · Delivery</p></div> },
+  ]} />;
 }
 
 export const blocks = {
+  'console-workspace': { name: 'Operations console', category: 'Application', description: 'Command tabs, local command history, and service status. Try help, status, and clear.', preview: ConsoleWorkspace, jsx: '',
+    html: consoleWorkspaceHtml },
+  'creative-workspace': { name: 'Creative studio', category: 'Application', description: 'Visual asset selection with a separate inspector and spacious studio navigation.', preview: StudioWorkspace, jsx: '',
+    html: studioWorkspaceHtml },
+  'office-workspace': { name: 'Team operations', category: 'Application', description: 'Labelled navigation with an interactive daily task list and team directory.', preview: OfficeWorkspace, jsx: '',
+    html: officeWorkspaceHtml },
   ...workflowBlocks,
   ...worklistBlocks,
   'enterprise-landing': { name: 'Enterprise landing', category: 'Marketing',

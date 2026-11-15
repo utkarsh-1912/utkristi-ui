@@ -6,7 +6,7 @@ export const PowerIconData = {
   line: "M12 3v9m5.7-6.3a8 8 0 1 1-11.4 0",
   filled: "M12 2a1 1 0 0 1 1 1v9a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1ZM7 5a1 1 0 0 1 0 1.4 7 7 0 1 0 10 0A1 1 0 1 1 18.4 5a9 9 0 1 1-12.8 0A1 1 0 0 1 7 5Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const CheckIconData = {
   line: "m20 6-11 11-5-5",
   filled: "M20.7 5.3a1 1 0 0 1 0 1.4l-11 11a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4L9 15.6 19.3 5.3a1 1 0 0 1 1.4 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

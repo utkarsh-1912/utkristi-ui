@@ -6,7 +6,7 @@ export const CameraIconData = {
   line: "M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Zm13 3 5-3v10l-5-3v-4Z",
   filled: "M5 4h9a3 3 0 0 1 3 3v1.6l3.5-2.1A1 1 0 0 1 22 7.4v9.2a1 1 0 0 1-1.5.9L17 15.4V17a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

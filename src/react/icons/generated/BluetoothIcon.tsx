@@ -6,7 +6,7 @@ export const BluetoothIconData = {
   line: "M12 3v18l5-5-10-8m5-5 5 5-10 8",
   filled: "M11 2h1.5l6 6.1-4.8 3.9 4.8 3.9-6 6.1H11v-8l-4.2 3.3-1.3-1.8L10 12 5.5 8.5l1.3-1.8L11 10Zm2 4v3.8l2.2-1.8Zm0 8.2V18l2.2-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

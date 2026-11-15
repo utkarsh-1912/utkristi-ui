@@ -35,6 +35,8 @@ export interface NavbarProps extends HTMLAttributes<HTMLElement> {
   brand?: ReactNode;
   /** `standard` is a full-width bar; `dock` is a floating inset bar with centered links. */
   variant?: 'standard' | 'dock';
+  /** Compact icon navigation for workstations. Text remains available to assistive technology. */
+  presentation?: 'labels' | 'icons';
   /** Align dock links beside the brand and move links that do not fit into a disclosure. */
   collapseLinks?: boolean;
   links?: NavbarLink[];
@@ -73,6 +75,7 @@ function NavEntry({ link, renderLink, className, hidden, onSelect, nested }: {
   link: NavbarLink; renderLink: RenderLink; className: string; hidden?: boolean; onSelect?: () => void; nested?: boolean;
 }) {
   if (!link.children?.length) return renderLink(link, { className, 'aria-current': link.active ? 'page' : undefined,
+    title: typeof link.label === 'string' ? link.label : undefined,
     tabIndex: hidden ? -1 : undefined, onClick: onSelect, children: linkContent(link) });
   return <details data-ut-disclosure="" className={cx('navbar-disclosure', nested && 'navbar-disclosure-nested')}>
     <summary className={cx(className, 'navbar-disclosure-trigger')} tabIndex={hidden ? -1 : undefined}
@@ -117,7 +120,7 @@ function MobileSheet({ id, brand, links, renderLink, onSearch, searchLabel, shee
 }
 
 export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
-  { brand = <Logo size={28} />, variant = 'standard', links = [], renderLink = defaultLink, right, strip, sticky = true, hideOnScroll, onSearch,
+  { brand = <Logo size={28} />, variant = 'standard', presentation = 'labels', links = [], renderLink = defaultLink, right, strip, sticky = true, hideOnScroll, onSearch,
     searchLabel = 'Search', searchShortcut, sheetFoot, collapseLinks, className, children, ...props }, ref,
 ) {
   const [open, setOpen] = useState(false);
@@ -259,7 +262,7 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
   return <>
     <header {...props} ref={ref} className={cx('header', !sticky && 'header-static', dock && 'header-dock', scrolled && 'is-scrolled', sticky && hideOnScroll && away && !open && 'is-away', className)}>
       {strip && <div className="strip"><div className="strip-inner"><div>{strip.left}</div><div>{strip.right}</div></div></div>}
-      <div ref={bar} className={cx('navbar', dock && 'navbar-dock')} data-collapse-links={collapsible || undefined}><div className="navbar-inner">
+      <div ref={bar} className={cx('navbar', dock && 'navbar-dock')} data-presentation={presentation} data-collapse-links={collapsible || undefined}><div className="navbar-inner">
         <div className="navbar-left">
           {brand}
           {!dock && navigation}

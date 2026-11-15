@@ -6,7 +6,7 @@ export const CommitIconData = {
   line: "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-9 4h5m8 0h5",
   filled: "M12 7a5 5 0 0 1 4.9 4H21a1 1 0 1 1 0 2h-4.1a5 5 0 0 1-9.8 0H3a1 1 0 1 1 0-2h4.1A5 5 0 0 1 12 7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -6,7 +6,7 @@ export const MegaphoneIconData = {
   line: "M4 9h5l9-4v14l-9-4H4zm5 6 2 5m10-9v2",
   filled: "M3 8h6l10-4v16L9 16H8l3 5H8l-3-5H3Zm7 2v4l7 3V7Zm10 0h2v4h-2Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

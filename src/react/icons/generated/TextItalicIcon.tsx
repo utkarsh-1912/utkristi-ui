@@ -6,7 +6,7 @@ export const TextItalicIconData = {
   line: "M10 4h8M6 20h8m2-16-8 16",
   filled: "M9 3h10v2.8h-3L9.7 18.2H15V21H5v-2.8h2.3L13.6 5.8H9Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Added a Workspace component with trading, terminal, studio, and office layouts, icon-led Navbar navigation, and interactive console, creative, and operations examples.
+- Extended 2.5D and raster 3D coverage across the icon catalog and added Microsoft, Adobe, Vercel, Netflix, Figma, and Linear identification marks.
+
+- Added Trading, Snow, Aurora, Sepia, Midnight, Forest, Sunset, High Contrast, and Terminal themes across React, standalone CSS, Tailwind, and the docs. Refined Glass surfaces and added reduced-transparency fallbacks.
+
 - Added separate HTML, CSS, and JavaScript sandbox editors, automatic indentation, and preview error messages.
 
 - Added controlled table views, page-size selection, column visibility, translatable table controls, and scoped control density.

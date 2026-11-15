@@ -6,7 +6,7 @@ export const SpinnerRingIconData = {
   line: "M12 3a9 9 0 1 1-9 9",
   filled: "M12 2a10 10 0 1 1-10 10 1.2 1.2 0 0 1 2.4 0A7.6 7.6 0 1 0 12 4.4a1.2 1.2 0 0 1 0-2.4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

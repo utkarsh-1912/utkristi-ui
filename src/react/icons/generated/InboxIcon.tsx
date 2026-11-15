@@ -6,7 +6,7 @@ export const InboxIconData = {
   line: "M7 5h10l4 9v5H3v-5Zm-4 9h5l2 2h4l2-2h5",
   filled: "M6 4h12l4 10v6H2v-6Zm2 2-3 7h4l2 2h2l2-2h4l-3-7Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

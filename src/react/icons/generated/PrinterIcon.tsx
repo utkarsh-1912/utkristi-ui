@@ -6,7 +6,7 @@ export const PrinterIconData = {
   line: "M7 9V4h10v5M7 17H4V9h16v8h-3M7 14h10v6H7Z",
   filled: "M6 3h12v5h3v10h-3v3H6v-3H3V8h3Zm2 2v3h8V5Zm0 10v4h8v-4ZM18 11a1 1 0 1 1 -2 0a1 1 0 1 1 2 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

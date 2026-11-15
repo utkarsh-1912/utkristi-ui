@@ -6,7 +6,7 @@ export const BatteryChargeIconData = {
   line: "M3 7h16v10H3zm16 3h2v4h-2m-7-5-3 4h3l-1 3",
   filled: "M2 6h18v3h2v6h-2v3H2Zm10 2-5 5h4l-1 3 6-6h-4Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

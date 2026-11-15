@@ -6,7 +6,7 @@ export const HardDriveIconData = {
   line: "M4 6h16l1 9H3zm-1 9v4h18v-4m-14 2h.01m4 0h.01",
   filled: "M3.5 5h17L22 15v5H2v-5Zm2 2-.8 7h14.6l-.8-7ZM8 17a1 1 0 1 1 -2 0a1 1 0 1 1 2 0ZM12 17a1 1 0 1 1 -2 0a1 1 0 1 1 2 0Z",
   detail: undefined,
-  has3d: false,
+  has3d: true,
 } as const;
 
 export interface GeneratedIconProps extends SVGProps<SVGSVGElement> {

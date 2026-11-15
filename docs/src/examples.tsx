@@ -1,3 +1,4 @@
+import { themes, themeIds } from '@utkristi/ui';
 import { useId, useState, type ReactNode } from 'react';
 import { ArrowUpRight, Bell, Check, Copy, Ellipsis, FolderOpen, Plus, Trash2 } from 'lucide-react';
 import {
@@ -230,15 +231,15 @@ export const examples = {
     jsx: '<Stats><Stat value={24} label="Rooms" desc="This month" /></Stats>',
   },
   'theme-toggle': {
-    name: 'ThemeToggle', description: 'Cycle through Night, Paper, and Glass with a single labelled button.',
+    name: 'ThemeToggle', description: 'Cycle through built-in appearances with a single labelled button.',
     preview: () => <ThemeToggle />,
-    html: '<button class="btn btn-ghost" id="cycle-theme" type="button">Cycle theme</button>\n<script>\n  const themes = ["dark", "light", "glass"];\n  document.querySelector("#cycle-theme").addEventListener("click", (event) => {\n    const root = document.documentElement;\n    const next = themes[(themes.indexOf(root.dataset.theme) + 1) % themes.length];\n    root.classList.remove(...themes);\n    root.classList.add(next);\n    root.dataset.theme = next;\n    event.currentTarget.textContent = "Cycle theme · " + next;\n  });\n</script>',
+    html: `<button class="btn btn-ghost" id="cycle-theme" type="button">Cycle theme</button>\n<script>\n  const themes = ${JSON.stringify(themeIds)};\n  document.querySelector("#cycle-theme").addEventListener("click", (event) => {\n    const root = document.documentElement;\n    const next = themes[(themes.indexOf(root.dataset.theme) + 1) % themes.length];\n    root.classList.remove(...themes);\n    root.classList.add(next);\n    root.dataset.theme = next;\n    event.currentTarget.textContent = "Cycle theme · " + next;\n  });\n</script>`,
     jsx: '<ThemeToggle />',
   },
   'theme-switch': {
-    name: 'ThemeSwitch', description: 'Select Dark, Light, Glass, or the operating-system preference.',
+    name: 'ThemeSwitch', description: 'Select a built-in appearance or follow the operating-system preference.',
     preview: () => <ThemeSwitch />,
-    html: '<label class="field">Theme<select class="select" data-ut-theme><option value="dark">Night</option><option value="light">Paper</option><option value="glass">Glass</option><option value="system">Auto</option></select></label>\n<script>\n  const themeSelect = document.querySelector("[data-ut-theme]");\n  themeSelect.value = document.documentElement.dataset.theme || "system";\n</script>',
+    html: `<label class="field">Theme<select class="select" data-ut-theme>${themes.map(({ id, label }) => `<option value="${id}">${label}</option>`).join("")}<option value="system">Auto</option></select></label>\n<script>\n  const themeSelect = document.querySelector("[data-ut-theme]");\n  themeSelect.value = document.documentElement.dataset.theme || "system";\n</script>`,
     jsx: '<ThemeProvider><ThemeSwitch /></ThemeProvider>',
   },
   'rich-text': {

@@ -153,16 +153,16 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(function D
   </Popover></>;
 });
 
-export interface DateRangeValue {
+export interface DateRangeCalendarValue {
   start?: Date | string;
   end?: Date | string;
   startTime?: string;
   endTime?: string;
 }
 
-export interface DateRangePickerProps extends Omit<CalendarProps, 'value' | 'defaultValue' | 'onValueChange' | 'rangeStart' | 'rangeEnd'> {
-  value?: DateRangeValue;
-  defaultValue?: DateRangeValue;
+export interface DateRangeCalendarProps extends Omit<CalendarProps, 'value' | 'defaultValue' | 'onValueChange' | 'rangeStart' | 'rangeEnd'> {
+  value?: DateRangeCalendarValue;
+  defaultValue?: DateRangeCalendarValue;
   onValueChange?: (range: { start?: Date; end?: Date; startTime?: string; endTime?: string }) => void;
   placeholder?: string;
   label?: string;
@@ -172,7 +172,7 @@ export interface DateRangePickerProps extends Omit<CalendarProps, 'value' | 'def
   showTime?: boolean;
 }
 
-export const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(function DateRangePicker(
+export const DateRangeCalendar = forwardRef<HTMLDivElement, DateRangeCalendarProps>(function DateRangeCalendar(
   {
     value, defaultValue, onValueChange, locale, min, max, weekStartsOn,
     placeholder = 'Choose date range', label = 'Date range calendar',
@@ -182,7 +182,7 @@ export const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
 ) {
   const field = useControl({ 'aria-describedby': props['aria-describedby'], 'aria-invalid': props['aria-invalid'] });
   const hidden = useRef<HTMLInputElement>(null);
-  const normalize = (range?: DateRangeValue) => ({
+  const normalize = (range?: DateRangeCalendarValue) => ({
     start: dateOnly(range?.start),
     end: dateOnly(range?.end),
     startTime: range?.startTime ?? '09:00',

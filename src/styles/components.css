@@ -876,11 +876,17 @@ input.switch { display: inline-block; margin: 0; }
 .button-group[data-orientation="vertical"] > .btn { margin-inline-start: 0; border-radius: 0; }
 .button-group[data-orientation="vertical"] > .btn:first-child { border-start-start-radius: var(--ut-button-shape, var(--ut-shape-radius, var(--ut-r-field))); border-start-end-radius: var(--ut-button-shape, var(--ut-shape-radius, var(--ut-r-field))); }
 .button-group[data-orientation="vertical"] > .btn:last-child { border-end-start-radius: var(--ut-button-shape, var(--ut-shape-radius, var(--ut-r-field))); border-end-end-radius: var(--ut-button-shape, var(--ut-shape-radius, var(--ut-r-field))); }
-.breadcrumb ol, .pagination, .pagination-entry, .navigation-menu, .menubar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.breadcrumb ol, .navigation-menu, .menubar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.pagination { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 3px; border-radius: var(--ut-shape-radius, var(--ut-r-pill)); background: var(--ut-bg-2); border: var(--ut-border-width, 1px) solid var(--ut-line); }
+.pagination-entry { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px; }
 .breadcrumb ol, .navigation-menu-links { list-style: none; margin: 0; padding: 0; }
 .breadcrumb li { display: inline-flex; gap: 6px; align-items: center; }
 .breadcrumb a, .breadcrumb-divider { color: var(--ut-ink-3); }
-.pagination .btn { padding-inline: 9px; min-inline-size: 32px; }
+.pagination .btn { padding-inline: 9px; min-inline-size: 30px; min-block-size: 30px; justify-content: center; font-variant-numeric: tabular-nums; }
+.pagination .btn-plain { color: var(--ut-ink-2); }
+.pagination .btn-plain:hover:not(:disabled) { background: var(--ut-tint); color: var(--ut-ink); }
+.pagination .btn-ghost { border-color: transparent; background: transparent; }
+.pagination .btn-ghost:hover:not(:disabled) { background: var(--ut-tint); border-color: var(--ut-line); }
 .sidebar { padding: 12px; min-inline-size: 0; }
 .sidebar-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .sidebar-heading { min-inline-size: 0; font-weight: 600; overflow-wrap: anywhere; }

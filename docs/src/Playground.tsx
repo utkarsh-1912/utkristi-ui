@@ -13,7 +13,7 @@ const policy = "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; st
 const frameHead = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
   '<meta http-equiv="Content-Security-Policy" content="' + policy + '"><style>' +
   styles.replace(/<\/style/gi, '<\\/style') +
-  'body{padding:16px;min-height:100vh}#playground{min-width:0}.sample-row{display:flex;flex-wrap:wrap;gap:8px}</style></head>';
+  'body{padding:16px;min-height:100vh}#playground,#sandbox-content{min-width:0}.sample-row{display:flex;flex-wrap:wrap;gap:8px}</style></head>';
 const previewLinks = `<script>
   document.addEventListener('click', event => {
     const link = event.target.closest?.('a[href]');
@@ -61,7 +61,7 @@ function htmlDocument(source: string, theme: ResolvedTheme, motion: PreviewMotio
     })();
   </script>` : '';
   const head = token ? frameHead : frameHead.replace(/<meta http-equiv="Content-Security-Policy"[^>]*>/, '');
-  return head.replace('<html>', `<html data-theme="${theme}" data-ut-motion="${motion}">`) +
+  return head.replace('<html>', `<html class="${theme}" data-theme="${theme}" data-ut-motion="${motion}">`) +
     '<body>' + report + (token ? previewLinks : '') + '<script>' + safeScript(domScript) + '</script><div id="sandbox-content" data-ut-enter>' + source +
     '</div><script>UtkristiDOM.initUI(document);</script>' + ready + '</body></html>';
 }

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { expect, test, vi } from 'vitest';
 import {
-  Button, DataTable, DateRangePicker, Field, Fieldset, Form, Input, Modal, Popover,
+  Button, DataTable, DateRangeCalendar, Field, Fieldset, Form, Input, Modal, Popover,
   Sidebar, SidebarDrawer, SidebarLink, SidebarProvider, SidebarSection, Table, useAsyncValidation, useSidebar,
 } from '../src/react/index.js';
 import { computePlacement } from '../src/react/utils/placement.js';
@@ -139,7 +139,7 @@ test('SidebarProvider persists collapsed state, supports nested SidebarSection, 
   expect(screen.getByRole('button', { name: 'Toggle sidebar navigation' })).toHaveAttribute('aria-expanded', 'false');
 });
 
-test('Fieldset, useAsyncValidation, and DateRangePicker support async validation, localization, time ranges, and form reset', async () => {
+test('Fieldset, useAsyncValidation, and DateRangeCalendar support async validation, localization, time ranges, and form reset', async () => {
   const user = userEvent.setup();
   const onRange = vi.fn();
 
@@ -156,7 +156,7 @@ test('Fieldset, useAsyncValidation, and DateRangePicker support async validation
             <Input value={name} onChange={(e) => { setName(e.target.value); void validate(e.target.value); }} />
           </Field>
           <Field label="Window">
-            <DateRangePicker
+            <DateRangeCalendar
               name="window"
               locale="en-US"
               showTime

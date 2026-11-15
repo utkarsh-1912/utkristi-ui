@@ -88,6 +88,8 @@ function IconDetails({ entry, initialStyle, onClose }: { entry: IconManifestEntr
       </Select></label>
       <div className="icons-detail-palette"><span>Colour</span><IconPalettePicker showPreview={false} /></div>
     </div>
+    {/* The previews scroll horizontally, so keyboard users need a focus stop to scroll them. */}
+    {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
     <div className="icons-detail-themes ut-scrollbar" role="region" aria-label="Icon theme previews, scroll horizontally for more" tabIndex={0}>
       {previewThemes.map((theme) => <div key={theme.id} data-theme={theme.id} className="theme-preview icons-detail-preview"
         ref={theme.id === resolvedTheme ? currentPreview : undefined}>

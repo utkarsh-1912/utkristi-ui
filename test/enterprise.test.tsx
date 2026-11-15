@@ -95,7 +95,7 @@ test('DataTable forwards expandable rows and editable columns', async () => {
       columns={[{ key: 'name', header: 'Name', editable: true, onCellEdit }]}
     />,
   );
-  await user.click(screen.getByRole('button', { name: 'Expand row 1' }));
+  await user.click(screen.getByRole('button', { name: /Expand row/i }));
   expect(screen.getByText('Expanded Core')).toBeInTheDocument();
 });
 
@@ -119,14 +119,14 @@ test('SidebarProvider persists collapsed state, supports nested SidebarSection, 
   }
 
   const first = render(<SidebarProvider storageKey="test-nav-collapsed"><NavProbe /></SidebarProvider>);
-  const collapseBtn = screen.getByRole('button', { name: 'Toggle sidebar navigation' });
-  await user.click(collapseBtn);
-  expect(localStorage.getItem('test-nav-collapsed')).toBe('true');
-
   const sectionTrigger = screen.getByRole('button', { name: 'Engineering' });
   expect(sectionTrigger).toHaveAttribute('aria-expanded', 'true');
   await user.click(sectionTrigger);
   expect(sectionTrigger).toHaveAttribute('aria-expanded', 'false');
+
+  const collapseBtn = screen.getByRole('button', { name: 'Toggle sidebar navigation' });
+  await user.click(collapseBtn);
+  expect(localStorage.getItem('test-nav-collapsed')).toBe('true');
 
   await user.click(screen.getByRole('button', { name: 'Open nav drawer' }));
   const drawer = screen.getByRole('dialog', { name: 'Mobile navigation' });
@@ -175,7 +175,7 @@ test('Fieldset, useAsyncValidation, and DateRangeCalendar support async validati
   await user.type(input, 'taken');
   await waitFor(() => expect(screen.getByText('Name already taken')).toBeInTheDocument());
 
-  const rangeBtn = screen.getByRole('button', { name: /Nov 10, 2026 09:30/i });
+  const rangeBtn = screen.getByRole('button', { name: 'Window' });
   await user.click(rangeBtn);
   const timeInput = screen.getByLabelText('End time');
   fireEvent.change(timeInput, { target: { value: '18:15' } });
@@ -183,7 +183,7 @@ test('Fieldset, useAsyncValidation, and DateRangeCalendar support async validati
 
   await user.click(screen.getByRole('button', { name: 'Reset' }));
   await waitFor(() => expect(screen.queryByText('Name already taken')).not.toBeInTheDocument());
-  expect(screen.getByRole('button', { name: /Nov 10, 2026 09:30 – Nov 12, 2026 17:00/i })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Window' })).toHaveTextContent(/Nov 10, 2026 09:30 – Nov 12, 2026 17:00/i);
 });
 
 test('Nested Popover inside Modal closes top-down on Escape and computePlacement flips on collision', async () => {

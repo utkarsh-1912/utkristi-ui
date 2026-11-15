@@ -153,6 +153,25 @@
 .marketing-featured-link:hover strong, .marketing-appearance:hover { text-decoration: underline; text-underline-offset: .25em; }
 .marketing-featured-link > svg, .marketing-appearance > svg { flex: none; color: var(--ut-ink-2); }
 .marketing-appearances > div { display: flex; flex-wrap: wrap; gap: 8px; margin-block-start: 12px; }
+.marketing-section-copy { margin: 0; color: var(--ut-ink-2); font-size: .92rem; line-height: 1.55; max-width: 44ch; }
+.marketing-appearance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 155px), 1fr)); gap: 10px; }
+.marketing-appearance-card {
+  display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-radius: var(--ut-r);
+  background: var(--ut-bg-2); color: var(--ut-ink); border: 1px solid var(--ut-line);
+  font-size: .88rem; font-weight: 500; text-decoration: none;
+  transition: transform .16s var(--ut-ease), border-color .16s var(--ut-ease);
+}
+.marketing-appearance-card:hover { transform: translateY(-1px); border-color: var(--ut-line-2); }
+.marketing-appearance-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.marketing-appearance-swatch { display: grid; place-items: center; inline-size: 20px; block-size: 20px; border-radius: 50%; background: var(--ut-bg); border: 1px solid var(--ut-line-2); flex: none; }
+.marketing-appearance-swatch i { inline-size: 8px; block-size: 8px; border-radius: 50%; background: var(--ut-solid); }
+.marketing-icon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 118px), 1fr)); gap: 12px; }
+.marketing-icon-tile {
+  display: grid; justify-items: center; align-content: center; gap: 10px; padding: 18px 12px;
+  border-radius: var(--ut-r); border: 1px solid var(--ut-line); background: var(--ut-bg-2);
+  color: var(--ut-ink); text-align: center;
+}
+.marketing-icon-tile span { font-size: .8rem; color: var(--ut-ink-2); font-weight: 500; }
 .marketing-appearance { justify-content: start; padding: 7px 10px; border-radius: var(--ut-r-field); background: var(--ut-tint); font-size: .875rem; }
 .marketing-appearance > span { display: grid; place-items: center; inline-size: 19px; block-size: 19px; border-radius: 50%; background: var(--ut-bg); border: 1px solid var(--ut-line-2); }
 .marketing-appearance i { inline-size: 7px; block-size: 7px; border-radius: 50%; background: var(--ut-solid); }

@@ -146,14 +146,16 @@ export function MarketingHome() {
       <div className="marketing-section-intro">
         <span className="label">Theming</span>
         <h2 id="theme-story">Choose the right appearance</h2>
+        <p className="marketing-section-copy">Switch seamlessly across 12 built-in appearances. Every surface shares the same component APIs and verified contrast ratios.</p>
         <a href="#/theming" className="marketing-link">Read the theme guide <Icon name="arrow-right" /></a>
       </div>
-      <div className="marketing-appearances">
-        <p>Switch seamlessly across Night, Paper, Glass, Trading, Terminal, High Contrast, and more. Every surface shares the same component APIs and verified contrast ratios.</p>
-        <div>{themes.map(({ id: theme, label }) =>
-          <a key={theme} href={`#/showcase?theme=${theme}`} className="marketing-appearance">
-            <span data-theme={theme} aria-hidden="true"><i /></span>{label}<Icon name="arrow-up-right" size={14} />
-          </a>)}</div>
+      <div className="marketing-appearance-grid">
+        {themes.map(({ id: theme, label }) =>
+          <a key={theme} href={`#/showcase?theme=${theme}`} className="marketing-appearance-card" data-theme={theme}>
+            <span className="marketing-appearance-swatch" aria-hidden="true"><i /></span>
+            <span className="marketing-appearance-name">{label}</span>
+            <Icon name="arrow-up-right" size={14} />
+          </a>)}
       </div>
     </section>
 
@@ -161,17 +163,15 @@ export function MarketingHome() {
       <div className="marketing-section-intro">
         <span className="label">Icons</span>
         <h2 id="icon-story">From toolbar to feature artwork</h2>
+        <p className="marketing-section-copy">Use line icons in dense controls, duotone in feature cards, and 2.5D/3D soft-clay artwork in empty states and onboarding—all with live palette selection.</p>
         <a href="#/icons" className="marketing-link">Explore {iconManifest.length} icons <Icon name="arrow-right" /></a>
       </div>
-      <div>
-        <div className="marketing-icon-samples" aria-hidden="true">
-          <Icon name="table" size={32} />
-          <Icon name="settings" variant="filled" size={36} />
-          <Icon name="palette" variant="duotone" size={48} />
-          <Icon name="rocket" variant="2.5d" hue="violet" size={72} />
-          <Icon name="database" variant="3d" hue="teal" size={88} />
-        </div>
-        <p>Use line icons in dense controls, duotone in feature cards, and 2.5D/3D soft-clay artwork in empty states and onboarding—all with live palette selection.</p>
+      <div className="marketing-icon-grid" aria-label="Icon style specimens">
+        <div className="marketing-icon-tile"><Icon name="table" size={28} /><span>2D Line</span></div>
+        <div className="marketing-icon-tile"><Icon name="settings" variant="filled" size={28} /><span>Filled</span></div>
+        <div className="marketing-icon-tile"><Icon name="palette" variant="duotone" size={34} /><span>Duotone</span></div>
+        <div className="marketing-icon-tile"><Icon name="rocket" variant="2.5d" hue="violet" size={48} /><span>2.5D Layered</span></div>
+        <div className="marketing-icon-tile"><Icon name="database" variant="3d" hue="teal" size={54} /><span>3D Clay</span></div>
       </div>
     </section>
   </article>;

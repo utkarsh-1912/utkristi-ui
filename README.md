@@ -1,77 +1,25 @@
 # Utkristi UI
 
-Utkristi UI is the shared design system for the Utkristi ecosystem. It includes twelve built-in themes, CSS custom properties, a Tailwind CSS 3.4 preset and plugin, a standalone stylesheet, and typed React components.
+A shared interface toolkit for the Utkristi ecosystem. Compose trading workspaces, creative tools, and everyday business applications with typed React components and theme-aware styles.
 
-[Marketing overview preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/overview.png)
+[Explore the docs](https://utkristi-ui.vercel.app/) · [Open the sandbox](https://utkristi-ui.vercel.app/#/sandbox) · [Component coverage](docs/component-coverage.md)
 
-[Navigation overflow preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/navbar-overflow.png)
+![Utkristi component studio](docs/screenshots/overview.png)
 
-[Icon catalog preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/icons.png)
+## Choose your starting point
 
-[Sandbox editor preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/sandbox.png)
-
-[Branded startup loader](docs/screenshots/loader.png)
-
-| Night | Paper | Glass |
-| --- | --- | --- |
-| ![Night showcase](docs/screenshots/theme-night.png) | ![Paper showcase](docs/screenshots/theme-paper.png) | ![Glass showcase](docs/screenshots/theme-glass.png) |
-
-[Trading](docs/screenshots/theme-trading.png) · [Snow](docs/screenshots/theme-snow.png) · [Aurora](docs/screenshots/theme-aurora.png) · [Sepia](docs/screenshots/theme-sepia.png) · [Midnight](docs/screenshots/theme-midnight.png) · [Forest](docs/screenshots/theme-forest.png) · [Sunset](docs/screenshots/theme-sunset.png) · [High Contrast](docs/screenshots/theme-high-contrast.png) · [Terminal](docs/screenshots/theme-terminal.png)
-
-| Mobile docs | Mobile navigation |
+| Build with | Start here |
 | --- | --- |
-| ![Mobile Glass docs with the index and Command preview](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/mobile-docs.png) | ![Compact mobile navigation panel in Glass](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/mobile-menu.png) |
+| Individual controls | [Components](https://utkristi-ui.vercel.app/#/components/button) with named examples, API defaults, and source |
+| Complete application layouts | [Blocks](https://utkristi-ui.vercel.app/#/blocks) for trading, terminal, studio, and operations |
+| Your product identity | Twelve themes, independent geometry, and a searchable icon catalog |
+| Your framework | React package or standalone HTML/CSS/JavaScript runtime |
 
-Choose Night, Paper, Glass, Trading, Snow, Aurora, Sepia, Midnight, Forest, Sunset, High Contrast, or Terminal. The same theme IDs work in React, standalone CSS, and Tailwind.
+## Explore before integrating
 
-| Workspace variant | Component layout | Example |
-| --- | --- | --- |
-| `trading` | Narrow icon rail, compact content padding, squared frame | Execution desk with density, refresh, and filter controls |
-| `terminal` | Horizontal command navigation, monospace content | Operations console with local command history |
-| `studio` | Spacious navigation and content area | Creative studio with asset selection and inspector |
-| `office` | Labelled sidebar and responsive mobile navigation | Daily tasks and a team directory |
+Each component page exposes its usage examples. Open an example in the sandbox, select a theme, edit the source, and run it. React and standalone markup can differ in behavior; integration guidance does not imply native Vue, Angular, or Svelte component packages.
 
-[Execution desk preview](docs/screenshots/execution-desk.png) · [Operations console preview](docs/screenshots/console-workspace.png) · [Creative studio preview](docs/screenshots/creative-workspace.png) · [Team operations preview](docs/screenshots/office-workspace.png) · [Workspace sandbox](docs/screenshots/workspace-sandbox.png)
-
-Select layout and palette independently. A Trading layout can use Snow, and a Studio layout can use Aurora. Open **Workspace** in the component docs to compare the four layouts and edit their React or standalone HTML examples.
-
-~~~tsx
-import { Icon, Workspace } from '@utkristi/ui';
-
-<Workspace
-  title="Execution"
-  variant="trading"
-  defaultActiveId="orders"
-  navigation={[
-    { id: 'orders', label: 'Orders', icon: <Icon name="table" />, content: <OrderBlotter /> },
-    { id: 'activity', label: 'Activity', icon: <Icon name="history" />, content: <Activity /> },
-  ]}
-  status="Sample market data"
-/>
-~~~
-
-Supply unique, stable navigation IDs. Use `activeId` and `onActiveChange` when routing is controlled by the application. The workspace mounts the active destination. Keep persistent form state in the parent when users need to retain it across destinations.
-
-For compact horizontal navigation, set `presentation="icons"` on `Navbar` and supply an `icon` and meaningful `label` on each link. Text appears on hover and keyboard focus, remains available to assistive technology, and stays visible in mobile navigation.
-
-The icon catalog contains 262 interface icons and company marks, with 2.5D SVG and raster 3D coverage for every entry. Microsoft, Adobe, Vercel, Netflix, Figma, and Linear join the existing social marks. Company marks identify their respective owners and imply no affiliation with Utkristi.
-
-~~~tsx
-<Icon name="settings" variant="2.5d" hue="violet" size={64} />
-<Icon name="database" variant="3d" hue="teal" size={96} />
-<Icon name="microsoft" variant="filled" label="Microsoft" size={24} />
-~~~
-
-The software clay renderer generates PNG assets at 96px and 160px in eight hues with Night, Paper, and Glass lighting. Additional appearances reuse the compatible light or dark lighting. Custom colors use live SVG extrusion. AVIF and WebP sources are included when those encoded assets are available. Large artwork is intended for feature cards and empty states, while line icons work at toolbar sizes.
-
-The docs include component variants and a Blocks library with working project management, account, settings, and pricing examples. Open any example in the sandbox to try it in any built-in theme.
-
-The Project Worklist demonstrates a controlled remote `DataTable`, request cancellation, retries, and bulk actions. Audit Explorer adds date filtering, visible columns, and a saved view. Roles and Access demonstrates permission editing in a sheet. All three include editable TSX and API references. The docs build also emits the worklist source as `r/project-worklist.json` for use with the matching package build.
-
-Pass `remote={{ state, onStateChange, totalRows, status }}` to `DataTable` with the current server page in `rows`. Use `toolbar` for app filters and actions, `density` for row spacing, and `stickyHeader` for a bounded scroll region. Set `--ut-table-height` on the table's container to adjust the region height. The header checkbox selects eligible rows on the current page. The selection summary counts keys across pages and can clear the selection. Render row action buttons or links inside a column to make them reachable with Tab.
-
-Use `state` and `onStateChange` to control a client-side table from a URL or saved view. With `pageSizeOptions`, the table emits `state.pageSize` and resets to page one when the size changes. In remote mode, use that size when fetching and fall back to the `pageSize` prop when it is omitted. Enable `columnVisibility` for an editable column view and set `hideable: false` on required columns. Hidden columns remain searchable. Use `labels` to translate pagination, selection, loading, and retry controls.
-
+Read the [feature review](docs/component-design-review.md) for remaining capabilities and the generated [coverage inventory](docs/component-coverage.md) for available examples.
 
 ## Install
 

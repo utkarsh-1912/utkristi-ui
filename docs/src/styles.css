@@ -379,7 +379,8 @@
 .icons-detail-palette .icon-swatch { inline-size: 25px; block-size: 25px; }
 .icons-detail-actions { align-items: center; }
 .icons-detail-actions .btn { min-block-size: 36px; }
-.icons-detail-themes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.icons-detail-themes { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 16px) / 3); grid-template-columns: none; gap: 8px; overflow-x: auto; min-inline-size: 0; scroll-snap-type: x proximity; padding-block-end: 8px; }
+.icons-detail-themes > * { scroll-snap-align: start; min-inline-size: 0; }
 .icons-detail-preview { display: grid; justify-items: center; gap: 8px; padding: 12px 4px; border-radius: var(--ut-r); }
 .icons-detail-glyph { display: grid; min-block-size: 80px; min-inline-size: 0; inline-size: 100%; place-items: center; }
 .icons-detail-glyph .icon { max-inline-size: 95%; block-size: auto; aspect-ratio: 1; }
@@ -424,3 +425,13 @@
 .playground-example-search { display:grid; gap:8px; margin-block:24px; max-inline-size:640px; }
 .playground-example-results { display:flex; flex-wrap:wrap; gap:8px; }
 .playground-example-description { color:var(--ut-ink-2); margin-block:12px 24px; }
+
+.marketing-paths { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:32px; padding-block:48px 72px; }
+.marketing-paths a { color:var(--ut-ink); }
+.marketing-paths h2 { font-size:1.25rem; margin-block:18px 10px; }
+.marketing-paths p { color:var(--ut-ink-2); line-height:1.6; }
+.marketing-variant-options { display:flex; flex-wrap:wrap; gap:6px; margin-block:20px; }
+.marketing-variant-options button { border:0; border-radius:var(--ut-r-field); padding:8px 12px; background:transparent; color:var(--ut-ink-2); cursor:pointer; }
+.marketing-variant-options button[aria-pressed="true"] { background:var(--ut-tint); color:var(--ut-ink); }
+.marketing-stage-body code { display:block; margin-block-start:24px; font-size:.75rem; overflow-wrap:anywhere; white-space:normal; }
+@media(max-width:700px) { .marketing-paths { grid-template-columns:1fr; gap:28px; } }

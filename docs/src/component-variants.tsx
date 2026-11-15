@@ -131,6 +131,15 @@ function CollapsingSidebar({ mode = 'icons' }: { mode?: 'icons' | 'offcanvas' } 
 }
 
 export const componentVariants = {
+  'table--pinned-columns': example('Pinned identifying column', 'Keep the project name visible while horizontally scrolling the remaining columns. Pinning uses logical edges for RTL layouts.',
+    () => <div style={{maxWidth:420}}><Table caption="Project directory" rows={projects} getRowKey={row => row.id} columns={[{key:'name',header:'Project',width:180,pinned:'start',resizable:true},{key:'owner',header:'Owner',width:360}]} /></div>,
+    '<div class="table-wrap" tabindex="0" role="region" aria-label="Project directory" style="max-width:420px"><table class="table"><thead><tr><th style="position:sticky;inset-inline-start:0;min-width:180px;background:var(--ut-bg-2)">Project</th><th style="min-width:360px">Owner</th></tr></thead><tbody><tr><td style="position:sticky;inset-inline-start:0;min-width:180px;background:var(--ut-bg-2)">Studio</td><td>Design</td></tr></tbody></table></div>'),
+  'badge--surfaces': example('Surface and size options', 'Use soft status labels, outlined metadata, or a solid emphasis badge in three sizes.',
+    () => <div className="sample-row"><Badge variant="soft" size="sm">Draft</Badge><Badge variant="outlined">Reviewed</Badge><Badge variant="solid" size="lg" icon={<Icon name="check" />}>Published</Badge></div>,
+    '<div class="sample-row"><span class="badge" data-size="sm">Draft</span><span class="badge" data-variant="outlined">Reviewed</span><span class="badge" data-variant="solid" data-size="lg">Published</span></div>'),
+  'button--appearances': example('Action hierarchy', 'Solid, outlined, dashed, filled, text, and link presentations share loading, disabled, size, and geometry options.',
+    () => <div className="sample-row">{(['solid','outlined','dashed','filled','text','link'] as const).map(variant => <Button key={variant} variant={variant}>{variant}</Button>)}</div>,
+    '<div class="sample-row"><button class="btn btn-solid">Solid</button><button class="btn btn-ghost">Outlined</button><button class="btn btn-dashed">Dashed</button><button class="btn btn-quiet">Filled</button><button class="btn btn-plain">Text</button><a href="#details" class="btn btn-link">Link</a></div>'),
   'card--surfaces': example('Outlined, elevated, soft, and plain', 'Select a card surface independently of the global theme and corner radius.',
     () => <div className="sample-grid">{(['outlined','elevated','soft','plain'] as const).map(variant => <Card key={variant} variant={variant}><CardBody><h3>{variant}</h3><p>Workspace details and a next step.</p><Button variant="quiet" href="#details">View details</Button></CardBody></Card>)}</div>,
     '<div class="sample-grid"><article class="card card-body" data-variant="soft"><h3>Workspace</h3><p>Workspace details</p><a class="btn btn-quiet" href="#details">View details</a></article><article class="card card-body" data-variant="elevated"><h3>Team</h3><p>Team details</p></article></div>'),

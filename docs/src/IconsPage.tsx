@@ -88,7 +88,7 @@ function IconDetails({ entry, initialStyle, onClose }: { entry: IconManifestEntr
       </Select></label>
       <div className="icons-detail-palette"><span>Colour</span><IconPalettePicker showPreview={false} /></div>
     </div>
-    <div className="icons-detail-themes">
+    <div className="icons-detail-themes ut-scrollbar" role="region" aria-label="Icon theme previews, scroll horizontally for more" tabIndex={0}>
       {previewThemes.map((theme) => <div key={theme.id} data-theme={theme.id} className="theme-preview icons-detail-preview"
         ref={theme.id === resolvedTheme ? currentPreview : undefined}>
         <span className="label">{theme.label}</span>

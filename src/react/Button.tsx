@@ -4,7 +4,7 @@ import { assignRef, cx } from './utils/cx.js';
 import type { ComponentGeometry } from './utils/geometry.js';
 
 interface ButtonStyle extends ComponentGeometry {
-  variant?: 'solid' | 'ghost' | 'quiet' | 'danger' | 'plain';
+  variant?: 'solid' | 'ghost' | 'quiet' | 'danger' | 'plain' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link';
   size?: 'sm' | 'md' | 'lg';
   block?: boolean;
   loading?: boolean;
@@ -18,7 +18,7 @@ export type ButtonProps = ButtonStyle & (
   | (AnchorHTMLAttributes<HTMLAnchorElement> & { href: string })
 );
 
-const variants = { solid: 'btn-solid', ghost: 'btn-ghost', quiet: 'btn-quiet', danger: 'btn-danger', plain: 'btn-plain' };
+const variants = { solid: 'btn-solid', ghost: 'btn-ghost', quiet: 'btn-quiet', danger: 'btn-danger', plain: 'btn-plain', outlined: 'btn-ghost', dashed: 'btn-dashed', filled: 'btn-quiet', text: 'btn-plain', link: 'btn-link' };
 const sizes = { sm: 'btn-sm', md: '', lg: 'btn-lg' };
 
 function buttonGeometry({ radius, inlineSize }: ComponentGeometry, style: CSSProperties | undefined) {

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, Icon, iconManifest, themes } from '@utkristi/ui';
 import { blocks } from './blocks';
 
@@ -42,15 +42,13 @@ export function WorkflowSection() {
 }
 
 function ReleasePreview() {
-  return <figure className="marketing-stage">
-    <figcaption><Icon name="layers" size={17} /> Release workspace <span>Example</span></figcaption>
-    <div className="marketing-stage-body">
-      <span className="label">Release 24.08</span>
-      <strong>Ready to promote</strong>
-      <ul>{['Build verified', 'Access review complete', 'Rollback tested'].map((item) =>
-        <li key={item}><Icon name="check" size={16} />{item}</li>)}</ul>
-    </div>
-  </figure>;
+  const [variant, setVariant] = useState<'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link'>('solid');
+  return <figure className="marketing-stage"><figcaption><Icon name="layers" size={17} /> Component studio <span>Interactive</span></figcaption>
+    <div className="marketing-stage-body"><span className="label">One API. Different intentions.</span><strong>Make it fit your product.</strong>
+      <div className="marketing-variant-options">{(['solid','outlined','dashed','filled','text','link'] as const).map(value => <button key={value} aria-pressed={value === variant} onClick={() => setVariant(value)}>{value}</button>)}</div>
+      <Button variant={variant} iconRight={<Icon name="arrow-right" />}>Explore the library</Button>
+      <code>{'<Button variant="' + variant + '">Explore the library</Button>'}</code>
+    </div></figure>;
 }
 
 export function MarketingHome() {
@@ -60,13 +58,18 @@ export function MarketingHome() {
       <div className="marketing-hero-copy">
         <span className="label">Utkristi UI</span>
         <h1 id="marketing-title">A design system for Utkristi.</h1>
-        <p>Build trading workstations, creative tools, and business apps with purpose-specific layouts, accessible controls, and twelve coordinated themes.</p>
+        <p>Build the tools your teams use every day. Start with typed components, explore working variants, and compose an interface for your product.</p>
         <div className="marketing-actions">
           <Button href="#/getting-started" iconRight={<Icon name="arrow-right" />}>Get started</Button>
           <a href="#/components/button" className="marketing-link">Explore components</a>
         </div>
       </div>
       <ReleasePreview />
+    </section>
+    <section className="marketing-paths" aria-label="Start building">
+      <a href="#/components/button"><Icon name="layers" /><h2>Choose a component</h2><p>Explore usage examples, props, and source together.</p></a>
+      <a href="#/sandbox"><Icon name="code" /><h2>Make it yours</h2><p>Edit React or HTML, CSS, and JavaScript in a live sandbox.</p></a>
+      <a href="#/frameworks"><Icon name="terminal" /><h2>Bring it to your stack</h2><p>Use the React package or standalone styles and DOM runtime.</p></a>
     </section>
     <WorkflowSection />
     <section className="marketing-section" aria-labelledby="theme-story" data-reveal>

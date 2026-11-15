@@ -340,7 +340,7 @@ async function captureEdge() {
     await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-transparency', value: 'reduce' }] });
     await retry(() => evaluate(`(() => {
       const glass = getComputedStyle(document.querySelector('.shape-demo [data-theme="glass"] .card'));
-      return glass.backdropFilter === 'none' && glass.backgroundColor === 'rgb(240, 237, 250)';
+      return glass.backdropFilter === 'none' && glass.backgroundColor === 'rgb(244, 242, 251)' && glass.backgroundImage === 'none';
     })()`), 'Glass respects reduced transparency');
     await setMotion('no-preference');
 

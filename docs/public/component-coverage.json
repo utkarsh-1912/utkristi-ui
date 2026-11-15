@@ -1,6 +1,6 @@
 {
   "components": 110,
-  "variants": 134,
+  "variants": 137,
   "entries": [
     {
       "slug": "accordion",
@@ -83,6 +83,10 @@
       "name": "Badge",
       "variants": [
         {
+          "slug": "badge--surfaces",
+          "name": "Surface and size options"
+        },
+        {
           "slug": "badge--counts",
           "name": "Counts and status badges"
         }
@@ -145,6 +149,10 @@
         {
           "slug": "button-states",
           "name": "Loading and disabled"
+        },
+        {
+          "slug": "button--appearances",
+          "name": "Action hierarchy"
         },
         {
           "slug": "button--sizes-and-icons",
@@ -1036,6 +1044,10 @@
       "slug": "table",
       "name": "Table",
       "variants": [
+        {
+          "slug": "table--pinned-columns",
+          "name": "Pinned identifying column"
+        },
         {
           "slug": "table--striped",
           "name": "Striped and bordered table"

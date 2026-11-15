@@ -1,4 +1,4 @@
-import { forwardRef, type ForwardedRef, type ReactElement, type ReactNode, type TableHTMLAttributes } from 'react';
+import { forwardRef, useState, type CSSProperties, type ForwardedRef, type ReactElement, type ReactNode, type TableHTMLAttributes } from 'react';
 import { cx } from './utils/cx.js';
 
 export interface TableColumn<Row> {
@@ -9,6 +9,12 @@ export interface TableColumn<Row> {
   align?: 'left' | 'center' | 'right';
   num?: boolean;
   label?: string;
+  /** Pixel width. Pinned columns default to 160px. */
+  width?: number;
+  pinned?: 'start' | 'end';
+  resizable?: boolean;
+  minWidth?: number;
+  maxWidth?: number;
 }
 export interface TableProps<Row> extends Omit<TableHTMLAttributes<HTMLTableElement>, 'caption'> {
   columns: TableColumn<Row>[];
@@ -23,19 +29,35 @@ export interface TableProps<Row> extends Omit<TableHTMLAttributes<HTMLTableEleme
   hoverable?: boolean;
   bordered?: boolean;
   emptyContent?: ReactNode;
+  columnWidths?: Readonly<Record<string, number>>;
+  defaultColumnWidths?: Readonly<Record<string, number>>;
+  onColumnWidthsChange?: (widths: Record<string, number>) => void;
 }
 
 export const Table = forwardRef(function Table<Row>(
-  { columns, rows, getRowKey, stack, caption, density, stickyHeader, onRowClick, striped, hoverable = true, bordered, emptyContent, className, ...props }: TableProps<Row>, ref: ForwardedRef<HTMLTableElement>,
+  { columns, rows, getRowKey, stack, caption, density, stickyHeader, onRowClick, striped, hoverable = true, bordered, emptyContent, columnWidths, defaultColumnWidths = {}, onColumnWidthsChange, className, ...props }: TableProps<Row>, ref: ForwardedRef<HTMLTableElement>,
 ) {
+  const [localWidths, setLocalWidths] = useState(defaultColumnWidths);
+  const widths = columnWidths ?? localWidths;
+  const widthOf = (column: TableColumn<Row>) => widths[column.key] ?? column.width ?? (column.pinned || column.resizable ? 160 : undefined);
   const alignment = (column: TableColumn<Row>) => cx((column.num || column.align === 'right') && 'num', column.align === 'center' && 'cell-center');
+  const columnStyle = (column: TableColumn<Row>, index: number): CSSProperties => {
+    const width = widthOf(column);
+    const peers = column.pinned === 'start' ? columns.slice(0, index) : columns.slice(index + 1);
+    const offset = peers.filter(item => item.pinned === column.pinned).reduce((sum, item) => sum + (widthOf(item) ?? 160), 0);
+    return { width, minWidth: width, ...(column.pinned ? { position: 'sticky', [column.pinned === 'start' ? 'insetInlineStart' : 'insetInlineEnd']: offset, zIndex: 1, background: 'var(--ut-bg-2)' } : {}) };
+  };
   // Keep the scrolling region reachable by keyboard.
   // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
   return <div className="table-wrap" tabIndex={0} role="region" aria-label={typeof caption === 'string' ? caption : 'Scrollable table'}
     data-ut-slot="table-scroll" data-sticky-header={stickyHeader || undefined}>
     <table {...props} ref={ref} data-ut-slot="table" data-density={density} data-striped={striped || undefined} data-hoverable={hoverable} data-bordered={bordered || undefined} className={cx('table', stack && 'table-stack', className)}>
       {caption != null && <caption>{caption}</caption>}
-      <thead><tr>{columns.map((column) => <th key={column.key} scope="col" data-ut-slot="table-header" aria-sort={column.sort} className={alignment(column)}>{column.header}</th>)}</tr></thead>
+      <thead><tr>{columns.map((column, index) => <th key={column.key} scope="col" style={columnStyle(column, index)} data-ut-slot="table-header" aria-sort={column.sort} className={alignment(column)}>{column.header}{column.resizable && <input className="table-column-width" type="range" aria-label={'Resize ' + (typeof column.header === 'string' ? column.header : column.label ?? column.key)} min={column.minWidth ?? 64} max={column.maxWidth ?? 600} value={widthOf(column)} onChange={event => {
+        const next = { ...widths, [column.key]: Number(event.target.value) };
+        if (columnWidths === undefined) setLocalWidths(next);
+        onColumnWidthsChange?.(next);
+      }} />}</th>)}</tr></thead>
       <tbody>{!rows.length && emptyContent != null && <tr><td colSpan={Math.max(1, columns.length)}>{emptyContent}</td></tr>}{rows.map((row, index) => <tr key={getRowKey(row, index)} data-ut-slot="table-row" tabIndex={onRowClick ? 0 : undefined}
         onClick={onRowClick ? (event) => {
           if (event.defaultPrevented || !(event.target instanceof Element) || !event.currentTarget.contains(event.target)) return;
@@ -47,7 +69,7 @@ export const Table = forwardRef(function Table<Row>(
         onKeyDown={onRowClick ? (event) => {
           if (event.key === 'Enter' && event.target === event.currentTarget) onRowClick(row);
         } : undefined}>
-        {columns.map((column) => <td key={column.key} data-ut-slot="table-cell" className={alignment(column)}
+        {columns.map((column, index) => <td key={column.key} data-ut-slot="table-cell" style={columnStyle(column, index)} className={alignment(column)}
           data-label={stack ? column.label ?? (typeof column.header === 'string' ? column.header : column.key) : undefined}>
           {column.render ? column.render(row) : String(row[column.key as keyof Row] ?? '')}
         </td>)}

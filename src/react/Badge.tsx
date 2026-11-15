@@ -4,10 +4,10 @@ import { CloseIconData } from './icons/generated/CloseIcon.js';
 import { assignRef, cx } from './utils/cx.js';
 
 export type Tone = 'neutral' | 'ok' | 'warn' | 'bad' | 'accent';
-export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> { tone?: Tone | 'count' }
+export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> { tone?: Tone | 'count'; variant?: 'soft' | 'outlined' | 'solid'; size?: 'sm' | 'md' | 'lg'; icon?: ReactNode }
 const badgeTones = { neutral: '', ok: 'badge-ok', warn: 'badge-warn', bad: 'badge-bad', accent: 'badge-accent' };
-export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(function Badge({ tone = 'neutral', className, ...props }, ref) {
-  return <span {...props} ref={ref} className={cx(tone === 'count' ? 'badge-count' : 'badge', tone !== 'count' && badgeTones[tone], className)} />;
+export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(function Badge({ tone = 'neutral', variant = 'soft', size = 'md', icon, children, className, ...props }, ref) {
+  return <span {...props} ref={ref} data-variant={variant} data-size={size} className={cx(tone === 'count' ? 'badge-count' : 'badge', tone !== 'count' && badgeTones[tone], className)}>{icon != null && <span aria-hidden="true">{icon}</span>}{children}</span>;
 });
 
 export interface DotProps extends HTMLAttributes<HTMLSpanElement> {

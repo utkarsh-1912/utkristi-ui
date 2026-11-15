@@ -1428,3 +1428,15 @@ input.switch { display: inline-block; margin: 0; }
 .card[data-variant="elevated"] { border:0; box-shadow:var(--ut-shadow); }
 .table[data-striped] tbody tr:nth-child(even) { background:var(--ut-tint); }
 .table[data-bordered] :is(th,td) { border:1px solid var(--ut-line); }
+
+.btn-dashed { border:1px dashed var(--ut-line-2); background:transparent; color:var(--ut-ink); }
+.btn-dashed:hover { background:var(--ut-tint); }
+.btn-link { background:transparent; color:var(--ut-ink); text-decoration:underline; text-underline-offset:4px; }
+
+.badge[data-variant="outlined"] { background:transparent; border:1px solid currentColor; }
+.badge[data-variant="solid"] { background:var(--ut-solid); color:var(--ut-on-solid); border-color:transparent; }
+.badge[data-size="sm"] { font-size:10px; padding:2px 6px; }
+.badge[data-size="lg"] { font-size:14px; padding:6px 12px; }
+.badge > span { display:inline-flex; align-items:center; }
+
+.table-column-width { display:block; width:100%; min-width:64px; max-width:140px; margin-block-start:8px; accent-color:var(--ut-ink); }

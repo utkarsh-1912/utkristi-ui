@@ -1,4 +1,4 @@
-import { forwardRef, useId, useState, type HTMLAttributes, type LabelHTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useId, useState, type AnchorHTMLAttributes, type HTMLAttributes, type LabelHTMLAttributes, type ReactNode } from 'react';
 import { cx, type CSSVariables } from './utils/cx.js';
 import { Button } from './Button.js';
 
@@ -6,10 +6,13 @@ type DivProps = HTMLAttributes<HTMLDivElement>;
 
 export const Alert = forwardRef<HTMLDivElement, DivProps & {
   title: string; tone?: 'neutral' | 'ok' | 'warn' | 'bad'; icon?: ReactNode;
-}>(function Alert({ title, tone = 'neutral', icon, children, className, ...props }, ref) {
-  return <div role={tone === 'bad' ? 'alert' : 'status'} {...props} ref={ref} className={cx('alert', className)} data-tone={tone}>
+  variant?: 'soft' | 'plain' | 'outlined' | 'solid';
+  actions?: ReactNode; onDismiss?: () => void; dismissLabel?: string; banner?: boolean;
+}>(function Alert({ title, tone = 'neutral', icon, variant = 'soft', actions, onDismiss, dismissLabel = 'Dismiss alert', banner, children, className, ...props }, ref) {
+  return <div role={tone === 'bad' ? 'alert' : 'status'} {...props} ref={ref} className={cx('alert', className)} data-tone={tone} data-variant={variant} data-banner={banner || undefined}>
     {icon && <span className="alert-icon" aria-hidden="true">{icon}</span>}
-    <div><strong>{title}</strong>{children != null && <div className="alert-description">{children}</div>}</div>
+    <div className="alert-content"><strong>{title}</strong>{children != null && <div className="alert-description">{children}</div>}{actions != null && <div className="alert-actions">{actions}</div>}</div>
+    {onDismiss && <Button variant="plain" size="sm" className="alert-dismiss" aria-label={dismissLabel} onClick={onDismiss}>×</Button>}
   </div>;
 });
 
@@ -118,17 +121,20 @@ export interface SidebarProps extends HTMLAttributes<HTMLElement> {
   defaultCollapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
   toggleLabel?: string;
+  collapseMode?: 'content' | 'icons' | 'offcanvas';
+  togglePosition?: 'header' | 'edge';
+  footer?: ReactNode;
 }
 
 export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar({
   heading, variant = 'panel', collapsible = false, collapsed, defaultCollapsed = false,
-  onCollapsedChange, toggleLabel = 'Toggle sidebar navigation', className, children, ...props
+  onCollapsedChange, toggleLabel = 'Toggle sidebar navigation', collapseMode = 'content', togglePosition = 'header', footer, className, children, ...props
 }, ref) {
   const contentId = useId();
   const [localCollapsed, setLocalCollapsed] = useState(defaultCollapsed);
   const isCollapsed = collapsed ?? localCollapsed;
   return <aside {...props} ref={ref} className={cx('sidebar', variant === 'rail' && 'sidebar-rail', className)}
-    data-collapsed={isCollapsed || undefined}>
+    data-collapsed={isCollapsed || undefined} data-collapse-mode={collapseMode} data-toggle-position={togglePosition}>
     {collapsible ? <div className="sidebar-header">
       {heading != null && <div className="sidebar-heading">{heading}</div>}
       <Button variant="ghost" size="sm" className="sidebar-toggle" type="button"
@@ -142,6 +148,17 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar({
         </svg>
       </Button>
     </div> : heading != null && <div className="sidebar-heading">{heading}</div>}
-    <div className="sidebar-content" id={contentId} hidden={isCollapsed}>{children}</div>
+    <div className="sidebar-content" id={contentId} hidden={isCollapsed && collapseMode !== 'icons'}>{children}</div>
+    {footer != null && <div className="sidebar-footer" hidden={isCollapsed}>{footer}</div>}
   </aside>;
+});
+
+/** Labels stay available to assistive technology when an icon rail is collapsed. */
+export const SidebarLink = forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement> & {
+  label: string; icon?: ReactNode; badge?: ReactNode;
+}>(function SidebarLink({ label, icon, badge, className, ...props }, ref) {
+  return <a title={label} aria-label={label} {...props} ref={ref} className={cx('sidebar-link', className)}>
+    <span className="sidebar-link-icon" aria-hidden="true">{icon ?? label.slice(0, 1)}</span>
+    <span className="sidebar-link-label">{label}</span>{badge != null && <span className="sidebar-link-badge">{badge}</span>}
+  </a>;
 });

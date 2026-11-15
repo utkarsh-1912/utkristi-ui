@@ -247,7 +247,8 @@
 .docs-theme-select { inline-size: 108px; block-size: 40px; padding-inline: 12px 28px; font-size: .875rem; background-position: calc(100% - 15px) center, calc(100% - 10px) center; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); }
 .docs-navbar .navbar-link-icon { display: none; }
 :is(.docs-navbar, .docs-sheet-theme) .docs-theme-select { inline-size: var(--docs-theme-select-width, 91px); block-size: 42px; padding-inline: 10px 24px; background-color: transparent; box-shadow: none; border: 0; color: var(--ut-control-ink, var(--ut-ink)); border-radius: 9px; }
-:root[data-theme="high-contrast"] { --docs-theme-select-width: 119px; }
+:root[data-theme="high-contrast"] { --docs-theme-select-width: 140px; }
+:root[data-theme="terminal"] { --docs-theme-select-width: 110px; }
 :is(.docs-navbar, .docs-sheet-theme) .docs-theme-select:hover { background-color: var(--ut-nav-hover, var(--ut-tint)); }
 :is(.docs-navbar, .docs-sheet-theme) .docs-theme-select:focus-visible { outline: 2px solid var(--ut-focus, var(--ut-accent)); outline-offset: -2px; box-shadow: none; }
 .docs-navbar .navbar-search { padding-inline: 10px; gap: 7px; }
@@ -411,3 +412,15 @@
 }
 
 .marketing-icon-samples { display: flex; align-items: center; flex-wrap: wrap; gap: clamp(16px, 3vw, 28px); padding-block: 16px; }
+
+.component-example-index { display:flex; flex-wrap:wrap; gap:8px; margin-block:24px 36px; }
+.component-example-index a { padding:8px 12px; background:var(--ut-tint); border-radius:var(--ut-r-field); color:var(--ut-ink); font-size:.875rem; }
+.component-example-section { scroll-margin-top:120px; margin-block:36px; min-width:0; }
+.component-example-section h3 { margin-block:0 8px; }
+.component-example-section .doc-section-head { align-items:flex-start; }
+.component-example-section > [id^="content-"] { margin-block-start:16px; }
+.component-variants { margin-block-start:48px; }
+
+.playground-example-search { display:grid; gap:8px; margin-block:24px; max-inline-size:640px; }
+.playground-example-results { display:flex; flex-wrap:wrap; gap:8px; }
+.playground-example-description { color:var(--ut-ink-2); margin-block:12px 24px; }

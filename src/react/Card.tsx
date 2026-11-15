@@ -6,9 +6,10 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement>, ComponentGeom
   well?: boolean;
   pane?: boolean;
   interactive?: boolean;
+  variant?: 'outlined' | 'elevated' | 'soft' | 'plain';
 }
-export const Card = forwardRef<HTMLDivElement, CardProps>(function Card({ well, pane, interactive, className, radius, inlineSize, style, ...props }, ref) {
-  return <div {...props} ref={ref} className={cx(pane ? 'pane' : 'card', well && 'card-well', interactive && 'card-interactive', className)}
+export const Card = forwardRef<HTMLDivElement, CardProps>(function Card({ well, pane, interactive, variant = 'outlined', className, radius, inlineSize, style, ...props }, ref) {
+  return <div {...props} ref={ref} data-variant={variant} className={cx(pane ? 'pane' : 'card', well && 'card-well', interactive && 'card-interactive', className)}
     style={geometryStyle({ radius, inlineSize }, style)} />;
 });
 export const CardHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function CardHeader({ className, ...props }, ref) {

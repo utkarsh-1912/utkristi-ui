@@ -210,3 +210,11 @@ See the [competitive audit and implementation roadmap](https://github.com/utkars
 The screenshot script uses Playwright with Chromium when Edge is unavailable. Install them in that environment before running the script.
 
 [Design tokens and class map](https://github.com/utkarsh-1912/utkristi-ui/blob/main/DESIGN_TOKENS.md) · [Changelog](https://github.com/utkarsh-1912/utkristi-ui/blob/main/CHANGELOG.md) · [MIT license](https://github.com/utkarsh-1912/utkristi-ui/blob/main/LICENSE)
+
+## Component reference and variants
+
+Every catalog page now lists basic usage and named usage examples with previews, copyable React and separate HTML/CSS/JavaScript source, and direct sandbox links. The sandbox can search components and usage descriptions. API tables include source-derived defaults.
+
+See the generated [component coverage inventory](docs/component-coverage.md) and [design review with remaining gaps](docs/component-design-review.md). Run `npm run docs:audit` to check catalog coverage and `node scripts/screenshots.mjs --catalog-only` to check React and HTML sandbox startup across the catalog. Startup checks do not replace interaction tests.
+
+`Sidebar` supports `collapseMode="icons"` with `SidebarLink`, `collapseMode="offcanvas"`, and `togglePosition="edge"`. `Alert` supports surface variants, actions and controlled dismissal. `Tabs` supports vertical navigation and pill/plain variants. `Card` exposes surface variants, and `Table` exposes striping, borders, hover behavior and empty content. These options work independently of theme choice.

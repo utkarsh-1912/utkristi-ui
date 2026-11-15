@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Reworked all component reference pages around named usage examples, separate web source files, source-derived API defaults, and searchable sandbox examples.
+- Removed decorative colored active edges from workspace navigation, navbar, tabs, and toast.
+- Added alert surfaces/actions/dismissal, sidebar collapse modes and edge triggers, vertical and pill tabs, separated accordions, card surfaces, and table striping/borders/empty content.
+
 - Added a Workspace component with trading, terminal, studio, and office layouts, icon-led Navbar navigation, and interactive console, creative, and operations examples.
 - Extended 2.5D and raster 3D coverage across the icon catalog and added Microsoft, Adobe, Vercel, Netflix, Figma, and Linear identification marks.
 

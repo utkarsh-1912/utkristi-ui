@@ -12,10 +12,13 @@ export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChang
   onChange?: (value: string) => void;
   activation?: 'auto' | 'manual';
   label?: string;
+  orientation?: 'horizontal' | 'vertical';
+  variant?: 'soft' | 'pills' | 'plain';
+  fullWidth?: boolean;
 }
 
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
-  { items, value, defaultValue, onChange, activation = 'auto', label, className, ...props }, ref,
+  { items, value, defaultValue, onChange, activation = 'auto', label, orientation = 'horizontal', variant = 'soft', fullWidth, className, ...props }, ref,
 ) {
   const id = useId();
   const enabled = items.filter((item) => !item.disabled);
@@ -24,8 +27,8 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
   const active = enabled.find((item) => item.id === current) ?? enabled[0];
   const tabStop = enabled.find((item) => item.id === focused) ?? active;
   const buttons = useRef(new Map<string, HTMLButtonElement>());
-  return <div {...props} ref={ref} className={className}>
-    <div role="tablist" aria-label={label} className="tabs" onBlur={(event) => {
+  return <div {...props} ref={ref} className={cx('tabs-root', className)} data-orientation={orientation} data-variant={variant} data-full-width={fullWidth || undefined}>
+    <div role="tablist" aria-label={label} aria-orientation={orientation} className="tabs" onBlur={(event) => {
       if (!event.currentTarget.contains(event.relatedTarget)) setFocused(undefined);
     }}>
       {items.map((item, index) => <button type="button" key={item.id} className="tab" role="tab" disabled={item.disabled}
@@ -33,8 +36,11 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
         tabIndex={tabStop?.id === item.id ? 0 : -1}
         ref={(node) => { if (node) buttons.current.set(item.id, node); else buttons.current.delete(item.id); }}
         onFocus={() => setFocused(item.id)} onClick={() => select(item.id)} onKeyDown={(event) => {
-          if (event.key === 'ArrowUp' || event.key === 'ArrowDown') return;
-          const next = navigationIndex(event.key, enabled.indexOf(item), enabled.length);
+          if (orientation === 'horizontal' && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) return;
+          if (orientation === 'vertical' && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) return;
+          const rtl = getComputedStyle(event.currentTarget).direction === 'rtl';
+          const key = orientation === 'horizontal' && rtl ? event.key === 'ArrowLeft' ? 'ArrowRight' : event.key === 'ArrowRight' ? 'ArrowLeft' : event.key : event.key;
+          const next = navigationIndex(key, enabled.indexOf(item), enabled.length);
           if (next === undefined) return;
           event.preventDefault();
           const target = enabled[next].id;

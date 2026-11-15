@@ -1,0 +1,1202 @@
+{
+  "components": 110,
+  "variants": 134,
+  "entries": [
+    {
+      "slug": "accordion",
+      "name": "Accordion",
+      "variants": [
+        {
+          "slug": "accordion-panel",
+          "name": "Panel with multiple sections"
+        },
+        {
+          "slug": "accordion--separated",
+          "name": "Separated sections"
+        },
+        {
+          "slug": "accordion--single",
+          "name": "Single expanded section"
+        }
+      ]
+    },
+    {
+      "slug": "alert",
+      "name": "Alert",
+      "variants": [
+        {
+          "slug": "alert-statuses",
+          "name": "Status and actions"
+        },
+        {
+          "slug": "alert--dismissible",
+          "name": "Dismissible with actions"
+        },
+        {
+          "slug": "alert--presentations",
+          "name": "Soft, plain, outlined, and solid"
+        }
+      ]
+    },
+    {
+      "slug": "alert-dialog",
+      "name": "Alert Dialog",
+      "variants": [
+        {
+          "slug": "alert-dialog--destructive",
+          "name": "Destructive confirmation"
+        }
+      ]
+    },
+    {
+      "slug": "aspect-ratio",
+      "name": "Aspect Ratio",
+      "variants": [
+        {
+          "slug": "aspect-ratio--portrait",
+          "name": "Portrait media frame"
+        }
+      ]
+    },
+    {
+      "slug": "attachment",
+      "name": "Attachment",
+      "variants": [
+        {
+          "slug": "attachment--removable",
+          "name": "Removable attachment"
+        }
+      ]
+    },
+    {
+      "slug": "avatar",
+      "name": "Avatar",
+      "variants": [
+        {
+          "slug": "avatar--team",
+          "name": "Overlapping member group"
+        }
+      ]
+    },
+    {
+      "slug": "badge",
+      "name": "Badge",
+      "variants": [
+        {
+          "slug": "badge--counts",
+          "name": "Counts and status badges"
+        }
+      ]
+    },
+    {
+      "slug": "banner",
+      "name": "Banner",
+      "variants": [
+        {
+          "slug": "banner--dismissible",
+          "name": "Dismissible announcement"
+        }
+      ]
+    },
+    {
+      "slug": "bottom-navigation",
+      "name": "Bottom Navigation",
+      "variants": [
+        {
+          "slug": "bottom-navigation--labelled",
+          "name": "Mobile destinations"
+        }
+      ]
+    },
+    {
+      "slug": "breadcrumb",
+      "name": "Breadcrumb",
+      "variants": [
+        {
+          "slug": "breadcrumb--deep",
+          "name": "Nested settings path"
+        }
+      ]
+    },
+    {
+      "slug": "bubble",
+      "name": "Bubble",
+      "variants": [
+        {
+          "slug": "bubble--reactions",
+          "name": "Reply with reactions"
+        }
+      ]
+    },
+    {
+      "slug": "bulk-action-bar",
+      "name": "Bulk Action Bar",
+      "variants": [
+        {
+          "slug": "bulk-action-bar--export",
+          "name": "Export selected rows"
+        }
+      ]
+    },
+    {
+      "slug": "button",
+      "name": "Button",
+      "variants": [
+        {
+          "slug": "button-states",
+          "name": "Loading and disabled"
+        },
+        {
+          "slug": "button--sizes-and-icons",
+          "name": "Sizes, icons, and geometry"
+        },
+        {
+          "slug": "button--full-width",
+          "name": "Full-width action"
+        }
+      ]
+    },
+    {
+      "slug": "button-group",
+      "name": "Button Group",
+      "variants": [
+        {
+          "slug": "button-group--vertical",
+          "name": "Vertical action group"
+        }
+      ]
+    },
+    {
+      "slug": "calendar",
+      "name": "Calendar",
+      "variants": [
+        {
+          "slug": "calendar--bounded",
+          "name": "Bounded booking window"
+        }
+      ]
+    },
+    {
+      "slug": "card",
+      "name": "Card",
+      "variants": [
+        {
+          "slug": "card--surfaces",
+          "name": "Outlined, elevated, soft, and plain"
+        },
+        {
+          "slug": "card--pane",
+          "name": "Contrast pane"
+        }
+      ]
+    },
+    {
+      "slug": "carousel",
+      "name": "Carousel",
+      "variants": [
+        {
+          "slug": "carousel--loop",
+          "name": "Looping project stages"
+        },
+        {
+          "slug": "carousel--vertical",
+          "name": "Vertical carousel"
+        }
+      ]
+    },
+    {
+      "slug": "chart",
+      "name": "Chart",
+      "variants": [
+        {
+          "slug": "chart--line",
+          "name": "Line trend"
+        }
+      ]
+    },
+    {
+      "slug": "checkbox",
+      "name": "Checkbox",
+      "variants": [
+        {
+          "slug": "checkbox--disabled",
+          "name": "Required permission"
+        }
+      ]
+    },
+    {
+      "slug": "chip",
+      "name": "Chip",
+      "variants": [
+        {
+          "slug": "chip--accent",
+          "name": "Accent filter chips"
+        }
+      ]
+    },
+    {
+      "slug": "choice",
+      "name": "Choice",
+      "variants": [
+        {
+          "slug": "choice--mixed",
+          "name": "Mixed and disabled choices"
+        }
+      ]
+    },
+    {
+      "slug": "clipboard",
+      "name": "Clipboard",
+      "variants": [
+        {
+          "slug": "clipboard--confirmation",
+          "name": "Custom copy confirmation"
+        }
+      ]
+    },
+    {
+      "slug": "code",
+      "name": "Code",
+      "variants": [
+        {
+          "slug": "code--inline",
+          "name": "Inline command"
+        }
+      ]
+    },
+    {
+      "slug": "code-block",
+      "name": "Code Block",
+      "variants": [
+        {
+          "slug": "code-block--logs",
+          "name": "Read-only build log"
+        }
+      ]
+    },
+    {
+      "slug": "collapsible",
+      "name": "Collapsible",
+      "variants": [
+        {
+          "slug": "collapsible--initially-open",
+          "name": "Initially open"
+        }
+      ]
+    },
+    {
+      "slug": "column-chooser",
+      "name": "Column Chooser",
+      "variants": [
+        {
+          "slug": "column-chooser--required",
+          "name": "Required identifying column"
+        }
+      ]
+    },
+    {
+      "slug": "combobox",
+      "name": "Combobox",
+      "variants": [
+        {
+          "slug": "combobox--multiple",
+          "name": "Multiple team selection"
+        }
+      ]
+    },
+    {
+      "slug": "command",
+      "name": "Command",
+      "variants": [
+        {
+          "slug": "command--groups",
+          "name": "Grouped project commands"
+        }
+      ]
+    },
+    {
+      "slug": "context-menu",
+      "name": "Context Menu",
+      "variants": [
+        {
+          "slug": "context-menu--project",
+          "name": "Project row context menu"
+        }
+      ]
+    },
+    {
+      "slug": "data-table",
+      "name": "Data Table",
+      "variants": [
+        {
+          "slug": "data-table--page-size",
+          "name": "Configurable project table"
+        }
+      ]
+    },
+    {
+      "slug": "date-picker",
+      "name": "Date Picker",
+      "variants": [
+        {
+          "slug": "date-picker--bounded",
+          "name": "Date picker with limits"
+        }
+      ]
+    },
+    {
+      "slug": "date-range-picker",
+      "name": "Date Range Picker",
+      "variants": [
+        {
+          "slug": "date-range-picker--bounded",
+          "name": "Reporting window"
+        }
+      ]
+    },
+    {
+      "slug": "device-mockup",
+      "name": "Device Mockup",
+      "variants": [
+        {
+          "slug": "device-mockup--desktop",
+          "name": "Desktop preview"
+        }
+      ]
+    },
+    {
+      "slug": "dialog",
+      "name": "Dialog",
+      "variants": [
+        {
+          "slug": "dialog--wide",
+          "name": "Wide settings dialog"
+        }
+      ]
+    },
+    {
+      "slug": "direction",
+      "name": "Direction",
+      "variants": [
+        {
+          "slug": "direction--rtl",
+          "name": "Right-to-left controls"
+        }
+      ]
+    },
+    {
+      "slug": "dot",
+      "name": "Dot",
+      "variants": [
+        {
+          "slug": "dot--static",
+          "name": "Static warning status"
+        }
+      ]
+    },
+    {
+      "slug": "drawer",
+      "name": "Drawer",
+      "variants": [
+        {
+          "slug": "drawer--side",
+          "name": "End-side drawer"
+        }
+      ]
+    },
+    {
+      "slug": "dropdown-menu",
+      "name": "Dropdown Menu",
+      "variants": [
+        {
+          "slug": "dropdown-menu--end",
+          "name": "Right-aligned actions"
+        }
+      ]
+    },
+    {
+      "slug": "empty",
+      "name": "Empty",
+      "variants": [
+        {
+          "slug": "empty--with-action",
+          "name": "Invite from an empty state"
+        }
+      ]
+    },
+    {
+      "slug": "empty-state",
+      "name": "EmptyState",
+      "variants": [
+        {
+          "slug": "empty-state--quiet",
+          "name": "Informational empty state"
+        }
+      ]
+    },
+    {
+      "slug": "field",
+      "name": "Field",
+      "variants": [
+        {
+          "slug": "field--validation",
+          "name": "Validation and help text"
+        }
+      ]
+    },
+    {
+      "slug": "file-input",
+      "name": "File Input",
+      "variants": [
+        {
+          "slug": "file-dropzone",
+          "name": "Drag and drop"
+        },
+        {
+          "slug": "file-input--images",
+          "name": "Multiple image uploads"
+        }
+      ]
+    },
+    {
+      "slug": "filter-bar",
+      "name": "Filter Bar",
+      "variants": [
+        {
+          "slug": "filter-bar--chips",
+          "name": "Removable active filter"
+        }
+      ]
+    },
+    {
+      "slug": "floating-input",
+      "name": "Floating Input",
+      "variants": [
+        {
+          "slug": "floating-input--prefilled",
+          "name": "Prefilled floating field"
+        }
+      ]
+    },
+    {
+      "slug": "footer",
+      "name": "Footer",
+      "variants": [
+        {
+          "slug": "footer--cta",
+          "name": "Footer with signup CTA"
+        }
+      ]
+    },
+    {
+      "slug": "gallery",
+      "name": "Gallery",
+      "variants": [
+        {
+          "slug": "gallery-lightbox",
+          "name": "Gallery with lightbox"
+        },
+        {
+          "slug": "gallery--two-columns",
+          "name": "Two-column gallery"
+        }
+      ]
+    },
+    {
+      "slug": "hover-card",
+      "name": "Hover Card",
+      "variants": [
+        {
+          "slug": "hover-card--profile",
+          "name": "Profile preview"
+        }
+      ]
+    },
+    {
+      "slug": "icon",
+      "name": "Icon",
+      "variants": [
+        {
+          "slug": "icon--duotone",
+          "name": "Duotone icon on an action"
+        }
+      ]
+    },
+    {
+      "slug": "icon-button",
+      "name": "IconButton",
+      "variants": [
+        {
+          "slug": "icon-button--pressed",
+          "name": "Pressed tool action"
+        }
+      ]
+    },
+    {
+      "slug": "input",
+      "name": "Input",
+      "variants": [
+        {
+          "slug": "input--required-email",
+          "name": "Required email"
+        }
+      ]
+    },
+    {
+      "slug": "input-group",
+      "name": "Input Group",
+      "variants": [
+        {
+          "slug": "input-group--with-action",
+          "name": "Trailing copy action"
+        }
+      ]
+    },
+    {
+      "slug": "input-otp",
+      "name": "Input OTP",
+      "variants": [
+        {
+          "slug": "input-otp--four-digit",
+          "name": "Four-digit PIN"
+        }
+      ]
+    },
+    {
+      "slug": "item",
+      "name": "Item",
+      "variants": [
+        {
+          "slug": "item--action",
+          "name": "List item with a trailing action"
+        }
+      ]
+    },
+    {
+      "slug": "jumbotron",
+      "name": "Jumbotron",
+      "variants": [
+        {
+          "slug": "jumbotron--actions",
+          "name": "Hero with two actions"
+        }
+      ]
+    },
+    {
+      "slug": "kbd",
+      "name": "Kbd",
+      "variants": [
+        {
+          "slug": "kbd--shortcut",
+          "name": "Keyboard shortcut chord"
+        }
+      ]
+    },
+    {
+      "slug": "label",
+      "name": "Label",
+      "variants": [
+        {
+          "slug": "label--required",
+          "name": "Label with a required control"
+        }
+      ]
+    },
+    {
+      "slug": "list-group",
+      "name": "List Group",
+      "variants": [
+        {
+          "slug": "list-group--links",
+          "name": "Linked settings list"
+        }
+      ]
+    },
+    {
+      "slug": "loader",
+      "name": "Loader",
+      "variants": [
+        {
+          "slug": "loader--progress",
+          "name": "Determinate loader"
+        }
+      ]
+    },
+    {
+      "slug": "logo",
+      "name": "Logo",
+      "variants": [
+        {
+          "slug": "logo--compact",
+          "name": "Compact project mark"
+        }
+      ]
+    },
+    {
+      "slug": "marker",
+      "name": "Marker",
+      "variants": [
+        {
+          "slug": "marker--border",
+          "name": "Inline confirmation marker"
+        }
+      ]
+    },
+    {
+      "slug": "mega-menu",
+      "name": "Mega Menu",
+      "variants": [
+        {
+          "slug": "mega-menu--resources",
+          "name": "Resource columns"
+        }
+      ]
+    },
+    {
+      "slug": "menu",
+      "name": "Menu",
+      "variants": [
+        {
+          "slug": "menu--danger",
+          "name": "Menu with a destructive action"
+        }
+      ]
+    },
+    {
+      "slug": "menubar",
+      "name": "Menubar",
+      "variants": [
+        {
+          "slug": "menubar--editor",
+          "name": "Editor menus"
+        }
+      ]
+    },
+    {
+      "slug": "message",
+      "name": "Message",
+      "variants": [
+        {
+          "slug": "message--outgoing",
+          "name": "Outgoing message"
+        }
+      ]
+    },
+    {
+      "slug": "message-scroller",
+      "name": "Message Scroller",
+      "variants": [
+        {
+          "slug": "message-scroller--history",
+          "name": "Review message history"
+        }
+      ]
+    },
+    {
+      "slug": "modal",
+      "name": "Modal",
+      "variants": [
+        {
+          "slug": "modal--wide",
+          "name": "Wide dialog"
+        }
+      ]
+    },
+    {
+      "slug": "native-select",
+      "name": "Native Select",
+      "variants": [
+        {
+          "slug": "native-select--placeholder",
+          "name": "Required select with placeholder"
+        }
+      ]
+    },
+    {
+      "slug": "navbar",
+      "name": "Navbar",
+      "variants": [
+        {
+          "slug": "navbar-icons",
+          "name": "Workstation icon navigation"
+        },
+        {
+          "slug": "navbar-dock",
+          "name": "Floating dock"
+        },
+        {
+          "slug": "navbar-dropdown",
+          "name": "Navbar with dropdown"
+        },
+        {
+          "slug": "navbar-multilevel",
+          "name": "Multi-level dropdown"
+        },
+        {
+          "slug": "navbar-sticky",
+          "name": "Sticky navbar"
+        },
+        {
+          "slug": "navbar-submenu",
+          "name": "Navbar with submenu"
+        },
+        {
+          "slug": "navbar-search",
+          "name": "Navbar with search"
+        },
+        {
+          "slug": "navbar-cta",
+          "name": "Navbar with CTA button"
+        }
+      ]
+    },
+    {
+      "slug": "navigation-menu",
+      "name": "Navigation Menu",
+      "variants": [
+        {
+          "slug": "navigation-menu--groups",
+          "name": "Grouped reference links"
+        }
+      ]
+    },
+    {
+      "slug": "number-input",
+      "name": "Number Input",
+      "variants": [
+        {
+          "slug": "number-input--step",
+          "name": "Quantity in steps"
+        }
+      ]
+    },
+    {
+      "slug": "pagination",
+      "name": "Pagination",
+      "variants": [
+        {
+          "slug": "pagination--last-page",
+          "name": "Pagination at the last page"
+        }
+      ]
+    },
+    {
+      "slug": "phone-input",
+      "name": "Phone Input",
+      "variants": [
+        {
+          "slug": "phone-input--country",
+          "name": "Country-code entry"
+        }
+      ]
+    },
+    {
+      "slug": "popover",
+      "name": "Popover",
+      "variants": [
+        {
+          "slug": "popover--align-end",
+          "name": "End-aligned settings"
+        }
+      ]
+    },
+    {
+      "slug": "progress",
+      "name": "Progress",
+      "variants": [
+        {
+          "slug": "progress-labelled",
+          "name": "Labelled progress"
+        },
+        {
+          "slug": "progress--indeterminate",
+          "name": "Indeterminate upload"
+        }
+      ]
+    },
+    {
+      "slug": "qr-code",
+      "name": "QR Code",
+      "variants": [
+        {
+          "slug": "qr-code--compact",
+          "name": "Compact matrix preview"
+        }
+      ]
+    },
+    {
+      "slug": "questionnaire",
+      "name": "Questionnaire",
+      "variants": [
+        {
+          "slug": "questionnaire--multiple",
+          "name": "Multiple answers"
+        }
+      ]
+    },
+    {
+      "slug": "radio-group",
+      "name": "Radio Group",
+      "variants": [
+        {
+          "slug": "radio-group--disabled-option",
+          "name": "Availability in a choice group"
+        }
+      ]
+    },
+    {
+      "slug": "rating",
+      "name": "Rating",
+      "variants": [
+        {
+          "slug": "rating--ten",
+          "name": "Ten-point rating"
+        }
+      ]
+    },
+    {
+      "slug": "resizable",
+      "name": "Resizable",
+      "variants": [
+        {
+          "slug": "resizable--vertical",
+          "name": "Vertical split"
+        }
+      ]
+    },
+    {
+      "slug": "rich-text",
+      "name": "RichText",
+      "variants": [
+        {
+          "slug": "rich-text--checklist",
+          "name": "Structured release notes"
+        }
+      ]
+    },
+    {
+      "slug": "scroll-area",
+      "name": "Scroll Area",
+      "variants": [
+        {
+          "slug": "scroll-area--horizontal",
+          "name": "Horizontal overflow region"
+        }
+      ]
+    },
+    {
+      "slug": "segmented",
+      "name": "Segmented",
+      "variants": [
+        {
+          "slug": "segmented--counts",
+          "name": "Views with counts"
+        }
+      ]
+    },
+    {
+      "slug": "select",
+      "name": "Select",
+      "variants": [
+        {
+          "slug": "select--disabled-option",
+          "name": "Role availability"
+        }
+      ]
+    },
+    {
+      "slug": "separator",
+      "name": "Separator",
+      "variants": [
+        {
+          "slug": "separator--vertical",
+          "name": "Vertical separator"
+        }
+      ]
+    },
+    {
+      "slug": "sheet",
+      "name": "Sheet",
+      "variants": [
+        {
+          "slug": "sheet--start",
+          "name": "Start-side sheet"
+        }
+      ]
+    },
+    {
+      "slug": "shell",
+      "name": "Shell",
+      "variants": [
+        {
+          "slug": "shell--workspace",
+          "name": "Workspace shell"
+        }
+      ]
+    },
+    {
+      "slug": "sidebar",
+      "name": "Sidebar",
+      "variants": [
+        {
+          "slug": "sidebar--icon-collapse",
+          "name": "Collapsible icon rail"
+        },
+        {
+          "slug": "sidebar--offcanvas",
+          "name": "Retractable with edge trigger"
+        },
+        {
+          "slug": "sidebar--collapsed",
+          "name": "Collapsed sidebar"
+        }
+      ]
+    },
+    {
+      "slug": "skeleton",
+      "name": "Skeleton",
+      "variants": [
+        {
+          "slug": "skeleton--profile",
+          "name": "Profile placeholder"
+        }
+      ]
+    },
+    {
+      "slug": "slider",
+      "name": "Slider",
+      "variants": [
+        {
+          "slug": "slider--marks",
+          "name": "Stepped range with marks"
+        }
+      ]
+    },
+    {
+      "slug": "speed-dial",
+      "name": "Speed Dial",
+      "variants": [
+        {
+          "slug": "speed-dial--above",
+          "name": "Actions above the trigger"
+        }
+      ]
+    },
+    {
+      "slug": "spinner",
+      "name": "Spinner",
+      "variants": [
+        {
+          "slug": "spinner--compact",
+          "name": "Compact inline spinner"
+        }
+      ]
+    },
+    {
+      "slug": "split-button",
+      "name": "SplitButton",
+      "variants": [
+        {
+          "slug": "split-button--new-project",
+          "name": "Create with secondary actions"
+        }
+      ]
+    },
+    {
+      "slug": "stat",
+      "name": "Stat",
+      "variants": [
+        {
+          "slug": "stat--suffix",
+          "name": "Metric with a unit"
+        }
+      ]
+    },
+    {
+      "slug": "steps",
+      "name": "Steps",
+      "variants": [
+        {
+          "slug": "steps--disabled",
+          "name": "Steps with a locked stage"
+        }
+      ]
+    },
+    {
+      "slug": "switch",
+      "name": "Switch",
+      "variants": [
+        {
+          "slug": "switch--locked",
+          "name": "Locked preference"
+        }
+      ]
+    },
+    {
+      "slug": "table",
+      "name": "Table",
+      "variants": [
+        {
+          "slug": "table--striped",
+          "name": "Striped and bordered table"
+        },
+        {
+          "slug": "table--empty",
+          "name": "Empty table with a next step"
+        },
+        {
+          "slug": "table--mobile-stack",
+          "name": "Stacked mobile rows"
+        }
+      ]
+    },
+    {
+      "slug": "tabs",
+      "name": "Tabs",
+      "variants": [
+        {
+          "slug": "tabs--vertical",
+          "name": "Vertical navigation tabs"
+        },
+        {
+          "slug": "tabs--pills",
+          "name": "Full-width pill tabs"
+        },
+        {
+          "slug": "tabs--access",
+          "name": "Project settings tabs"
+        }
+      ]
+    },
+    {
+      "slug": "textarea",
+      "name": "Textarea",
+      "variants": [
+        {
+          "slug": "textarea--code",
+          "name": "Code entry"
+        }
+      ]
+    },
+    {
+      "slug": "theme-switch",
+      "name": "ThemeSwitch",
+      "variants": [
+        {
+          "slug": "theme-switch--settings",
+          "name": "Theme switch in settings"
+        }
+      ]
+    },
+    {
+      "slug": "theme-toggle",
+      "name": "ThemeToggle",
+      "variants": [
+        {
+          "slug": "theme-toggle--select",
+          "name": "Theme dropdown"
+        }
+      ]
+    },
+    {
+      "slug": "time-input",
+      "name": "Time Input",
+      "variants": [
+        {
+          "slug": "time-input--business-hours",
+          "name": "Business hours"
+        }
+      ]
+    },
+    {
+      "slug": "timeline",
+      "name": "Timeline",
+      "variants": [
+        {
+          "slug": "timeline--horizontal",
+          "name": "Horizontal milestones"
+        }
+      ]
+    },
+    {
+      "slug": "toast",
+      "name": "Toast",
+      "variants": [
+        {
+          "slug": "toast--persistent",
+          "name": "Persistent action toast"
+        }
+      ]
+    },
+    {
+      "slug": "toggle",
+      "name": "Toggle",
+      "variants": [
+        {
+          "slug": "toggle--selected",
+          "name": "Initially selected"
+        }
+      ]
+    },
+    {
+      "slug": "toggle-group",
+      "name": "Toggle Group",
+      "variants": [
+        {
+          "slug": "toggle-group--formatting",
+          "name": "Independent formatting"
+        }
+      ]
+    },
+    {
+      "slug": "tooltip",
+      "name": "Tooltip",
+      "variants": [
+        {
+          "slug": "tooltip--immediate",
+          "name": "Immediate toolbar hint"
+        }
+      ]
+    },
+    {
+      "slug": "trace",
+      "name": "Trace",
+      "variants": [
+        {
+          "slug": "trace--failed",
+          "name": "Failed step with details"
+        }
+      ]
+    },
+    {
+      "slug": "typography",
+      "name": "Typography",
+      "variants": [
+        {
+          "slug": "typography--reading",
+          "name": "Serif reading mode"
+        }
+      ]
+    },
+    {
+      "slug": "video",
+      "name": "Video",
+      "variants": [
+        {
+          "slug": "video--poster",
+          "name": "Poster and native controls"
+        }
+      ]
+    },
+    {
+      "slug": "workspace",
+      "name": "Workspace",
+      "variants": [
+        {
+          "slug": "workspace--layouts",
+          "name": "Office, terminal, and studio layouts"
+        }
+      ]
+    }
+  ]
+}

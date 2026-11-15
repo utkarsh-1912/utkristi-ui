@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { Button, Icon, Kbd, Loader, Select, type ResolvedTheme, themes, useTheme } from '@utkristi/ui';
+import { Button, Icon, Input, Kbd, Loader, Select, type ResolvedTheme, themes, useTheme } from '@utkristi/ui';
 import { CopyAction } from './CopyCode';
 import { SourceEditor } from './SourceEditor';
 import { blockPages, componentPages, examplePage, sandboxExamples as previews } from './examples';
@@ -9,7 +9,7 @@ import { script, styles, domScript } from 'virtual:utkristi-runtime';
 import { exampleMotion, motionOptions, type PreviewMotion } from './motion-options';
 import { joinWebSource, splitWebSource, webFiles, type WebFile, type WebSource } from './sandbox-source';
 
-const policy = "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline' https://fonts.googleapis.com; img-src data: blob:; media-src data: blob:; font-src data: https://fonts.gstatic.com; form-action 'none'; base-uri 'none'";
+const policy = "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline' https://fonts.googleapis.com; img-src data: blob: " + location.origin + "; media-src data: blob:; font-src data: https://fonts.gstatic.com; form-action 'none'; base-uri 'none'";
 const frameHead = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
   '<meta http-equiv="Content-Security-Policy" content="' + policy + '"><style>' +
   styles.replace(/<\/style/gi, '<\\/style') +
@@ -97,6 +97,7 @@ export default function Playground({ component, editorMode, initialMotion }: { c
   const id = useId();
   const [viewport, setViewport] = useState<'fluid' | 'phone' | 'tablet'>('fluid');
   const [pane, setPane] = useState<'source' | 'preview'>('source');
+  const [exampleQuery, setExampleQuery] = useState('');
   const slug = component && Object.hasOwn(previews, component) && Object.hasOwn(examples, component)
     ? component as keyof typeof previews : 'carousel';
   const example = previews[slug];
@@ -251,6 +252,14 @@ export default function Playground({ component, editorMode, initialMotion }: { c
       <h1 className="display display-xl">Sandbox</h1>
       <p className="lede">Edit a working example, run it in any theme, and copy the code into your app.</p>
     </header>
+    <div className="playground-example-search"><label htmlFor={id + '-find'}>Find a component or use case</label>
+      <Input id={id + '-find'} type="search" value={exampleQuery} onChange={event => setExampleQuery(event.target.value)} placeholder="Try sidebar, validation, multi-select…" />
+      {exampleQuery.trim() && <div className="playground-example-results" aria-label="Matching examples">
+        {Object.entries(previews).filter(([key, entry]) => (key + ' ' + entry.name + ' ' + entry.description).toLowerCase().includes(exampleQuery.trim().toLowerCase())).slice(0, 20).map(([key, entry]) =>
+          <Button key={key} size="sm" variant="quiet" onClick={() => selectExample(key)}>{entry.name}</Button>)}
+        {!Object.entries(previews).some(([key, entry]) => (key + ' ' + entry.name + ' ' + entry.description).toLowerCase().includes(exampleQuery.trim().toLowerCase())) && <p role="status">No matching examples. Try a component name or a shorter phrase.</p>}
+      </div>}
+    </div>
     <div className="playground-toolbar">
       <label htmlFor={id + "-component"}>Example<Select id={id + "-component"} value={parent} onChange={(event) => selectExample(event.target.value)}>
         <optgroup label="Components">{componentPages.map(([key, item]) => <option key={key} value={key}>{item.name}</option>)}</optgroup>
@@ -274,6 +283,7 @@ export default function Playground({ component, editorMode, initialMotion }: { c
         compile(code, mode, theme, next);
       }}>{motionOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</Select></label>
     </div>
+    <p className="playground-example-description">{example.description}</p>
     <div className="playground-panes" role="group" aria-label="Workspace view">
       <Button size="sm" variant="quiet" aria-pressed={pane === 'source'} onClick={() => setPane('source')}>Source</Button>
       <Button size="sm" variant="quiet" aria-pressed={pane === 'preview'} onClick={() => setPane('preview')}>Preview</Button>

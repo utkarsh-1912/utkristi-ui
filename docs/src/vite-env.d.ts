@@ -2,7 +2,7 @@
 
 declare module 'virtual:utkristi-examples' {
   export const examples: Record<string, { code: string; components: string[] }>;
-  export const api: Record<string, { name: string; type: string; required: boolean; description: string }[]>;
+  export const api: Record<string, { name: string; type: string; required: boolean; description: string; defaultValue?: string }[]>;
 }
 
 declare module 'virtual:utkristi-runtime' {

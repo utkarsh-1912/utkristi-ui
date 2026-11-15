@@ -20,6 +20,7 @@ const captureOnly = process.argv.includes('--capture-only');
 const verifyOnly = process.argv.includes('--verify-only');
 const themesOnly = process.argv.includes('--themes-only');
 const workspacesOnly = process.argv.includes('--workspaces-only');
+const catalogOnly = process.argv.includes('--catalog-only');
 const reuseBuild = process.argv.includes('--reuse-build');
 const require = createRequire(import.meta.url);
 
@@ -126,6 +127,29 @@ async function captureEdge() {
     };
     // Keep motion assertions independent of the runner's OS accessibility settings.
     const setMotion = (value) => send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value }] });
+    if (catalogOnly) {
+      const coverage = JSON.parse(await readFile(join(root, 'docs/public/component-coverage.json'), 'utf8'));
+      const failures = [];
+      await size(1440, 1000);
+      await setMotion('reduce');
+      for (const [index, entry] of coverage.entries.entries()) {
+        for (const slug of [entry.slug, ...entry.variants.map(variant => variant.slug)]) {
+          for (const editor of ['react', 'html']) {
+            await load('/sandbox?component=' + slug + '&editor=' + editor + '&theme=snow', 'Sandbox');
+            const expected = editor === 'react' ? 'React preview ready' : 'HTML preview ready';
+            try {
+              await retry(() => evaluate(`document.querySelector('.playground-run-status')?.textContent === ${JSON.stringify(expected)} || !!document.querySelector('.playground-error')`), slug + ' ' + editor);
+              const error = await evaluate('document.querySelector(".playground-error")?.textContent');
+              if (error) failures.push({ slug, editor, error });
+            } catch (error) { failures.push({ slug, editor, error: error.message }); }
+          }
+        }
+        process.stdout.write('Checked ' + (index + 1) + '/' + coverage.entries.length + ': ' + entry.name + '\n');
+      }
+      await writeFile(join(root, '.npm-cache/component-browser-results.json'), JSON.stringify({ failures, exceptions }, null, 2));
+      if (failures.length || exceptions.length) throw new Error('Catalog verification failed: ' + JSON.stringify({ failures, exceptions }));
+      return;
+    }
     if (workspacesOnly) {
       await setMotion('reduce');
       const samples = [
@@ -138,6 +162,8 @@ async function captureEdge() {
         await size(1440, 1000);
         await load('/blocks/' + slug + '?theme=' + theme, title);
         await fontsReady();
+        const activeShadow = await evaluate('getComputedStyle(document.querySelector(".workspace-navigation [aria-current=page]")).boxShadow');
+        if (activeShadow !== 'none') throw new Error(slug + ' still has a decorative active edge: ' + activeShadow);
         await screenshot(slug);
         {
           await evaluate('document.querySelectorAll(".workspace-navigation button")[1].click()');
@@ -161,6 +187,16 @@ async function captureEdge() {
       for (const slug of ['workspace', 'console-workspace', 'creative-workspace', 'office-workspace']) {
         await load('/sandbox?component=' + slug + '&editor=html&theme=snow', 'Sandbox');
         await retry(() => evaluate('document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), slug + ' HTML sandbox');
+      }
+      for (const [slug, title] of [['sidebar', 'Sidebar'], ['alert', 'Alert'], ['tabs', 'Tabs'], ['card', 'Card'], ['table', 'Table']]) {
+        await size(1440, 1000);
+        await load('/components/' + slug + '?theme=snow', title);
+        await retry(() => evaluate('!!document.querySelector(".component-variants button[aria-expanded=false]")'), slug + ' variant index');
+        await evaluate('document.querySelector(".component-variants button[aria-expanded=false]").click()');
+        await retry(() => evaluate('!!document.querySelector(".component-variants .docs-example")'), slug + ' expanded preview');
+        await screenshot('component-' + slug);
+        await size(375, 830);
+        await retry(() => evaluate('document.documentElement.scrollWidth <= innerWidth'), slug + ' docs mobile width');
       }
       if (exceptions.length) throw new Error(exceptions.join('\n'));
       return;
@@ -230,7 +266,7 @@ async function captureEdge() {
     await screenshot('sandbox');
     for (const [slug, theme, title] of [['enterprise-landing', 'glass', 'Enterprise landing'], ['execution-desk', 'dark', 'Execution desk']]) {
       await load(`/blocks/${slug}?theme=${theme}`, title);
-      await retry(() => evaluate(`document.documentElement.dataset.theme === '${theme}' && !!document.querySelector('.ut-template')`), title + ' screenshot');
+      await retry(() => evaluate(`document.documentElement.dataset.theme === '${theme}' && !!document.querySelector('.ut-template, .workspace')`), title + ' screenshot');
       await fontsReady();
       await screenshot(slug);
     }
@@ -383,7 +419,7 @@ async function captureEdge() {
     await retry(() => evaluate('document.querySelector(".ut-desk-table tbody").rows.length === 1 && document.querySelector(".ut-desk-inspector h3").textContent === "MIDX"'), 'blotter filter links the inspector');
     await evaluate(`Array.from(document.querySelectorAll('.ut-desk-inspector [role=tab]')).find(tab => tab.textContent === 'Fills').click()`);
     await retry(() => evaluate('document.querySelector(".ut-desk-fills")?.children.length === 2'), 'selected order fill history');
-    await evaluate('document.querySelector(".ut-template-toolbar [role=switch]").click()');
+    await evaluate(`document.querySelector('.workspace-actions [aria-label="Use comfortable rows"]').click()`);
     await retry(() => evaluate('document.querySelector(".ut-desk").dataset.density === "comfortable"'), 'blotter density control');
     await evaluate('document.querySelector(".ut-desk-foot [role=switch]").click()');
     await retry(() => evaluate('document.querySelector(".ut-desk-summary [role=status]").textContent.includes("Snapshot stale")'), 'stale snapshot state');
@@ -627,11 +663,7 @@ async function captureEdge() {
     process.stdout.write('Verified worklist recovery and selection, plus audit accessibility in all themes.\n');
 
     await load('/components/file-input?theme=glass', 'File Input');
-    await evaluate(`(() => {
-      const select = document.querySelector('select[aria-label="Example variant"]');
-      select.value = 'file-dropzone';
-      select.dispatchEvent(new Event('change', { bubbles: true }));
-    })()`);
+    await evaluate('document.querySelector("button[aria-controls=content-file-dropzone]").click()');
     await retry(() => evaluate('!!document.querySelector(".file-dropzone") && !!document.querySelector("a[href*=file-dropzone]")'), 'file input variant and its sandbox link');
     await evaluate(`(() => {
       const transfer = new DataTransfer();
@@ -641,10 +673,10 @@ async function captureEdge() {
     await retry(() => evaluate('document.querySelector(".docs-example [role=status]")?.textContent === "1 file selected"'), 'dropzone accepts a file');
 
     await load('/components/navbar?variant=navbar-multilevel&theme=glass', 'Navbar');
-    await retry(() => evaluate('document.querySelector(".docs-example select[aria-label=\'Example variant\']").value === "navbar-multilevel"'), 'navbar variant deep link');
-    await retry(() => evaluate('getComputedStyle(document.querySelector(".docs-example [data-ut-enter]")).animationName === "ut-appear-slide"'), 'variant entry motion');
+    await retry(() => evaluate('!!document.querySelector("#content-navbar-multilevel .docs-example")'), 'navbar variant deep link');
+    await retry(() => evaluate('getComputedStyle(document.querySelector("#content-navbar-multilevel [data-ut-enter]")).animationName === "ut-appear-slide"'), 'variant entry motion');
     await setMotion('reduce');
-    await retry(() => evaluate('getComputedStyle(document.querySelector(".docs-example [data-ut-enter]")).animationName === "none"'), 'variant respects reduced motion');
+    await retry(() => evaluate('getComputedStyle(document.querySelector("#content-navbar-multilevel [data-ut-enter]")).animationName === "none"'), 'variant respects reduced motion');
     await setMotion('no-preference');
 
     await load('/getting-started', 'Getting started');
@@ -661,14 +693,14 @@ async function captureEdge() {
         const width = await evaluate('document.documentElement.scrollWidth');
         if (width > 375) overflow.push(path + ' (' + theme + ', ' + width + 'px)');
         if (theme === 'dark' && path.startsWith('/components/')) {
-          const selector = '.docs-example select[aria-label="Example variant"]';
-          const choices = await evaluate(`[...document.querySelectorAll(${JSON.stringify(selector + ' option')})].map(option => option.value).filter(Boolean)`);
+          const choices = await evaluate('[...document.querySelectorAll(".component-variants button[aria-controls]")].map(button => button.getAttribute("aria-controls").slice(8))');
           if (!choices.length) throw new Error('Missing component variants for ' + path);
           for (const choice of choices) {
-            await selectOption(selector, choice);
+            await evaluate(`document.querySelector('button[aria-controls="content-${choice}"]').click()`);
             await retry(() => evaluate(`!!document.querySelector(${JSON.stringify('a[href="#/sandbox?component=' + choice + '"]')})`), choice + ' sandbox source');
             const actual = await evaluate('document.documentElement.scrollWidth');
             if (actual > 375) overflow.push(choice + ' (' + actual + 'px at 375px)');
+            await evaluate(`document.querySelector('button[aria-controls="content-${choice}"]').click()`);
             variantsChecked++;
           }
         }
@@ -1150,7 +1182,7 @@ async function capturePlaywright() {
     await page.screenshot({ path: join(screenshots, 'sandbox.png') });
     for (const [slug, theme] of [['enterprise-landing', 'glass'], ['execution-desk', 'dark']]) {
       await page.goto(`${url}/#/blocks/${slug}?theme=${theme}`);
-      await page.locator(`html[data-theme="${theme}"] .ut-template`).waitFor();
+      await page.locator(`html[data-theme="${theme}"] :is(.ut-template, .workspace)`).waitFor();
       await page.evaluate(() => document.fonts.ready);
       await page.screenshot({ path: join(screenshots, slug + '.png') });
     }
@@ -1175,7 +1207,7 @@ const stopped = once(server, 'exit').catch(() => {});
 try {
   await retry(async () => !server.exitCode && (await fetch(url)).ok, 'Vite preview', 240);
   if (existsSync(edge)) await captureEdge();
-  else if (verifyOnly || themesOnly || workspacesOnly) throw new Error('The docs browser verification suite requires Microsoft Edge.');
+  else if (verifyOnly || themesOnly || workspacesOnly || catalogOnly) throw new Error('The docs browser verification suite requires Microsoft Edge.');
   else await capturePlaywright();
 } finally {
   server.kill();

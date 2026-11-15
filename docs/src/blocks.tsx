@@ -325,7 +325,7 @@ function ConsoleWorkspace() {
       <div role="log" aria-label="Command output" style={{ maxHeight: 240, overflow: 'auto' }}>
         {lines.map((line, index) => <pre key={index} style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{line}</pre>)}
       </div>
-      <form onSubmit={runCommand} style={actions}><Field label="Command"><Input value={command} onChange={(event) => setCommand(event.target.value)} autoComplete="off" spellCheck={false} /></Field><Button type="submit">Run</Button></form>
+      <form onSubmit={runCommand} style={{ ...actions, alignItems: 'flex-end' }}><Field label="Command"><Input value={command} onChange={(event) => setCommand(event.target.value)} autoComplete="off" spellCheck={false} /></Field><Button type="submit">Run</Button></form>
     </div> },
     { id: 'services', label: 'Services', icon: <Icon name="server-rack" />, content: <div style={stack}>
       {['API gateway', 'Event worker', 'Search index'].map((service) => <div key={service} style={actions}><strong>{service}</strong><Badge tone="ok">Healthy</Badge></div>)}

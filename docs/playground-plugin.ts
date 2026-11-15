@@ -115,6 +115,18 @@ function apiFor(docs: string, source: string, examples: ReturnType<typeof sample
   return Object.fromEntries(checker.getExportsOfModule(module).filter((symbol) => requested.has(symbol.name)).map((exported) => {
     const symbol = exported.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(exported) : exported;
     const declaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
+    const defaults = new Map<string, string>();
+    function findDefaults(node: ts.Node) {
+      if ((ts.isFunctionExpression(node) || ts.isFunctionDeclaration(node) || ts.isArrowFunction(node)) && node.parameters[0]) {
+        const binding = node.parameters[0].name;
+        if (ts.isObjectBindingPattern(binding)) for (const item of binding.elements) {
+          if (item.initializer) defaults.set(item.name.getText(), item.initializer.getText());
+        }
+        return;
+      }
+      ts.forEachChild(node, findDefaults);
+    }
+    if (declaration) findDefaults(declaration);
     const props = declaration && checker.getTypeOfSymbolAtLocation(symbol, declaration).getCallSignatures()[0]?.parameters[0];
     const type = props && declaration ? checker.getTypeOfSymbolAtLocation(props, declaration) : undefined;
     const properties = type?.getProperties().flatMap((property) => {
@@ -122,7 +134,7 @@ function apiFor(docs: string, source: string, examples: ReturnType<typeof sample
       if (!prop) return [];
       return [{ name: property.name, type: checker.typeToString(checker.getTypeOfSymbolAtLocation(property, prop), prop),
         required: !(property.flags & ts.SymbolFlags.Optional),
-        description: ts.displayPartsToString(property.getDocumentationComment(checker)) }];
+        description: ts.displayPartsToString(property.getDocumentationComment(checker)), defaultValue: defaults.get(property.name) }];
     }) ?? [];
     return [exported.name, properties];
   }));

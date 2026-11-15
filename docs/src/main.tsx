@@ -132,21 +132,34 @@ function ComponentPage({ slug, initialVariant }: { slug: keyof typeof examples; 
   const { resolvedTheme } = useTheme();
   const example = examples[slug];
   const choices = variantSets[slug] ?? [];
-  const [variant, setVariant] = useState(() => choices.find((key) => key === initialVariant));
-  const selected = variant ? variants[variant] : example;
-  return <article className="doc-article">
+  const [expanded, setExpanded] = useState(() => new Set<string>(initialVariant ? [initialVariant] : []));
+  return <article className="doc-article component-guide">
     <PageTitle kicker="Components" title={example.name} detail={example.description} />
-    <ExamplePreview key={resolvedTheme} example={selected} initialTheme={resolvedTheme} motion={exampleMotion(variant ?? slug)} description={variant ? selected.description : undefined}>
-      {choices.length > 0 && <Select aria-label="Example variant" value={variant ?? ''}
-        onChange={(event) => setVariant(choices.find((key) => key === event.target.value))}>
-        <option value="">{slug === 'navbar' ? 'Default navbar' : 'Default example'}</option>
-        {choices.map((key) => <option key={key} value={key}>{variants[key].name}</option>)}
-      </Select>}
-    </ExamplePreview>
-    <Suspense fallback={<Loader variant="brand" className="docs-loader-inline" label="Loading examples and props…" />}>
-      <ComponentReference slug={variant ?? slug} html={selected.html} />
-    </Suspense>
-    <DocsPagination links={componentLinks} current={`#/components/${slug}`} label="Component pagination" />
+    <nav className="component-example-index" aria-label="Examples on this page">
+      <a href={'#/components/' + slug + '?section=default-example'}>Basic usage</a>
+      {choices.map(key => <a key={key} href={'#/components/' + slug + '?section=example-' + key} onClick={() => setExpanded(previous => new Set([...previous, key]))}>{variants[key].name}</a>)}
+    </nav>
+    <section className="component-example-section">
+      <h2 id="default-example">Basic usage</h2>
+      <ExamplePreview key={resolvedTheme} example={example} initialTheme={resolvedTheme} motion={exampleMotion(slug)} />
+      <Suspense fallback={<Loader label="Loading source and API…" />}><ComponentReference slug={slug} html={example.html} /></Suspense>
+    </section>
+    <section aria-label="Usage variants" className="component-variants">
+      <h2>Usage variants</h2>
+      <p>Choose an example to inspect its behavior and source, or open it directly in the sandbox.</p>
+      {choices.map(key => <section key={key} className="component-example-section">
+        <div className="doc-section-head"><div><h3 id={'example-' + key}>{variants[key].name}</h3><p className="muted">{variants[key].description}</p></div>
+          <Button size="sm" variant="quiet" href={'#/sandbox?component=' + key}>Open sandbox</Button></div>
+        <Button variant="quiet" aria-expanded={expanded.has(key)} aria-controls={'content-' + key} onClick={() => setExpanded(previous => {
+          const next = new Set(previous); if (next.has(key)) next.delete(key); else next.add(key); return next;
+        })}>{expanded.has(key) ? 'Hide preview and code' : 'Show preview and code'}</Button>
+        <div id={'content-' + key} hidden={!expanded.has(key)}>{expanded.has(key) && <>
+          <ExamplePreview example={variants[key]} initialTheme={resolvedTheme} motion={exampleMotion(key)} />
+          <Suspense fallback={<Loader label="Loading example source…" />}><ComponentReference slug={key} html={variants[key].html} showApi={false} /></Suspense>
+        </>}</div>
+      </section>)}
+    </section>
+    <DocsPagination links={componentLinks} current={'#/components/' + slug} label="Component pagination" />
   </article>;
 }
 

@@ -1,12 +1,12 @@
 import { themes } from '@utkristi/ui';
 import { useState } from 'react';
 import {
-  Accordion, AlertDialog, AspectRatio, Attachment, Avatar, AvatarGroup, Badge, Banner, Breadcrumb, Bubble, Button, ButtonGroup,
+  Accordion, Alert, AlertDialog, AspectRatio, Attachment, Avatar, AvatarGroup, Badge, Banner, Breadcrumb, Bubble, Button, ButtonGroup,
   BottomNavigation, BulkActionBar, Calendar, Card, CardBody, Carousel, Chart, Checkbox, Chip, ClipboardButton, Code, CodeBlock, Collapsible, ColumnChooser, Combobox, Command, ContextMenu,
   DataTable, DatePicker, DateRangePicker, DeviceMockup, Dialog, Direction, Dot, Drawer, EmptyState, Field, FileInput, FilterBar, FloatingInput, Footer, Gallery, HoverCard, Icon, IconButton,
   Input, InputGroup, InputOTP, Item, Jumbotron, Kbd, Label, ListGroup, Loader, Logo, Marker, MegaMenu, Menu, Menubar, Message, MessageScroller, NativeSelect, NavigationMenu, NumberInput, Pagination, PhoneInput, Popover, Progress, QRCode, Questionnaire, Radio,
-  RadioGroup, Rating, Resizable, RichText, ScrollArea, Segmented, SelectMenu, Separator, Sheet, Shell, Sidebar, Skeleton, Slider, SpeedDial, Spinner, SplitButton, Stat, Steps, Switch, Table, Tabs, Textarea, ThemeSelect, ThemeSwitch,
-  TimeInput, Timeline, Toggle, ToggleGroup, Tooltip, Trace, Typography, VideoPlayer, useToast,
+  RadioGroup, Rating, Resizable, RichText, ScrollArea, Segmented, SelectMenu, Separator, Sheet, Shell, Sidebar, SidebarLink, Skeleton, Slider, SpeedDial, Spinner, SplitButton, Stat, Steps, Switch, Table, Tabs, Textarea, ThemeSelect, ThemeSwitch,
+  Workspace, TimeInput, Timeline, Toggle, ToggleGroup, Tooltip, Trace, Typography, VideoPlayer, useToast,
 } from '@utkristi/ui';
 import type { Example } from './examples';
 
@@ -119,7 +119,52 @@ const themeSelectMarkup = `<label class="field">Theme<select class="select" data
   <option value="system">Auto</option>
 </select></label>`;
 
+function DismissibleAlert() {
+  const [visible, setVisible] = useState(true);
+  return visible ? <Alert title="Export ready" variant="soft" icon={<Icon name="check" />} onDismiss={() => setVisible(false)} actions={<Button size="sm" onClick={() => setVisible(false)}>Acknowledge</Button>}>Your sample export has finished.</Alert> : <Button onClick={() => setVisible(true)}>Show notice</Button>;
+}
+
+function CollapsingSidebar({ mode = 'icons' }: { mode?: 'icons' | 'offcanvas' } = {}) {
+  return <div style={{ minHeight: 250, paddingInlineEnd: 24 }}><Sidebar heading="Workspace" collapsible collapseMode={mode} togglePosition="edge" footer="Team settings">
+    <nav aria-label="Projects"><SidebarLink href="#projects" label="Projects" icon={<Icon name="folder" />} aria-current="page" /><SidebarLink href="#team" label="Team" icon={<Icon name="people" />} /></nav>
+  </Sidebar></div>;
+}
+
 export const componentVariants = {
+  'card--surfaces': example('Outlined, elevated, soft, and plain', 'Select a card surface independently of the global theme and corner radius.',
+    () => <div className="sample-grid">{(['outlined','elevated','soft','plain'] as const).map(variant => <Card key={variant} variant={variant}><CardBody><h3>{variant}</h3><p>Workspace details and a next step.</p><Button variant="quiet" href="#details">View details</Button></CardBody></Card>)}</div>,
+    '<div class="sample-grid"><article class="card card-body" data-variant="soft"><h3>Workspace</h3><p>Workspace details</p><a class="btn btn-quiet" href="#details">View details</a></article><article class="card card-body" data-variant="elevated"><h3>Team</h3><p>Team details</p></article></div>'),
+  'table--striped': example('Striped and bordered table', 'Set row striping, grid borders, hover feedback, and density independently.',
+    () => <Table striped bordered hoverable={false} density="compact" caption="Project owners" rows={projects} getRowKey={row => row.id} columns={[{key:'name',header:'Project'},{key:'owner',header:'Owner'}]} />,
+    '<div class="table-wrap" role="region" tabindex="0" aria-label="Project owners"><table class="table" data-striped data-bordered data-hoverable="false" data-density="compact"><caption>Project owners</caption><thead><tr><th>Project</th><th>Owner</th></tr></thead><tbody><tr><td>Studio</td><td>Design</td></tr><tr><td>Atlas</td><td>Engineering</td></tr></tbody></table></div>'),
+  'table--empty': example('Empty table with a next step', 'Keep headers visible while explaining why rows are absent.',
+    () => <Table rows={[]} getRowKey={() => ''} columns={[{key:'name',header:'Project'}]} emptyContent={<EmptyState title="No projects"><p>Create your first project to get started.</p></EmptyState>} />,
+    '<div class="table-wrap"><table class="table"><thead><tr><th>Project</th></tr></thead><tbody><tr><td><div class="empty-state"><h3>No projects</h3><p>Create your first project to get started.</p></div></td></tr></tbody></table></div>'),
+  'button--sizes-and-icons': example('Sizes, icons, and geometry', 'Use small tool actions, large calls to action, and independent corner radius.',
+    () => <div className="sample-row"><Button size="sm" iconLeft={<Icon name="plus" />}>Add</Button><Button size="md" variant="ghost" radius={0}>Square</Button><Button size="lg" iconRight={<Icon name="arrow-right" />} radius={999}>Continue</Button></div>,
+    '<div class="sample-row"><button class="btn btn-solid btn-sm">Add</button><button class="btn btn-ghost" style="--ut-button-shape:0">Square</button><button class="btn btn-solid btn-lg" style="--ut-button-shape:999px">Continue</button></div>'),
+  'workspace--layouts': example('Office, terminal, and studio layouts', 'Choose navigation composition independently of the active color theme.',
+    () => <div className="sample-stack">{(['office','terminal','studio'] as const).map(variant => <Workspace key={variant} variant={variant} title={variant} navigation={[{id:'overview',label:'Overview',icon:<Icon name="grid" />,content:<p>Workspace overview</p>},{id:'activity',label:'Activity',icon:<Icon name="history" />,content:<p>Recent activity</p>}]} />)}</div>,
+    '<section class="workspace" data-variant="office"><header class="workspace-header">Office workspace</header><div class="workspace-layout"><nav class="workspace-navigation"><a href="#overview">Overview</a></nav><div class="workspace-content">Workspace overview</div></div></section>'),
+  'alert--dismissible': example('Dismissible with actions', 'Theme surface, optional icon, action slot, and controlled dismissal.', DismissibleAlert,
+    '<div class="alert" id="export-alert" role="status"><div class="alert-content"><strong>Export ready</strong><p>Your sample export has finished.</p><button class="btn" data-ut-dismiss="export-alert">Acknowledge</button></div><button class="btn" aria-label="Dismiss alert" data-ut-dismiss="export-alert">×</button></div>'),
+  'alert--presentations': example('Soft, plain, outlined, and solid', 'Choose surface treatment independently of the semantic tone.',
+    () => <div className="sample-stack">{(['soft', 'plain', 'outlined', 'solid'] as const).map(variant => <Alert key={variant} variant={variant} title={variant + ' notice'}>A theme-aligned message without colored edge decoration.</Alert>)}</div>,
+    '<div class="sample-stack"><div class="alert" data-variant="soft" role="status">Soft notice</div><div class="alert" data-variant="plain" role="status">Plain notice</div><div class="alert" data-variant="outlined" role="status">Outlined notice</div><div class="alert" data-variant="solid" role="status">Solid notice</div></div>'),
+  'sidebar--icon-collapse': example('Collapsible icon rail', 'Keep labelled icon links reachable when collapsed. The edge trigger expands the rail.', CollapsingSidebar,
+    '<aside class="sidebar" data-collapse-mode="icons" id="icon-sidebar"><button class="btn" aria-expanded="true" aria-label="Toggle sidebar" onclick="const rail=this.parentElement;const closed=rail.toggleAttribute(&quot;data-collapsed&quot;);this.setAttribute(&quot;aria-expanded&quot;,String(!closed))">☰</button><nav class="sidebar-content"><a class="sidebar-link" href="#projects" aria-label="Projects" title="Projects"><span class="sidebar-link-icon" aria-hidden="true">▦</span><span class="sidebar-link-label">Projects</span></a></nav></aside>'),
+  'sidebar--offcanvas': example('Retractable with edge trigger', 'Collapse the panel completely while keeping a reachable reopen control.',
+    () => <CollapsingSidebar mode="offcanvas" />,
+    '<details><summary class="btn">Toggle navigation</summary><aside class="sidebar"><nav><a href="#projects">Projects</a><a href="#team">Team</a></nav></aside></details>'),
+  'tabs--vertical': example('Vertical navigation tabs', 'Arrow Up and Down navigate. Disabled entries are skipped.',
+    () => <Tabs orientation="vertical" label="Project settings" items={[{id:'general',label:'General',content:'Project name and description'},{id:'access',label:'Access',content:'Members and permissions'},{id:'billing',label:'Billing',content:'Payment settings',disabled:true}]} />,
+    '<div class="sample-stack"><details open><summary>General</summary>Project name and description</details><details><summary>Access</summary>Members and permissions</details></div>'),
+  'tabs--pills': example('Full-width pill tabs', 'Surface-based active state without an accent underline.',
+    () => <Tabs variant="pills" fullWidth label="Activity" items={[{id:'all',label:'All',content:'All activity'},{id:'mine',label:'Assigned',content:'Your assigned tasks'}]} />,
+    '<div class="sample-row"><a class="btn btn-solid" href="#all">All</a><a class="btn btn-ghost" href="#assigned">Assigned</a></div>'),
+  'accordion--separated': example('Separated sections', 'Independent theme surfaces, a leading indicator, and one section kept open.',
+    () => <Accordion appearance="separated" indicatorPosition="start" collapsible={false} defaultValue={['profile']} items={[{id:'profile',label:'Profile',content:'Name and avatar settings'},{id:'security',label:'Security',content:'Sign-in and session settings'}]} />,
+    '<div class="accordion accordion-separated"><details class="accordion-item" open><summary>Profile</summary>Name and avatar settings</details><details class="accordion-item"><summary>Security</summary>Sign-in and session settings</details></div>'),
   'button--full-width': example('Full-width action', 'Stretch a primary action to the width of its form.',
     () => <Button block radius={8}>Continue to payment</Button>, '<button class="btn btn-solid btn-block" data-ut-radius="soft">Continue to payment</button>'),
   'icon-button--pressed': example('Pressed tool action', 'Pair a compact icon with an accessible toggle state.',

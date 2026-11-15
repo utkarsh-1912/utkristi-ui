@@ -4,11 +4,13 @@ import { api, examples as sampleSources } from 'virtual:utkristi-examples';
 import { CopyCode } from './CopyCode';
 import enterpriseStyles from './enterprise.css?raw';
 import { exampleMotion } from './motion-options';
+import { splitWebSource } from './sandbox-source';
 
-export default function ComponentReference({ slug, html }: { slug: string; html: string }) {
+export default function ComponentReference({ slug, html, showApi = true }: { slug: string; html: string; showApi?: boolean }) {
   const sample = sampleSources[slug];
   const reactExample = sample?.code;
   const template = slug === 'enterprise-landing' || slug === 'execution-desk';
+  const web = splitWebSource(html, true);
   return <>
     <div className="example-source">
       <div className="doc-section-head"><div><span className="label">Implementation</span><h2>Use in your app</h2></div>
@@ -19,7 +21,11 @@ export default function ComponentReference({ slug, html }: { slug: string; html:
             <a className="link" href={`${import.meta.env.BASE_URL}utkristi-ui.css`} download>Download stylesheet</a>
             <a className="link" href={`${import.meta.env.BASE_URL}utkristi-dom.js`} download>Download runtime</a>
           </div>
-          <CopyCode text={`<link rel="stylesheet" href="./utkristi-ui.css">\n<script src="./utkristi-dom.js"></script>\n<div data-ut-motion="${exampleMotion(slug)}" data-ut-enter>\n${html}\n</div>\n<script>UtkristiDOM.initUI(document);</script>`} language="HTML / CSS / JS" /></> },
+          <Tabs label="Web source files" items={[
+            { id: 'html-file', label: 'HTML', content: <CopyCode text={`<link rel="stylesheet" href="./utkristi-ui.css">\n<link rel="stylesheet" href="./example.css">\n<script src="./utkristi-dom.js" defer></script>\n<script src="./example.js" defer></script>\n${web.html}`} language="HTML" /> },
+            { id: 'css-file', label: 'CSS', content: <CopyCode text={web.css || '/* Uses the shared utkristi-ui.css stylesheet. */'} language="CSS" /> },
+            { id: 'js-file', label: 'JavaScript', content: <CopyCode text={`${web.js}\nUtkristiDOM.initUI(document);`.trim()} language="JavaScript" /> },
+          ]} /></> },
         { id: 'react', label: 'React', content: reactExample
           ? <><p className="muted">Install the kit and use the example with its stylesheet and providers.</p>
             {template && <p className="muted">Copy the stylesheet from the Layout CSS tab and import it beside this example.</p>}
@@ -42,7 +48,7 @@ export default function ComponentReference({ slug, html }: { slug: string; html:
         <Code inline>hideable=false</Code> for identifying columns, and <Code inline>labels</Code> for translations.</p>
       <Button href="#/blocks/project-worklist" variant="ghost">Try the project worklist</Button>
     </section>}
-    {sample && <ComponentApi components={sample.components} />}
+    {sample && showApi && <ComponentApi components={sample.components} />}
   </>;
 }
 
@@ -52,8 +58,8 @@ function ComponentApi({ components }: { components: string[] }) {
     <p className="muted">The tables list kit-specific props. Components also forward their supported HTML attributes.</p>
     {components.map((name) => <details key={name}>
       <summary>{name}</summary>
-      {api[name]?.length ? <div className="table-wrap"><table className="table api-table"><thead><tr><th scope="col">Prop</th><th scope="col">Type</th><th scope="col">Required</th></tr></thead>
-        <tbody>{api[name].map((prop) => <tr key={prop.name}><th scope="row"><Code inline>{prop.name}</Code></th><td><code>{prop.type}</code>{prop.description && <p>{prop.description}</p>}</td><td>{prop.required ? "Yes" : "Optional"}</td></tr>)}</tbody>
+      {api[name]?.length ? <div className="table-wrap"><table className="table api-table"><thead><tr><th scope="col">Prop</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Required</th></tr></thead>
+        <tbody>{api[name].map((prop) => <tr key={prop.name}><th scope="row"><Code inline>{prop.name}</Code></th><td><code>{prop.type}</code>{prop.description && <p>{prop.description}</p>}</td><td><code>{prop.defaultValue ?? '—'}</code></td><td>{prop.required ? "Yes" : "Optional"}</td></tr>)}</tbody>
       </table></div> : <p className="muted">Uses standard HTML attributes and children.</p>}
     </details>)}
   </section>;

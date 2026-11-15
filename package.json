@@ -88,7 +88,8 @@
     "docs:verify": "node scripts/screenshots.mjs --verify-only",
     "smoke:package": "node scripts/smoke-package.mjs",
     "check:bundles": "node scripts/check-bundles.mjs",
-    "docs:stress": "node scripts/screenshots.mjs --stress"
+    "docs:stress": "node scripts/screenshots.mjs --stress",
+    "docs:audit": "node scripts/audit-components.mjs"
   },
   "peerDependencies": {
     "lucide-react": ">=0.468",

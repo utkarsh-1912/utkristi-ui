@@ -29,16 +29,19 @@ export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
   onValueChange?: (value: readonly string[]) => void;
   multiple?: boolean;
   /** Use a list of dividers instead of enclosing the accordion in a surface. */
-  appearance?: 'panel' | 'flush';
+  appearance?: 'panel' | 'flush' | 'separated';
+  indicatorPosition?: 'start' | 'end';
+  /** Keep at least one item open when using single expansion. */
+  collapsible?: boolean;
 }
 export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Accordion(
-  { items, value, defaultValue = [], onValueChange, multiple, appearance = 'flush', className, ...props }, ref,
+  { items, value, defaultValue = [], onValueChange, multiple, appearance = 'flush', indicatorPosition = 'end', collapsible = true, className, ...props }, ref,
 ) {
   const id = useId();
   const [expanded, setExpanded] = useControllable(value, defaultValue, onValueChange);
   const triggers = useRef(new Map<string, HTMLButtonElement>());
   const enabled = items.filter((item) => !item.disabled);
-  return <div {...props} ref={ref} className={cx('accordion', appearance === 'panel' && 'accordion-panel', className)}>
+  return <div {...props} ref={ref} data-indicator-position={indicatorPosition} className={cx('accordion', appearance !== 'flush' && `accordion-${appearance}`, className)}>
     {items.map((item, index) => {
       const active = expanded.includes(item.id);
       const title = `${id}-title-${index}`;
@@ -46,8 +49,8 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Acc
       return <div key={item.id} className="accordion-item">
         <h3 className="accordion-heading"><button type="button" className="disclosure-trigger" disabled={item.disabled} id={title}
           ref={(node) => { if (node) triggers.current.set(item.id, node); else triggers.current.delete(item.id); }}
-          aria-expanded={active} aria-controls={panel}
-          onClick={() => setExpanded(active ? expanded.filter((key) => key !== item.id) : multiple ? [...expanded, item.id] : [item.id])}
+          aria-expanded={active} aria-controls={panel} aria-disabled={active && !collapsible && !multiple || undefined}
+          onClick={() => { if (active && !collapsible && !multiple) return; setExpanded(active ? expanded.filter((key) => key !== item.id) : multiple ? [...expanded, item.id] : [item.id]); }}
           onKeyDown={(event) => {
             if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
             const next = navigationIndex(event.key, enabled.indexOf(item), enabled.length);

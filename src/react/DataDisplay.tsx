@@ -6,7 +6,7 @@ import { SearchInput, Select } from './Field.js';
 import { ControlIcon } from './ControlIcon.js';
 import { CheckIconData } from './icons/generated/CheckIcon.js';
 import { CopyIconData } from './icons/generated/CopyIcon.js';
-import { Pagination, type PaginationProps } from './Layout.js';
+import { Pagination, type PaginationProps } from './Pagination.js';
 import { Table, type TableColumn, type TableProps } from './Table.js';
 import { cx, type CSSVariables } from './utils/cx.js';
 import { useControllable } from './utils/useControllable.js';

@@ -21,10 +21,11 @@ function same(a: Date, b?: Date) { return !!b && +a === +from(b); }
 export interface CalendarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> {
   value?: Date; defaultValue?: Date; onValueChange?: (date: Date) => void;
   locale?: string; weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6; min?: Date; max?: Date;
+  rangeStart?: Date; rangeEnd?: Date;
 }
 
 export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calendar(
-  { value, defaultValue, onValueChange, locale, weekStartsOn = 0, min, max, className, ...props }, ref,
+  { value, defaultValue, onValueChange, locale, weekStartsOn = 0, min, max, rangeStart, rangeEnd, className, ...props }, ref,
 ) {
   const id = useId();
   const [selected, select] = useControllable<Date | undefined>(value, defaultValue, (date) => { if (date) onValueChange?.(date); });
@@ -67,7 +68,10 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
     <table className="calendar-grid" aria-labelledby={id} role="grid">
       <thead><tr>{days.slice(0, 7).map((date) => <th key={+date} scope="col">{weekdayFormat.format(date)}</th>)}</tr></thead>
       <tbody>{Array.from({ length: 6 }, (_, week) => <tr key={week}>
-        {days.slice(week * 7, week * 7 + 7).map((date) => <td key={+date} aria-selected={same(date, selected)}>
+        {days.slice(week * 7, week * 7 + 7).map((date) => {
+          const inRange = !!(rangeStart && rangeEnd && +date >= +from(rangeStart) && +date <= +from(rangeEnd));
+          const selectedCell = same(date, selected) || same(date, rangeStart) || same(date, rangeEnd);
+          return <td key={+date} aria-selected={selectedCell} data-in-range={inRange || undefined}>
           <button type="button" className="calendar-day" aria-label={dateFormat.format(date)} aria-current={same(date, today) ? 'date' : undefined}
             data-outside={date.getMonth() !== month || undefined} disabled={!!unavailable(date)}
             tabIndex={same(date, focused) ? 0 : -1} ref={(button) => {
@@ -86,7 +90,8 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
                 moveMonth((event.key === 'PageUp' ? -1 : 1) * (event.shiftKey ? 12 : 1), true);
               }
             }}>{date.getDate()}</button>
-        </td>)}
+        </td>;
+        })}
       </tr>)}</tbody>
     </table>
   </div>;
@@ -146,4 +151,104 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(function D
         setOpen(false);
       }} />
   </Popover></>;
+});
+
+export interface DateRangeValue {
+  start?: Date | string;
+  end?: Date | string;
+  startTime?: string;
+  endTime?: string;
+}
+
+export interface DateRangePickerProps extends Omit<CalendarProps, 'value' | 'defaultValue' | 'onValueChange' | 'rangeStart' | 'rangeEnd'> {
+  value?: DateRangeValue;
+  defaultValue?: DateRangeValue;
+  onValueChange?: (range: { start?: Date; end?: Date; startTime?: string; endTime?: string }) => void;
+  placeholder?: string;
+  label?: string;
+  name?: string;
+  form?: string;
+  disabled?: boolean;
+  showTime?: boolean;
+}
+
+export const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(function DateRangePicker(
+  {
+    value, defaultValue, onValueChange, locale, min, max, weekStartsOn,
+    placeholder = 'Choose date range', label = 'Date range calendar',
+    className, name, form, disabled, showTime = false, ...props
+  },
+  ref,
+) {
+  const field = useControl({ 'aria-describedby': props['aria-describedby'], 'aria-invalid': props['aria-invalid'] });
+  const hidden = useRef<HTMLInputElement>(null);
+  const normalize = (range?: DateRangeValue) => ({
+    start: dateOnly(range?.start),
+    end: dateOnly(range?.end),
+    startTime: range?.startTime ?? '09:00',
+    endTime: range?.endTime ?? '17:00',
+  });
+  const [range, setRange] = useControllable(
+    value === undefined ? undefined : normalize(value),
+    normalize(defaultValue),
+    (next) => {
+      onValueChange?.({
+        start: parseDateOnly(next.start),
+        end: parseDateOnly(next.end),
+        ...(showTime ? { startTime: next.startTime, endTime: next.endTime } : {}),
+      });
+    },
+  );
+  const [open, setOpen] = useState(false);
+  const root = useRef<HTMLDivElement | null>(null);
+  const startDate = parseDateOnly(range.start);
+  const endDate = parseDateOnly(range.end);
+
+  useFormReset(hidden, () => {
+    setRange(normalize(defaultValue));
+    setOpen(false);
+  }, form);
+
+  const fmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium' });
+  const triggerText = startDate && endDate
+    ? `${fmt.format(startDate)}${showTime ? ` ${range.startTime}` : ''} – ${fmt.format(endDate)}${showTime ? ` ${range.endTime}` : ''}`
+    : startDate
+      ? `${fmt.format(startDate)} – …`
+      : placeholder;
+
+  return <>
+    <input ref={hidden} type="hidden" name={name ? `${name}[start]` : undefined} form={form} value={range.start} disabled={disabled} />
+    <input type="hidden" name={name ? `${name}[end]` : undefined} form={form} value={range.end} disabled={disabled} />
+    <Popover {...props} ref={(node) => { root.current = node; assignRef(ref, node); }} label={label}
+      className={cx('date-picker', 'date-range-picker', className)} open={!disabled && open} onOpenChange={setOpen}
+      triggerProps={{ id: field.id, form, disabled, 'aria-describedby': field['aria-describedby'], 'aria-invalid': field['aria-invalid'], 'aria-labelledby': props['aria-labelledby'] }}
+      trigger={triggerText}>
+      <Calendar value={endDate ?? startDate} rangeStart={startDate} rangeEnd={endDate}
+        locale={locale} weekStartsOn={weekStartsOn} min={min} max={max}
+        onValueChange={(picked) => {
+          const pickedStr = dateOnly(picked);
+          if (!startDate || (startDate && endDate)) {
+            setRange({ ...range, start: pickedStr, end: '' });
+          } else if (+from(picked) < +from(startDate)) {
+            setRange({ ...range, start: pickedStr, end: range.start });
+          } else {
+            setRange({ ...range, end: pickedStr });
+            if (!showTime) {
+              root.current?.querySelector<HTMLElement>('button[aria-haspopup="dialog"]')?.focus();
+              setOpen(false);
+            }
+          }
+        }} />
+      {showTime && <div className="date-range-times">
+        <label className="date-range-time"><span>Start</span>
+          <input type="time" className="input" aria-label="Start time" value={range.startTime}
+            onChange={(event) => setRange({ ...range, startTime: event.target.value })} />
+        </label>
+        <label className="date-range-time"><span>End</span>
+          <input type="time" className="input" aria-label="End time" value={range.endTime}
+            onChange={(event) => setRange({ ...range, endTime: event.target.value })} />
+        </label>
+      </div>}
+    </Popover>
+  </>;
 });

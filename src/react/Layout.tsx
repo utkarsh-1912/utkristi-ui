@@ -1,6 +1,8 @@
-import { forwardRef, useId, useState, type AnchorHTMLAttributes, type HTMLAttributes, type LabelHTMLAttributes, type ReactNode } from 'react';
+import { createContext, forwardRef, useContext, useEffect, useId, useState, type AnchorHTMLAttributes, type HTMLAttributes, type LabelHTMLAttributes, type ReactNode } from 'react';
 import { cx, type CSSVariables } from './utils/cx.js';
+import { useControllable } from './utils/useControllable.js';
 import { Button } from './Button.js';
+import { Sheet } from './Overlays.js';
 
 type DivProps = HTMLAttributes<HTMLDivElement>;
 
@@ -113,6 +115,68 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
   </nav>;
 });
 
+export interface SidebarContextValue {
+  collapsed: boolean;
+  setCollapsed: (collapsed: boolean) => void;
+  toggleCollapsed: () => void;
+  mobileOpen: boolean;
+  setMobileOpen: (open: boolean) => void;
+}
+
+const SidebarContext = createContext<SidebarContextValue | null>(null);
+
+export function useSidebar(): SidebarContextValue {
+  const ctx = useContext(SidebarContext);
+  if (!ctx) throw new Error('useSidebar must be used within a SidebarProvider.');
+  return ctx;
+}
+
+export interface SidebarProviderProps {
+  children: ReactNode;
+  collapsed?: boolean;
+  defaultCollapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
+  mobileOpen?: boolean;
+  defaultMobileOpen?: boolean;
+  onMobileOpenChange?: (open: boolean) => void;
+  storageKey?: string | null;
+}
+
+export function SidebarProvider({
+  children, collapsed: controlledCollapsed, defaultCollapsed = false, onCollapsedChange,
+  mobileOpen: controlledMobileOpen, defaultMobileOpen = false, onMobileOpenChange, storageKey = 'utkristi-sidebar-collapsed',
+}: SidebarProviderProps) {
+  const [initialCollapsed] = useState(() => {
+    if (defaultCollapsed || !storageKey || typeof window === 'undefined') return defaultCollapsed;
+    try { return window.localStorage.getItem(storageKey) === 'true'; } catch { return defaultCollapsed; }
+  });
+  const [collapsed, setCollapsedState] = useControllable(controlledCollapsed, initialCollapsed, onCollapsedChange);
+  const [mobileOpen, setMobileOpen] = useControllable(controlledMobileOpen, defaultMobileOpen, onMobileOpenChange);
+
+  const setCollapsed = (next: boolean) => {
+    setCollapsedState(next);
+    if (storageKey && typeof window !== 'undefined') {
+      try { window.localStorage.setItem(storageKey, String(next)); } catch { /* ignore */ }
+    }
+  };
+
+  useEffect(() => {
+    if (!mobileOpen || typeof window === 'undefined' || !window.matchMedia) return;
+    const narrow = window.matchMedia('(max-width: 980px)');
+    const onChange = (event: MediaQueryListEvent) => { if (!event.matches) setMobileOpen(false); };
+    narrow.addEventListener('change', onChange);
+    return () => narrow.removeEventListener('change', onChange);
+  }, [mobileOpen, setMobileOpen]);
+
+  return <SidebarContext.Provider value={{
+    collapsed,
+    setCollapsed,
+    toggleCollapsed: () => setCollapsed(!collapsed),
+    mobileOpen,
+    setMobileOpen,
+  }}>{children}</SidebarContext.Provider>;
+}
+
 export interface SidebarProps extends HTMLAttributes<HTMLElement> {
   heading?: ReactNode;
   variant?: 'panel' | 'rail';
@@ -131,18 +195,24 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar({
   onCollapsedChange, toggleLabel = 'Toggle sidebar navigation', collapseMode = 'content', togglePosition = 'header', footer, className, children, ...props
 }, ref) {
   const contentId = useId();
+  const ctx = useContext(SidebarContext);
   const [localCollapsed, setLocalCollapsed] = useState(defaultCollapsed);
-  const isCollapsed = collapsed ?? localCollapsed;
+  const isCollapsed = collapsed ?? ctx?.collapsed ?? localCollapsed;
+  const handleToggle = () => {
+    const next = !isCollapsed;
+    if (collapsed === undefined) {
+      if (ctx) ctx.setCollapsed(next);
+      else setLocalCollapsed(next);
+    }
+    onCollapsedChange?.(next);
+  };
   return <aside {...props} ref={ref} className={cx('sidebar', variant === 'rail' && 'sidebar-rail', className)}
     data-collapsed={isCollapsed || undefined} data-collapse-mode={collapseMode} data-toggle-position={togglePosition}>
     {collapsible ? <div className="sidebar-header">
       {heading != null && <div className="sidebar-heading">{heading}</div>}
       <Button variant="ghost" size="sm" className="sidebar-toggle" type="button"
         aria-label={toggleLabel} aria-expanded={!isCollapsed} aria-controls={contentId}
-        onClick={() => {
-          if (collapsed === undefined) setLocalCollapsed(!isCollapsed);
-          onCollapsedChange?.(!isCollapsed);
-        }}>
+        onClick={handleToggle}>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
           <path d="m4 6 4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -152,6 +222,53 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar({
     {footer != null && <div className="sidebar-footer" hidden={isCollapsed}>{footer}</div>}
   </aside>;
 });
+
+export interface SidebarSectionProps extends HTMLAttributes<HTMLDivElement> {
+  heading: ReactNode;
+  icon?: ReactNode;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export const SidebarSection = forwardRef<HTMLDivElement, SidebarSectionProps>(function SidebarSection(
+  { heading, icon, open, defaultOpen = true, onOpenChange, className, children, ...props }, ref,
+) {
+  const id = useId();
+  const [expanded, setExpanded] = useControllable(open, defaultOpen, onOpenChange);
+  return <div {...props} ref={ref} className={cx('sidebar-section', className)} data-open={expanded || undefined}>
+    <button type="button" className="sidebar-section-trigger" aria-expanded={expanded} aria-controls={id}
+      onClick={() => setExpanded(!expanded)}>
+      {icon && <span className="sidebar-link-icon" aria-hidden="true">{icon}</span>}
+      <span className="sidebar-section-label">{heading}</span>
+      <svg className="sidebar-section-caret" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+        <path d="m4 6 4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </button>
+    <div id={id} className="sidebar-section-items" hidden={!expanded}>{children}</div>
+  </div>;
+});
+
+export interface SidebarDrawerProps {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  title?: ReactNode;
+  side?: 'start' | 'end';
+  className?: string;
+  children: ReactNode;
+}
+
+export function SidebarDrawer({ open, onOpenChange, title = 'Navigation', side = 'start', className, children }: SidebarDrawerProps) {
+  const ctx = useContext(SidebarContext);
+  const isOpen = open ?? ctx?.mobileOpen ?? false;
+  const close = () => {
+    if (onOpenChange) onOpenChange(false);
+    else ctx?.setMobileOpen(false);
+  };
+  return <Sheet open={isOpen} onClose={close} title={title} side={side} className={cx('sidebar-drawer', className)}>
+    {children}
+  </Sheet>;
+}
 
 /** Labels stay available to assistive technology when an icon rail is collapsed. */
 export const SidebarLink = forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement> & {

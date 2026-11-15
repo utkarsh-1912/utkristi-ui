@@ -1,4 +1,5 @@
-import { useEffect, useRef, type RefObject } from 'react';
+import { useEffect, useId, useRef, type RefObject } from 'react';
+import { isTopOverlay, pushOverlay } from './overlayStack.js';
 
 const focusable = 'a[href], button, input:not([type="hidden"]), select, textarea, summary, [tabindex], [contenteditable="true"]';
 const dialogs: HTMLElement[] = [];
@@ -9,6 +10,7 @@ export function useDialogFocus(
   initialFocus?: RefObject<HTMLElement>,
 ) {
   const close = useRef(onClose);
+  const overlayId = useId();
   useEffect(() => { close.current = onClose; }, [onClose]);
 
   useEffect(() => {
@@ -21,12 +23,13 @@ export function useDialogFocus(
         getComputedStyle(element).visibility !== 'hidden' && getComputedStyle(element).display !== 'none',
     );
     dialogs.push(root);
+    const popStack = pushOverlay(overlayId);
     const initial = initialFocus?.current;
     (initial && root.contains(initial) ? initial : stops()[0] ?? root).focus();
 
     function handleKey(event: KeyboardEvent) {
       if (dialogs.at(-1) !== root || event.defaultPrevented) return;
-      if (event.key === 'Escape' && close.current) {
+      if (event.key === 'Escape' && close.current && isTopOverlay(overlayId)) {
         event.preventDefault();
         close.current();
       }
@@ -42,6 +45,7 @@ export function useDialogFocus(
     document.addEventListener('keydown', handleKey);
     return () => {
       document.removeEventListener('keydown', handleKey);
+      popStack();
       const wasTop = dialogs.at(-1) === root;
       dialogs.splice(dialogs.indexOf(root), 1);
       if (wasTop && previous instanceof HTMLElement && previous.isConnected) previous.focus();

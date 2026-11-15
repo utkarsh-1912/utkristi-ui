@@ -173,7 +173,7 @@ const initialTableState: DataTableState = { query: '', page: 1 };
 export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize = 10,
   state: controlledState, defaultState = initialTableState, onStateChange, pageSizeOptions, columnVisibility, labels,
   searchLabel = 'Filter rows', toolbar, emptyMessage = 'No rows yet.', noResultsMessage = 'No matching rows.',
-  selection, remote, className, ...props }: DataTableProps<Row>) {
+  selection, remote, renderExpandedRow, className, ...props }: DataTableProps<Row>) {
   const [local, setLocal] = useControllable(controlledState, defaultState, onStateChange);
   const [columnKeys, setColumnKeys] = useControllable<readonly string[] | undefined>(
     columnVisibility?.visibleKeys, columnVisibility?.defaultVisibleKeys,
@@ -224,8 +224,13 @@ export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize 
     : columns;
   const displayedColumns = visibleColumns.length ? visibleColumns : columns.slice(0, 1);
   const prepared = displayedColumns.map((entry): TableColumn<typeof pageRows[number]> => {
-    const cell = { ...entry, render: ({ row }: typeof pageRows[number]) => entry.render
-      ? entry.render(row) : String(row[entry.key as keyof Row] ?? '') };
+    const cell: TableColumn<typeof pageRows[number]> = {
+      ...entry,
+      validate: entry.validate ? (value, wrapped) => entry.validate!(value, wrapped.row) : undefined,
+      onCellEdit: entry.onCellEdit ? (_wk, columnKey, value, wrapped) => entry.onCellEdit!(wrapped.key, columnKey, value, wrapped.row) : undefined,
+      render: ({ row }: typeof pageRows[number]) => entry.render
+        ? entry.render(row) : String(row[entry.key as keyof Row] ?? ''),
+    };
     if (isRemote ? !(entry.sortable ?? Boolean(entry.sortValue)) : !entry.sortValue) return cell;
     const direction = sort?.key === entry.key ? sort.descending ? 'descending' : 'ascending' : undefined;
     return { ...cell, label: entry.label ?? (typeof entry.header === 'string' ? entry.header : undefined), sort: direction,
@@ -297,6 +302,7 @@ export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize 
       {remote.onRetry && <button type="button" className="btn btn-sm" onClick={remote.onRetry}>{labels?.retry ?? 'Retry'}</button>}
     </div>}
     <Table {...props} aria-busy={isRemote ? busy : props['aria-busy']} columns={prepared} rows={pageRows} getRowKey={({ key }) => `${typeof key}:${key}`}
+      renderExpandedRow={renderExpandedRow ? ({ row }) => renderExpandedRow(row) : undefined}
       onRowClick={onRowClick && (({ row }) => onRowClick(row))} />
     {visible.length === 0 && !busy && remote?.status !== 'error' && <p role="status" className="muted">
       {query.trim() ? noResultsMessage : emptyMessage}

@@ -426,12 +426,60 @@
 .playground-example-results { display:flex; flex-wrap:wrap; gap:8px; }
 .playground-example-description { color:var(--ut-ink-2); margin-block:12px 24px; }
 
-.marketing-paths { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:32px; padding-block:48px 72px; }
-.marketing-paths a { color:var(--ut-ink); }
-.marketing-paths h2 { font-size:1.25rem; margin-block:18px 10px; }
-.marketing-paths p { color:var(--ut-ink-2); line-height:1.6; }
-.marketing-variant-options { display:flex; flex-wrap:wrap; gap:6px; margin-block:20px; }
-.marketing-variant-options button { border:0; border-radius:var(--ut-r-field); padding:8px 12px; background:transparent; color:var(--ut-ink-2); cursor:pointer; }
-.marketing-variant-options button[aria-pressed="true"] { background:var(--ut-tint); color:var(--ut-ink); }
-.marketing-stage-body code { display:block; margin-block-start:24px; font-size:.75rem; overflow-wrap:anywhere; white-space:normal; }
-@media(max-width:700px) { .marketing-paths { grid-template-columns:1fr; gap:28px; } }
+.marketing-paths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding-block: 16px 56px; }
+.marketing-path-card {
+  display: grid; gap: 10px; align-content: start; padding: 22px;
+  border: 1px solid var(--ut-line); border-radius: var(--ut-r); background: var(--ut-bg-2) var(--ut-surface-sheen, none);
+  color: var(--ut-ink); transition: border-color .2s var(--ut-ease), transform .2s var(--ut-ease), background-color .2s var(--ut-ease);
+}
+.marketing-path-card:hover { border-color: var(--ut-line-2); background: var(--ut-raise); transform: translateY(-2px); }
+.marketing-path-icon {
+  display: grid; place-items: center; inline-size: 38px; block-size: 38px; border-radius: 10px;
+  background: var(--ut-tint); color: var(--ut-accent); border: 1px solid var(--ut-line);
+}
+.marketing-path-card h2 { font-size: 1.15rem; margin: 4px 0 0; }
+.marketing-path-card p { margin: 0; color: var(--ut-ink-2); font-size: .92rem; line-height: 1.55; }
+
+.marketing-metrics {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
+  margin: 28px 0 0; padding-top: 20px; border-top: 1px solid var(--ut-line);
+}
+.marketing-metrics > div { display: grid; gap: 2px; min-width: 0; }
+.marketing-metrics dt { font-size: .75rem; color: var(--ut-ink-3); font-family: var(--ut-font-mono); text-transform: uppercase; letter-spacing: .04em; }
+.marketing-metrics dd { margin: 0; font-size: 1.35rem; font-weight: 650; font-family: var(--ut-font-display); letter-spacing: -.03em; color: var(--ut-ink); }
+
+.marketing-stage-themes { display: inline-flex; gap: 4px; margin-inline-start: auto; }
+.marketing-stage-themes button {
+  padding: 4px 9px; border-radius: 999px; border: 1px solid var(--ut-line); background: transparent;
+  color: var(--ut-ink-2); font: 500 .75rem var(--ut-font-text); cursor: pointer;
+}
+.marketing-stage-themes button[aria-pressed="true"] { background: var(--ut-solid); color: var(--ut-on-solid); border-color: var(--ut-solid); }
+.marketing-stage-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.marketing-stage-preview { padding-block: 6px; }
+.marketing-stage-code {
+  margin: 18px 0 0; padding: 11px 14px; border-radius: var(--ut-r-field); border: 1px solid var(--ut-line);
+  background: var(--ut-bg-2); font: .76rem/1.5 var(--ut-font-mono); overflow-x: auto; max-width: 100%;
+}
+.marketing-stage-code code { margin: 0; display: block; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.marketing-variant-options { display: flex; flex-wrap: wrap; gap: 6px; margin-block: 16px; }
+.marketing-variant-options button {
+  border: 1px solid var(--ut-line); border-radius: var(--ut-r-field); padding: 6px 11px;
+  background: transparent; color: var(--ut-ink-2); font-size: .82rem; cursor: pointer;
+  transition: background-color .16s var(--ut-ease), border-color .16s var(--ut-ease), color .16s var(--ut-ease);
+}
+.marketing-variant-options button[aria-pressed="true"] { background: var(--ut-tint); border-color: var(--ut-line-2); color: var(--ut-ink); font-weight: 600; }
+
+.marketing-capabilities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.marketing-capability {
+  display: grid; gap: 6px; align-content: start; padding: 18px;
+  border: 1px solid var(--ut-line); border-radius: var(--ut-r); background: var(--ut-bg-2);
+}
+.marketing-capability svg { color: var(--ut-accent); }
+.marketing-capability h3 { margin: 4px 0 0; font-size: 1rem; }
+.marketing-capability p { margin: 0; color: var(--ut-ink-2); font-size: .88rem; line-height: 1.5; }
+
+@media (max-width: 700px) {
+  .marketing-paths, .marketing-capabilities { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .marketing-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

@@ -468,7 +468,7 @@ async function captureEdge() {
     const kitAssets = await Promise.all(['utkristi-ui.css', 'utkristi-dom.js'].map((file) => fetch(url + '/' + file)));
     if (kitAssets.some((asset) => !asset.ok)) throw new Error('Framework downloads are unavailable');
     const assetCss = await kitAssets[0].text();
-    if (!assetCss.includes('background-size: 100% 100%')) throw new Error('The standalone CSS still has a fixed-height backdrop');
+    if (!/background-size:\s*(?:var\(--ut-canvas-size,\s*)?100%\s+100%\)?/.test(assetCss)) throw new Error('The standalone CSS still has a fixed-height backdrop');
     await evaluate(`document.querySelector('.doc-outline a[href*="section=mcp-ui"]').click()`);
     await retry(() => evaluate(`location.hash.includes('section=mcp-ui') && document.activeElement?.id === 'mcp-ui' &&
       document.querySelector('.doc-outline a[aria-current="location"]')?.textContent === 'MCP UI server'`), 'outline jumps and focuses a framework heading');

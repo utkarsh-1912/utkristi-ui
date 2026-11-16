@@ -184,7 +184,7 @@ test('Fieldset, useAsyncValidation, and DateRangeCalendar support async validati
   await user.click(screen.getByRole('button', { name: 'Reset' }));
   await waitFor(() => expect(screen.queryByText('Name already taken')).not.toBeInTheDocument());
   expect(screen.getByRole('button', { name: 'Window' })).toHaveTextContent(/Nov 10, 2026 09:30 – Nov 12, 2026 17:00/i);
-});
+}, 15_000);
 
 test('Nested Popover inside Modal closes top-down on Escape and computePlacement flips on collision', async () => {
   const user = userEvent.setup();

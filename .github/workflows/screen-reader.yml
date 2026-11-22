@@ -1,0 +1,42 @@
+name: NVDA screen reader checks
+
+on:
+  schedule:
+    - cron: '30 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  nvda:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run docs:build
+      - name: Install and run the screen reader suite
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force .npm-cache/screen-reader
+          Copy-Item scripts/screen-reader/*.mjs .npm-cache/screen-reader/
+          Set-Location .npm-cache/screen-reader
+          npm install --prefix . --no-audit --no-fund @playwright/test @guidepup/guidepup @guidepup/playwright @guidepup/setup
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          npx playwright install chromium
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          npx @guidepup/setup setup --ci
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          npx @guidepup/setup install
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          npx playwright test --config playwright.config.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nvda-spoken-output
+          path: .npm-cache/screen-reader/test-results

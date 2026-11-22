@@ -1,3 +1,5 @@
+'use client';
+
 import {
   forwardRef, useCallback, useEffect, useRef, useState,
   type FieldsetHTMLAttributes, type FormHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes,
@@ -18,7 +20,7 @@ export interface FieldProps extends HTMLAttributes<HTMLDivElement> {
   controlId?: string;
 }
 
-export const Field = forwardRef<HTMLDivElement, FieldProps>(function Field(
+export const Field = /* @__PURE__ */ forwardRef<HTMLDivElement, FieldProps>(function Field(
   { label, hint, error, required, controlId, className, children, ...props }, ref,
 ) {
   const id = useId();
@@ -48,7 +50,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
 });
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>, ComponentGeometry { code?: boolean }
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({ className, code, radius, inlineSize, style, ...props }, ref) {
+export const Textarea = /* @__PURE__ */ forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({ className, code, radius, inlineSize, style, ...props }, ref) {
   const field = useControl(props);
   return <textarea {...props} {...field} ref={ref} className={cx('textarea', code && 'textarea-code', className)}
     style={geometryStyle({ radius, inlineSize }, style)} />;
@@ -73,7 +75,7 @@ export interface FieldsetProps extends FieldsetHTMLAttributes<HTMLFieldSetElemen
   orientation?: 'vertical' | 'horizontal';
 }
 
-export const Fieldset = forwardRef<HTMLFieldSetElement, FieldsetProps>(function Fieldset(
+export const Fieldset = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, FieldsetProps>(function Fieldset(
   { legend, description, error, orientation = 'vertical', className, children, ...props }, ref,
 ) {
   const id = useId();
@@ -141,7 +143,7 @@ export interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
   error?: ReactNode;
 }
 
-export const Form = forwardRef<HTMLFormElement, FormProps>(function Form(
+export const Form = /* @__PURE__ */ forwardRef<HTMLFormElement, FormProps>(function Form(
   { error, className, children, ...props }, ref,
 ) {
   return <form {...props} ref={ref} className={cx('ut-form', className)}>

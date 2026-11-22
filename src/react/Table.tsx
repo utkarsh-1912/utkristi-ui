@@ -1,5 +1,7 @@
+'use client';
+
 import {
-  forwardRef, Fragment, useRef, useState,
+  forwardRef, Fragment, useEffect, useLayoutEffect, useRef, useState,
   type CSSProperties, type ForwardedRef, type KeyboardEvent, type ReactElement, type ReactNode, type TableHTMLAttributes,
 } from 'react';
 import { cx } from './utils/cx.js';
@@ -47,16 +49,18 @@ export interface TableProps<Row> extends Omit<TableHTMLAttributes<HTMLTableEleme
   defaultExpandedRowKeys?: readonly TableRowKey[];
   onExpandedRowsChange?: (keys: readonly TableRowKey[]) => void;
   virtualize?: { rowHeight: number; height: number; overscan?: number };
+  preserveScrollAnchor?: boolean;
   gridNavigation?: boolean;
 }
 
 const noExpanded: readonly TableRowKey[] = [];
+const useScrollLayout = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 export const Table = forwardRef(function Table<Row>(
   {
     columns, rows, getRowKey, stack, caption, density, stickyHeader, onRowClick, striped, hoverable = true, bordered, emptyContent,
     columnWidths, defaultColumnWidths = {}, onColumnWidthsChange, renderExpandedRow, expandedRowKeys, defaultExpandedRowKeys = noExpanded,
-    onExpandedRowsChange, virtualize, gridNavigation, className, style, ...props
+    onExpandedRowsChange, virtualize, preserveScrollAnchor, gridNavigation, className, style, ...props
   }: TableProps<Row>,
   ref: ForwardedRef<HTMLTableElement>,
 ) {
@@ -68,6 +72,21 @@ export const Table = forwardRef(function Table<Row>(
   const [editing, setEditing] = useState<{ rowKey: TableRowKey; columnKey: string; draft: string; error?: string; saving?: boolean } | null>(null);
   const [focusCell, setFocusCell] = useState<{ row: number; col: number }>({ row: 0, col: 0 });
   const wrapRef = useRef<HTMLDivElement>(null);
+  const previousRows = useRef(rows);
+  const rowHeight = virtualize?.rowHeight;
+  useScrollLayout(() => {
+    const previous = previousRows.current;
+    previousRows.current = rows;
+    const wrap = wrapRef.current;
+    if (!wrap || !preserveScrollAnchor || !rowHeight || previous === rows || scrollTop <= 0) return;
+    const index = Math.floor(scrollTop / rowHeight);
+    if (index >= previous.length) return;
+    const key = getRowKey(previous[index], index);
+    const next = rows.findIndex((row, index) => getRowKey(row, index) === key);
+    if (next < 0 || next === index) return;
+    wrap.scrollTop = scrollTop + (next - index) * rowHeight;
+    setScrollTop(wrap.scrollTop);
+  }, [rows, getRowKey, rowHeight, preserveScrollAnchor, scrollTop]);
 
   const widthOf = (column: TableColumn<Row>) => widths[column.key] ?? column.width ?? (column.pinned || column.resizable ? 160 : undefined);
   const alignment = (column: TableColumn<Row>) => cx((column.num || column.align === 'right') && 'num', column.align === 'center' && 'cell-center');
@@ -139,6 +158,7 @@ export const Table = forwardRef(function Table<Row>(
   // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
   return <div ref={wrapRef} className="table-wrap" tabIndex={0} role="region" aria-label={typeof caption === 'string' ? caption : 'Scrollable table'}
     data-ut-slot="table-scroll" data-sticky-header={stickyHeader || virtualize ? 'true' : undefined}
+    data-ut-anchor-scroll={preserveScrollAnchor || undefined}
     style={virtualize ? { maxHeight: virtualize.height, overflowY: 'auto' } : undefined}
     onScroll={virtualize ? (event) => setScrollTop(event.currentTarget.scrollTop) : undefined}>
     <table {...props} ref={ref} role={gridNavigation ? 'grid' : props.role}

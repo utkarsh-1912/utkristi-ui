@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, useEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Button } from './Button.js';
 import { Menu, type MenuItem } from './Menu.js';

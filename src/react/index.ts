@@ -1,4 +1,9 @@
 export * from './theme/ThemeProvider.js';
+export * from './A11yPreferences.js';
+export * from './LiveData.js';
+export { createDataTableStream, type DataTablePatch, type DataTableStream } from './tableStream.js';
+export * from './collab/index.js';
+export * from './collab/adapter.js';
 export * from './Workspace.js';
 export type { ComponentGeometry } from './utils/geometry.js';
 export * from './Button.js';
@@ -42,7 +47,7 @@ export * from './Worklist.js';
 export * from './Resizable.js';
 export * from './Conversation.js';
 export * from './Questionnaire.js';
-export * from './icons.js';
+export * from './icons-entry.js';
 
 export { EmptyState as Empty } from './EmptyState.js';
 export { Menu as DropdownMenu } from './Menu.js';

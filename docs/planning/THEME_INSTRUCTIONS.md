@@ -1,7 +1,7 @@
 # Utkristi UI: theme brief
 
 These are instructions for the model that builds themes in **utkristi-ui** (this folder). They don't
-apply to the CoLabs app. Read [DESIGN_TOKENS.md](DESIGN_TOKENS.md) first. Commit nothing unless the
+apply to the CoLabs app. Read [DESIGN_TOKENS.md](../../DESIGN_TOKENS.md) first. Commit nothing unless the
 user asks.
 
 ## 1. How a theme is wired (every theme follows this)

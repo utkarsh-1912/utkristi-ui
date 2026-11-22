@@ -1,0 +1,158 @@
+{
+  "measured": "2026-11-22",
+  "method": "esbuild bundle, minified ESM, React external, gzip level 9 default; CSS is the library's own shipped stylesheet for those components",
+  "components": [
+    "Button",
+    "Dialog",
+    "Menu",
+    "Tabs",
+    "Tooltip",
+    "Select"
+  ],
+  "results": [
+    {
+      "id": "utkristi",
+      "name": "Utkristi UI",
+      "version": "0.1.7",
+      "styling": "Prebuilt CSS (per-component files)",
+      "js": {
+        "Button": 1026,
+        "Dialog": 3063,
+        "Menu": 2340,
+        "Tabs": 1079,
+        "Tooltip": 1431,
+        "Select": 1396,
+        "all": 6621
+      },
+      "css": {
+        "Button": 10693,
+        "Dialog": 9933,
+        "Menu": 10396,
+        "Tabs": 9758,
+        "Tooltip": 9609,
+        "Select": 11431,
+        "all": 14028
+      }
+    },
+    {
+      "id": "mui",
+      "name": "MUI (Material UI)",
+      "version": "6.5.0",
+      "styling": "CSS-in-JS (Emotion, counted in JS)",
+      "js": {
+        "Button": 35169,
+        "Dialog": 36400,
+        "Menu": 39437,
+        "Tabs": 37807,
+        "Tooltip": 42338,
+        "Select": 49507,
+        "all": 72070
+      },
+      "css": {
+        "Button": 0,
+        "Dialog": 0,
+        "Menu": 0,
+        "Tabs": 0,
+        "Tooltip": 0,
+        "Select": 0,
+        "all": 0
+      }
+    },
+    {
+      "id": "mantine",
+      "name": "Mantine",
+      "version": "7.17.8",
+      "styling": "Prebuilt CSS (per-component files)",
+      "js": {
+        "Button": 14909,
+        "Dialog": 27994,
+        "Menu": 31189,
+        "Tabs": 14230,
+        "Tooltip": 31070,
+        "Select": 42245,
+        "all": 61620
+      },
+      "css": {
+        "Button": 6406,
+        "Dialog": 6113,
+        "Menu": 5599,
+        "Tabs": 6689,
+        "Tooltip": 5240,
+        "Select": 7892,
+        "all": 11592
+      }
+    },
+    {
+      "id": "react-aria",
+      "name": "React Aria Components",
+      "version": "1.22.1",
+      "styling": "Unstyled (you write the CSS)",
+      "js": {
+        "Button": 13072,
+        "Dialog": 23142,
+        "Menu": 49556,
+        "Tabs": 31759,
+        "Tooltip": 13841,
+        "Select": 58479,
+        "all": 67757
+      },
+      "css": {
+        "Button": 0,
+        "Dialog": 0,
+        "Menu": 0,
+        "Tabs": 0,
+        "Tooltip": 0,
+        "Select": 0,
+        "all": 0
+      }
+    },
+    {
+      "id": "radix",
+      "name": "shadcn/ui (Radix primitives)",
+      "version": "1.3.1",
+      "styling": "Tailwind classes in your app (not counted)",
+      "js": {
+        "Button": 1875,
+        "Dialog": 14216,
+        "Menu": 32424,
+        "Tabs": 9731,
+        "Tooltip": 20424,
+        "Select": 32555,
+        "all": 43479
+      },
+      "css": {
+        "Button": 0,
+        "Dialog": 0,
+        "Menu": 0,
+        "Tabs": 0,
+        "Tooltip": 0,
+        "Select": 0,
+        "all": 0
+      }
+    },
+    {
+      "id": "antd",
+      "name": "Ant Design",
+      "version": "5.29.3",
+      "styling": "CSS-in-JS (counted in JS)",
+      "js": {
+        "Button": 46634,
+        "Dialog": 81295,
+        "Menu": 106629,
+        "Tabs": 73852,
+        "Tooltip": 71633,
+        "Select": 101851,
+        "all": 161690
+      },
+      "css": {
+        "Button": 0,
+        "Dialog": 0,
+        "Menu": 0,
+        "Tabs": 0,
+        "Tooltip": 0,
+        "Select": 0,
+        "all": 0
+      }
+    }
+  ]
+}

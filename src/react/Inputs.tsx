@@ -1,4 +1,6 @@
-import { forwardRef, useEffect, useRef, useState, type HTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
+'use client';
+
+import { forwardRef, useEffect, useLayoutEffect, useRef, useState, type HTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
 import { Button } from './Button.js';
 import { Chip } from './Badge.js';
 import { Input, Select } from './Field.js';
@@ -6,6 +8,8 @@ import { cx } from './utils/cx.js';
 import { useControllable } from './utils/useControllable.js';
 import { useId } from './utils/useId.js';
 import { useControl, useFormReset } from './utils/field.js';
+import { showAnchoredPopover } from './utils/nativePopover.js';
+import { isTopOverlay, pushOverlay } from './utils/overlayStack.js';
 
 export const NativeSelect = Select;
 
@@ -98,6 +102,14 @@ const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchLi
   const [open, setOpen] = useState(false);
   const [cursor, setCursor] = useState(-1);
   const visible = !popup || open;
+  useLayoutEffect(() => {
+    if (popup && open && results.current && control.current) {
+      return showAnchoredPopover(results.current, control.current, id);
+    }
+  }, [popup, open, selectOnly, id]);
+  useEffect(() => {
+    if (popup && open) return pushOverlay(id);
+  }, [popup, open, id]);
   const normalizedQuery = query.trim().toLocaleLowerCase().replace(/\s+/g, ' ');
   const terms = normalizedQuery.split(' ').filter(Boolean);
   const matches = options.filter((item) => {
@@ -142,7 +154,7 @@ const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchLi
   }
 
   function handleKey(event: KeyboardEvent<HTMLElement>) {
-    if (event.key === 'Escape' && popup && open) {
+    if (event.key === 'Escape' && popup && open && isTopOverlay(id)) {
       event.preventDefault();
       event.stopPropagation();
       setOpen(false); setQuery(''); setCursor(-1);

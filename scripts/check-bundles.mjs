@@ -18,7 +18,8 @@ const results = await Promise.all(Object.entries(budgets).map(async ([name, budg
   return { name, budget, bytes, catalog };
 }));
 
+if (process.argv.includes('--json')) console.log(JSON.stringify(results));
 for (const { name, budget, bytes, catalog } of results) {
-  console.log(`${name}: ${bytes} bytes gzipped (budget ${budget})${catalog ? ' · icon catalog retained' : ''}`);
+  if (!process.argv.includes('--json')) console.log(`${name}: ${bytes} bytes gzipped (budget ${budget})${catalog ? ' · icon catalog retained' : ''}`);
   if (catalog || bytes > budget) process.exitCode = 1;
 }

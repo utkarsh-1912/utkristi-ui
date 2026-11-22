@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { ControlIcon } from './ControlIcon.js';
 import { CloseIconData } from './icons/generated/CloseIcon.js';

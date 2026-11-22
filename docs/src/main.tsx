@@ -20,6 +20,7 @@ import ShowcaseIconTray from './ShowcaseIconTray';
 import { TokensPaletteSection } from './TokensPaletteSection';
 import { MarketingHome, useMarketingMotion, WorkflowSection } from './Marketing';
 import tokenCSS from '../../src/styles/tokens.css?raw';
+import { transitionUI } from '../../src/react/utils/motion';
 import './styles.css';
 import './enterprise.css';
 
@@ -27,6 +28,8 @@ const Playground = lazy(() => import('./Playground'));
 const IconsPage = lazy(() => import('./IconsPage'));
 const ComponentReference = lazy(() => import('./ComponentReference'));
 const Frameworks = lazy(() => import('./Frameworks'));
+const ThemeStudio = lazy(() => import('./ThemeStudio'));
+const Verification = lazy(() => import('./Verification'));
 
 const primary = [
   { href: '#/overview', label: 'Overview' },
@@ -55,6 +58,8 @@ const guide = [
   { href: '#/typography', label: 'Typography' },
   { href: '#/blocks', label: 'Blocks' },
   { href: '#/sandbox', label: 'Sandbox' },
+  { href: '#/theme-studio', label: 'Theme Studio' },
+  { href: '#/status', label: 'Verification status' },
 ];
 const componentLinks = componentPages.map(([slug, item]) => ({ href: `#/components/${slug}`, label: item.name }));
 const blockCategories = ['Application', 'Account', 'Marketing', 'Cards'];
@@ -86,12 +91,16 @@ function route() {
   const theme = isResolvedTheme(requestedTheme) ? requestedTheme : undefined;
   const params = new URLSearchParams(options);
   return { path: path || '/overview', theme, sample: params.get('component') ?? undefined, variant: params.get('variant') ?? undefined,
-    editor: params.get('editor') ?? undefined, motion: params.get('motion') ?? undefined, section: params.get('section') ?? undefined } as const;
+    editor: params.get('editor') ?? undefined, motion: params.get('motion') ?? undefined, section: params.get('section') ?? undefined,
+    studio: path === '/sandbox' && params.has('brand') ? params.toString() : undefined,
+    direction: params.get('dir') === 'rtl' ? 'rtl' : 'ltr' } as const;
 }
 
-function Frame({ theme, fixedTheme, motion, children }: { theme: PreviewTheme; fixedTheme?: boolean; motion?: PreviewMotion; children: ReactNode }) {
+function Frame({ theme, fixedTheme, motion, direction, children }: {
+  theme: PreviewTheme; fixedTheme?: boolean; motion?: PreviewMotion; direction?: 'ltr' | 'rtl'; children: ReactNode;
+}) {
   const panel = useRef<HTMLDivElement>(null);
-  return <div ref={panel} data-theme={theme} data-ut-motion={motion} className="theme-preview">
+  return <div ref={panel} dir={direction} data-theme={theme} data-ut-motion={motion} className="theme-preview">
     <span className="label"><Dot static tone="off" /> {themeLabel(theme)}</span>
     <div className="preview-content">
       <ThemeProvider defaultTheme={theme} forcedTheme={fixedTheme ? theme : undefined} storageKey={null} target={() => panel.current}>
@@ -106,6 +115,7 @@ function ExamplePreview({ example, initialTheme, motion, description, preserveSt
 }) {
   const [previewTheme, setPreviewTheme] = useState(initialTheme);
   const [override, setOverride] = useState<PreviewMotion>();
+  const [direction, setDirection] = useState<'ltr' | 'rtl'>();
   const Preview = example.preview;
   return <div className="docs-example" onClickCapture={(event) => {
     if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey || !(event.target instanceof Element)) return;
@@ -120,9 +130,10 @@ function ExamplePreview({ example, initialTheme, motion, description, preserveSt
     </Select>}<Select aria-label="Preview theme" value={previewTheme}
         onChange={(event) => setPreviewTheme(event.target.value as PreviewTheme)}>
         {themes.map((theme) => <option key={theme} value={theme}>{themeLabel(theme)}</option>)}
-      </Select></div>
+      </Select><Button size="sm" variant="ghost" aria-label="RTL preview" aria-pressed={direction === 'rtl'}
+        onClick={() => setDirection((value) => (value ?? document.documentElement.dir) === 'rtl' ? 'ltr' : 'rtl')}>RTL</Button></div>
     </div>
-    <Frame key={preserveState ? undefined : previewTheme} theme={previewTheme} fixedTheme={preserveState} motion={override ?? motion}>
+    <Frame key={preserveState ? undefined : previewTheme} theme={previewTheme} fixedTheme={preserveState} motion={override ?? motion} direction={direction}>
       {motion ? <div key={example.name} data-ut-enter=""><Preview /></div> : <Preview key={example.name} />}
     </Frame>
   </div>;
@@ -167,7 +178,7 @@ function BlocksPage() {
   const motion = useMarketingMotion();
   return <article ref={motion} className="doc-article">
     <PageTitle kicker="UI library" title="Blocks" detail="Working layouts for application screens, account flows, and marketing pages. Open a block to try it and copy its source." />
-    {blockCategories.map((category) => <section key={category} className="blocks-section" data-reveal>
+    {blockCategories.map((category) => <section key={category} className="blocks-section" data-rise>
       <h2>{category}</h2>
       <div className="blocks-grid">{blockPages.filter(([, block]) => block.category === category).map(([slug, block]) =>
         <a key={slug} href={`#/blocks/${slug}`} className="block-link">
@@ -187,13 +198,13 @@ function BlockPage({ slug }: { slug: keyof typeof blocks }) {
     <a href="#/blocks" className="link block-back"><Icon name="arrow-left" /> All blocks</a>
     <PageTitle kicker={`Blocks / ${block.category}`} title={block.name} detail={block.description} />
     <ExamplePreview key={resolvedTheme} example={block} initialTheme={resolvedTheme} preserveState={template} />
-    {slug === 'project-worklist' && <section className="example-source">
+    <section className="example-source">
       <h2>Installable source</h2>
       <p className="muted">The registry item contains the sandbox source and pins the kit version used by this build.
         Use its URL with <Code inline>shadcn add</Code> after the matching kit is released. During development,
         use a locally packed kit and the React source below. Load the kit stylesheet in your app.</p>
-      <Button variant="ghost" href={`${import.meta.env.BASE_URL}r/project-worklist.json`}>Open registry item</Button>
-    </section>}
+      <Button variant="ghost" href={`${import.meta.env.BASE_URL}r/${slug}.json`}>Open registry item</Button>
+    </section>
     <Suspense fallback={<Loader variant="brand" className="docs-loader-inline" label="Loading example source…" />}>
       <ComponentReference slug={slug} html={block.html} />
     </Suspense>
@@ -446,14 +457,22 @@ function DocsThemeSelect({ previewTheme, releasePreviewTheme, className }: {
 }
 
 function App() {
-  const [{ path, theme, sample, variant: selectedVariant, editor, motion, section }, setRoute] = useState(route);
+  const [{ path, theme, sample, variant: selectedVariant, editor, motion, section, studio, direction }, setRoute] = useState(route);
   const [searchOpen, setSearchOpen] = useState(false);
   const docsContent = useRef<HTMLDivElement>(null);
+  useEffect(() => { document.documentElement.dir = direction; }, [direction]);
   useEffect(() => {
+    let current = route().path;
     const update = () => {
       const next = route();
-      setRoute(next);
-      if (!next.section) window.scrollTo(0, 0);
+      const commit = () => {
+        const latest = route();
+        setRoute(latest);
+        if (!latest.section) window.scrollTo(0, 0);
+      };
+      if (current !== next.path) transitionUI(document.documentElement, 'route', commit);
+      else commit();
+      current = next.path;
     };
     window.addEventListener('hashchange', update);
     return () => window.removeEventListener('hashchange', update);
@@ -487,10 +506,12 @@ function App() {
     '/overview': <MarketingHome />, '/getting-started': <GettingStarted />, '/theming': <Theming />,
     '/tokens': <Tokens />, '/icons': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading icon catalog…" />}><IconsPage /></Suspense>, '/typography': <Typography />, '/showcase': <Showcase />,
     '/blocks': <BlocksPage />,
+    '/theme-studio': <Suspense fallback={<Loader label="Loading Theme Studio…" />}><ThemeStudio /></Suspense>,
+    '/status': <Suspense fallback={<Loader label="Loading verification status…" />}><Verification /></Suspense>,
     '/about': <About />, '/terms': <Terms />, '/privacy': <Privacy />,
     '/frameworks': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading integrations…" />}><Frameworks /></Suspense>,
-    '/sandbox': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading sandbox…" />}><Playground key={JSON.stringify([sample ?? 'carousel', editor, motion])} component={sample}
-      editorMode={editor} initialMotion={motion} /></Suspense>,
+    '/sandbox': <Suspense fallback={<Loader variant="brand" className="docs-loader" label="Loading sandbox…" />}><Playground key={JSON.stringify([sample ?? 'carousel', editor, motion, studio])} component={sample}
+      editorMode={editor} initialMotion={motion} studio={studio} direction={direction} /></Suspense>,
   };
   const page = Object.hasOwn(pages, path) ? pages[path] : undefined;
   const errorPage = /^\/(?:error|500)(?:\.html)?\/?$/.test(path);
@@ -520,6 +541,7 @@ function App() {
   return <ThemeProvider forcedTheme={theme}><IconPaletteProvider><ToastProvider>
     <Shell mainClassName="docs-main" navbar={{
       variant: 'dock',
+      expandOnScroll: true,
       collapseLinks: true,
       className: 'docs-navbar',
       brand: <a href="#/overview" aria-label="Utkristi UI overview"><Logo size={32} /></a>,
@@ -537,7 +559,7 @@ function App() {
       className: 'docs-footer',
       lede: <div className="docs-footer-brand"><Logo size={32} /><p>Design and build across the Utkristi ecosystem.</p></div>,
       columns: [{ title: 'Build', links: [guide[0], primary[3], primary[5], primary[6]] },
-        { title: 'Design', links: [guide[1], guide[2], guide[3], guide[4]] }, { title: 'Explore', links: [primary[0], primary[4], showcaseLink] }],
+        { title: 'Design', links: [guide[1], guide[2], guide[3], guide[4], guide[7]] }, { title: 'Explore', links: [primary[0], primary[4], showcaseLink] }],
       themeSwitch: <div className="docs-footer-appearance"><span className="label">Appearance</span>{themeSelect()}</div>,
       bottom: <><span>Utkristi UI · MIT license</span><nav className="docs-footer-links" aria-label="Site information">
         {siteLinks.map(({ href, label }) => <a key={href} href={href} className="link"

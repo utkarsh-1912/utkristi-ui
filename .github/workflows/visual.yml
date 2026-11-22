@@ -1,0 +1,48 @@
+name: Docs visual matrix
+
+on:
+  workflow_dispatch:
+    inputs:
+      baseline_run_id:
+        description: Earlier baseline run ID. Leave blank to capture a new baseline.
+        required: false
+        type: string
+      example:
+        description: Optional example slug for a focused run.
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  visual:
+    runs-on: windows-latest
+    timeout-minutes: 180
+    env:
+      UTKRISTI_VISUAL_SLUG: ${{ inputs.example }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run docs:build
+      - uses: actions/download-artifact@v4
+        if: inputs.baseline_run_id != ''
+        with:
+          name: docs-visual-baseline
+          path: docs/screenshots/matrix
+          run-id: ${{ inputs.baseline_run_id }}
+          github-token: ${{ github.token }}
+      - if: inputs.baseline_run_id != ''
+        run: npm run docs:visual -- --reuse-build
+      - if: inputs.baseline_run_id == ''
+        run: npm run docs:visual -- --reuse-build --update-visual-baselines
+      - uses: actions/upload-artifact@v4
+        if: inputs.baseline_run_id == ''
+        with:
+          name: docs-visual-baseline
+          path: docs/screenshots/matrix

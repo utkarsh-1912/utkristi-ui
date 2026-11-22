@@ -1,8 +1,13 @@
 import { readFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import { join } from 'node:path';
+import { compileFunction } from 'node:vm';
 import { build } from 'esbuild';
+import postcss from 'postcss';
 import ts from 'typescript';
 import type { Plugin } from 'vite';
+import { agentDocs } from './agent-docs';
+export { agentDocs } from './agent-docs';
 
 function namesIn(node: ts.Node) {
   const names = new Set<string>();
@@ -44,6 +49,8 @@ function samples(file: string, text: string, recordName: string, includeStyles =
         ts.isPropertyAssignment(entry) && entry.name.getText(source) === name)?.initializer : undefined;
     const preview = ts.isCallExpression(item) ? item.arguments[2] : propertyValue('preview');
     const html = ts.isCallExpression(item) ? item.arguments[item.arguments.length - 1] : propertyValue('html');
+    const name = ts.isCallExpression(item) ? item.arguments[0] : propertyValue('name');
+    const description = ts.isCallExpression(item) ? item.arguments[1] : propertyValue('description');
     if (!preview) throw new Error('Missing preview for ' + key);
     if (!html || html === preview || (ts.isStringLiteralLike(html) && !html.text.trim())) throw new Error('Missing HTML source for ' + key);
     const names = namesIn(preview);
@@ -63,11 +70,13 @@ function samples(file: string, text: string, recordName: string, includeStyles =
     });
     const fixtureText = [...fixtures].sort((a, b) => a.pos - b.pos).map((entry) =>
       entry.getText(source).replace(/^export /, '')).join('\n\n');
-    const kitImport = imports.find((item) => ts.isStringLiteral(item.moduleSpecifier) && item.moduleSpecifier.text === '@utkristi/ui');
-    const components = kitImport?.importClause?.namedBindings;
-    const primary = components && ts.isNamedImports(components)
-      ? components.elements.filter((element) => /^[A-Z]/.test(element.name.text) && !element.isTypeOnly && names.has(element.name.text))
-        .map((element) => element.name.text) : [];
+    const primary = imports.flatMap((item) => {
+      if (!ts.isStringLiteral(item.moduleSpecifier) || item.moduleSpecifier.text !== '@utkristi/ui') return [];
+      const bindings = item.importClause?.namedBindings;
+      if (!bindings || !ts.isNamedImports(bindings) || item.importClause?.isTypeOnly) return [];
+      return bindings.elements.filter((element) => /^[A-Z]/.test(element.name.text) && !element.isTypeOnly && names.has(element.name.text))
+        .map((element) => (element.propertyName ?? element.name).text);
+    });
     const code = [
       ...selected,
       "import { ThemeProvider, ToastProvider, type ResolvedTheme } from '@utkristi/ui';",
@@ -80,7 +89,9 @@ function samples(file: string, text: string, recordName: string, includeStyles =
   </ThemeProvider>;
 }`,
     ].filter(Boolean).join('\n\n');
-    return [[key, { code, components: primary }]];
+    return [[key, { code, components: primary, name: name && ts.isStringLiteralLike(name) ? name.text : key,
+      description: description && ts.isStringLiteralLike(description) ? description.text : '',
+      html: ts.isStringLiteralLike(html) ? html.text : undefined }]];
   }));
 }
 
@@ -140,41 +151,124 @@ function apiFor(docs: string, source: string, examples: ReturnType<typeof sample
   }));
 }
 
+const registries = [
+  ['catalog', 'catalog', 'component'], ['examples', 'examples', 'component'], ['variants', 'variants', 'variant'],
+  ['navbar-variants', 'navbarVariants', 'variant'], ['component-variants', 'componentVariants', 'variant'],
+  ['blocks', 'blocks', 'block'], ['workflow-blocks', 'workflowBlocks', 'block'], ['worklist-blocks', 'worklistBlocks', 'block'],
+] as const;
+
+async function exampleMarkup(docs: string, source: string) {
+  const imports = registries.map(([file, name], index) => `import { ${name} as samples${index} } from './${file}.tsx';`);
+  const samples = registries.map((_, index) => `samples${index}`).join(', ');
+  const { outputFiles: [entry] } = await build({
+    stdin: {
+      contents: `${imports.join('\n')}\nmodule.exports = Object.fromEntries(Object.entries(Object.assign({}, ${samples})).map(([id, example]) => [id, example.html]));`,
+      resolveDir: join(docs, 'src'),
+      loader: 'ts',
+    },
+    alias: { '@utkristi/ui': join(source, 'index.ts') },
+    packages: 'external', bundle: true, format: 'cjs', platform: 'node', write: false, jsx: 'automatic',
+  });
+  // Load the authored docs registries once during the build. The markup strings
+  // are exported directly and no preview or example script is executed.
+  const module: { exports: Record<string, string> } = { exports: {} };
+  compileFunction(entry.text, ['require', 'module', 'exports'], { filename: 'utkristi-example-markup.cjs' })(
+    createRequire(join(docs, 'index.html')), module, module.exports,
+  );
+  return module.exports;
+}
+
+export async function generateReference(docs: string, source: string) {
+  const paths = registries.map(([file]) => join(docs, 'src', file + '.tsx'));
+  const tokenPath = join(source, '../styles/tokens.css');
+  const cssPath = join(source, '../styles/components.css');
+  const [registrations, markup, tokens, css, packageFile] = await Promise.all([
+    Promise.all(registries.map(async ([, name, kind], index) => {
+      const path = paths[index];
+      const extracted = samples(path, await readFile(path, 'utf8'), name, true);
+      return Object.fromEntries(Object.entries(extracted).map(([key, example]) => [key, { ...example, kind }]));
+    })),
+    exampleMarkup(docs, source),
+    readFile(tokenPath, 'utf8'),
+    readFile(cssPath, 'utf8'),
+    readFile(join(source, '../../package.json'), 'utf8'),
+  ]);
+  const examples = Object.assign({}, ...registrations) as typeof registrations[number];
+  for (const [id, example] of Object.entries(examples)) {
+    if (!markup[id]?.trim()) throw new Error(`Missing rendered example markup for ${id}`);
+    example.html = markup[id];
+  }
+  const classes = new Set<string>();
+  postcss.parse(css).walkRules((rule) => {
+    for (const [, name] of rule.selector.matchAll(/\.([a-z][a-z0-9-]*)/g)) classes.add(name);
+  });
+  const tokenIndex = new Map<string, Record<string, string>>();
+  postcss.parse(tokens).walkDecls(/^--ut-/, (decl) => {
+    if (decl.parent?.type !== 'rule') return;
+    const values = tokenIndex.get(decl.prop) ?? {};
+    values[decl.parent.selector] = decl.value;
+    tokenIndex.set(decl.prop, values);
+  });
+  return { version: JSON.parse(packageFile).version as string, examples, api: apiFor(docs, source, examples),
+    classes: [...classes].sort(), tokens: Object.fromEntries([...tokenIndex].sort(([a], [b]) => a.localeCompare(b))) };
+}
+
 export function docsPlayground(docs: string, source: string): Plugin {
   const prefix = 'virtual:utkristi-';
-  const worklistSource = join(docs, 'src', 'worklist-blocks.tsx');
   const domPath = join(source, 'dom.ts');
   const cssFiles = ['tokens', 'base', 'components'].map((file) => join(source, '..', 'styles', file + '.css'));
   const loadKitStyles = () => Promise.all(cssFiles.map((file) => readFile(file, 'utf8')));
   const buildDom = async () => (await build({
     entryPoints: [domPath], bundle: true, write: false, minify: true, format: 'iife', globalName: 'UtkristiDOM',
   })).outputFiles[0].text;
-  const registryPath = 'r/project-worklist.json';
-  async function worklistRegistry() {
-    const [packageFile, content] = await Promise.all([
-      readFile(join(source, '../../package.json'), 'utf8'),
-      readFile(worklistSource, 'utf8'),
-    ]);
-    const { name, version } = JSON.parse(packageFile);
-    const { code } = samples(worklistSource, content, 'worklistBlocks')['project-worklist'];
-    return JSON.stringify({
-      $schema: 'https://ui.shadcn.com/schema/registry-item.json',
-      name: 'project-worklist',
-      type: 'registry:block',
-      title: 'Project worklist',
-      description: 'Server-style pagination, filters, bulk actions and request recovery.',
-      dependencies: [`${name}@${version}`],
-      files: [{ path: 'registry/project-worklist.tsx', type: 'registry:component', content: `"use client";\n\n${code}\n` }],
-    }, null, 2);
+  let reference: ReturnType<typeof generateReference> | undefined;
+  const loadReference = () => reference ??= generateReference(docs, source);
+  let agentAssets: Promise<Record<string, string>> | undefined;
+  const loadAgentAssets = () => agentAssets ??= loadReference().then(agentDocs);
+  async function registryItems() {
+    const { examples, version } = await loadReference();
+    const layout = await readFile(join(docs, 'src', 'enterprise.css'), 'utf8');
+    return Object.fromEntries(Object.entries(examples).filter(([, item]) => item.kind === 'block').map(([name, item]) => {
+      const template = ['enterprise-landing', 'execution-desk'].includes(name);
+      const component = item.code.replace("\n\nimport '@utkristi/ui/utkristi-ui.css';", '');
+      const code = ['"use client";', template ? 'import "./utkristi-enterprise.css";' : '', component].filter(Boolean).join('\n\n');
+      const files: { path: string; type: string; content: string; target?: string }[] = [
+        { path: `registry/${name}.tsx`, type: 'registry:component', content: code + '\n' },
+      ];
+      if (template) files.push({ path: 'registry/utkristi-enterprise.css', type: 'registry:file',
+        target: '@components/utkristi-enterprise.css', content: layout });
+      return [name, {
+        $schema: 'https://ui.shadcn.com/schema/registry-item.json',
+        name, type: 'registry:block', title: item.name, description: item.description,
+        dependencies: [`@utkristi/ui@${version}`],
+        files,
+      }];
+    }));
   }
   return {
     name: 'utkristi-docs-playground',
+    watchChange() { reference = undefined; agentAssets = undefined; },
     async generateBundle() {
-      this.emitFile({ type: 'asset', fileName: registryPath, source: await worklistRegistry() });
+      for (const [id, item] of Object.entries(await registryItems())) {
+        this.emitFile({ type: 'asset', fileName: `r/${id}.json`, source: JSON.stringify(item, null, 2) });
+      }
       this.emitFile({ type: 'asset', fileName: 'utkristi-dom.js', source: await buildDom() });
       this.emitFile({ type: 'asset', fileName: 'utkristi-ui.css', source: (await loadKitStyles()).join('\n\n') });
+      for (const [fileName, source] of Object.entries(await loadAgentAssets())) {
+        this.emitFile({ type: 'asset', fileName, source });
+      }
     },
     configureServer(server) {
+      server.middlewares.use((request, response, next) => {
+        const path = request.url?.split('?')[0].slice(1);
+        if (!path || !/^(?:llms(?:-full)?\.txt|components\/[a-z0-9-]+\.md|component-manifest\.json)$/.test(path)) return next();
+        void loadAgentAssets().then((files) => {
+          const file = files[path];
+          if (!file) return next();
+          response.setHeader('Content-Type', path.endsWith('.json') ? 'application/json; charset=utf-8' : 'text/plain; charset=utf-8');
+          response.end(file);
+        }).catch(next);
+      });
       server.middlewares.use('/utkristi-ui.css', (_request, response, next) => {
         void loadKitStyles().then((css) => {
           response.setHeader('Content-Type', 'text/css; charset=utf-8');
@@ -187,27 +281,23 @@ export function docsPlayground(docs: string, source: string): Plugin {
           response.end(javascript);
         }).catch(next);
       });
-      server.middlewares.use('/' + registryPath, (_request, response, next) => {
-        void worklistRegistry().then((json) => {
+      server.middlewares.use('/r', (request, response, next) => {
+        const id = /^\/([a-z0-9-]+)\.json(?:\?|$)/.exec(request.url ?? '')?.[1];
+        if (!id) return next();
+        void registryItems().then((items) => {
+          if (!Object.hasOwn(items, id)) return next();
           response.setHeader('Content-Type', 'application/json; charset=utf-8');
-          response.end(json);
+          response.end(JSON.stringify(items[id], null, 2));
         }).catch(next);
       });
     },
     resolveId(id) { if (id.startsWith(prefix)) return '\0' + id; },
     async load(id) {
       if (id === '\0' + prefix + 'examples') {
-        const registries = [['catalog', 'catalog'], ['examples', 'examples'], ['variants', 'variants'],
-          ['navbar-variants', 'navbarVariants'], ['component-variants', 'componentVariants'],
-          ['blocks', 'blocks'], ['workflow-blocks', 'workflowBlocks'], ['worklist-blocks', 'worklistBlocks']];
-        const entries = await Promise.all(registries.map(async ([file, name]) => {
-          const path = join(docs, 'src', file + '.tsx');
-          this.addWatchFile(path);
-          return samples(path, await readFile(path, 'utf8'), name, true);
-        }));
-        const examples = Object.assign({}, ...entries) as ReturnType<typeof samples>;
-        const api = apiFor(docs, source, examples);
-        return `export const examples = ${JSON.stringify(examples)}; export const api = ${JSON.stringify(api)};`;
+        for (const [file] of registries) this.addWatchFile(join(docs, 'src', file + '.tsx'));
+        const { examples, api } = await loadReference();
+        const previews = Object.fromEntries(Object.entries(examples).map(([id, { code, components }]) => [id, { code, components }]));
+        return `export const examples = ${JSON.stringify(previews)}; export const api = ${JSON.stringify(api)};`;
       }
       if (id === '\0' + prefix + 'runtime') {
         const path = join(docs, 'src', 'playground-frame.tsx');

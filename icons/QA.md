@@ -1,6 +1,6 @@
 # Utkristi Icons: Design & Accessibility QA Report
 
-This document records the design, optical-weight, 3D consistency, and accessibility QA checks defined in Section 11 of `ICON_SYSTEM_INSTRUCTIONS.md`.
+This document records the design, optical-weight, 3D consistency, and accessibility QA checks defined in Section 11 of `docs/planning/ICON_SYSTEM_INSTRUCTIONS.md`.
 
 The shipped clay images use the repository’s deterministic renderer. A verified Blender scene and the full size and density matrix are still outstanding. The current assets use 96px and 160px PNG masters. Previously encoded icons also have AVIF and WebP. Newly generated entries currently use PNG. The optical and lighting rows below describe checks of the shipped artwork and its geometry.
 

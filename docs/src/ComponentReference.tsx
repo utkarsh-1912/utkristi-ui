@@ -33,6 +33,18 @@ export default function ComponentReference({ slug, html, showApi = true }: { slu
           : <p className="muted">The React example is temporarily unavailable. See the HTML tab for the markup.</p> },
         { id: 'motion', label: 'Motion', content: <><p className="muted">Choose fade, rise, scale, slide, or none. The scope also sets the entry motion for supported overlays inside it.</p>
           <CopyCode text={`<div data-ut-motion="${exampleMotion(slug)}" data-ut-enter>\n  {/* Place the component here. */}\n</div>`} language="TSX" /></> },
+        ...(['popover', 'menu', 'tooltip'].includes(slug) ? [{ id: 'native', label: 'Native HTML', content: <>
+          <p><strong>Zero JavaScript</strong> {slug === 'tooltip' ? 'for a short description that appears on hover and keyboard focus.'
+            : 'in browsers with the Popover API. Anchor positioning places the popup beside its trigger when supported.'}</p>
+          <CopyCode language="HTML" text={slug === 'tooltip'
+            ? '<button class="btn btn-ghost" type="button" data-tip="Copy the release URL" aria-label="Copy release URL">Copy link</button>'
+            : `<button class="btn btn-ghost" type="button" popovertarget="release-details">Release details</button>
+<div id="release-details" class="menu ut-html-popover" popover aria-label="Release details">
+  <p>Version 4.2 is ready to review.</p>
+  <a class="link" href="/releases/4.2">Read the release notes</a>
+</div>`} />
+          {slug !== 'tooltip' && <p className="muted">For browsers without the Popover API, use a details disclosure or the React component with its placement fallback.</p>}
+        </> }] : []),
         ...(template ? [{ id: 'layout-css', label: 'Layout CSS', content: <CopyCode text={enterpriseStyles} language="CSS" /> }] : []),
       ]} />
     </div>

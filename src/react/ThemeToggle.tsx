@@ -1,3 +1,7 @@
+'use client';
+
+import { transitionUI } from './utils/motion.js';
+
 import { forwardRef, type SelectHTMLAttributes } from 'react';
 import { IconButton, type IconButtonProps } from './Button.js';
 import { Select } from './Field.js';
@@ -15,7 +19,7 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, Omit<IconButtonProps, '
   const glyph = next.id === 'dark' ? MoonIconData : next.id === 'light' ? SunIconData : LayersIconData;
   return <IconButton {...props} ref={ref} label={`Switch to ${next.label} theme`} onClick={(event) => {
     onClick?.(event);
-    if (!event.defaultPrevented) setTheme(next.id);
+    if (!event.defaultPrevented) transitionUI(event.currentTarget, 'theme', () => setTheme(next.id));
   }}><ControlIcon glyph={glyph} size={18} /></IconButton>;
 });
 
@@ -35,7 +39,10 @@ export const ThemeSelect = forwardRef<HTMLSelectElement, ThemeSelectProps>(funct
   const { theme, setTheme } = useTheme();
   return <Select {...props} ref={ref} aria-label={label} value={theme} onChange={(event) => {
     onChange?.(event);
-    if (!event.defaultPrevented) setTheme(event.target.value as Theme);
+    if (!event.defaultPrevented) {
+      const next = event.currentTarget.value as Theme;
+      transitionUI(event.currentTarget, 'theme', () => setTheme(next));
+    }
   }}>
     {themes.map(({ id, label }) => <option key={id} value={id}>{label}</option>)}
     <option value="system">System</option>

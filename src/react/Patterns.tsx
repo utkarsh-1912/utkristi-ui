@@ -1,3 +1,5 @@
+'use client';
+
 import { useId, useRef, useState, type HTMLAttributes, type InputHTMLAttributes, type ReactNode } from 'react';
 import { Button, type ButtonProps } from './Button.js';
 import { Input } from './Field.js';

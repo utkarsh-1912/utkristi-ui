@@ -1,3 +1,5 @@
+'use client';
+
 import {
   createContext, forwardRef, useContext, useEffect, useId, useRef, useState,
   type HTMLAttributes, type KeyboardEvent, type ReactNode, type SVGProps,
@@ -9,9 +11,8 @@ import { iconGlyphs, type IconGlyphName } from './icons/generated/index.js';
 import { iconManifest, type IconManifestEntry } from './icons/generated/manifest.js';
 import { icon3dRenders } from './icons/generated/renders.js';
 
-export { iconGlyphs, iconManifest, icon3dRenders };
-export type { IconGlyphName, IconManifestEntry };
-export * from './icons/generated/index.js';
+export { iconManifest, icon3dRenders };
+export type { IconManifestEntry };
 
 export const iconHues = ['blue', 'lime', 'violet', 'teal', 'amber', 'coral', 'rose', 'graphite'] as const;
 export type IconPresetHue = typeof iconHues[number];
@@ -292,6 +293,32 @@ export interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
   renderTheme?: ResolvedTheme;
 }
 
+interface IconRender {
+  png1x: string;
+  png2x: string;
+  avif?: string;
+  webp?: string;
+}
+
+function RasterIconImage({ render, size }: { render: IconRender; size: number }) {
+  const [pngOnly, setPngOnly] = useState(false);
+  const [ready, setReady] = useState(false);
+  const hasModernSource = Boolean(render.avif || render.webp);
+
+  return <picture data-icon-raster-ready={ready ? '' : undefined}>
+    {!pngOnly && render.avif && <source type="image/avif" srcSet={render.avif} />}
+    {!pngOnly && render.webp && <source type="image/webp" srcSet={render.webp} />}
+    <img key={pngOnly ? 'png' : 'auto'} src={render.png1x} srcSet={`${render.png1x} 1x, ${render.png2x} 2x`}
+      width={size} height={size} loading="lazy" decoding="async" alt=""
+      ref={(image) => { if (image?.complete && image.naturalWidth > 0) setReady(true); }}
+      onLoad={(event) => setReady(event.currentTarget.naturalWidth > 0)}
+      onError={() => {
+        setReady(false);
+        if (hasModernSource && !pngOnly) setPngOnly(true);
+      }} />
+  </picture>;
+}
+
 export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
   { name, variant: requestedVariant = 'line', size, hue, customColor, inColour, label, renderTheme, strokeWidth, className, style, ...props },
   ref,
@@ -332,7 +359,7 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
         ? (normalizedHue as IconPresetHue)
         : null;
     const renderEntry = rasterHue
-      ? (icon3dRenders as Record<string, Record<string, Record<string, { png1x: string; png2x: string; avif?: string; webp?: string }>>>)[glyph.name]?.[themeKey]?.[rasterHue]
+      ? (icon3dRenders as Record<string, Record<string, Record<string, IconRender>>>)[glyph.name]?.[themeKey]?.[rasterHue]
       : undefined;
 
     if (renderEntry) {
@@ -342,19 +369,7 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
           style={{ width: resolvedSize, height: resolvedSize, ...customVars, ...style }}
           {...a11yProps}
         >
-          <picture>
-            {renderEntry.avif && <source type="image/avif" srcSet={renderEntry.avif} />}
-            {renderEntry.webp && <source type="image/webp" srcSet={renderEntry.webp} />}
-            <img
-              src={renderEntry.png1x}
-              srcSet={`${renderEntry.png1x} 1x, ${renderEntry.png2x} 2x`}
-              width={resolvedSize}
-              height={resolvedSize}
-              loading="lazy"
-              decoding="async"
-              alt=""
-            />
-          </picture>
+          <RasterIconImage key={renderEntry.png1x} render={renderEntry} size={resolvedSize} />
           <svg
             ref={ref}
             viewBox="0 0 24 24"

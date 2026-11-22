@@ -1,6 +1,6 @@
 import { deflateSync } from 'node:zlib';
 
-// Theme + Hue palettes matching src/styles/tokens.css & ICON_SYSTEM_INSTRUCTIONS.md
+// Theme + Hue palettes matching src/styles/tokens.css & docs/planning/ICON_SYSTEM_INSTRUCTIONS.md
 export const clayPalettes = {
   night: {
     rim: [156, 195, 255, 0.60],

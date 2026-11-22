@@ -8,6 +8,7 @@
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": { "@utkristi/ui": ["src/react/index.ts"] }
   },

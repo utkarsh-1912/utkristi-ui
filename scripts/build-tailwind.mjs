@@ -43,3 +43,46 @@ await Promise.all(Object.entries(entries).flatMap(([name, { code, type }]) =>
   }),
 ));
 
+
+// Tailwind CSS 4 entry, written in v4's native CSS API (the v3 plugin's nested @media components don't load in v4).
+// Usage: @import "tailwindcss"; @import "@utkristi/ui/tailwind.css";
+{
+  const { default: extend } = await import('../src/tailwind/theme.js');
+  const read = (name) => readFile(new URL(`../src/styles/${name}.css`, import.meta.url), 'utf8');
+  const [tokenCss, baseCss, componentCss] = await Promise.all(['tokens', 'base', 'components'].map(read));
+  const v4 = (value) => value.replace('calc(<alpha-value> * 100%)', '100%');
+  const block = (prefix, entries) => Object.entries(entries).map(([key, value]) => `  --${prefix}-${key}: ${v4(value)};`);
+  const theme = [
+    ...block('color', extend.colors),
+    ...block('font', extend.fontFamily),
+    ...block('font-stretch', extend.fontStretch),
+    ...block('radius', extend.borderRadius),
+    ...block('shadow', extend.boxShadow),
+    ...block('ease', extend.transitionTimingFunction),
+    ...block('container', extend.maxWidth),
+    ...block('spacing', extend.spacing),
+  ];
+  const themes = ['glass', 'aurora', 'snow', 'trading', 'sepia', 'midnight', 'forest', 'sunset', 'high-contrast', 'terminal'];
+  const variant = (name, cls, attr) => `@custom-variant ${name} (&:where(.${cls}, .${cls} *, [data-theme="${attr}"], [data-theme="${attr}"] *));`;
+  const stretches = Object.entries(extend.fontStretch).map(([key, value]) => `@utility stretch-${key} { font-stretch: ${value}; }`);
+  await writeFile(new URL('../dist/tailwind.css', import.meta.url), [
+    '/* Utkristi UI for Tailwind CSS 4. Import after "tailwindcss". */',
+    '@source "./react";',
+    '',
+    '@theme inline {',
+    ...theme,
+    '}',
+    '',
+    variant('light', 'light', 'light'),
+    variant('night', 'dark', 'dark'),
+    ...themes.map((name) => variant(name, name, name)),
+    '',
+    '@utility font-condensed { font-stretch: 62%; }',
+    ...stretches,
+    '',
+    `@layer base {\n${tokenCss}\n\n${baseCss}\n}`,
+    '',
+    `@layer components {\n${componentCss}\n}`,
+    '',
+  ].join('\n'));
+}

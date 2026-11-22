@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { expect, test } from 'vitest';
 import { iconThemeKey, themes } from '../src/react/theme/themes.js';
@@ -107,6 +107,35 @@ test('two 2.5D icons on one page never share a gradient id and 3D swaps to 2.5D 
   expect(new Set(gradients).size).toBe(gradients.length);
   expect(screen.getByRole('img', { name: 'Launch 3D' }).querySelector('picture img')).toBeInTheDocument();
   expect(screen.getByRole('img', { name: 'Custom 3D' }).tagName.toLowerCase()).toBe('svg');
+});
+
+test('3D icons keep the vector fallback until the raster loads and retry after a palette change', () => {
+  const icon = (hue: 'blue' | 'teal') => <Icon name="rocket" variant="3d" hue={hue} label="Launch" />;
+  const { rerender } = render(icon('blue'));
+  const wrapper = screen.getByRole('img', { name: 'Launch' });
+  const picture = () => wrapper.querySelector('picture')!;
+  const image = () => wrapper.querySelector('img')!;
+  expect(wrapper.querySelector('.icon-3d-fallback path')).toBeInTheDocument();
+  expect(picture()).not.toHaveAttribute('data-icon-raster-ready');
+  fireEvent.error(image());
+  expect(picture()).not.toHaveAttribute('data-icon-raster-ready');
+  Object.defineProperty(image(), 'naturalWidth', { value: 96 });
+  fireEvent.load(image());
+  expect(picture()).toHaveAttribute('data-icon-raster-ready');
+  rerender(icon('teal'));
+  expect(image()).toHaveAttribute('src', expect.stringContaining('/teal/'));
+  expect(picture()).not.toHaveAttribute('data-icon-raster-ready');
+});
+
+test('a failed modern image source retries with the PNG before using the vector fallback', () => {
+  render(<Icon name="ai-spark" variant="3d" renderTheme="glass" hue="lime" label="AI spark" />);
+  const icon = screen.getByRole('img', { name: 'AI spark' });
+  expect(icon.querySelector('source')).toBeInTheDocument();
+  fireEvent.error(icon.querySelector('img')!);
+  expect(icon.querySelector('source')).not.toBeInTheDocument();
+  fireEvent.error(icon.querySelector('img')!);
+  expect(icon.querySelector('picture')).not.toHaveAttribute('data-icon-raster-ready');
+  expect(icon.querySelector('.icon-3d-fallback path')).toBeInTheDocument();
 });
 
 test('picker supports arrow keys, persists across remount, and derives stroke and on for light and dark custom colours', async () => {

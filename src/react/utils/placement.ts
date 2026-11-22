@@ -1,3 +1,5 @@
+'use client';
+
 export type PlacementSide = 'top' | 'bottom';
 export type PlacementAlign = 'start' | 'end';
 

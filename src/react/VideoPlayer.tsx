@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useState, type CSSProperties, type VideoHTMLAttributes } from 'react';
 import { IconButton } from './Button.js';
 import { Select } from './Field.js';

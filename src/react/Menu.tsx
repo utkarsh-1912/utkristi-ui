@@ -1,9 +1,13 @@
-import { cloneElement, forwardRef, isValidElement, useCallback, useEffect, useRef, useState, type HTMLAttributes,
+'use client';
+
+import { cloneElement, forwardRef, isValidElement, useCallback, useEffect, useLayoutEffect, useRef, useState, type HTMLAttributes,
   type KeyboardEvent, type MouseEvent, type ReactElement, type ReactNode } from 'react';
 import { assignRef, cx, type CSSVariables } from './utils/cx.js';
 import { navigationIndex } from './utils/focus.js';
 import { Portal } from './utils/Portal.js';
 import { useId } from './utils/useId.js';
+import { showAnchoredPopover } from './utils/nativePopover.js';
+import { isTopOverlay, pushOverlay } from './utils/overlayStack.js';
 
 export type MenuItem =
   | { type: 'separator'; id?: string }
@@ -49,16 +53,25 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
     if (restore) returnTo.current?.focus();
   }
 
+  useLayoutEffect(() => {
+    const anchor = root.current?.ownerDocument.getElementById(triggerId) ?? root.current;
+    if (open && surface && anchor && !context) return showAnchoredPopover(surface, anchor, menuId);
+  }, [open, surface, context, triggerId, menuId]);
+
+  useEffect(() => {
+    if (open) return pushOverlay(menuId);
+  }, [open, menuId]);
+
   useEffect(() => {
     if (!edge || !surface) return;
     const enabled = buttons();
     (enabled[edge === 'first' ? 0 : enabled.length - 1] ?? surface)?.focus();
     function outside(event: globalThis.MouseEvent) {
-      if (event.target instanceof Node && !root.current?.contains(event.target) && !surface?.contains(event.target)) setEdge(undefined);
+      if (event.target instanceof Node && isTopOverlay(menuId) && !root.current?.contains(event.target) && !surface?.contains(event.target)) setEdge(undefined);
     }
     document.addEventListener('mousedown', outside);
     return () => document.removeEventListener('mousedown', outside);
-  }, [edge, surface, buttons]);
+  }, [edge, surface, buttons, menuId]);
 
   function openContext(target: HTMLElement, x: number, y: number) {
     returnTo.current = target;
@@ -97,7 +110,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
         return;
       }
       if (context && event.key !== 'Escape') return;
-      if (event.key === 'Escape' && open) {
+      if (event.key === 'Escape' && open && isTopOverlay(menuId)) {
         event.preventDefault();
         close(true);
       } else if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) {
@@ -132,8 +145,9 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
       style={context ? { '--ut-context-x': (point?.x ?? 0) + 'px', '--ut-context-y': (point?.y ?? 0) + 'px' } as CSSVariables : undefined}
       className={cx('pop', context && 'context-surface', align === 'start' && 'pop-left', up && 'pop-up', menuClassName)}
       onKeyDown={(event) => {
-        if (event.key === 'Escape') {
+        if (event.key === 'Escape' && isTopOverlay(menuId)) {
           event.preventDefault();
+          event.stopPropagation();
           close(true);
           return;
         }

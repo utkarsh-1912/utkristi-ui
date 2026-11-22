@@ -1,7 +1,7 @@
 # Utkristi UI: build instructions
 
 This is a complete brief for the model that builds Utkristi UI. Read it together with
-[DESIGN_TOKENS.md](DESIGN_TOKENS.md), which maps every app token and `.u-*` class to its kit name and
+[DESIGN_TOKENS.md](../../DESIGN_TOKENS.md), which maps every app token and `.u-*` class to its kit name and
 is the naming contract. Don't rename anything listed there.
 
 The custom 2D/3D icon family and its colour palette have their own brief:

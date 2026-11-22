@@ -1,4 +1,6 @@
-import { forwardRef, useRef, type FormEventHandler, type HTMLAttributes, type ReactNode, type RefObject } from 'react';
+'use client';
+
+import { forwardRef, useRef, type FormEventHandler, type HTMLAttributes, type MouseEvent, type ReactNode, type RefObject } from 'react';
 import { IconButton } from './Button.js';
 import { ControlIcon } from './ControlIcon.js';
 import { CloseIconData } from './icons/generated/CloseIcon.js';
@@ -29,8 +31,10 @@ const ModalContent = forwardRef<HTMLElement, Omit<ModalProps, 'open'>>(function 
     className, children, radius, inlineSize, style, ...props }, ref,
 ) {
   const scope = useRef<HTMLElement | null>(null);
+  const nativeHost = useRef<HTMLDialogElement>(null);
   const id = useId();
-  useDialogFocus(scope, onClose, initialFocus);
+  const native = typeof HTMLDialogElement !== 'undefined' && typeof HTMLDialogElement.prototype.showModal === 'function';
+  useDialogFocus(scope, onClose, initialFocus, native ? nativeHost : undefined);
   const setRef = (element: HTMLElement | null) => { scope.current = element; assignRef(ref, element); };
   const content = <>
     {handle}
@@ -47,21 +51,27 @@ const ModalContent = forwardRef<HTMLElement, Omit<ModalProps, 'open'>>(function 
   </>;
   const dialog = {
     ...props,
-    role: props.role ?? 'dialog',
-    'aria-modal': true as const,
-    'aria-labelledby': `${id}-title`,
-    'aria-describedby': description != null ? `${id}-desc` : props['aria-describedby'],
+    role: native ? undefined : props.role ?? 'dialog',
+    'aria-modal': native ? undefined : true as const,
+    'aria-labelledby': native ? undefined : `${id}-title`,
+    'aria-describedby': native ? undefined : description != null ? `${id}-desc` : props['aria-describedby'],
     tabIndex: -1,
     className: cx('modal', wide && 'modal-wide', className),
     style: geometryStyle({ radius, inlineSize }, style),
   };
-  return <div className={cx('modal-backdrop', backdropClassName)} role="presentation" onMouseDown={(event) => {
+  const backdrop = cx('modal-backdrop', backdropClassName);
+  const dismiss = (event: MouseEvent<HTMLElement>) => {
     if (dismissOnBackdrop && event.target === event.currentTarget) onClose?.();
-  }}>
-    {onSubmit
-      ? <form {...dialog} ref={setRef} onSubmit={(event) => { event.preventDefault(); onSubmit(event); }}>{content}</form>
-      : <div {...dialog} ref={setRef}>{content}</div>}
-  </div>;
+  };
+  const panel = onSubmit
+    ? <form {...dialog} ref={setRef} onSubmit={(event) => { event.preventDefault(); onSubmit(event); }}>{content}</form>
+    : <div {...dialog} ref={setRef}>{content}</div>;
+  // Backdrop interaction supplements the keyboard-accessible Close button.
+  // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+  return native ? <dialog ref={nativeHost} className={backdrop} role={props.role ?? 'dialog'}
+    aria-modal="true" aria-labelledby={`${id}-title`} aria-describedby={description != null ? `${id}-desc` : props['aria-describedby']}
+    onMouseDown={dismiss}>{panel}</dialog>
+    : <div className={backdrop} role="presentation" onMouseDown={dismiss}>{panel}</div>;
 });
 
 export const Modal = forwardRef<HTMLElement, ModalProps>(function Modal({ open, ...props }, ref) {

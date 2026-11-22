@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, type HTMLAttributes } from 'react';
 import { Button } from './Button.js';
 import { cx } from './utils/cx.js';

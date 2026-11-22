@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, useRef, useState, type FormHTMLAttributes } from 'react';
 import { Button } from './Button.js';
 import { Checkbox, Radio } from './Choice.js';

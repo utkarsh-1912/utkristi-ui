@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Button } from './Button.js';
 import { cx } from './utils/cx.js';
@@ -5,6 +7,7 @@ import { isTopOverlay, pushOverlay } from './utils/overlayStack.js';
 import { computePlacement, type PlacementAlign, type PlacementSide } from './utils/placement.js';
 import { useControllable } from './utils/useControllable.js';
 import { useId } from './utils/useId.js';
+import { showAnchoredPopover } from './utils/nativePopover.js';
 
 export interface PopoverProps extends HTMLAttributes<HTMLDivElement> {
   trigger: ReactNode; label: string; open?: boolean; defaultOpen?: boolean;
@@ -25,7 +28,7 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover
     if (!shown) return;
     const pop = pushOverlay(id);
     const outside = (event: PointerEvent) => {
-      if (event.target instanceof Node && !anchor.current?.contains(event.target)) setShown(false);
+      if (event.target instanceof Node && isTopOverlay(id) && !anchor.current?.contains(event.target)) setShown(false);
     };
     document.addEventListener('pointerdown', outside);
     return () => { pop(); document.removeEventListener('pointerdown', outside); };
@@ -36,10 +39,15 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover
       setPlacement({ side, align });
       return;
     }
+    const native = showAnchoredPopover(panel.current, anchor.current, id);
+    if (native) {
+      setPlacement({ side, align });
+      return native;
+    }
     const anchorRect = anchor.current.getBoundingClientRect();
     const panelRect = panel.current.getBoundingClientRect();
     setPlacement(computePlacement(anchorRect, { width: panelRect.width, height: panelRect.height }, { side, align }));
-  }, [shown, side, align]);
+  }, [shown, side, align, id]);
 
   useEffect(() => { if (shown) panel.current?.focus(); }, [shown]);
 

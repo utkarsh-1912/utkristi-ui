@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, useRef, type HTMLAttributes, type ReactNode } from 'react';
 import { assignRef, cx, type CSSVariables } from './utils/cx.js';
 import { useControllable } from './utils/useControllable.js';

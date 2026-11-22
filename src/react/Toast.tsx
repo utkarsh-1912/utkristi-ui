@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState,
   type HTMLAttributes, type ReactNode } from 'react';
 import type { Tone } from './Badge.js';

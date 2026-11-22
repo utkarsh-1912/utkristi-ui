@@ -1,3 +1,5 @@
+'use client';
+
 import { isTheme, themeIds } from './theme/themes.js';
 
 /** Connect data-ut-open-dialog buttons to native dialogs within this root. */
@@ -86,8 +88,8 @@ export function initDisclosures(root: Document | HTMLElement = document): () => 
     if (!details || !root.contains(details)) return;
     event.preventDefault();
     event.stopPropagation();
+    details.querySelector<HTMLElement>(':scope > summary')?.focus({ preventScroll: true });
     details.open = false;
-    details.querySelector<HTMLElement>(':scope > summary')?.focus();
   };
   const toggle = (event: Event) => {
     const details = event.target;
@@ -247,7 +249,22 @@ export function initFileDrops(root: Document | HTMLElement = document): () => vo
   };
 }
 
+/** Toggles `is-scrolled` on `.header` elements as the page scrolls (drives `.header-expand` and the scrolled shadow). */
+export function initHeaders(root: Document | HTMLElement = document): () => void {
+  const headers = [...root.querySelectorAll<HTMLElement>('.header')];
+  if (!headers.length || typeof window === 'undefined') return () => {};
+  let frame = 0;
+  const sync = () => {
+    frame = 0;
+    for (const header of headers) header.classList.toggle('is-scrolled', window.scrollY > 4);
+  };
+  const onScroll = () => { if (!frame) frame = requestAnimationFrame(sync); };
+  sync();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(frame); };
+}
+
 export function initUI(root: Document | HTMLElement = document): () => void {
-  const dispose = [initDialogs(root), initTabs(root), initDisclosures(root), initActions(root), initFileDrops(root)];
+  const dispose = [initDialogs(root), initTabs(root), initDisclosures(root), initActions(root), initFileDrops(root), initHeaders(root)];
   return () => dispose.forEach((cleanup) => cleanup());
 }

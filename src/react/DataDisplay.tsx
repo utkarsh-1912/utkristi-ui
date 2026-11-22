@@ -1,4 +1,6 @@
-import { forwardRef, useEffect, useMemo, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
+'use client';
+
+import { forwardRef, useEffect, useMemo, useRef, useState, useSyncExternalStore, type HTMLAttributes, type ReactNode } from 'react';
 import { Button } from './Button.js';
 import { Checkbox } from './Choice.js';
 import { Code } from './Code.js';
@@ -11,12 +13,13 @@ import { Table, type TableColumn, type TableProps } from './Table.js';
 import { cx, type CSSVariables } from './utils/cx.js';
 import { useControllable } from './utils/useControllable.js';
 import { ColumnChooser } from './Worklist.js';
+import type { DataTableStream } from './tableStream.js';
 
 export interface CodeBlockProps extends HTMLAttributes<HTMLDivElement> {
   code: string; language?: string; lineNumbers?: boolean; copy?: boolean;
   renderLine?: (line: string, index: number) => ReactNode;
 }
-export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(function CodeBlock(
+export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockProps>(function CodeBlock(
   { code, language, title, lineNumbers, copy = true, renderLine, className, ...props }, ref,
 ) {
   const [feedback, setFeedback] = useState<{ code: string; message: string }>();
@@ -54,7 +57,7 @@ export interface ChartDatum { id?: string; label: string; value: number }
 export interface ChartProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   title: string; data: readonly ChartDatum[]; variant?: 'bar' | 'line'; format?: (value: number) => string;
 }
-export const Chart = forwardRef<HTMLElement, ChartProps>(function Chart(
+export const Chart = /* @__PURE__ */ forwardRef<HTMLElement, ChartProps>(function Chart(
   { title, data, variant = 'bar', format = String, className, ...props }, ref,
 ) {
   const values = data.map((datum) => Number.isFinite(datum.value) ? datum.value : 0);
@@ -165,15 +168,23 @@ export interface DataTableProps<Row> extends Omit<TableProps<Row>, 'columns'> {
   selection?: DataTableSelection<Row>;
   /** Treats rows as an already filtered, ordered, and paginated result. */
   remote?: DataTableRemote;
+  /** Apply patches to the current source rows. getRowKey must return a stable ID independent of the row index. */
+  stream?: DataTableStream<Row>;
 }
 
 const noSelection: readonly DataTableRowKey[] = [];
 const initialTableState: DataTableState = { query: '', page: 1 };
+const emptyStream = { getSnapshot: () => undefined, subscribe: () => () => {} };
 
-export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize = 10,
+export function DataTable<Row>({ columns, rows: initialRows, getRowKey, onRowClick, pageSize = 10,
   state: controlledState, defaultState = initialTableState, onStateChange, pageSizeOptions, columnVisibility, labels,
   searchLabel = 'Filter rows', toolbar, emptyMessage = 'No rows yet.', noResultsMessage = 'No matching rows.',
-  selection, remote, renderExpandedRow, className, ...props }: DataTableProps<Row>) {
+  selection, remote, stream, renderExpandedRow, className, ...props }: DataTableProps<Row>) {
+  const key = useRef(getRowKey);
+  useEffect(() => { key.current = getRowKey; }, [getRowKey]);
+  const feed = useMemo(() => stream?.forRows(initialRows, (row, index) => key.current(row, index)) ?? emptyStream, [stream, initialRows]);
+  const live = useSyncExternalStore(feed.subscribe, feed.getSnapshot, emptyStream.getSnapshot);
+  const rows = live?.rows ?? initialRows;
   const [local, setLocal] = useControllable(controlledState, defaultState, onStateChange);
   const [columnKeys, setColumnKeys] = useControllable<readonly string[] | undefined>(
     columnVisibility?.visibleKeys, columnVisibility?.defaultVisibleKeys,
@@ -228,8 +239,16 @@ export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize 
       ...entry,
       validate: entry.validate ? (value, wrapped) => entry.validate!(value, wrapped.row) : undefined,
       onCellEdit: entry.onCellEdit ? (_wk, columnKey, value, wrapped) => entry.onCellEdit!(wrapped.key, columnKey, value, wrapped.row) : undefined,
-      render: ({ row }: typeof pageRows[number]) => entry.render
-        ? entry.render(row) : String(row[entry.key as keyof Row] ?? ''),
+      render: ({ row, key }: typeof pageRows[number]) => {
+        const value = row[entry.key as keyof Row];
+        const content = entry.render ? entry.render(row) : String(value ?? '');
+        const old = live?.past.get(key)?.[entry.key as keyof Row];
+        if (typeof old !== 'number' || typeof value !== 'number' || !Number.isFinite(value - old) || old === value) return content;
+        const up = value > old;
+        return <span key={live?.revision} className={up ? 'flash-up' : 'flash-down'}>
+          {content} <span className={up ? 'market-up' : 'market-down'}><span aria-hidden="true">{up ? '↑ ' : '↓ '}</span>{up ? '+' : '−'}{Math.abs(value - old).toLocaleString()}</span>
+        </span>;
+      },
     };
     if (isRemote ? !(entry.sortable ?? Boolean(entry.sortValue)) : !entry.sortValue) return cell;
     const direction = sort?.key === entry.key ? sort.descending ? 'descending' : 'ascending' : undefined;
@@ -284,6 +303,7 @@ export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize 
   const pagination = count > 1 && <Pagination page={current} totalPages={count} labels={labels?.pagination}
     onPageChange={(page) => update({ ...state, page })} />;
   return <div className={cx('data-table', className)} data-ut-slot="data-table">
+    {stream && <span role="status" className="ut-sr-only">{live?.announced ? `${live.announced} new ${live.announced === 1 ? 'row' : 'rows'} received` : ''}</span>}
     {selection || toolbar != null || chooser ? <div className="data-table-controls" data-ut-slot="data-table-toolbar">
       {chooser}{search}{pageCheckbox}{toolbar}
     </div> : search}
@@ -301,7 +321,8 @@ export function DataTable<Row>({ columns, rows, getRowKey, onRowClick, pageSize 
       <p role="alert">{remote.error ?? labels?.error ?? 'Could not load rows.'}</p>
       {remote.onRetry && <button type="button" className="btn btn-sm" onClick={remote.onRetry}>{labels?.retry ?? 'Retry'}</button>}
     </div>}
-    <Table {...props} aria-busy={isRemote ? busy : props['aria-busy']} columns={prepared} rows={pageRows} getRowKey={({ key }) => `${typeof key}:${key}`}
+    <Table {...props} preserveScrollAnchor={props.preserveScrollAnchor ?? Boolean(stream)}
+      aria-busy={isRemote ? busy : props['aria-busy']} columns={prepared} rows={pageRows} getRowKey={({ key }) => `${typeof key}:${key}`}
       renderExpandedRow={renderExpandedRow ? ({ row }) => renderExpandedRow(row) : undefined}
       onRowClick={onRowClick && (({ row }) => onRowClick(row))} />
     {visible.length === 0 && !busy && remote?.status !== 'error' && <p role="status" className="muted">

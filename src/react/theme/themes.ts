@@ -1,4 +1,4 @@
-/** Built-in appearances. To add a theme, give it a token block in tokens.css first (see THEME_INSTRUCTIONS.md). */
+/** Built-in appearances. To add a theme, give it a token block in tokens.css first (see docs/planning/THEME_INSTRUCTIONS.md). */
 export const themes = [
   { id: 'dark', label: 'Night', scheme: 'dark' },
   { id: 'light', label: 'Paper', scheme: 'light' },

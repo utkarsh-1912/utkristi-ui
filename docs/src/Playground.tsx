@@ -8,6 +8,8 @@ import { examples } from 'virtual:utkristi-examples';
 import { script, styles, domScript } from 'virtual:utkristi-runtime';
 import { exampleMotion, motionOptions, type PreviewMotion } from './motion-options';
 import { joinWebSource, splitWebSource, webFiles, type WebFile, type WebSource } from './sandbox-source';
+import { createTheme, toCSS } from '../../src/react/theme-engine/index';
+import { studioSettings } from './studio-settings';
 
 const policy = "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline' https://fonts.googleapis.com; img-src data: blob: " + location.origin + "; media-src data: blob:; font-src data: https://fonts.gstatic.com; form-action 'none'; base-uri 'none'";
 const frameHead = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
@@ -92,7 +94,9 @@ function readDraft(slug: string, mode: Mode, initial: string) {
   } catch { return initial; }
 }
 
-export default function Playground({ component, editorMode, initialMotion }: { component?: string; editorMode?: string; initialMotion?: string }) {
+export default function Playground({ component, editorMode, initialMotion, studio, direction = 'ltr' }: {
+  component?: string; editorMode?: string; initialMotion?: string; studio?: string; direction?: 'ltr' | 'rtl';
+}) {
   const { resolvedTheme } = useTheme();
   const id = useId();
   const [viewport, setViewport] = useState<'fluid' | 'phone' | 'tablet'>('fluid');
@@ -218,7 +222,9 @@ export default function Playground({ component, editorMode, initialMotion }: { c
     return () => window.removeEventListener('message', message);
   }, []);
 
-  const previewDocument = run?.markup ? htmlDocument(run.source, run.theme, run.motion, run.token) : reactFrame;
+  const preview = (run?.markup ? htmlDocument(run.source, run.theme, run.motion, run.token) : reactFrame)
+    .replace('<html', `<html dir="${direction}"`);
+  const previewDocument = studio ? preview.replace('</head>', `<style>${toCSS(createTheme(studioSettings(new URLSearchParams(studio))), 'html:root')}</style></head>`) : preview;
 
   function changeMode(next: Mode) {
     setMode(next);

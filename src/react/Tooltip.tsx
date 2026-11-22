@@ -1,8 +1,12 @@
-import { cloneElement, forwardRef, useEffect, useRef, useState, type FocusEvent, type HTMLAttributes,
+'use client';
+
+import { cloneElement, forwardRef, useCallback, useEffect, useLayoutEffect, useRef, useState, type FocusEvent, type HTMLAttributes,
   type MouseEvent, type ReactElement, type ReactNode } from 'react';
 import { assignRef, cx } from './utils/cx.js';
 import { Portal } from './utils/Portal.js';
 import { useId } from './utils/useId.js';
+import { showAnchoredPopover } from './utils/nativePopover.js';
+import { isTopOverlay, pushOverlay } from './utils/overlayStack.js';
 
 type TriggerProps = Pick<HTMLAttributes<HTMLElement>, 'aria-describedby' | 'onMouseEnter' | 'onMouseLeave' | 'onFocus' | 'onBlur'>;
 export interface TooltipProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'children' | 'content'> {
@@ -16,7 +20,11 @@ export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Toolti
 ) {
   const id = useId();
   const target = useRef<HTMLElement>();
-  const bubble = useRef<HTMLSpanElement | null>(null);
+  const [bubble, setBubble] = useState<HTMLSpanElement | null>(null);
+  const attach = useCallback((node: HTMLSpanElement | null) => {
+    setBubble(node);
+    assignRef(ref, node);
+  }, [ref]);
   const [hovered, hover] = useState(false);
   const [focused, focus] = useState(false);
   const [dismissed, dismiss] = useState(false);
@@ -27,19 +35,23 @@ export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Toolti
     if (!wanted) return;
     const timer = window.setTimeout(() => setOpen(true), delay);
     function escape(event: KeyboardEvent) {
-      if (event.key === 'Escape') { dismiss(true); setOpen(false); }
+      if (event.key === 'Escape' && !event.defaultPrevented && isTopOverlay(id)) {
+        event.preventDefault();
+        dismiss(true);
+        setOpen(false);
+      }
     }
     document.addEventListener('keydown', escape);
     return () => {
       window.clearTimeout(timer);
       document.removeEventListener('keydown', escape);
     };
-  }, [wanted, delay]);
+  }, [wanted, delay, id]);
 
-  function position() {
-    if (!target.current || !bubble.current) return;
+  const position = useCallback(() => {
+    if (!target.current || !bubble) return;
     const anchor = target.current.getBoundingClientRect();
-    const element = bubble.current;
+    const element = bubble;
     const { height, width } = element.getBoundingClientRect();
     const center = anchor.left + anchor.width / 2;
     const x = Math.max(width / 2 + 8, Math.min(center, window.innerWidth - width / 2 - 8));
@@ -48,17 +60,25 @@ export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Toolti
     element.style.setProperty('--ut-tip-y', `${above ? anchor.top - 8 : anchor.bottom + 8}px`);
     element.style.setProperty('--ut-tip-arrow', `${Math.max(8, Math.min(width - 8, width / 2 + center - x))}px`);
     element.dataset.side = above ? 'top' : 'bottom';
-  }
+  }, [bubble]);
 
   useEffect(() => {
     if (!open || !wanted) return;
+    return pushOverlay(id);
+  }, [open, wanted, id]);
+
+  useLayoutEffect(() => {
+    if (!open || !wanted || !bubble || !target.current) return;
+    const cleanup = showAnchoredPopover(bubble, target.current, id);
+    if (cleanup) return cleanup;
+    position();
     window.addEventListener('scroll', position, true);
     window.addEventListener('resize', position);
     return () => {
       window.removeEventListener('scroll', position, true);
       window.removeEventListener('resize', position);
     };
-  }, [open, wanted]);
+  }, [open, wanted, id, bubble, position]);
 
   function leave() {
     setOpen(false);
@@ -88,10 +108,6 @@ export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Toolti
         if (!hovered) leave();
       },
     })}
-    {open && wanted && <Portal><span {...props} ref={(node) => {
-      bubble.current = node;
-      position();
-      assignRef(ref, node);
-    }} id={id} role="tooltip" className={cx('tooltip', className)}>{content}</span></Portal>}
+    {open && wanted && <Portal><span {...props} ref={attach} id={id} role="tooltip" className={cx('tooltip', className)}>{content}</span></Portal>}
   </>;
 });

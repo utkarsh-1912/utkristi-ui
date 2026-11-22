@@ -1,0 +1,10 @@
+{
+  "name": "eslint-plugin-utkristi",
+  "version": "0.1.0",
+  "description": "ESLint rules for Utkristi UI class names, accessible markup and logical properties",
+  "type": "module",
+  "license": "MIT",
+  "exports": "./index.mjs",
+  "peerDependencies": { "eslint": ">=9" },
+  "files": ["index.mjs", "README.md"]
+}

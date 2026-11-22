@@ -5,6 +5,7 @@ import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import { docsPlayground } from './playground-plugin';
 import { docsStatusRoutes } from './status-routes';
+import { docsIconAssets } from './icon-assets';
 import { themeScript } from '../src/react/theme/ThemeProvider';
 // @ts-expect-error The development preset is handwritten ESM.
 import preset from '../src/tailwind/preset.js';
@@ -20,6 +21,7 @@ export default defineConfig({
     react(),
     docsPlayground(docs, source),
     docsStatusRoutes,
+    docsIconAssets(fileURLToPath(new URL('../dist/icons/', import.meta.url))),
     {
       name: 'utkristi-docs-initial-theme',
       transformIndexHtml() {

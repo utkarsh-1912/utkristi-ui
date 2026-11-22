@@ -95,3 +95,23 @@ test('nested navbar groups dismiss one level at a time and return focus', async 
   expect(resources).toHaveFocus();
   expect(resources.parentElement).not.toHaveAttribute('open');
 });
+
+test('expandOnScroll turns the floating dock into a full-width bar once the page scrolls', async () => {
+  const { act } = await import('@testing-library/react');
+  render(<Navbar variant="dock" expandOnScroll brand={<Logo />} links={[{ href: '#a', label: 'A' }]} />);
+  const header = screen.getByRole('banner');
+  expect(header).toHaveClass('header-dock', 'header-expand');
+  expect(header).not.toHaveClass('is-scrolled');
+  await act(async () => {
+    Object.defineProperty(window, 'scrollY', { value: 240, configurable: true });
+    window.dispatchEvent(new Event('scroll'));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  });
+  expect(header).toHaveClass('is-scrolled');
+  Object.defineProperty(window, 'scrollY', { value: 0, configurable: true });
+});
+
+test('expandOnScroll only applies to the sticky dock', () => {
+  render(<><Navbar expandOnScroll brand={<Logo />} /><Navbar variant="dock" sticky={false} expandOnScroll brand={<Logo />} /></>);
+  for (const header of screen.getAllByRole('banner')) expect(header).not.toHaveClass('header-expand');
+});

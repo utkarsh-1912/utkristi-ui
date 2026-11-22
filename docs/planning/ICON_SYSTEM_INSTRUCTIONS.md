@@ -2,7 +2,7 @@
 
 This is a design brief for a custom 2D and 3D icon family with a colour palette people can choose
 from in every theme. It is **instructions only**: the model or designer who picks it up makes the
-artwork and the code. Read it together with [DESIGN_TOKENS.md](DESIGN_TOKENS.md), which defines the
+artwork and the code. Read it together with [DESIGN_TOKENS.md](../../DESIGN_TOKENS.md), which defines the
 night, paper and glass themes, and [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md).
 
 ## 0. Ground rules

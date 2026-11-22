@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Badge } from './Badge.js';
 import { Button } from './Button.js';

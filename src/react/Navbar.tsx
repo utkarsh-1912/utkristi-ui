@@ -1,3 +1,5 @@
+'use client';
+
 import {
   forwardRef, useEffect, useLayoutEffect, useRef, useState, Fragment,
   type AnchorHTMLAttributes, type HTMLAttributes, type ReactNode,
@@ -46,6 +48,11 @@ export interface NavbarProps extends HTMLAttributes<HTMLElement> {
   /** Keep the bar at the top of its scroll container. Defaults to true. */
   sticky?: boolean;
   hideOnScroll?: boolean;
+  /**
+   * Dock only: once the page scrolls, the floating dock animates into a flush, full-width bar pinned to the top.
+   * The brand and links keep their position. Respects reduced motion.
+   */
+  expandOnScroll?: boolean;
   /** Shows a search trigger in the bar and in the mobile sheet. */
   onSearch?: () => void;
   /** Accessible name and visible text of the search trigger. */
@@ -120,7 +127,7 @@ function MobileSheet({ id, brand, links, renderLink, onSearch, searchLabel, shee
 }
 
 export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
-  { brand = <Logo size={28} />, variant = 'standard', presentation = 'labels', links = [], renderLink = defaultLink, right, strip, sticky = true, hideOnScroll, onSearch,
+  { brand = <Logo size={28} />, variant = 'standard', presentation = 'labels', links = [], renderLink = defaultLink, right, strip, sticky = true, hideOnScroll, expandOnScroll, onSearch,
     searchLabel = 'Search', searchShortcut, sheetFoot, collapseLinks, className, children, ...props }, ref,
 ) {
   const [open, setOpen] = useState(false);
@@ -260,7 +267,7 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(function Navbar(
   </button>;
 
   return <>
-    <header {...props} ref={ref} className={cx('header', !sticky && 'header-static', dock && 'header-dock', scrolled && 'is-scrolled', sticky && hideOnScroll && away && !open && 'is-away', className)}>
+    <header {...props} ref={ref} className={cx('header', !sticky && 'header-static', dock && 'header-dock', dock && sticky && expandOnScroll && 'header-expand', scrolled && 'is-scrolled', sticky && hideOnScroll && away && !open && 'is-away', className)}>
       {strip && <div className="strip"><div className="strip-inner"><div>{strip.left}</div><div>{strip.right}</div></div></div>}
       <div ref={bar} className={cx('navbar', dock && 'navbar-dock')} data-presentation={presentation} data-collapse-links={collapsible || undefined}><div className="navbar-inner">
         <div className="navbar-left">

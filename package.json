@@ -1,26 +1,51 @@
 {
   "name": "@utkristi/ui",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "The shared component library and design tokens for the Utkristi ecosystem.",
   "license": "MIT",
   "type": "module",
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "./dist/react/elements.js"
   ],
   "files": [
     "dist",
+    "bin",
     "CHANGELOG.md",
     "DESIGN_TOKENS.md"
   ],
+  "bin": {
+    "utkristi-ui": "./bin/utkristi-ui.mjs"
+  },
   "types": "./dist/react/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/react/index.d.ts",
       "import": "./dist/react/index.js"
     },
+    "./theme-engine": {
+      "types": "./dist/react/theme-engine/index.d.ts",
+      "import": "./dist/react/theme-engine/index.js"
+    },
+    "./collab-yjs": {
+      "types": "./dist/react/collab/yjs.d.ts",
+      "import": "./dist/react/collab/yjs.js"
+    },
+    "./collab-liveblocks": {
+      "types": "./dist/react/collab/liveblocks.d.ts",
+      "import": "./dist/react/collab/liveblocks.js"
+    },
+    "./collab-ws": {
+      "types": "./dist/react/collab/ws.d.ts",
+      "import": "./dist/react/collab/ws.js"
+    },
     "./dom": {
       "types": "./dist/react/dom.d.ts",
       "import": "./dist/react/dom.js"
+    },
+    "./elements": {
+      "types": "./dist/react/elements.d.ts",
+      "import": "./dist/react/elements.js"
     },
     "./preset": {
       "import": {
@@ -55,12 +80,18 @@
     "./utkristi-ui.css": "./dist/utkristi-ui.css",
     "./css": "./dist/utkristi-ui.css",
     "./utkristi-ui.min.css": "./dist/utkristi-ui.min.css",
+    "./css/*": "./dist/css/*",
+    "./tailwind.css": "./dist/tailwind.css",
+    "./utkristi-ui.layered.css": "./dist/utkristi-ui.layered.css",
+    "./utkristi-ui.layered.min.css": "./dist/utkristi-ui.layered.min.css",
     "./scoped.css": "./dist/scoped.css",
     "./tokens.css": "./dist/tokens.css",
+    "./tokens.json": "./dist/tokens.json",
+    "./style-dictionary.config.json": "./dist/style-dictionary.config.json",
     "./fonts.css": "./dist/fonts.css",
     "./icons": {
-      "types": "./dist/react/icons.d.ts",
-      "import": "./dist/react/icons.js"
+      "types": "./dist/react/icons-entry.d.ts",
+      "import": "./dist/react/icons-entry.js"
     },
     "./icons/*": "./dist/icons/*",
     "./package.json": "./package.json"
@@ -75,18 +106,24 @@
     "build:css": "node scripts/build-css.mjs",
     "build:tailwind": "node scripts/build-tailwind.mjs",
     "build:react": "tsc -p tsconfig.build.json",
+    "build:mcp": "node scripts/build-mcp.mjs",
+    "test:mcp": "npm run build:mcp && node --test packages/ui-mcp/test/*.test.mjs",
     "prepack": "npm run build",
     "pretest": "npm run build:assets",
     "test": "vitest run",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "predocs": "npm run icons",
     "docs": "vite --config docs/vite.config.ts",
+    "predocs:build": "npm run icons",
     "docs:build": "vite build --config docs/vite.config.ts",
     "docs:preview": "vite preview --config docs/vite.config.ts",
     "screenshots": "node scripts/screenshots.mjs",
     "screenshots:capture": "node scripts/screenshots.mjs --capture-only",
     "docs:verify": "node scripts/screenshots.mjs --verify-only",
+    "docs:visual": "node scripts/screenshots.mjs --verify-only --visual-matrix",
     "smoke:package": "node scripts/smoke-package.mjs",
+    "smoke:next": "node scripts/smoke-next.mjs",
     "check:bundles": "node scripts/check-bundles.mjs",
     "docs:stress": "node scripts/screenshots.mjs --stress",
     "docs:audit": "node scripts/audit-components.mjs",
@@ -130,6 +167,7 @@
     "globals": "^16.0.0",
     "jsdom": "^26.1.0",
     "lucide-react": "^0.468.0",
+    "parse5": "^7.3.0",
     "postcss": "^8.5.3",
     "postcss-js": "^4.0.1",
     "react": "^18.3.1",

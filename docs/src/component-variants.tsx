@@ -6,7 +6,7 @@ import {
   DataTable, DatePicker, DateRangePicker, DeviceMockup, Dialog, Direction, Dot, Drawer, EmptyState, Field, FileInput, FilterBar, FloatingInput, Footer, Gallery, HoverCard, Icon, IconButton,
   Input, InputGroup, InputOTP, Item, Jumbotron, Kbd, Label, ListGroup, Loader, Logo, Marker, MegaMenu, Menu, Menubar, Message, MessageScroller, NativeSelect, NavigationMenu, NumberInput, Pagination, PhoneInput, Popover, Progress, QRCode, Questionnaire, Radio,
   RadioGroup, Rating, Resizable, RichText, ScrollArea, Segmented, SelectMenu, Separator, Sheet, Shell, Sidebar, SidebarLink, Skeleton, Slider, SpeedDial, Spinner, SplitButton, Stat, Steps, Switch, Table, Tabs, Textarea, ThemeSelect, ThemeSwitch,
-  Workspace, TimeInput, Timeline, Toggle, ToggleGroup, Tooltip, Trace, Typography, VideoPlayer, useToast,
+  LogViewer, PresenceStack, Workspace, TimeInput, Timeline, Toggle, ToggleGroup, Tooltip, Trace, Typography, VideoPlayer, useToast,
 } from '@utkristi/ui';
 import type { Example } from './examples';
 
@@ -131,6 +131,19 @@ function CollapsingSidebar({ mode = 'icons' }: { mode?: 'icons' | 'offcanvas' } 
 }
 
 export const componentVariants = {
+  'accessibility-preferences--large-text': example('Large text and underlined links', 'Apply high readability settings to a standalone region.',
+    () => <div className="ut-a11y-scope" data-ut-a11y-text="200" data-ut-a11y-links="true">
+      <p>Workspace updates</p><a href="#/getting-started">Read the guide</a>
+    </div>,
+    '<div class="ut-a11y-scope" data-ut-a11y-text="200" data-ut-a11y-links="true"><p>Workspace updates</p><a href="/guide">Read the guide</a></div>'),
+  'collaboration--presence-overflow': example('Presence overflow', 'Show two avatars and let people open the full roster.',
+    () => <PresenceStack max={2} users={[
+      { id: 'asha', name: 'Asha Rao', location: 'Review' }, { id: 'nora', name: 'Nora Chen' }, { id: 'mika', name: 'Mika Laurent' },
+    ]} />,
+    '<details class="collab-presence"><summary>Three people present</summary><ul><li>Asha Rao</li><li>Nora Chen</li><li>Mika Laurent</li></ul></details>'),
+  'live-data--filtered-log': example('Filter a virtual log', 'Search log messages while follow-tail is paused.',
+    () => <LogViewer label="Release log" defaultFollow={false} lines={['Building release', 'Lint passed', 'Release published']} height={140} />,
+    '<pre class="live-log-viewport" tabindex="0" role="region" aria-label="Release log">Building release\nLint passed\nRelease published</pre>'),
   'table--pinned-columns': example('Pinned identifying column', 'Keep the project name visible while horizontally scrolling the remaining columns. Pinning uses logical edges for RTL layouts.',
     () => <div style={{maxWidth:420}}><Table caption="Project directory" rows={projects} getRowKey={row => row.id} columns={[{key:'name',header:'Project',width:180,pinned:'start',resizable:true},{key:'owner',header:'Owner',width:360}]} /></div>,
     '<div class="table-wrap" tabindex="0" role="region" aria-label="Project directory" style="max-width:420px"><table class="table"><thead><tr><th style="position:sticky;inset-inline-start:0;min-width:180px;background:var(--ut-bg-2)">Project</th><th style="min-width:360px">Owner</th></tr></thead><tbody><tr><td style="position:sticky;inset-inline-start:0;min-width:180px;background:var(--ut-bg-2)">Studio</td><td>Design</td></tr></tbody></table></div>'),

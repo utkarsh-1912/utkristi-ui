@@ -1,25 +1,32 @@
 # Utkristi UI
 
-A shared interface toolkit for the Utkristi ecosystem. Compose trading workspaces, creative tools, and everyday business applications with typed React components and theme-aware styles.
+Typed React components, theme-aware CSS and a Tailwind preset for building trading desks, creative
+tools and business apps across the Utkristi ecosystem. It has the same look as Utkristi CoLabs:
+condensed display type, hairline borders, pill controls and one cool accent, in twelve themes.
 
-[Explore the docs](https://utkristi-ui.vercel.app/) · [Open the sandbox](https://utkristi-ui.vercel.app/#/sandbox) · [Component coverage](docs/component-coverage.md)
+[Docs](https://utkristi-ui.vercel.app/) · [Sandbox](https://utkristi-ui.vercel.app/#/sandbox) ·
+[Blocks](https://utkristi-ui.vercel.app/#/blocks) · [Changelog](CHANGELOG.md)
 
 ![Utkristi component studio](docs/screenshots/overview.png)
 
-## Choose your starting point
+## Three ways to use it
 
-| Build with | Start here |
-| --- | --- |
-| Individual controls | [Components](https://utkristi-ui.vercel.app/#/components/button) with named examples, API defaults, and source |
-| Complete application layouts | [Blocks](https://utkristi-ui.vercel.app/#/blocks) for trading, terminal, studio, and operations |
-| Your product identity | Twelve themes, independent geometry, and a searchable icon catalog |
-| Your framework | React package or standalone HTML/CSS/JavaScript runtime |
+| You use | Import | You get |
+| --- | --- | --- |
+| **React** | `@utkristi/ui` | Accessible, typed components (keyboard support, focus management, themes) |
+| **Tailwind CSS** | `@utkristi/ui/preset` or `@utkristi/ui/plugin` | Component classes plus theme-aware colour, font, radius and easing utilities |
+| **Plain HTML/CSS** | `@utkristi/ui/utkristi-ui.css` | The same classes with no build step; works in Vue, Svelte, Angular and static HTML |
 
-## Explore before integrating
+All three use the same `--ut-*` CSS variables, so they mix freely.
 
-Each component page exposes its usage examples. Open an example in the sandbox, select a theme, edit the source, and run it. React and standalone markup can differ in behavior; integration guidance does not imply native Vue, Angular, or Svelte component packages.
+## Motion, live interfaces and agent tools
 
-Read the [feature review](docs/component-design-review.md) for remaining capabilities and the generated [coverage inventory](docs/component-coverage.md) for available examples.
+- [Theme Studio](https://utkristi-ui.vercel.app/#/theme-studio) previews, shares, and exports generated themes. Import `@utkristi/ui/tokens.json` for the built-in DTCG token sets.
+- Copy `@utkristi/ui/style-dictionary.config.json` next to a `tokens.json` export to generate CSS variables with Style Dictionary. [Style Dictionary configuration](https://styledictionary.com/reference/config/)
+- Tabs, segmented controls, steps, theme changes, and docs navigation use View Transitions where supported. The kit respects reduced motion and uses native popovers and dialogs with keyboard and placement fallbacks.
+- [Collaboration](https://utkristi-ui.vercel.app/#/components/collaboration), [live data](https://utkristi-ui.vercel.app/#/components/live-data), and [accessibility preferences](https://utkristi-ui.vercel.app/#/components/accessibility-preferences) have interactive examples.
+- Import `@utkristi/ui/elements` to register light-DOM custom elements, or install a block through its version-pinned registry item.
+- Run `npm run build:mcp` to build the local MCP server. The [MCP setup guide](packages/ui-mcp/README.md) describes its six tools. The docs build generates `llms.txt`, `llms-full.txt`, and per-component Markdown from the same catalog.
 
 ## Install
 
@@ -27,7 +34,29 @@ Read the [feature review](docs/component-design-review.md) for remaining capabil
 npm install @utkristi/ui
 ```
 
-For local development, run `npm pack` in this repository and install the resulting tarball in the consuming project.
+React 18+ and `lucide-react` are optional peer dependencies. You only need them for the React
+components and for icons in your own code.
+
+### React
+
+```tsx
+import { Button, ThemeProvider } from '@utkristi/ui';
+import '@utkristi/ui/fonts.css';
+import '@utkristi/ui/utkristi-ui.css';
+
+export function App() {
+  return (
+    <ThemeProvider>
+      <Button variant="solid">New workspace</Button>
+    </ThemeProvider>
+  );
+}
+```
+
+Interactive components are marked `'use client'`, so you can import them straight into Next.js App
+Router server components. Static ones (`Card`, `Badge`, `Kbd`, `Stat`, `Typography`, and similar)
+render on the server with no client JavaScript. To avoid a flash of the wrong theme, render
+`themeScript()` in an inline `<script>` in `<head>`.
 
 ### Tailwind CSS 3.4
 
@@ -41,128 +70,180 @@ export default {
 };
 ```
 
-In CommonJS, use `presets: [require('@utkristi/ui/preset')]`. To load only the plugin, use `plugins: [utkristi()]` with `import utkristi from '@utkristi/ui/plugin'`. Pass `{ base: false }` to skip the global base styles and keep the tokens. Include Tailwind's base, components, and utilities layers in your CSS.
+- **CommonJS:** use `presets: [require('@utkristi/ui/preset')]`.
+- **Plugin only:** use `plugins: [utkristi()]` with `import utkristi from '@utkristi/ui/plugin'`.
+  `utkristi({ base: false })` keeps the tokens but skips global base styles.
+### Tailwind CSS 4
 
-For Tailwind CSS 4, load the legacy configuration with `@config` or load the plugin directly with `@plugin "@utkristi/ui/plugin"`. Use `@source` to include the kit's compiled React files. [Tailwind compatibility directives](https://tailwindcss.com/docs/functions-and-directives#compatibility)
-
-### Standalone CSS
-
-```js
-import '@utkristi/ui/fonts.css';
-import '@utkristi/ui/utkristi-ui.css';
+```css
+@import "tailwindcss";
+@import "@utkristi/ui/tailwind.css";
 ```
 
-The stylesheet is also available as `@utkristi/ui/css` or `@utkristi/ui/utkristi-ui.min.css`. Use `@utkristi/ui/tokens.css` for just the CSS variables, or import `night`, `paper`, and `glass` from `@utkristi/ui/tokens` for raw values.
+The file is written in Tailwind 4's own CSS API (`@theme`, `@custom-variant`, `@utility`, `@layer`)
+and already includes the kit's compiled React files as a `@source`. It gives the same colour, font,
+radius, shadow and easing utilities, the same theme variants (`light:`, `glass:` and so on) and the
+same component classes as the v3 preset. Checked with Tailwind 4.3. Don't load
+`@utkristi/ui/plugin` with `@plugin` in v4: it's for v3 only.
+
+### Plain CSS
 
 ```html
+<link rel="stylesheet" href="https://unpkg.com/@utkristi/ui/dist/fonts.css">
+<link rel="stylesheet" href="https://unpkg.com/@utkristi/ui/dist/utkristi-ui.min.css">
+
 <button class="btn btn-solid" type="button">New workspace</button>
 ```
 
-### React
+| File | Use it when |
+| --- | --- |
+| `utkristi-ui.css` / `.min.css` | The default full stylesheet. |
+| `utkristi-ui.layered.css` / `.layered.min.css` | You want your own CSS to win. Everything sits in `@layer utkristi.*`, so any unlayered rule in your app overrides the kit without `!important`. |
+| `css/core.css` + `css/<component>.css` | You use only a few components. `core.css` holds the tokens, base and type helpers; add files such as `css/button.css`, `css/forms.css` or `css/menu.css`. `css/manifest.json` lists them all. For example, core plus button is about 11 KB gzipped, against 25 KB for the full sheet. |
+| `scoped.css` | You're embedding the kit in an existing app. Styles apply only inside `[data-ut-scope]`. |
+| `tokens.css` | You only want the CSS variables. |
+| `@utkristi/ui/dom` | You want behaviour (`initUI(root)` for native dialogs and tabs) without React. |
 
-```tsx
-import { Button, ThemeProvider } from '@utkristi/ui';
-import '@utkristi/ui/utkristi-ui.css';
+The raw token values for every theme can be imported from `@utkristi/ui/tokens`: `night`, `paper`,
+`glass`, `trading`, `snow`, `aurora`, `sepia`, `midnight`, `forest`, `sunset`, `highContrast` and
+`terminal`.
 
-export function App() {
-  return (
-    <ThemeProvider>
-      <Button onClick={() => console.log('Create workspace')}>New workspace</Button>
-    </ThemeProvider>
-  );
-}
+## Themes
+
+Night is the default. Set `data-theme` (or the matching class) on `<html>` or on any section:
+
+| Theme | `data-theme` | Look |
+| --- | --- | --- |
+| Night | `dark` | Near-black film, warm ink, cool blue accent |
+| Paper | `light` | Paper and navy ink |
+| Glass | `glass` | Frosted translucent surfaces over a colour field |
+| Trading | `trading` | Dense terminal, amber accent, market up/down colours |
+| Snow | `snow` | Cool whites with light frost |
+| Aurora | `aurora` | Dark glass with northern-lights colour |
+| Sepia | `sepia` | Warm reading paper |
+| Midnight | `midnight` | True black for OLED screens |
+| Forest | `forest` | Calm dark green |
+| Sunset | `sunset` | Warm peach and rose |
+| High Contrast | `high-contrast` | 7:1 contrast, 2px borders, no translucency |
+| Terminal | `terminal` | Retro green phosphor, monospace |
+
+`data-theme="system"` follows the OS between Night and Paper. `ThemeProvider` saves the choice and
+`ThemeSwitch` / `ThemeSelect` / `ThemeToggle` let people change it.
+
+To rebrand a theme, override `--ut-*` variables. For small per-theme tweaks, Tailwind has a variant
+per theme (`light:`, `night:`, `glass:`, `trading:` and so on).
+
+### Make your own theme
+
+The Theme Engine turns one brand colour into a complete theme. It defines every token a built-in
+theme has, including the icon palette, and solves each text, control and focus pair in OKLCH until
+it meets WCAG 2 contrast, so it cannot output a failing pair.
+
+```sh
+npx @utkristi/ui theme --brand "#7C3AED" --name violet --scheme dark > violet.css
+npx @utkristi/ui theme --brand "#7C3AED" --name violet --scheme light --contrast AAA --format dtcg --out violet.tokens.json
 ```
 
-React and React DOM 18 or later are peer dependencies. Pass icons as React nodes. The kit ships its own icons for internal controls.
+```ts
+import { createTheme, toCSS, toDTCG, toTailwindV4 } from '@utkristi/ui/theme-engine';
 
-## Themes and accessibility
-
-Night is the default. Set `data-theme="light"` for Paper, `data-theme="dark"` for Night, or `data-theme="glass"` for Glass. Use `data-theme="system"` to follow the operating-system preference for Night and Paper. These selectors also work on nested surfaces. `ThemeProvider` persists the preference and applies the resolved theme to the root. Render `themeScript()` in the document head to set the theme before paint. Override `--ut-*` variables to customize a theme and use the `light:`, `night:`, and `glass:` Tailwind variants for local adjustments.
-
-To embed the kit in an existing app, import `@utkristi/ui/scoped.css` and wrap its components in an element with `data-ut-scope` and your preferred `data-theme`. When using `ThemeProvider`, pass that element as its `target`. Table headers, cells, and field errors expose `data-ut-slot="table-header"`, `data-ut-slot="table-cell"`, and `data-ut-slot="field-error"` for custom styles. Import the full icon API from `@utkristi/ui/icons` or the main entry.
-
-Give a `Combobox` or `DatePicker` a `name` inside a form to include it in `FormData`. `Combobox` submits selected option values and uses repeated entries for multiple selection. `DatePicker` accepts a local `YYYY-MM-DD` string or a `Date` and submits the calendar date as `YYYY-MM-DD`. Use `onDateValueChange` for string state. Both pickers use their surrounding `Field` label and description. Uncontrolled pickers restore their defaults when the form resets.
-
-Set `data-ut-radius="square"`, `"soft"`, `"round"`, or `"pill"` on a component or section in any theme. Use `--ut-shape-radius` for a custom value. In React, buttons, cards, inputs, dialogs, and video players accept `radius` and `inlineSize` as pixel numbers or CSS values. In HTML, set `inline-size` on the component and add `btn-fit` to let a fixed-width button wrap its label.
-
-Set `data-ut-density="compact"` or `"comfortable"` on a section to adjust default button and field heights in React or native markup. Explicit button sizes still apply, and portalled dialogs inherit the density of their trigger's section.
-
-```tsx
-<Button radius={0} inlineSize={176}>Create project</Button>
-<VideoPlayer src="/demo.mp4" controls="custom" radius={14} inlineSize="36rem">
-  <track kind="captions" src="/captions.vtt" srcLang="en" label="English" />
-</VideoPlayer>
+const violet = createTheme({ brand: '#7C3AED', name: 'violet', scheme: 'dark', contrast: 'AA' });
+violet.report;      // every checked pair with its ratio and target
+toCSS(violet);      // .violet, [data-theme="violet"] { … }
+toTailwindV4(violet); // adds a `violet:` variant
+toDTCG(violet);     // Design Tokens (Tokens Studio, Style Dictionary, Figma importers)
 ```
 
-VideoPlayer uses browser controls by default. Custom mode adds themed playback, seeking, mute, and a captions selector for supplied tracks. Fullscreen appears when the browser allows it.
+Use the theme with `data-theme="violet"`. For the React theme switcher, add it to the list in
+`src/react/theme/themes.ts`. The tests generate 1,300 random brand themes on every run and require
+zero contrast failures.
 
-Every component page includes selectable examples. Navbar links can contain nested `children`. Use `sticky` for scroll positioning, `onSearch` for a search trigger, `right` for a CTA, and the children slot for a second row.
+**Shape, density and motion** can be set on any section:
+- `data-ut-radius="square" | "soft" | "round" | "pill"`.
+- `data-ut-density="compact" | "comfortable"`.
+- `data-ut-motion="fade" | "rise" | "scale" | "slide" | "none"`, with `data-ut-enter` on the region
+  that animates in.
 
-Add `data-ut-motion="fade"`, `"rise"`, `"scale"`, `"slide"`, or `"none"` to a scope. Mark a region with `data-ut-enter` to animate its entry. Set `--ut-motion-duration` to adjust the timing. The entry presets respect reduced motion.
+## Accessibility
 
-The sandbox has separate HTML, CSS, and JavaScript editors. Run combines all three in one preview, and the HTML download includes the code, stylesheet, and runtime.
+- **Keyboard and focus.** Menus, tabs, segmented controls, steps and tables support the keyboard.
+  Dialogs and the mobile menu trap and restore focus.
+- **Contrast.** Contrast is tested for every theme. Text pairs reach 4.5:1 or more; borders, focus
+  rings and graphics reach 3:1 or more.
+- **System preferences.** Animations respect `prefers-reduced-motion`. Glass and the other
+  translucent themes switch to opaque surfaces under `prefers-reduced-transparency`. Forced colours
+  (Windows High Contrast) are supported.
+- **Automated checks.** The test suite runs axe-core on the catalog examples.
+- **Right-to-left.** Component CSS uses logical properties, so layouts mirror under `dir="rtl"`. Code
+  blocks, keyboard keys and sliders stay left-to-right on purpose. A test blocks new physical
+  `left`/`right` properties.
 
-Menus, tabs, segmented controls, and dialogs support keyboard navigation. Dialogs trap and restore focus. Decorative animations respect reduced motion, and the spinner keeps moving as a loading cue. The Night theme uses dark `--ut-on-bad` text on red fills to meet the 4.5:1 text contrast target.
+Browser support: the CSS uses `color-mix()`, so it needs Chrome/Edge 111+, Safari 16.2+ or
+Firefox 113+.
 
-The standalone CSS requires `color-mix()`. Use Chrome or Edge 111+, Safari 16.2+, or Firefox 113+.
+## Size compared with other libraries
 
-## Component catalog
+These are gzipped sizes for the same six components (button, dialog, menu, tabs, tooltip, select).
+Each library is bundled the same way: esbuild, minified, React left out. Measured 2026-11-22.
 
-The docs show the component catalog in all built-in themes. Use React for stateful behavior or the CSS classes and Tailwind utilities to build native HTML compositions. Utkristi’s components have their own APIs and reuse the same theme tokens across apps.
+| Library | JS | CSS | Total |
+| --- | --- | --- | --- |
+| **Utkristi UI 0.1.7** | **6.5 KB** | 13.7 KB (includes all 12 themes) | **20.2 KB** |
+| shadcn/ui (Radix primitives) | 42.5 KB | Tailwind classes in your app | 42.5 KB + your CSS |
+| React Aria Components 1.22 | 66.2 KB | Unstyled, you write it | 66.2 KB + your CSS |
+| MUI 6.5 | 70.4 KB | CSS-in-JS (in the JS) | 70.4 KB |
+| Mantine 7.17 | 60.2 KB | 11.3 KB | 71.5 KB |
+| Ant Design 5.29 | 157.9 KB | CSS-in-JS (in the JS) | 157.9 KB |
 
-Use `Typography` with `typeface="archivo"`, `"geist"`, `"inter"`, `"manrope"`, or `"serif"` (Newsreader). Import `@utkristi/ui/fonts.css` to load the web fonts, or override the font tokens for your app. Tailwind also exposes `font-geist`, `font-inter`, `font-manrope`, and `font-serif`.
+**Caveat:** Utkristi's `Select` is a styled native `<select>`. The others build a custom listbox,
+which costs more and does more. Utkristi's equivalent of that is `Combobox`. Per-component figures
+are on the docs overview. To reproduce, see `scripts/compare-competitors.mjs`.
 
-## Docs and hosting
+## What's included
 
-Run `npm run docs` to open the documentation. Each component page includes interactive previews, copyable code, a prop reference, and links to adjacent components.
+- **Components:** buttons, split buttons, forms (Field, Combobox, DatePicker, date ranges, file
+  drop), overlays (Modal, Menu, Popover, Tooltip, Toast), navigation (Navbar, Sidebar, Tabs,
+  Breadcrumb, Pagination), data (Table and DataTable with remote state, selection, editing and
+  virtualisation), layout (Shell, Workspace, Resizable), conversation, questionnaire, video and
+  more. The [coverage inventory](docs/component-coverage.md) lists every example.
+- **Blocks:** complete screens, including a project worklist, audit explorer, roles and access,
+  trading and terminal workspaces, a landing page and pricing.
+- **Icons:** about 256 glyphs in line, filled, duotone, 2.5D and 3D, with an icon colour palette
+  for every theme (`@utkristi/ui/icons`).
 
-The Sandbox runs TSX or HTML in an isolated preview. Edit the example and press **Run** or **Ctrl/⌘ + Enter**. Drafts are saved per example and language in your browser. **Reset** restores the original, and you can copy or download the source. Choose **Fit**, **Phone (375 px)**, or **Tablet (768 px)** to test the layout.
-
-Add `ut-scrollbar` to an existing scroll container to style its native scrollbar, or use `ScrollArea` to add a keyboard-focusable scroll region. Scrollbars reveal on hover or focus and use system styling for touch and forced colours.
-
-Import `@utkristi/ui/utkristi-ui.css` in HTML, Vue, Svelte, or Angular to use the kit's classes and themes. The `@utkristi/ui/dom` entry point provides `initUI(root)` for native dialogs and tabs. See the Frameworks guide in the docs for copyable integration examples.
-
-Build the website with `npm ci` and `npm run docs:build`. Publish the contents of `docs/dist` with your static host. The site uses relative asset paths and hash routes, so a subdirectory works without a server rewrite. Run `npm run docs:preview` to verify the production build locally.
-
-On Vercel, use the repository root as the project root. The checked-in configuration builds `docs/dist` and revalidates the HTML entry document so it can pick up new asset URLs. The build emits `404.html` for missing URLs and `500.html` for hosts with custom server error pages. Vercel's custom platform error pages require Enterprise. The app's runtime error page works on any static host. For subdirectory hosts, configure their error documents and adjust the home links in the static pages to the mount path.
-
-Open `/404` or `/error` to verify the standalone pages and their HTTP status codes. Open `/#/404` or `/#/error` to check the versions inside the docs shell.
-
-## Performance verification
-
-Component source and prop tables load when opened. The production build reports about 159 KB of gzipped JavaScript for the main docs. The sandbox preview runtime is in a separate route bundle, and the TSX compiler runs in a worker.
-
-Run `npm run docs:stress` to repeat the Edge check. It sweeps the docs at 375px in all three themes and checks key routes from 320px to 1440px. It reports run-to-preview latency for 12 sandbox runs at 4× CPU throttling with 5,000 table rows or 60 carousel slides, and checks that the preview recovers after invalid TSX.
-
-[React code splitting](https://react.dev/reference/react/lazy) · [Long tasks and main-thread work](https://web.dev/articles/optimize-long-tasks) · [Animation rendering](https://web.dev/articles/animations-guide)
-
-See the [competitive audit and implementation roadmap](https://github.com/utkarsh-1912/utkristi-ui/blob/main/docs/competitive-audit.md) for gaps across app workflows, distribution, accessibility, and performance.
+Known gaps are listed in the [design review](docs/component-design-review.md), and the roadmap is
+in [docs/planning/INNOVATION_PLAN.md](docs/planning/INNOVATION_PLAN.md).
 
 ## Development
 
+```sh
+npm ci
+npm run build
+npm test
+npm run docs
+```
+
 | Command | Purpose |
 | --- | --- |
-| `npm run build` | Build CSS, Tailwind, React, and declarations |
-| `npm test` | Run the test suite after building |
-| `npm run lint` | Lint the workspace |
-| `npm run typecheck` | Check TypeScript |
-| `npm run docs` | Start the Vite documentation server |
-| `npm run docs:build` | Build the documentation |
-| `npm run docs:preview` | Preview the documentation build |
-| `npm run docs:stress` | Run browser checks and exercise repeated sandbox runs under CPU throttling |
-| `npm run screenshots` | Capture all three themes in headless Edge, sweep every docs route at 375px, and check key pages from 320px to 1440px |
-| `node scripts/screenshots.mjs --themes-only` | Capture all twelve theme showcases and check each at 375px in headless Edge |
-| `node scripts/screenshots.mjs --workspaces-only` | Verify workspace navigation at desktop and mobile widths, check the workspace sandbox, and refresh marketing screenshots |
-| `npm run screenshots:capture` | Refresh the overview, showcases, icon catalog, sandbox, and mobile screenshots |
+| `npm run build` | Icons, CSS, Tailwind preset and plugin, React and type declarations |
+| `npm test` | Vitest suite (builds the assets first) |
+| `npm run lint` / `npm run typecheck` | ESLint and TypeScript |
+| `npm run docs` / `docs:build` / `docs:preview` | Docs dev server, production build and local preview (icons are generated first) |
+| `npm run check:bundles` | Bundle size budgets |
+| `npm run smoke:package` | Packs the library and installs it into a test project |
+| `npm run screenshots` | Headless Edge screenshots and responsive checks (falls back to Playwright) |
+| `npm run docs:audit` / `docs:verify` / `docs:stress` | Catalog coverage, browser checks and sandbox stress run |
+| `npm run bench` | Performance benchmarks |
+| `npm run icons` / `icons:3d` | Rebuild icons (the 3D renders need Python and Blender) |
 
-The screenshot script uses Playwright with Chromium when Edge is unavailable. Install them in that environment before running the script.
+The docs build to `docs/dist` and deploy on Vercel with the included `vercel.json`. They use hash
+routes, so any static host works.
 
-[Design tokens and class map](https://github.com/utkarsh-1912/utkristi-ui/blob/main/DESIGN_TOKENS.md) · [Migration guide](https://github.com/utkarsh-1912/utkristi-ui/blob/main/MIGRATION.md) · [Support & compatibility](https://github.com/utkarsh-1912/utkristi-ui/blob/main/SUPPORT.md) · [Changelog](https://github.com/utkarsh-1912/utkristi-ui/blob/main/CHANGELOG.md) · [MIT license](https://github.com/utkarsh-1912/utkristi-ui/blob/main/LICENSE)
+## More
 
-## Component reference and variants
-
-Every catalog page now lists basic usage and named usage examples with previews, copyable React and separate HTML/CSS/JavaScript source, and direct sandbox links. The sandbox can search components and usage descriptions. API tables include source-derived defaults.
-
-See the generated [component coverage inventory](docs/component-coverage.md) and [design review with remaining gaps](docs/component-design-review.md). Run `npm run docs:audit` to check catalog coverage and `node scripts/screenshots.mjs --catalog-only` to check React and HTML sandbox startup across the catalog. Startup checks do not replace interaction tests.
-
-`Sidebar` supports `collapseMode="icons"` with `SidebarLink`, `collapseMode="offcanvas"`, and `togglePosition="edge"`. `Alert` supports surface variants, actions and controlled dismissal. `Tabs` supports vertical navigation and pill/plain variants. `Card` exposes surface variants, and `Table` exposes striping, borders, hover behavior and empty content. These options work independently of theme choice.
+- [Design tokens and class map](DESIGN_TOKENS.md)
+- [Migration guide](MIGRATION.md)
+- [Support and compatibility](SUPPORT.md)
+- [Changelog](CHANGELOG.md)
+- Planning briefs (build, icons, themes, enterprise, innovation) in [docs/planning](docs/planning)
+- [MIT license](LICENSE)

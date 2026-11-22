@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, useRef, useState, type HTMLAttributes } from 'react';
 import { IconButton } from './Button.js';
 import { ControlIcon } from './ControlIcon.js';

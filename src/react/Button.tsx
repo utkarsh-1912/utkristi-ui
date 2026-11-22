@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
 import { Spinner } from './Spinner.js';
 import { assignRef, cx } from './utils/cx.js';
@@ -64,7 +66,7 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
   badge?: ReactNode;
 }
 
-export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
+export const IconButton = /* @__PURE__ */ forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
   { label, variant = 'icon', size, pressed, tone, badge, className, children, radius, inlineSize, style, type = 'button', ...props }, ref,
 ) {
   return <button {...props} ref={ref} type={type} aria-label={label} aria-pressed={pressed ?? props['aria-pressed']}

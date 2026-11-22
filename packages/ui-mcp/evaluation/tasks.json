@@ -1,0 +1,22 @@
+[
+  { "id": "button", "prompt": "Write standalone Utkristi HTML for a destructive Delete button.", "pass": "Uses a native button with type=button, btn and btn-danger." },
+  { "id": "icon-label", "prompt": "Create a React icon-only settings button.", "pass": "Uses IconButton with an accessible label and a valid icon." },
+  { "id": "tabs", "prompt": "Build labelled, manual-activation React tabs with one disabled tab.", "pass": "Uses Tabs items with stable IDs, activation=manual, and an item with disabled=true." },
+  { "id": "tab-markup", "prompt": "Build a standalone accessible tab list with two panels.", "pass": "Uses data-ut-tabs, matching IDs, selection attributes, and the DOM runtime hookup." },
+  { "id": "modal", "prompt": "Build a confirmation dialog that initially focuses the cancel button.", "pass": "Uses AlertDialog or Modal with an initialFocus ref, explicit title, and controlled close." },
+  { "id": "menu", "prompt": "Show an accessible keyboard-operated actions menu with one disabled item.", "pass": "Uses correct trigger props and passes a disabled Menu item." },
+  { "id": "select-menu", "prompt": "Create a custom single-choice department field that submits with a form.", "pass": "Uses a visible Field label and SelectMenu with name and valid options." },
+  { "id": "combobox", "prompt": "Create a multi-value searchable team picker.", "pass": "Uses Combobox with multiple, value array and onValueChange." },
+  { "id": "date", "prompt": "Implement a DatePicker with an earliest and latest date.", "pass": "Uses the actual DatePicker boundary props and valid date values." },
+  { "id": "table-selection", "prompt": "Keep DataTable selection across filtering and pages.", "pass": "Uses stable keys and the documented selection object." },
+  { "id": "table-remote", "prompt": "Render a remotely sorted table showing a server-side total.", "pass": "Uses remote.state, remote.onStateChange and remote.totalRows with server order preserved." },
+  { "id": "table-stream", "prompt": "Apply a keyed price update to a live DataTable without recreating the stream.", "pass": "Uses createDataTableStream, stable getRowKey, stream prop and applyPatch upsert." },
+  { "id": "palette", "prompt": "Set an accent and foreground with Utkristi CSS variables.", "pass": "Uses actual color-token names, including a foreground designed for the chosen fill." },
+  { "id": "theme", "prompt": "Generate light CSS from #7C3AED with WCAG AAA text targets.", "pass": "Uses the real theme engine, valid brand and scheme, and exports CSS." },
+  { "id": "motion", "prompt": "Animate entry for a sample region while allowing reduced-motion preferences.", "pass": "Uses the actual motion scope and data-ut-enter or an equivalent reduced-motion-aware rule." },
+  { "id": "log", "prompt": "Render a 100,000-line terminal log with filtering and optional follow-tail.", "pass": "Uses LogViewer with lines and a valid follow-tail setting." },
+  { "id": "presence", "prompt": "Show how to render peer presence and cursors from a transport-neutral adapter.", "pass": "Uses the channel and hook contract and passes user and cursor records with correct shapes." },
+  { "id": "a11y", "prompt": "Provide user-controlled text scale and reduced-motion settings.", "pass": "Mounts the documented accessibility provider and panel or hook." },
+  { "id": "registry", "prompt": "Find the installable Project Worklist and provide the source installation steps.", "pass": "Uses the actual registry item and describes the version-pinned kit dependency." },
+  { "id": "validate", "prompt": "Correct an icon button marked up as <button class='btn-solid icon-btn'><svg></svg></button>.", "pass": "Provides an accessible name and correct base or removes the incompatible variant." }
+]

@@ -22,6 +22,10 @@ const themesOnly = process.argv.includes('--themes-only');
 const workspacesOnly = process.argv.includes('--workspaces-only');
 const catalogOnly = process.argv.includes('--catalog-only');
 const reuseBuild = process.argv.includes('--reuse-build');
+const visualMatrix = process.argv.includes('--visual-matrix');
+const iconsOnly = process.argv.includes('--icons-only');
+const updateVisualBaselines = process.argv.includes('--update-visual-baselines');
+const innovationOnly = process.argv.includes('--innovation-only');
 const require = createRequire(import.meta.url);
 
 async function run(args) {
@@ -66,11 +70,11 @@ async function connect(address, onEvent) {
   });
   return {
     close: () => socket.close(),
-    send(method, params = {}) {
+    send(method, params = {}, sessionId) {
       const id = ++nextId;
       return new Promise((accept, reject) => {
         pending.set(id, { accept, reject });
-        socket.send(JSON.stringify({ id, method, params }));
+      socket.send(JSON.stringify({ id, method, params, sessionId }));
       });
     },
   };
@@ -125,8 +129,208 @@ async function captureEdge() {
       const { data } = await send('Page.captureScreenshot', { format: 'png', fromSurface: true, captureBeyondViewport: fullPage, clip });
       await writeFile(join(screenshots, `${file}.png`), Buffer.from(data, 'base64'));
     };
+    const verifyFrameFocus = async (probe, name) => {
+      await retry(() => evaluate(`(() => {
+        const run = [...document.querySelectorAll('.playground-actions button')].find(button => button.textContent.trim() === 'Run');
+        if (!run || run.disabled) return false;
+        run.click();
+        return true;
+      })()`), name + ' run action');
+      await retry(() => evaluate(`document.querySelector('.playground-run-status')?.textContent === 'HTML preview ready' &&
+        document.querySelector('.playground iframe')?.getBoundingClientRect().width > 0`), name + ' rendered frame');
+      const tree = await send('Page.getFrameTree');
+      let frame = tree.frameTree.childFrames?.find(({ frame }) => frame.url === 'about:srcdoc')?.frame;
+      let sessionId;
+      try {
+        if (!frame) {
+          const { targetInfos } = await send('Target.getTargets');
+          const target = targetInfos.find(({ type, url }) => type === 'iframe' && url === 'about:srcdoc');
+          if (!target) throw new Error('The HTML preview frame is missing.');
+          ({ sessionId } = await send('Target.attachToTarget', { targetId: target.targetId, flatten: true }));
+          frame = (await send('Page.getFrameTree', {}, sessionId)).frameTree.frame;
+        }
+        const { executionContextId } = await send('Page.createIsolatedWorld', { frameId: frame.id, worldName: 'utkristi-verification' }, sessionId);
+        const result = await send('Runtime.evaluate', {
+          contextId: executionContextId, userGesture: true, returnByValue: true,
+          expression: `(() => { const parent = { postMessage: (report) => report }; ${probe.replace('parent.postMessage(', 'return parent.postMessage(')} })()`,
+        }, sessionId);
+        if (result.exceptionDetails) throw new Error(name + ': ' + (result.exceptionDetails.exception?.description ?? result.exceptionDetails.text));
+        if (!result.result.value?.passed) throw new Error(name + ' failed inside the HTML frame: ' + JSON.stringify(result.result.value?.detail));
+      } finally {
+        if (sessionId) await send('Target.detachFromTarget', { sessionId });
+      }
+    };
+    const disclosureProbe = `
+      const mobile = document.querySelector('.navbar-html-mobile');
+      if (getComputedStyle(mobile).display !== 'none') mobile.querySelector('summary').click();
+      const nav = getComputedStyle(mobile).display === 'none' ? document.querySelector('.navbar-links') : mobile;
+      const resources = [...nav.querySelectorAll('summary')].find(summary => summary.textContent.includes('Resources'));
+      resources.click();
+      const teams = [...resources.parentElement.querySelectorAll('summary')].find(summary => summary.textContent.includes('Teams'));
+      teams.click();
+      const target = teams.parentElement.querySelector('a');
+      target.focus();
+      target.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      const detail = { focus: document.activeElement === teams, active: document.activeElement?.tagName, inner: teams.parentElement.open,
+        outer: resources.parentElement.open, motion: document.documentElement.dataset.utMotion };
+      parent.postMessage({ kind: 'utkristi-verification', passed: detail.focus && !detail.inner && detail.outer &&
+        detail.motion === 'fade', detail }, '*');
+    `;
     // Keep motion assertions independent of the runner's OS accessibility settings.
     const setMotion = (value) => send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value }] });
+    if (iconsOnly) {
+      await size(1440, 900);
+      await setMotion('reduce');
+      for (const [path, type] of [
+        ['/icons/sprite.svg', 'image/svg+xml'],
+        ['/icons/svg/line/rocket.svg', 'image/svg+xml'],
+        ['/icons/3d/render/glass/blue/rocket@1x.png', 'image/png'],
+      ]) {
+        const response = await fetch(url + path);
+        await response.body?.cancel();
+        if (!response.ok || !response.headers.get('content-type')?.startsWith(type)) {
+          throw new Error(`Invalid static icon response for ${path}: ${response.status}`);
+        }
+      }
+      const scrollToIcon = (selector) => evaluate(`document.querySelector(${JSON.stringify(selector)})?.scrollIntoView({ block: 'center' })`);
+      const tray = '.showcase-icon-tray .icon-3d';
+      await load('/showcase?theme=glass', 'Build together.');
+      await retry(() => evaluate(`!!document.querySelector(${JSON.stringify(tray)})`), '3D tray icons');
+      await scrollToIcon(tray);
+      await retry(() => evaluate(`[...document.querySelectorAll(${JSON.stringify(tray)})].filter(icon =>
+        icon.querySelector('picture[data-icon-raster-ready] img')?.naturalWidth > 0).length === 6`), 'all tray images load');
+      await load('/icons?theme=glass', 'Icons');
+      await retry(() => evaluate('!!document.querySelector(".icons-cell")'), 'icon catalog');
+      await evaluate(`(() => {
+        const style = document.querySelector('select[aria-label="Icon style"]');
+        style.value = '3d';
+        style.dispatchEvent(new Event('change', { bubbles: true }));
+      })()`);
+      await retry(() => evaluate('document.querySelector(".icons-cell picture[data-icon-raster-ready] img")?.naturalWidth > 0'), '3D icon catalog artwork');
+
+      await send('Network.enable');
+      await send('Network.setCacheDisabled', { cacheDisabled: true });
+      await send('Network.setBlockedURLs', { urls: ['*://*/icons/3d/render/*'] });
+      const checkFallback = async (selector) => {
+        await retry(() => evaluate(`!!document.querySelector(${JSON.stringify(selector)})`), 'fallback icon');
+        await scrollToIcon(selector);
+        await retry(() => evaluate(`(() => {
+          const icon = document.querySelector(${JSON.stringify(selector)});
+          const image = icon?.querySelector('img');
+          const fallback = icon?.querySelector('.icon-3d-fallback');
+          return image?.complete && image.naturalWidth === 0 && fallback?.getBoundingClientRect().width > 0 &&
+            getComputedStyle(fallback).visibility === 'visible';
+        })()`), 'vector icon stays visible when the raster request fails');
+      };
+      await load('/overview?theme=glass', 'Interfaces for live, dense, shared work.');
+      await checkFallback('.marketing-icon-tile .icon-3d');
+      await load('/showcase?theme=dark', 'Build together.');
+      await checkFallback(tray);
+      await load('/blocks/creative-workspace?theme=glass', 'Creative studio');
+      await retry(() => evaluate(`document.querySelector('.theme-preview svg.icon-2d5 path')?.getAttribute('d')?.length > 0`), 'block icon artwork');
+      console.log('Verified static icon assets, 3D tray and catalog loading, block artwork, and raster fallbacks.');
+      return;
+    }
+    if (innovationOnly) {
+      await size(375, 900);
+      await setMotion('reduce');
+      const previewWidth = () => evaluate('document.documentElement.scrollWidth');
+      await load('/theme-studio?brand=%230EA5E9&scheme=light&contrast=AAA&dir=rtl', 'Theme Studio');
+      await retry(() => evaluate('document.documentElement.dir === "rtl" && [...document.querySelectorAll(".theme-studio [role=status]")].some(node => node.textContent.includes("checks pass"))'), 'Theme Studio contrast report');
+      if (await previewWidth() > 375) throw new Error('Theme Studio exceeds 375px.');
+      await load('/components/collaboration?dir=rtl', 'Collaboration');
+      await evaluate('Array.from(document.querySelectorAll(".theme-preview button")).find(button => button.textContent.includes("cursor")).click()');
+      await retry(() => evaluate('!!document.querySelector(".collab-cursor[aria-hidden=true]")'), 'simulated collaborator cursor');
+      if (await previewWidth() > 375) throw new Error('Collaboration preview exceeds 375px.');
+      await load('/components/live-data?dir=rtl', 'Live data');
+      await evaluate('Array.from(document.querySelectorAll(".theme-preview button")).find(button => button.textContent.includes("price update")).click()');
+      await retry(() => evaluate('!!document.querySelector(".data-table .flash-up .market-up")'), 'streamed numeric update');
+      if (await previewWidth() > 375) throw new Error('Live data preview exceeds 375px.');
+      await load('/components/accessibility-preferences?dir=rtl', 'Accessibility preferences');
+      await evaluate(`(() => {
+        const field = document.querySelector('.ut-a11y-scope select');
+        Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value').set.call(field, '200');
+        field.dispatchEvent(new Event('change', { bubbles: true }));
+      })()`);
+      await retry(() => evaluate(`!!document.querySelector('[data-ut-a11y-text="200"]')`), '200% text preference');
+      if (await previewWidth() > 375) throw new Error('Accessibility preferences exceed 375px at 200%.');
+      await load('/components/menu', 'Menu');
+      await evaluate('document.querySelector(".theme-preview .menu-anchor button").click()');
+      await retry(() => evaluate(`!CSS.supports('position-area: block-end span-inline-end') ||
+        !!document.querySelector('.theme-preview [role=menu]:popover-open')`), 'native top-layer menu');
+      await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
+      await retry(() => evaluate('!document.querySelector(".theme-preview [role=menu]")'), 'native menu dismissal');
+      await load('/sandbox?component=navbar-multilevel&editor=html&motion=fade&theme=glass', 'Sandbox');
+      await verifyFrameFocus(disclosureProbe, 'HTML nested disclosure');
+      if (exceptions.length) throw new Error('Innovation preview errors: ' + exceptions.join('\n'));
+      console.log('Verified Theme Studio, collaboration, live data, adaptive preferences, and native menu behavior.');
+      return;
+    }
+    if (visualMatrix) {
+      const folder = join(screenshots, 'matrix');
+      if (updateVisualBaselines) await mkdir(folder, { recursive: true });
+      const { examples } = JSON.parse(await readFile(join(root, 'docs/dist/component-manifest.json'), 'utf8'));
+      const direction = ['ltr', 'rtl'];
+      const failures = [];
+      await setMotion('reduce');
+      const difference = (before, after) => evaluate(`(async () => {
+        async function bytes(data) {
+          const image = new Image();
+          image.src = 'data:image/png;base64,' + data;
+          await image.decode();
+          const canvas = document.createElement('canvas');
+          canvas.width = image.width;
+          canvas.height = image.height;
+          const context = canvas.getContext('2d');
+          context.drawImage(image, 0, 0);
+          return context.getImageData(0, 0, canvas.width, canvas.height).data;
+        }
+        const [before, after] = await Promise.all([bytes(${JSON.stringify(before)}), bytes(${JSON.stringify(after)})]);
+        if (before.length !== after.length) return 1;
+        let changed = 0;
+        for (let index = 0; index < after.length; index += 4) {
+          if ([0, 1, 2].some((channel) => Math.abs(before[index + channel] - after[index + channel]) > 20)) changed++;
+        }
+        return changed * 4 / after.length;
+      })()`);
+      const selected = process.env.UTKRISTI_VISUAL_SLUG;
+      if (selected && !Object.hasOwn(examples, selected)) throw new Error('Unknown visual matrix slug: ' + selected);
+      for (const [id, example] of Object.entries(examples)) {
+        if (selected && selected !== id) continue;
+        for (const theme of [...themes.map(([id]) => id), ...newThemes]) {
+          for (const width of [375, 768, 1440]) {
+            await size(width, 900);
+            for (const dir of direction) {
+              const name = `${id}-${theme}-${width}-${dir}.png`;
+              const baselinePath = join(folder, name);
+              if (!updateVisualBaselines && !existsSync(baselinePath)) {
+                failures.push(`${name}: missing baseline`);
+                continue;
+              }
+              const route = example.kind === 'variant' ? `/sandbox?component=${id}&editor=react`
+                : `/${example.kind === 'block' ? 'blocks' : 'components'}/${id}?`;
+              await send('Page.navigate', { url: `${url}/#${route}&theme=${theme}&dir=${dir}` });
+              const selector = example.kind === 'variant' ? '.playground-run-status' : '.theme-preview';
+              await retry(() => evaluate(`document.documentElement.dir === "${dir}" &&
+                document.documentElement.dataset.theme === "${theme}" &&
+                ${example.kind === 'variant' ? 'document.querySelector(".playground-run-status")?.textContent === "React preview ready"' :
+                  `document.querySelector('h1')?.textContent.trim() === ${JSON.stringify(example.name)} && !!document.querySelector(${JSON.stringify(selector)})`}`), name);
+              await fontsReady();
+              const { data } = await send('Page.captureScreenshot', { format: 'png', fromSurface: true });
+              if (updateVisualBaselines) await writeFile(baselinePath, Buffer.from(data, 'base64'));
+              else {
+                const baseline = (await readFile(baselinePath)).toString('base64');
+                const change = baseline === data ? 0 : await difference(baseline, data);
+                if (change > .005) failures.push(`${name}: ${(change * 100).toFixed(2)}% pixels changed`);
+              }
+            }
+          }
+        }
+        console.log(`Checked visual matrix for ${id}`);
+      }
+      if (failures.length) throw new Error(`${failures.length} visual matrix failures:\n${failures.slice(0, 25).join('\n')}`);
+      return;
+    }
     if (catalogOnly) {
       const coverage = JSON.parse(await readFile(join(root, 'docs/public/component-coverage.json'), 'utf8'));
       const failures = [];
@@ -175,7 +379,7 @@ async function captureEdge() {
         process.stdout.write('Checked ' + slug + ' at desktop and mobile widths.\n');
       }
       await size(1440, 1000);
-      await load('/overview?theme=glass', 'A design system for Utkristi.');
+      await load('/overview?theme=glass', 'Interfaces for live, dense, shared work.');
       await fontsReady();
       await screenshot('overview', true);
       await load('/icons?theme=glass', 'Icons');
@@ -235,7 +439,7 @@ async function captureEdge() {
     } finally {
       await send('Fetch.disable');
     }
-    await retry(() => evaluate('!document.querySelector("#docs-boot-loader") && !!document.querySelector(".marketing-hero")'), 'startup loader hands off to the app');
+    await retry(() => evaluate('!document.querySelector("#docs-boot-loader") && !!document.querySelector(".mk-hero")'), 'startup loader hands off to the app');
     await size(viewport.width, viewport.height);
     for (const [theme, file] of themes) {
       await load(`/showcase?theme=${theme}`, 'Build together.');
@@ -245,7 +449,7 @@ async function captureEdge() {
       await fontsReady();
       await screenshot(file, true);
     }
-    await load('/overview?theme=glass', 'A design system for Utkristi.');
+    await load('/overview?theme=glass', 'Interfaces for live, dense, shared work.');
     await retry(() => evaluate('document.documentElement.dataset.theme === "glass"'), 'marketing theme');
     await fontsReady();
     await screenshot('overview', true);
@@ -290,7 +494,7 @@ async function captureEdge() {
     await retry(() => evaluate('getComputedStyle(document.querySelector(".docs-example .loader-brand .brand-tile")).animationName === "none"'), 'static brand loader with reduced motion');
     await setMotion('no-preference');
     const { version } = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
-    await load('/overview', 'A design system for Utkristi.');
+    await load('/overview', 'Interfaces for live, dense, shared work.');
     for (const [page, heading] of [['about', 'About'], ['terms', 'Terms'], ['privacy', 'Privacy']]) {
       await evaluate(`document.querySelector('.docs-footer-links a[href="#/${page}"]').click()`);
       await retry(() => evaluate(`document.querySelector('.site-info h1')?.textContent === '${heading}' &&
@@ -524,7 +728,7 @@ async function captureEdge() {
     await evaluate('getSelection().removeAllRanges()');
 
     await size(760, 812);
-    await load('/overview?theme=glass', 'A design system for Utkristi.');
+    await load('/overview?theme=glass', 'Interfaces for live, dense, shared work.');
     await retry(() => evaluate('!!document.querySelector(".navbar-more:not([data-hidden]) button")'), 'tablet overflow trigger');
     await evaluate('document.querySelector(".navbar-more button").click()');
     await retry(() => evaluate(`(() => {
@@ -557,7 +761,7 @@ async function captureEdge() {
     }
 
     await size(375, 812);
-    await load('/overview?theme=glass', 'A design system for Utkristi.');
+    await load('/overview?theme=glass', 'Interfaces for live, dense, shared work.');
     await retry(() => evaluate('getComputedStyle(document.querySelector(".header-dock .burger")).display !== "none"'), 'mobile dock button');
     await evaluate('(() => { const button = document.querySelector(".header-dock .burger"); button.focus(); button.click(); })()');
     await retry(() => evaluate('document.activeElement?.getAttribute("aria-label") === "Close menu" && !!document.querySelector(".sheet-dock [aria-current=page]")'), 'focused mobile dock');
@@ -681,7 +885,7 @@ async function captureEdge() {
 
     await load('/getting-started', 'Getting started');
     const links = await evaluate(`Array.from(document.querySelectorAll('.doc-sidebar a'), link => [link.hash.slice(1), link.textContent])`);
-    const routes = [['/overview', 'A design system for Utkristi.'], ['/showcase', 'Build together.'],
+    const routes = [['/overview', 'Interfaces for live, dense, shared work.'], ['/showcase', 'Build together.'],
       ['/about', 'About'], ['/terms', 'Terms'], ['/privacy', 'Privacy'], ...blocks, ...links];
     const overflow = [];
     let variantsChecked = 0;
@@ -709,7 +913,7 @@ async function captureEdge() {
     if (overflow.length) throw new Error(`Horizontal overflow at 375px: ${overflow.join(', ')}`);
     process.stdout.write(`Verified ${variantsChecked} component variants at 375px.\n`);
     const responsiveRoutes = [
-      ['/overview', 'A design system for Utkristi.'], ['/icons', 'Icons'], ['/tokens', 'Tokens'], ['/showcase', 'Build together.'],
+      ['/overview', 'Interfaces for live, dense, shared work.'], ['/icons', 'Icons'], ['/tokens', 'Tokens'], ['/showcase', 'Build together.'],
       ['/components/command', 'Command'], ['/components/data-table', 'Data Table'], ['/components/file-input', 'File Input'],
       ['/theming', 'Theming'], ['/components/video', 'Video'],
       ['/sandbox?component=command', 'Sandbox'], ['/blocks', 'Blocks'], ['/blocks/project-directory', 'Project directory'],
@@ -956,10 +1160,11 @@ async function captureEdge() {
     await retry(() => evaluate('document.querySelector(".playground select[id$=-variant]")?.value === "navbar"'), 'navbar sandbox variants');
     await selectOption('.playground select[id$="-variant"]', 'navbar-multilevel');
     await retry(() => evaluate('document.querySelector("#sandbox-source")?.value.includes("Teams") && document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), 'HTML variant preserves editor selection');
-    const verifyHtmlScript = async (probe, name) => {
+    const verifyHtmlScript = async (probe, name, needsFrameFocus = false) => {
       if (await evaluate('!!document.querySelector(\'.playground select[id$="-mode"] option[value="js"]\')')) {
         throw new Error('JavaScript should be offered in the source-file group');
       }
+      if (needsFrameFocus) return verifyFrameFocus(probe, name);
       await evaluate(`(() => {
         window.utkristiVerificationResult = undefined;
         const receive = event => {
@@ -976,22 +1181,7 @@ async function captureEdge() {
       const result = await retry(() => evaluate('window.utkristiVerificationResult'), name);
       if (!result.passed) throw new Error(name + ' failed inside the HTML frame: ' + JSON.stringify(result.detail));
     };
-    await verifyHtmlScript(`
-      const mobile = document.querySelector('.navbar-html-mobile');
-      if (getComputedStyle(mobile).display !== 'none') mobile.querySelector('summary').click();
-      const nav = getComputedStyle(mobile).display === 'none' ? document.querySelector('.navbar-links') : mobile;
-      const resources = [...nav.querySelectorAll('summary')].find(summary => summary.textContent.includes('Resources'));
-      resources.click();
-      const teams = [...resources.parentElement.querySelectorAll('summary')].find(summary => summary.textContent.includes('Teams'));
-      teams.click();
-      const target = teams.parentElement.querySelector('a');
-      target.focus();
-      target.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
-      const detail = { focus: document.activeElement === teams, inner: teams.parentElement.open,
-        outer: resources.parentElement.open, motion: document.documentElement.dataset.utMotion };
-      parent.postMessage({ kind: 'utkristi-verification', passed: detail.focus && !detail.inner && detail.outer &&
-        detail.motion === 'fade', detail }, '*');
-    `, 'HTML nested disclosure, focus return and animation choice');
+    await verifyHtmlScript(disclosureProbe, 'HTML nested disclosure, focus return and animation choice', true);
     await load('/sandbox?component=file-dropzone&editor=html&theme=glass', 'Sandbox');
     await retry(() => evaluate('document.querySelector("#sandbox-source")?.value.includes("data-ut-dropzone") && document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), 'HTML file drop preview');
     await verifyHtmlScript(`
@@ -1012,7 +1202,7 @@ async function captureEdge() {
       const detail = { scrolled: region.scrollLeft, focused: document.activeElement === region,
         pageFits: document.documentElement.scrollWidth === document.documentElement.clientWidth };
       parent.postMessage({ kind: 'utkristi-verification', passed: detail.scrolled > 0 && detail.focused && detail.pageFits, detail }, '*');
-    `, 'wide tables scroll inside the keyboard-focusable region');
+    `, 'wide tables scroll inside the keyboard-focusable region', true);
     await load('/sandbox?component=questionnaire&editor=html', 'Sandbox');
     await retry(() => evaluate('document.querySelector("#sandbox-source")?.value.includes("workspace-survey") && document.querySelector(".playground-run-status")?.textContent === "HTML preview ready"'), 'HTML form preview');
     await verifyHtmlScript(`
@@ -1060,7 +1250,7 @@ async function captureEdge() {
     await load('/components/not-a-real-component', 'Page not found');
     await retry(() => evaluate('document.activeElement?.matches(".docs-status h1") && !!document.querySelector(".docs-navbar")'), '404 focuses heading and keeps navigation');
     await evaluate('document.querySelector(\'.docs-status a[href="#/overview"]\').click()');
-    await retry(() => evaluate('document.querySelector("h1")?.textContent === "A design system for Utkristi."'), '404 returns to overview');
+    await retry(() => evaluate('document.querySelector("h1")?.textContent === "Interfaces for live, dense, shared work."'), '404 returns to overview');
     await load('/404', 'Page not found');
     await load('/error?theme=glass', 'Something went wrong');
     await load('/500', 'Something went wrong');
@@ -1109,7 +1299,7 @@ async function captureEdge() {
       await retry(() => evaluate('document.querySelector(".docs-status h1")?.textContent.trim() === "Something went wrong"'), 'runtime error fallback');
       if (faultRequests !== 1) throw new Error('A runtime error triggered an automatic reload');
       await evaluate('document.querySelector(".docs-status a").click()');
-      await retry(() => evaluate('document.querySelector("h1")?.textContent === "A design system for Utkristi."'), 'leave a failed route without reloading');
+      await retry(() => evaluate('document.querySelector("h1")?.textContent === "Interfaces for live, dense, shared work."'), 'leave a failed route without reloading');
     } finally {
       await send('Fetch.disable');
     }
@@ -1163,7 +1353,7 @@ async function capturePlaywright() {
       await page.screenshot({ path: join(screenshots, `${file}.png`), fullPage: true });
     }
     await page.goto(`${url}/#/overview?theme=glass`);
-    await page.locator('html[data-theme="glass"] .marketing-hero').waitFor();
+    await page.locator('html[data-theme="glass"] .mk-hero').waitFor();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: join(screenshots, 'overview.png'), fullPage: true });
     await page.setViewportSize({ width: 760, height: 812 });

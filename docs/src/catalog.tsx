@@ -1,12 +1,13 @@
 import { useId, useState } from 'react';
 import {
-  Accordion, Alert, AlertDialog, AspectRatio, Attachment, Avatar, Badge, Banner, BottomNavigation, Breadcrumb, Bubble, Button,
+  A11yPanel, A11yPreferencesProvider, Accordion, Alert, AlertDialog, AspectRatio, Attachment, Avatar, Badge, Banner, BottomNavigation, Breadcrumb, Bubble, Button,
   BulkActionBar, ButtonGroup, Calendar, Card, CardBody, Carousel, Chart, Checkbox, ClipboardButton, CodeBlock, Collapsible, ColumnChooser, Combobox,
   Command, ContextMenu, DataTable, DatePicker, DateRangePicker, Dialog, Direction, Drawer, DropdownMenu, Empty, FilterBar,
   DeviceMockup, Field, FileInput, FloatingInput, Gallery, HoverCard, Icon, IconPalettePicker, IconTile, Input, InputGroup, InputOTP, Item, Jumbotron, Label, ListGroup, Loader, Marker, MegaMenu, Menubar, Message, NumberInput, PhoneInput,
   MessageScroller, NativeSelect, NavigationMenu, Pagination, Popover, Progress, Questionnaire, Radio,
   QRCode, RadioGroup, Rating, Resizable, ScrollArea, Select, SelectMenu, Separator, Sheet, Sidebar, SpeedDial, Switch, Textarea, TimeInput, Timeline, Toggle, ToggleGroup, Trace, Typography, VideoPlayer,
-  Workspace, type DataColumn, type DataTableRowKey, type Typeface, useToast,
+  CommentThread, CursorLayer, Gauge, LogViewer, PresenceStack, Sparkline, Ticker, Workspace, createCollabChannel, createDataTableStream,
+  useCollabAdapter, type CollabAdapter, type CollabCursor, type CollabThread, type DataColumn, type DataTableRowKey, type Typeface, useToast,
 } from '@utkristi/ui';
 import type { Example } from './examples';
 
@@ -15,6 +16,64 @@ const demo = (name: string, description: string, preview: Example['preview'], js
 
 const teams = ['Design', 'Engineering', 'Operations'].map((label) => ({ value: label.toLowerCase(), label }));
 const worklistColumns = [{ key: 'name', label: 'Project', required: true }, { key: 'team', label: 'Team' }];
+
+function CollaborationDemo() {
+  const [adapter] = useState(() => {
+    const users$ = createCollabChannel([{ id: 'local', name: 'You', role: 'Editor' }, { id: 'asha', name: 'Asha Rao', role: 'Reviewer' }]);
+    const cursors$ = createCollabChannel<CollabCursor>();
+    const comments$ = createCollabChannel<CollabThread>([{ id: 'release', comments: [
+      { id: 'first', authorId: 'asha', body: 'Ready for a second review.', createdAt: Date.now() },
+    ] }]);
+    const adapter: CollabAdapter = { users$, cursors$, comments$, send(action) {
+      if (action.type === 'cursor') cursors$.publish([action.cursor]);
+      if (action.type === 'reply' || action.type === 'resolve') comments$.publish(comments$.getSnapshot().map((thread) => {
+        if (thread.id !== action.threadId) return thread;
+        return action.type === 'resolve' ? { ...thread, resolved: action.resolved } : { ...thread, comments: [
+          ...thread.comments, { id: `reply-${thread.comments.length}`, authorId: 'local', body: action.body, createdAt: Date.now() },
+        ] };
+      }));
+    } };
+    return adapter;
+  });
+  const { users, cursors, threads, send } = useCollabAdapter(adapter);
+  const thread = threads[0];
+  const [atStart, setAtStart] = useState(true);
+  return <div className="collab-demo">
+    <Card><CardBody>
+      <PresenceStack users={users} />
+      <div className="collab-demo-canvas">
+        <h3>Release notes</h3><p>Review the deployment checklist before sharing it.</p>
+        <CursorLayer users={users} cursors={cursors} />
+      </div>
+      <Button variant="ghost" onClick={() => {
+        send({ type: 'cursor', cursor: { userId: 'asha', x: atStart ? 66 : 24, y: atStart ? 55 : 25, updatedAt: Date.now() } });
+        setAtStart(!atStart);
+      }}>Move Asha’s cursor</Button>
+    </CardBody></Card>
+    <Card><CardBody>{thread && <CommentThread thread={thread} users={users}
+      onReply={(body) => send({ type: 'reply', threadId: thread.id, body })}
+      onResolve={(resolved) => send({ type: 'resolve', threadId: thread.id, resolved })} />}</CardBody></Card>
+  </div>;
+}
+
+const openingPrices = [{ id: 'studi', symbol: 'STUDI', price: 102.5 }, { id: 'work', symbol: 'WORK', price: 38.4 }];
+const priceColumns = [{ key: 'symbol', header: 'Symbol' }, { key: 'price', header: 'Price', num: true }];
+function LiveDataDemo() {
+  const [stream] = useState(() => createDataTableStream<typeof openingPrices[number]>());
+  const [price, setPrice] = useState(openingPrices[0].price);
+  return <div className="sample-stack">
+    <Ticker items={[{ id: 'studi', label: 'STUDI', value: price, change: (price - 102.5) / 102.5 }]} />
+    <Sparkline values={[98, 101, 100, 102.5, price]} label="STUDI price history" />
+    <Gauge label="Open order limit" value={65} />
+    <Button variant="ghost" onClick={() => {
+      const next = Number((price + .4).toFixed(2));
+      setPrice(next);
+      stream.applyPatch({ upsert: [{ ...openingPrices[0], price: next }] });
+    }}>Apply a price update</Button>
+    <DataTable rows={openingPrices} columns={priceColumns} getRowKey={(row) => row.id} stream={stream} aria-label="Live prices" />
+    <LogViewer label="Market connection" lines={['Connected to market data', '\u001b[32mQuotes synchronized\u001b[0m']} height={100} />
+  </div>;
+}
 
 function WorkspaceDemo() {
   const [variant, setVariant] = useState<'trading' | 'terminal' | 'studio' | 'office'>('trading');
@@ -176,6 +235,13 @@ const panelMarkup = (type: string, side = '') =>
   `<div class="modal-backdrop ${side ? 'sheet-backdrop' : ''}"><section class="modal ${side ? 'sheet-panel' : ''}"${side ? ` data-side="${side}"` : ''} role="${type}" aria-label="Settings"><div class="modal-body">Settings</div></section></div>`;
 
 export const catalog = {
+  'accessibility-preferences': demo('Accessibility preferences', 'Persist contrast, motion, density, type, font, focus and links.',
+    () => <A11yPreferencesProvider storageKey={null}><A11yPanel /></A11yPreferencesProvider>, '',
+    '<div class="ut-a11y-scope" data-ut-a11y-contrast="more" data-ut-a11y-motion="reduce" data-ut-a11y-text="125"><p>Custom appearance preferences</p><button class="btn btn-ghost" type="button">Preview focus</button></div>'),
+  collaboration: demo('Collaboration', 'Share team presence, show a live cursor and discuss changes in a comment thread.',
+    CollaborationDemo, '', '<div class="collab-status"><strong>Asha Rao</strong><span>Reviewing release notes</span></div>'),
+  'live-data': demo('Live data', 'Stream keyed table updates and show ticker prices, trends, gauges and logs.',
+    LiveDataDemo, '', '<ul class="live-ticker" aria-label="Live prices"><li><strong>STUDI</strong><span>102.50</span><span class="market-up">↑ +0.4%</span></li></ul>'),
   workspace: demo('Workspace', 'Choose an icon rail, command tabs, studio navigation, or a labelled office sidebar. Layout and palette can be selected independently.',
     WorkspaceDemo, '', `<section class="workspace" data-variant="trading">
   <header class="workspace-header"><strong>Operations</strong></header>

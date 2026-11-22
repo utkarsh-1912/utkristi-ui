@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useId, useRef, type RefObject } from 'react';
 import { isTopOverlay, pushOverlay } from './overlayStack.js';
 
@@ -8,6 +10,7 @@ export function useDialogFocus(
   scope: RefObject<HTMLElement>,
   onClose: (() => void) | undefined,
   initialFocus?: RefObject<HTMLElement>,
+  nativeHost?: RefObject<HTMLDialogElement>,
 ) {
   const close = useRef(onClose);
   const overlayId = useId();
@@ -17,6 +20,17 @@ export function useDialogFocus(
     const root = scope.current;
     if (!root) return;
     const previous = document.activeElement;
+    const host = nativeHost?.current;
+    let native = false;
+    if (host) {
+      try {
+        host.showModal();
+        native = host.open;
+      } catch { /* Keep the keyboard trap if the browser rejects showModal. */ }
+      if (!native) host.setAttribute('open', '');
+    }
+    const cancel = (event: Event) => event.preventDefault();
+    host?.addEventListener('cancel', cancel);
     const stops = () => Array.from(root.querySelectorAll<HTMLElement>(focusable)).filter(
       (element) => element.tabIndex >= 0 && !element.matches(':disabled, [aria-disabled="true"]') &&
         !element.closest('[hidden], [inert], [aria-hidden="true"], details:not([open]) > :not(summary)') &&
@@ -33,7 +47,7 @@ export function useDialogFocus(
         event.preventDefault();
         close.current();
       }
-      if (event.key !== 'Tab') return;
+      if (event.key !== 'Tab' || native) return;
       const items = stops();
       const index = items.indexOf(document.activeElement as HTMLElement);
       if (index === -1 || (event.shiftKey ? index === 0 : index === items.length - 1)) {
@@ -45,12 +59,15 @@ export function useDialogFocus(
     document.addEventListener('keydown', handleKey);
     return () => {
       document.removeEventListener('keydown', handleKey);
+      host?.removeEventListener('cancel', cancel);
+      if (native) host?.close();
+      else host?.removeAttribute('open');
       popStack();
       const wasTop = dialogs.at(-1) === root;
       dialogs.splice(dialogs.indexOf(root), 1);
       if (wasTop && previous instanceof HTMLElement && previous.isConnected) previous.focus();
     };
-  }, [scope, initialFocus]);
+  }, [scope, initialFocus, nativeHost]);
 }
 
 export function navigationIndex(key: string, index: number, length: number) {

@@ -21,7 +21,21 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run docs:audit
-      - run: npm test
+      - run: npm test -- --reporter=default --reporter=json --outputFile.json=dist/verification-tests.json
+      - run: npm run test:mcp
       - run: npm run check:bundles
       - run: npm run docs:verify
+      - run: npm run docs:verify -- --reuse-build --innovation-only
       - run: npm run smoke:package
+      - name: Record verification results
+        shell: pwsh
+        run: |
+          node scripts/check-bundles.mjs --json | Set-Content -Encoding utf8 dist/verification-bundles.json
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          node scripts/benchmark.mjs | Set-Content -Encoding utf8 dist/verification-benchmark.txt
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          node scripts/write-verification.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docs-verification
+          path: docs/dist/verification.json

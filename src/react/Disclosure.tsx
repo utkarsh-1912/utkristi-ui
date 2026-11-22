@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, useRef, type ButtonHTMLAttributes, type HTMLAttributes, type ReactNode } from 'react';
 import { ControlIcon } from './ControlIcon.js';
 import { ChevronDownIconData } from './icons/generated/ChevronDownIcon.js';

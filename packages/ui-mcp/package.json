@@ -1,0 +1,10 @@
+{
+  "name": "@utkristi/ui-mcp",
+  "version": "0.1.0",
+  "description": "Stdio MCP server for the Utkristi UI design system",
+  "license": "MIT",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "bin": { "utkristi-ui-mcp": "./dist/server.mjs" },
+  "files": ["dist", "evaluation", "README.md"]
+}

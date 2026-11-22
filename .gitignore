@@ -4,3 +4,6 @@ docs/dist/
 .npm-cache/
 *.tgz
 .edge-preview-*/
+docs/public/icons/
+docs/screenshots/matrix/
+/nul

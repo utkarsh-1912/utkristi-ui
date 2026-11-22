@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, forwardRef, useContext, useEffect, useId, useState, type AnchorHTMLAttributes, type HTMLAttributes, type LabelHTMLAttributes, type ReactNode } from 'react';
 import { cx, type CSSVariables } from './utils/cx.js';
 import { useControllable } from './utils/useControllable.js';

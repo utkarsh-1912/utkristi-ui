@@ -13,7 +13,7 @@ Build the server from this repository with `npm run build:mcp`. Add the generate
 }
 ```
 
-The server uses newline-delimited JSON-RPC over stdio and negotiates the 2024 and 2025 handshake revisions. It runs on Node.js 18 or newer. The package can be packed locally with `npm pack ./packages/ui-mcp` after building.
+The server uses newline-delimited JSON-RPC over stdio and negotiates the 2024 and 2025 handshake revisions. It runs on Node.js 18 or newer. From a repository checkout with development dependencies installed, `npm pack ./packages/ui-mcp` builds a tarball containing the server, catalog, and license notices. Install that tarball into a consumer project and use its `utkristi-ui-mcp` binary to run independently of the checkout.
 
 | Tool | Inputs |
 | --- | --- |

@@ -142,30 +142,33 @@ function EfficiencyMatrix() {
       <p>Button, dialog, menu, tabs, tooltip and select, bundled the same way for every library: esbuild, minified, React left out, gzipped. CSS is each library's own stylesheet for those components.
         {lighterThan.length > 0 && <> Utkristi ships styled components in less than {lighterThan.map((row) => row.name).join(', ')}.</>}</p>
     </div>
-    <div className="table-wrap mk-matrix-wrap">
-      <table className="table mk-matrix">
+    <p className="mk-scroll-hint">Scroll across to compare individual components.</p>
+    <div className="table-wrap mk-matrix-wrap" role="region" aria-label="Bundle size comparison" tabIndex={0}>
+      <table className="table mk-matrix" aria-describedby="efficiency-notes">
         <caption className="sr-only">Gzipped size for six components per library</caption>
         <thead><tr>
-          <th scope="col">Library</th><th scope="col">Styling</th>
+          <th scope="col">Library</th><th scope="col" className="num">Total</th><th scope="col">Styling</th>
           {efficiency.components.map((name) => <th key={name} scope="col" className="num">{name}</th>)}
-          <th scope="col" className="num">All six JS</th><th scope="col" className="num">CSS</th><th scope="col">Total</th>
+          <th scope="col" className="num">All six JS</th><th scope="col" className="num">CSS</th>
         </tr></thead>
         <tbody>{rows.map((row) => {
           const total = row.js.all + row.css.all;
           return <tr key={row.id} aria-current={row.id === 'utkristi' ? 'true' : undefined} className={row.id === 'utkristi' ? 'mk-ours' : undefined}>
             <th scope="row">{row.name}<small className="mono"> {row.version}</small></th>
+            <td className="num mk-total"><strong>{kb(total)}</strong><span className="mk-bar" aria-hidden="true" style={{ inlineSize: `${(total / max) * 100}%` }} /></td>
             <td className="mk-styling">{row.styling}</td>
             {efficiency.components.map((name) => <td key={name} className="num">{kb(row.js[name as keyof Row['js']])}</td>)}
             <td className="num"><b>{kb(row.js.all)}</b></td>
             <td className="num">{kb(row.css.all)}</td>
-            <td className="mk-bar-cell"><span className="mk-bar" style={{ inlineSize: `${Math.max(4, (total / max) * 100)}%` }} /><span className="num">{kb(total)}</span></td>
           </tr>;
         })}</tbody>
       </table>
     </div>
-    <p className="mk-footnote">
-      Measured {efficiency.measured} with the versions shown. The figures cover the library's code only, not your app's. Unstyled libraries (React Aria, and the Radix primitives behind shadcn/ui) leave the CSS to you, so their CSS column is blank. Utkristi's CSS includes the tokens for all twelve themes. Utkristi's <code>Select</code> is a styled native <code>&lt;select&gt;</code>, while the others build a custom listbox; for that, use Utkristi's <code>Combobox</code>. Reproduce it with <code>node scripts/compare-competitors.mjs</code>.
-    </p>
+    <div className="mk-footnote" id="efficiency-notes">
+      <p><strong>Measurement.</strong> Results from {efficiency.measured} cover only the library code in the versions shown. Total combines the bundled JavaScript for all six components with the library’s CSS.</p>
+      <p><strong>CSS and Select.</strong> A dash means the benchmark included no library CSS. Utkristi CSS includes all twelve themes. Its <code>Select</code> uses the browser’s built-in control. Use <code>Combobox</code> for a custom listbox.</p>
+      <p>To reproduce, run <code>node scripts/compare-competitors.mjs</code>.</p>
+    </div>
   </section>;
 }
 
@@ -195,7 +198,7 @@ export function MarketingHome() {
       <span className="label"><Dot /> Utkristi UI · React · Tailwind 4 · Plain CSS</span>
       <h1 id="marketing-title" className="display mk-title">Interfaces for{' '}<br /><span className="faint">live, dense,</span>{' '}<br />shared work.</h1>
       <div className="mk-hero-foot">
-        <p className="lede">Components for trading desks, consoles, studios and everyday business apps, in <b>twelve themes</b>. You can also <b>generate your own theme</b> from one colour. They're accessible, they mirror for right-to-left languages, and they import straight into Next.js server components.</p>
+        <p className="lede">Build a trading desk with streaming rows and price tickers, an incident console with searchable logs, or a shared workspace with presence and comments. Each uses the same theme tokens.</p>
         <div className="mk-hero-actions">
           <Button href="#/getting-started" size="lg" iconRight={<Icon name="arrow-right" />}>Get started</Button>
           <Button href="#/components/button" size="lg" variant="ghost">Components</Button>
@@ -221,7 +224,7 @@ export function MarketingHome() {
         <p className="marketing-section-copy">Use the typed React components, the Tailwind 4 entry, or plain stylesheets, either the full sheet or only the components you use. Every route uses the same <code>--ut-*</code> tokens.</p>
         <a href="#/frameworks" className="marketing-link">Framework guides <Icon name="arrow-right" /></a>
       </div>
-      <Tabs items={usage} />
+      <div><Tabs items={usage} /><a href="./operations.html" className="marketing-link">Explore the plain HTML operations dashboard <Icon name="arrow-right" /></a></div>
     </section>
 
     <WorkflowSection />

@@ -1,7 +1,17 @@
 {
-  "components": 110,
-  "variants": 137,
+  "components": 113,
+  "variants": 140,
   "entries": [
+    {
+      "slug": "accessibility-preferences",
+      "name": "Accessibility preferences",
+      "variants": [
+        {
+          "slug": "accessibility-preferences--large-text",
+          "name": "Large text and underlined links"
+        }
+      ]
+    },
     {
       "slug": "accordion",
       "name": "Accordion",
@@ -279,6 +289,16 @@
         {
           "slug": "code-block--logs",
           "name": "Read-only build log"
+        }
+      ]
+    },
+    {
+      "slug": "collaboration",
+      "name": "Collaboration",
+      "variants": [
+        {
+          "slug": "collaboration--presence-overflow",
+          "name": "Presence overflow"
         }
       ]
     },
@@ -617,6 +637,16 @@
         {
           "slug": "list-group--links",
           "name": "Linked settings list"
+        }
+      ]
+    },
+    {
+      "slug": "live-data",
+      "name": "Live data",
+      "variants": [
+        {
+          "slug": "live-data--filtered-log",
+          "name": "Filter a virtual log"
         }
       ]
     },

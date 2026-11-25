@@ -177,6 +177,8 @@ export const iconsPart2 = [
   },
   {
     name: 'database',
+    clayBody: 'M12 2.5C17 2.5 20.5 4.2 20.5 6.6V17.5C20.5 20 17 21.5 12 21.5C7 21.5 3.5 20 3.5 17.5V6.6C3.5 4.2 7 2.5 12 2.5Z',
+    clayDetail: 'M5.3 7.8C8 10.2 16 10.2 18.7 7.8 M5.3 12.4C8 14.8 16 14.8 18.7 12.4 M5.3 17C8 19.4 16 19.4 18.7 17',
     group: 'Code',
     description: 'Inspect structured storage, tables, and queries.',
     keywords: ['storage', 'sql', 'data', 'cylinder', 'store'],

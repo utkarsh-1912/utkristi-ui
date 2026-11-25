@@ -4,7 +4,32 @@
   "description": "Stdio MCP server for the Utkristi UI design system",
   "license": "MIT",
   "type": "module",
-  "engines": { "node": ">=18" },
-  "bin": { "utkristi-ui-mcp": "./dist/server.mjs" },
-  "files": ["dist", "evaluation", "README.md"]
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "utkristi-ui-mcp": "./dist/server.mjs"
+  },
+  "files": [
+    "dist",
+    "evaluation",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/utkarsh-1912/utkristi-ui.git",
+    "directory": "packages/ui-mcp"
+  },
+  "homepage": "https://utkristi-ui.vercel.app/",
+  "keywords": [
+    "mcp",
+    "design-system",
+    "live-data"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prepack": "node ../../scripts/build-mcp.mjs"
+  }
 }

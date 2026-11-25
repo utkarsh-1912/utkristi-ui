@@ -1,4 +1,4 @@
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -9,6 +9,7 @@ const generator = fileURLToPath(new URL('generate-reference.mjs', directory));
 const docs = fileURLToPath(new URL('../docs/', import.meta.url)).replaceAll('\\', '/');
 const source = fileURLToPath(new URL('../src/react/', import.meta.url)).replaceAll('\\', '/');
 await mkdir(directory, { recursive: true });
+await copyFile(new URL('../LICENSE', import.meta.url), new URL('LICENSE', directory));
 await build({ entryPoints: [new URL('../docs/playground-plugin.ts', import.meta.url)].map(fileURLToPath),
   platform: 'node', format: 'esm', bundle: true, packages: 'external', outfile: generator });
 try {

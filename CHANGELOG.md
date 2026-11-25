@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Added focused live-data and collaboration imports and a source-copy CLI for the React ticker.
+- Documented six button appearances. Existing variant names retain their styles.
+- Disabled menu actions now receive keyboard focus and announce their availability.
+- Added Linux to the verification matrix and a standalone HTML operations dashboard.
+
 - Added native dialog and anchored popover paths, View Transitions for navigation and selection, and reduced-motion-aware scroll reveals.
 - Added Theme Studio with shareable settings, sandbox previews, DTCG and Tokens Studio exports, and built-in theme JSON.
 - Added collaboration components and transport adapters, keyed table streams, ticker, sparkline, gauge, and a windowed log viewer.

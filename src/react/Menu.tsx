@@ -46,7 +46,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
   const [edge, setEdge] = useState<'first' | 'last'>();
   const open = edge !== undefined;
   const [point, setPoint] = useState<{ x: number; y: number }>();
-  const buttons = useCallback(() => Array.from(surface?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not([aria-disabled="true"])') ?? []), [surface]);
+  const buttons = useCallback(() => Array.from(surface?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]') ?? []), [surface]);
 
   function close(restore = false) {
     setEdge(undefined);
@@ -64,8 +64,8 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
 
   useEffect(() => {
     if (!edge || !surface) return;
-    const enabled = buttons();
-    (enabled[edge === 'first' ? 0 : enabled.length - 1] ?? surface)?.focus();
+    const menuButtons = buttons();
+    (menuButtons[edge === 'first' ? 0 : menuButtons.length - 1] ?? surface)?.focus();
     function outside(event: globalThis.MouseEvent) {
       if (event.target instanceof Node && isTopOverlay(menuId) && !root.current?.contains(event.target) && !surface?.contains(event.target)) setEdge(undefined);
     }
@@ -118,8 +118,8 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
         returnTo.current = event.currentTarget;
         const requested = event.key === 'ArrowUp' ? 'last' : 'first';
         if (edge === requested) {
-          const enabled = buttons();
-          (enabled[requested === 'first' ? 0 : enabled.length - 1] ?? surface)?.focus();
+          const menuButtons = buttons();
+          (menuButtons[requested === 'first' ? 0 : menuButtons.length - 1] ?? surface)?.focus();
         } else setEdge(requested);
       }
     },
@@ -152,15 +152,15 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
           return;
         }
         if (event.key === 'Tab') return;
-        const enabled = buttons();
-        const current = enabled.indexOf(document.activeElement as HTMLButtonElement);
-        const next = event.key === 'ArrowLeft' || event.key === 'ArrowRight' ? undefined : navigationIndex(event.key, current, enabled.length);
+        const menuButtons = buttons();
+        const current = menuButtons.indexOf(document.activeElement as HTMLButtonElement);
+        const next = event.key === 'ArrowLeft' || event.key === 'ArrowRight' ? undefined : navigationIndex(event.key, current, menuButtons.length);
         if (next !== undefined) {
           event.preventDefault();
-          enabled[next].focus();
+          menuButtons[next].focus();
         } else if (event.key.length === 1 && event.key.trim() && !event.ctrlKey && !event.metaKey && !event.altKey) {
           const key = event.key.toLocaleLowerCase();
-          const order = [...enabled.slice(current + 1), ...enabled.slice(0, current + 1)];
+          const order = [...menuButtons.slice(current + 1), ...menuButtons.slice(0, current + 1)];
           const match = order.find((item) => (item.dataset.textValue || item.textContent || '').trim().toLocaleLowerCase().startsWith(key));
           if (match) { event.preventDefault(); match.focus(); }
         }

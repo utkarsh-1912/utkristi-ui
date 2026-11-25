@@ -25,6 +25,13 @@ try {
   await writeFile(join(fixture, 'package.json'), JSON.stringify({ name: 'utkristi-package-smoke', private: true, type: 'module' }));
   npm(['install', '--ignore-scripts', '--no-audit', '--no-fund',
     `./utkristi-ui-${pkg.version}.tgz`, 'react@18.3.1', 'react-dom@18.3.1', 'vue@3.5.13'], fixture);
+  const cli = join(fixture, 'node_modules', '@utkristi', 'ui', 'bin', 'utkristi-ui.mjs');
+  const copyTicker = () => execFileSync(process.execPath, [cli, 'add', 'ticker'], { cwd: fixture, stdio: 'pipe' });
+  copyTicker();
+  assert.throws(copyTicker, /File already exists/);
+  const copied = await readFile(join(fixture, 'Ticker.tsx'), 'utf8');
+  const ticker = await transform(copied, { loader: 'tsx', jsx: 'automatic', format: 'esm' });
+  await writeFile(join(fixture, 'ticker.mjs'), ticker.code);
   const built = await transform(code, { loader: 'tsx', jsx: 'automatic', format: 'esm' });
   await writeFile(join(fixture, 'project-worklist.mjs'), built.code);
   await writeFile(join(fixture, 'check.mjs'), `
@@ -36,6 +43,13 @@ try {
     import { JSDOM } from 'jsdom';
     import { initTabs } from '@utkristi/ui/dom';
     import Worklist from './project-worklist.mjs';
+
+    import { Ticker as CopiedTicker } from './ticker.mjs';
+    import { Ticker } from '@utkristi/ui/live-data';
+    import { createCollabChannel } from '@utkristi/ui/collab';
+    const props = { items: [{ id: 'A', label: 'Alpha', value: 42 }], locale: 'en' };
+    assert.equal(renderToStaticMarkup(createElement(CopiedTicker, props)), renderToStaticMarkup(createElement(Ticker, props)));
+    assert.equal(typeof createCollabChannel, 'function');
 
     const resolved = fileURLToPath(import.meta.resolve('@utkristi/ui'));
     assert.ok(resolved.startsWith(fileURLToPath(new URL('./node_modules/', import.meta.url))));

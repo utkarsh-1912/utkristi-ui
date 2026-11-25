@@ -1,8 +1,11 @@
 # Utkristi UI
 
-Typed React components, theme-aware CSS and a Tailwind preset for building trading desks, creative
-tools and business apps across the Utkristi ecosystem. It has the same look as Utkristi CoLabs:
-condensed display type, hairline borders, pill controls and one cool accent, in twelve themes.
+Build trading desks, incident consoles, and collaborative workspaces with a live ticker, streaming tables,
+windowed logs, and shared presence. React components, Tailwind utilities, and plain HTML share the same
+theme tokens. The kit has no required runtime npm dependencies.
+
+Explore the [execution desk](https://utkristi-ui.vercel.app/#/blocks/execution-desk) or the
+[incident board](https://utkristi-ui.vercel.app/#/blocks/incident-board).
 
 [Docs](https://utkristi-ui.vercel.app/) · [Sandbox](https://utkristi-ui.vercel.app/#/sandbox) ·
 [Blocks](https://utkristi-ui.vercel.app/#/blocks) · [Changelog](CHANGELOG.md)
@@ -18,6 +21,18 @@ condensed display type, hairline borders, pill controls and one cool accent, in 
 | **Plain HTML/CSS** | `@utkristi/ui/utkristi-ui.css` | The same classes with no build step; works in Vue, Svelte, Angular and static HTML |
 
 All three use the same `--ut-*` CSS variables, so they mix freely.
+
+For buttons, use `solid` for the primary action, `outlined` for a bordered secondary action,
+`quiet` for a subdued fill, `plain` for an unframed control, `danger` for a destructive action,
+and `link` for inline navigation. Pass `href` when the action navigates.
+
+## Workstation modules
+
+Use `@utkristi/ui/live-data` for the ticker, gauges, sparklines and log viewer. Use `@utkristi/ui/collab`
+for presence and comments. Transport adapters have separate entry points such as `@utkristi/ui/collab-yjs`.
+
+With this version installed, run `npx utkristi-ui add ticker` to copy the editable React component into
+`Ticker.tsx`, or pass `--out src/Ticker.tsx` for an existing directory. Import `@utkristi/ui/css` for the kit styles.
 
 ## Motion, live interfaces and agent tools
 

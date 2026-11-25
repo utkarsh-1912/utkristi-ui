@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Operations dashboard · Utkristi UI</title>
+  <link rel="stylesheet" href="./utkristi-ui.css">
+  <style>
+    body { margin: 0; background: var(--ut-bg); color: var(--ut-ink); font-family: system-ui, sans-serif; }
+    main { max-width: 60rem; margin: auto; padding: clamp(1rem, 4vw, 3rem); }
+    header, section { margin-block: 2rem; }
+    summary { cursor: pointer; padding-block: .75rem; }
+    th, td { text-align: start; }
+  </style>
+</head>
+<body>
+  <main>
+    <a href="./">Utkristi UI</a>
+    <header><h1>Operations dashboard</h1><p>Sample shift handoff · 09:00 UTC</p></header>
+    <section aria-labelledby="services">
+      <h2 id="services">Service health</h2>
+      <div class="table-wrap">
+        <table class="table">
+          <caption>Most recent five-minute sample</caption>
+          <thead><tr><th scope="col">Service</th><th scope="col">State</th><th scope="col">P95 latency</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Order gateway</th><td>Healthy</td><td>41 ms</td></tr>
+            <tr><th scope="row">Event ingestion</th><td>Degraded</td><td>386 ms</td></tr>
+            <tr><th scope="row">Query API</th><td>Healthy</td><td>68 ms</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section aria-labelledby="handoff">
+      <h2 id="handoff">Incident handoff</h2>
+      <details open><summary>Event ingestion delay</summary><p>The queue began growing at 08:35 UTC. Consumers are catching up following a capacity increase. The on-call engineer will review lag at 09:15 UTC.</p></details>
+      <details><summary>Resolved overnight</summary><p>The query API returned to its latency target at 04:20 UTC after the index rebuild finished.</p></details>
+    </section>
+  </main>
+</body>
+</html>

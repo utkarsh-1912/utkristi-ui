@@ -45,6 +45,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
   const today = from(new Date());
   const monthLabel = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(start);
   const weekdayFormat = new Intl.DateTimeFormat(locale, { weekday: 'narrow' });
+  const weekdayName = new Intl.DateTimeFormat(locale, { weekday: 'long' });
   const dateFormat = new Intl.DateTimeFormat(locale, { dateStyle: 'full' });
   const first = from(start, -((start.getDay() - weekStartsOn + 7) % 7));
   const days = Array.from({ length: 42 }, (_, index) => from(first, index));
@@ -68,7 +69,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
       <IconButton label="Next month" size="sm" onClick={() => moveMonth(1)} disabled={!!max && day(year, month + 1, 1) > from(max)}><ControlIcon glyph={ArrowRightIconData} /></IconButton>
     </div>
     <table className="calendar-grid" aria-labelledby={id} role="grid">
-      <thead><tr>{days.slice(0, 7).map((date) => <th key={+date} scope="col">{weekdayFormat.format(date)}</th>)}</tr></thead>
+      <thead><tr>{days.slice(0, 7).map((date) => <th key={+date} scope="col" abbr={weekdayName.format(date)}>{weekdayFormat.format(date)}</th>)}</tr></thead>
       <tbody>{Array.from({ length: 6 }, (_, week) => <tr key={week}>
         {days.slice(week * 7, week * 7 + 7).map((date) => {
           const inRange = !!(rangeStart && rangeEnd && +date >= +from(rangeStart) && +date <= +from(rangeEnd));

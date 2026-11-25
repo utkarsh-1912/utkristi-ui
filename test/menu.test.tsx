@@ -3,12 +3,12 @@ import userEvent from '@testing-library/user-event';
 import { expect, test, vi } from 'vitest';
 import { Menu } from '../src/react/index.js';
 
-test('opens from the keyboard, skips disabled items, supports typeahead, and returns focus', async () => {
+test('opens from the keyboard, focuses disabled items without activating them, supports typeahead, and returns focus', async () => {
   const user = userEvent.setup();
   const pick = vi.fn();
   render(<>
     <Menu trigger={<button>Options</button>} items={[
-      { label: 'Archive', onSelect: pick }, { label: 'Blocked', disabled: true }, { label: 'Copy', onSelect: pick },
+      { label: 'Archive', onSelect: pick }, { label: 'Blocked', disabled: true, onSelect: pick }, { label: 'Copy', onSelect: pick },
     ]} />
     <button>Outside</button>
   </>);
@@ -19,6 +19,12 @@ test('opens from the keyboard, skips disabled items, supports typeahead, and ret
   const copy = screen.getByRole('menuitem', { name: 'Copy' });
   expect(trigger).toHaveAttribute('aria-expanded', 'true');
   expect(archive).toHaveFocus();
+  await user.keyboard('{ArrowDown}');
+  const blocked = screen.getByRole('menuitem', { name: 'Blocked' });
+  expect(blocked).toHaveFocus();
+  await user.keyboard('{Enter} ');
+  expect(blocked).toHaveFocus();
+  expect(pick).not.toHaveBeenCalled();
   await user.keyboard('{ArrowDown}');
   expect(copy).toHaveFocus();
   await user.keyboard('{ArrowDown}');

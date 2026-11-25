@@ -11,7 +11,8 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const vite = join(root, 'node_modules', 'vite', 'bin', 'vite.js');
 const screenshots = join(root, 'docs', 'screenshots');
 const url = 'http://127.0.0.1:4173';
-const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
+const browserPath = process.env.CHROMIUM_PATH || (process.platform === 'linux'
+  ? '/usr/bin/google-chrome' : 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe');
 const themes = [['dark', 'night'], ['light', 'paper'], ['glass', 'glass']];
 const newThemes = ['trading', 'snow', 'aurora', 'sepia', 'midnight', 'forest', 'sunset', 'high-contrast', 'terminal'];
 const viewport = { width: 1440, height: 1800 };
@@ -82,7 +83,7 @@ async function connect(address, onEvent) {
 
 async function captureEdge() {
   const profile = await mkdtemp(join(root, '.edge-preview-'));
-  const browser = spawn(edge, ['--headless', '--hide-scrollbars', '--no-first-run', '--disable-extensions', '--disable-background-networking',
+  const browser = spawn(browserPath, ['--headless', '--hide-scrollbars', '--no-first-run', '--disable-extensions', '--disable-background-networking',
     '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank'],
   { cwd: root, stdio: 'ignore', windowsHide: true });
   const exited = once(browser, 'exit').catch(() => {});
@@ -178,6 +179,12 @@ async function captureEdge() {
     `;
     // Keep motion assertions independent of the runner's OS accessibility settings.
     const setMotion = (value) => send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value }] });
+    if (verifyOnly) {
+      await send('Page.navigate', { url: url + '/operations.html' });
+      await retry(() => evaluate(`document.title === 'Operations dashboard · Utkristi UI' &&
+        document.scripts.length === 0 && document.querySelectorAll('tbody tr').length === 3 &&
+        getComputedStyle(document.body).getPropertyValue('--ut-bg').trim() !== ''`), 'standalone operations dashboard');
+    }
     if (iconsOnly) {
       await size(1440, 900);
       await setMotion('reduce');
@@ -208,6 +215,29 @@ async function captureEdge() {
       })()`);
       await retry(() => evaluate('document.querySelector(".icons-cell picture[data-icon-raster-ready] img")?.naturalWidth > 0'), '3D icon catalog artwork');
 
+      await load('/overview?theme=glass', 'Interfaces for live, dense, shared work.');
+      const database = '.marketing-icon-tile .icon-3d';
+      await scrollToIcon(database);
+      await retry(() => evaluate(`(() => {
+        const image = document.querySelector('${database} picture[data-icon-raster-ready] img');
+        return image?.naturalWidth > 0 && image.currentSrc.includes('/database@');
+      })()`), 'landing database render');
+      await size(375, 900);
+      await retry(() => evaluate(`(() => {
+        const region = document.querySelector('.mk-matrix-wrap');
+        const notes = document.querySelector('#efficiency-notes');
+        if (!region || !notes || region.clientWidth >= region.scrollWidth) return false;
+        region.focus();
+        const header = region.querySelector('tbody th');
+        const start = header.getBoundingClientRect().left;
+        region.scrollLeft = 100;
+        return document.activeElement === region && region.scrollLeft > 0 &&
+          Math.abs(header.getBoundingClientRect().left - start) < 2 &&
+          notes.getBoundingClientRect().top >= region.getBoundingClientRect().bottom &&
+          notes.scrollWidth === notes.clientWidth && document.documentElement.scrollWidth <= 375;
+      })()`), 'landing comparison scroll and notes at 375px');
+      await size(1440, 900);
+
       await send('Network.enable');
       await send('Network.setCacheDisabled', { cacheDisabled: true });
       await send('Network.setBlockedURLs', { urls: ['*://*/icons/3d/render/*'] });
@@ -222,7 +252,7 @@ async function captureEdge() {
             getComputedStyle(fallback).visibility === 'visible';
         })()`), 'vector icon stays visible when the raster request fails');
       };
-      await load('/overview?theme=glass', 'Interfaces for live, dense, shared work.');
+      await load('/overview?theme=light', 'Interfaces for live, dense, shared work.');
       await checkFallback('.marketing-icon-tile .icon-3d');
       await load('/showcase?theme=dark', 'Build together.');
       await checkFallback(tray);
@@ -1396,8 +1426,8 @@ const server = spawn(process.execPath, [vite, 'preview', '--config', 'docs/vite.
 const stopped = once(server, 'exit').catch(() => {});
 try {
   await retry(async () => !server.exitCode && (await fetch(url)).ok, 'Vite preview', 240);
-  if (existsSync(edge)) await captureEdge();
-  else if (verifyOnly || themesOnly || workspacesOnly || catalogOnly) throw new Error('The docs browser verification suite requires Microsoft Edge.');
+  if (existsSync(browserPath)) await captureEdge();
+  else if (verifyOnly || themesOnly || workspacesOnly || catalogOnly) throw new Error(`Browser verification requires Chromium. Set CHROMIUM_PATH (checked ${browserPath}).`);
   else await capturePlaywright();
 } finally {
   server.kill();

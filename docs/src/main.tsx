@@ -523,7 +523,7 @@ function App() {
   useEffect(() => {
     document.title = status === 'missing' ? 'Page not found · Utkristi UI'
       : status === 'error' ? 'Something went wrong · Utkristi UI'
-        : sitePage ? `${sitePage.label} · Utkristi UI` : 'Utkristi UI · Ecosystem design system';
+        : sitePage ? `${sitePage.label} · Utkristi UI` : 'Utkristi UI · Live-data and collaborative workstations';
   }, [status, sitePage]);
   const routeContent = <DocsErrorBoundary key={JSON.stringify([path, sample])}>{content}</DocsErrorBoundary>;
   function releasePreviewTheme() {

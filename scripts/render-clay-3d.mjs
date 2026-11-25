@@ -321,8 +321,8 @@ function distToSegments(x, y, polys) {
 
 // Precompute 3D soft-clay geometry & lighting at a target pixel size
 export function buildClayGeometry(icon, size = 96) {
-  const bodyPolys = parseSvgPolygons(icon.filled || icon.plate);
-  const detailPolys = parseSvgPolygons(icon.detail || '');
+  const bodyPolys = parseSvgPolygons(icon.clayBody ?? (icon.filled || icon.plate));
+  const detailPolys = parseSvgPolygons(icon.clayDetail ?? (icon.detail || ''));
   // 12% padding around the 24x24 icon box so shadows and extrusion never clip
   const pad = size * 0.14;
   const scale = (size - pad * 2) / 24;

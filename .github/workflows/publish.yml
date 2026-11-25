@@ -1,0 +1,50 @@
+name: Publish tagged npm package
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: Package to publish from this tag
+        type: choice
+        required: true
+        options: [ui, ui-mcp]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Match the selected tag to the package version
+        env:
+          PACKAGE: ${{ inputs.package }}
+        run: |
+          if [ "$PACKAGE" = "ui" ]; then
+            folder=.
+            prefix=v
+          else
+            folder=packages/ui-mcp
+            prefix=ui-mcp-v
+          fi
+          version=$(node -p "require('./$folder/package.json').version")
+          test "$GITHUB_REF_NAME" = "$prefix$version"
+          echo "PACKAGE_FOLDER=$folder" >> "$GITHUB_ENV"
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run test:mcp
+      - run: npm run check:bundles
+      - run: npm publish --provenance --access public
+        working-directory: ${{ env.PACKAGE_FOLDER }}

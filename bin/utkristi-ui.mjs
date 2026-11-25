@@ -1,8 +1,24 @@
 #!/usr/bin/env node
-import { writeFileSync } from 'node:fs';
+import { constants, copyFileSync, writeFileSync } from 'node:fs';
 import { createTheme, toCSS, toDTCG, tokensToDTCG2025, tokensToTokensStudio, toTailwindV4 } from '../dist/react/theme-engine/index.js';
 
 const [command, ...rest] = process.argv.slice(2);
+if (command === 'add') {
+  const [name, flag, destination] = rest;
+  if (name !== 'ticker' || (rest.length !== 1 && !(rest.length === 3 && flag === '--out' && destination))) {
+    process.stderr.write('Usage: utkristi-ui add ticker [--out path/to/Ticker.tsx]\n');
+    process.exit(2);
+  }
+  const output = destination ?? 'Ticker.tsx';
+  try {
+    copyFileSync(new URL('../src/react/Ticker.tsx', import.meta.url), output, constants.COPYFILE_EXCL);
+  } catch (error) {
+    process.stderr.write(error.code === 'EEXIST' ? `File already exists: ${output}\n` : error.message + '\n');
+    process.exit(1);
+  }
+  process.stdout.write(`Created ${output}. Import @utkristi/ui/css for the ticker styles.\n`);
+  process.exit(0);
+}
 const args = {};
 for (let i = 0; i < rest.length; i += 1) {
   const key = rest[i];

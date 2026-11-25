@@ -5,8 +5,13 @@ import { Spinner } from './Spinner.js';
 import { assignRef, cx } from './utils/cx.js';
 import type { ComponentGeometry } from './utils/geometry.js';
 
+export type ButtonVariant = 'solid' | 'outlined' | 'quiet' | 'plain' | 'danger' | 'link';
+
+/** Earlier appearances accepted for compatibility with existing applications. */
+type LegacyButtonVariant = 'ghost' | 'dashed' | 'filled' | 'text';
+
 interface ButtonStyle extends ComponentGeometry {
-  variant?: 'solid' | 'ghost' | 'quiet' | 'danger' | 'plain' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link';
+  variant?: ButtonVariant | LegacyButtonVariant;
   size?: 'sm' | 'md' | 'lg';
   block?: boolean;
   loading?: boolean;

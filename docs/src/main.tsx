@@ -11,6 +11,7 @@ import { variants, variantSets } from './variants';
 import { exampleMotion, motionOptions, type PreviewMotion } from './motion-options';
 import { FontDemo } from './catalog';
 import { CopyCode } from './CopyCode';
+import { GitHubStars } from './GitHubStars';
 import { DocsSearch } from './DocsSearch';
 import DocsOutline from './DocsOutline';
 import { DocsErrorBoundary, DocsStatus } from './DocsStatus';
@@ -553,7 +554,7 @@ function App() {
       onSearch: () => setSearchOpen(true),
       searchLabel: 'Search docs',
       searchShortcut: isMac ? '⌘K' : 'Ctrl K',
-      right: themeSelect('nav-theme docs-theme-select'),
+      right: <><GitHubStars />{themeSelect('nav-theme docs-theme-select')}</>,
       sheetFoot: <div className="docs-sheet-theme"><span className="label">Appearance</span>{themeSelect()}</div>,
     }} footer={{
       className: 'docs-footer',

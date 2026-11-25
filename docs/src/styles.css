@@ -277,6 +277,9 @@
 .docs-navbar.header-expand.is-scrolled { padding-inline: 0; }
 .docs-navbar.header-expand.is-scrolled .navbar-dock { max-inline-size: 100%; border-inline-width: 0; }
 .docs-navbar.header-expand.is-scrolled .navbar-inner { max-inline-size: var(--ut-max); padding-inline: var(--ut-side); }
+.docs-github { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-block-size: 42px; padding-inline: 8px; border-radius: 9px; color: var(--ut-nav-ink); text-decoration: none; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.docs-github span { font-size: .75rem; }
+.docs-github:hover { background: var(--ut-nav-hover); }
 .docs-navbar .navbar-link-icon { display: none; }
 :is(.docs-navbar, .docs-sheet-theme) .docs-theme-select { inline-size: var(--docs-theme-select-width, 91px); block-size: 42px; padding-inline: 10px 24px; background-color: transparent; box-shadow: none; border: 0; color: var(--ut-control-ink, var(--ut-ink)); border-radius: 9px; }
 :root[data-theme="high-contrast"] { --docs-theme-select-width: 140px; }

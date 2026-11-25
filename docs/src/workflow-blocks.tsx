@@ -1,6 +1,6 @@
-import { useState, type CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import {
-  Avatar, Badge, Button, Card, CardBody, CardHeader, Checkbox, DataTable, Icon,
+  Avatar, Badge, Button, StreamChart, createChartStream, type StreamChartVariant, Card, CardBody, CardHeader, Checkbox, DataTable, Icon,
   Select, Stat, Table, Tabs, type DataColumn,
 } from '@utkristi/ui';
 import type { Example } from './examples';
@@ -141,7 +141,91 @@ function TeamCard() {
   </CardBody></Card>;
 }
 
+function SignalMonitor() {
+  const [stream] = useState(() => {
+    const source = createChartStream(8192);
+    source.append(Array.from({ length: 1024 }, (_, time) => ({ time, value: 50 + 8 * Math.sin(time / 90) })));
+    return source;
+  });
+  const clock = useRef(1024);
+  const [running, setRunning] = useState(false);
+  const [variant, setVariant] = useState<StreamChartVariant>('range');
+  useEffect(() => {
+    if (!running) return;
+    const timer = window.setInterval(() => {
+      stream.append(Array.from({ length: 32 }, () => {
+        const time = clock.current++;
+        return { time, value: 50 + 8 * Math.sin(time / 90) + 3 * Math.sin(time / 7) + (time % 499 === 0 ? 22 : 0) };
+      }));
+    }, 32);
+    return () => window.clearInterval(timer);
+  }, [running, stream]);
+  return <Card><CardHeader style={row}><strong>Signal monitor</strong><Badge>Simulated feed</Badge></CardHeader>
+    <CardBody style={flow}><StreamChart label="Gateway latency" unit="ms" variant={variant} stream={stream} paused={!running} />
+      <div style={row}><Select aria-label="Chart view" value={variant} onChange={e => setVariant(e.target.value as StreamChartVariant)}>
+        <option value="line">Closing values</option><option value="range">Peak envelope</option><option value="candlestick">Open / high / low / close</option>
+      </Select><Button onClick={() => setRunning(!running)}>{running ? 'Pause feed' : 'Start feed'}</Button></div>
+    </CardBody></Card>;
+}
+
+const deskModels = ['Relay', 'Analyst', 'Editor'] as const;
+function ConversationDesk() {
+  const [threads, setThreads] = useState([{ id: 1, title: 'New conversation', turns: [] as { prompt: string; answer: string; model: string; attachment: string; imageUrl: string }[] }]);
+  const [active, setActive] = useState(1);
+  const [model, setModel] = useState<string>(deskModels[0]);
+  const [draft, setDraft] = useState('');
+  const [file, setFile] = useState<File>();
+  const picker = useRef<HTMLInputElement>(null);
+  const images = useRef(new Set<string>());
+  useEffect(() => {
+    const urls = images.current;
+    return () => { urls.forEach(url => URL.revokeObjectURL(url)); urls.clear(); };
+  }, []);
+  const thread = threads.find(item => item.id === active)!;
+  function switchThread(id: number) {
+    setActive(id);
+    setDraft('');
+    setFile(undefined);
+    if (picker.current) picker.current.value = '';
+  }
+  function send() {
+    const prompt = draft.trim();
+    if (!prompt) return;
+    const words = prompt.split(/\s+/);
+    const answer = model === 'Analyst' ? 'Input summary: ' + words.length + ' words, ' + prompt.length + ' characters.'
+      : model === 'Editor' ? 'Brief: ' + words.slice(0, 12).join(' ') + (words.length > 12 ? '?' : '')
+      : 'Received your request: ?' + prompt + '?.';
+    const attachment = file?.name ?? '';
+    const imageUrl = file?.type.startsWith('image/') && typeof URL.createObjectURL === 'function' ? URL.createObjectURL(file) : '';
+    if (imageUrl) images.current.add(imageUrl);
+    const turn = { prompt, model, attachment, imageUrl, answer: answer + (file ? ' Attachment: ' + file.type + ', ' + file.size + ' bytes.' : '') };
+    setThreads(current => current.map(item => item.id === active ? { ...item, title: item.turns.length ? item.title : prompt.slice(0, 36), turns: [...item.turns, turn] } : item));
+    switchThread(active);
+  }
+  return <Card><CardHeader style={row}><strong>Conversation desk</strong><Badge>Local model demo</Badge></CardHeader><CardBody style={flow}>
+    <div style={row}><Select aria-label="Conversation history" value={active} onChange={e => switchThread(Number(e.target.value))}>
+      {threads.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}</Select>
+      <Button variant="outlined" onClick={() => { const id = threads.length + 1; setThreads([...threads, { id, title: 'New conversation', turns: [] }]); switchThread(id); }}>New chat</Button></div>
+    <section role="log" aria-label="Conversation transcript" style={{ display: 'grid', gap: 12, maxHeight: 360, overflowY: 'auto', overflowWrap: 'anywhere' }}>
+      {!thread.turns.length && <p>Write a message or attach an image. Replies are generated locally for this preview.</p>}
+      {thread.turns.map((turn, i) => <article key={i}><strong>You</strong><p>{turn.prompt}</p>{turn.attachment && <small>{turn.attachment}</small>}
+        {turn.imageUrl && <img src={turn.imageUrl} alt={turn.attachment} style={{ maxWidth: '100%', maxHeight: 180, objectFit: 'contain' }} />}
+        <div className="card card-body"><strong>{turn.model}</strong><p>{turn.answer}</p></div></article>)}
+    </section>
+    <form style={flow} onSubmit={e => { e.preventDefault(); send(); }}>
+      <textarea className="input" aria-label="Message" rows={3} value={draft} placeholder="Message the desk?" onChange={e => setDraft(e.target.value)}
+        onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); send(); } }} />
+      <div style={row}><Select aria-label="Reply model" value={model} onChange={e => setModel(e.target.value)}>{deskModels.map(name => <option key={name}>{name}</option>)}</Select>
+        <label>Attach image <input ref={picker} type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0])} style={{ maxWidth: '100%' }} /></label>
+        <Button type="submit" disabled={!draft.trim()}>Send</Button></div>
+    </form></CardBody></Card>;
+}
+
 export const workflowBlocks = {
+  'signal-monitor': { name: 'Signal monitor', category: 'Application', description: 'Inspect a simulated latency stream as a line, peak envelope, or OHLC candles.',
+    preview: SignalMonitor, jsx: '', html: '<figure><figcaption>Gateway latency snapshot</figcaption><meter min="0" max="100" value="50">50 ms</meter></figure>' },
+  'conversation-desk': { name: 'Conversation desk', category: 'Application', description: 'Try local model selection, image attachment metadata and conversation history.',
+    preview: ConversationDesk, jsx: '', html: '<section class="card card-body"><h2>Conversation desk</h2><label>Reply model <select><option>Relay</option><option>Analyst</option><option>Editor</option></select></label><label>Message <textarea></textarea></label></section>' },
   'incident-board': { name: 'Incident board', category: 'Application', description: 'Filter service incidents by severity and search by team or impact.',
     preview: IncidentBoard, jsx: '', html: '<section class="card"><div class="card-head">Incident board</div><div class="card-body"><table class="table"><thead><tr><th>Service</th><th>Severity</th></tr></thead><tbody><tr><td>API gateway</td><td>Critical</td></tr></tbody></table></div></section>' },
   'access-review': { name: 'Access review', category: 'Account', description: 'Select multiple access requests and mark them reviewed in one action.',

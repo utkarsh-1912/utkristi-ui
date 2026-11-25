@@ -53,3 +53,5 @@ export { EmptyState as Empty } from './EmptyState.js';
 export { Menu as DropdownMenu } from './Menu.js';
 
 export * from './Patterns.js';
+export * from './StreamChart.js';
+export * from './chart-stream.js';

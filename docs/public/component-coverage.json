@@ -1,6 +1,6 @@
 {
   "components": 113,
-  "variants": 140,
+  "variants": 141,
   "entries": [
     {
       "slug": "accessibility-preferences",
@@ -226,6 +226,10 @@
       "slug": "chart",
       "name": "Chart",
       "variants": [
+        {
+          "slug": "chart--range",
+          "name": "Stream envelope"
+        },
         {
           "slug": "chart--line",
           "name": "Line trend"

@@ -1,7 +1,7 @@
 import { themes } from '@utkristi/ui';
 import { useState } from 'react';
 import {
-  Accordion, Alert, AlertDialog, AspectRatio, Attachment, Avatar, AvatarGroup, Badge, Banner, Breadcrumb, Bubble, Button, ButtonGroup,
+  StreamChart, createChartStream, Accordion, Alert, AlertDialog, AspectRatio, Attachment, Avatar, AvatarGroup, Badge, Banner, Breadcrumb, Bubble, Button, ButtonGroup,
   BottomNavigation, BulkActionBar, Calendar, Card, CardBody, Carousel, Chart, Checkbox, Chip, ClipboardButton, Code, CodeBlock, Collapsible, ColumnChooser, Combobox, Command, ContextMenu,
   DataTable, DatePicker, DateRangePicker, DeviceMockup, Dialog, Direction, Dot, Drawer, EmptyState, Field, FileInput, FilterBar, FloatingInput, Footer, Gallery, HoverCard, Icon, IconButton,
   Input, InputGroup, InputOTP, Item, Jumbotron, Kbd, Label, ListGroup, Loader, Logo, Marker, MegaMenu, Menu, Menubar, Message, MessageScroller, NativeSelect, NavigationMenu, NumberInput, Pagination, PhoneInput, Popover, Progress, QRCode, Questionnaire, Radio,
@@ -430,6 +430,14 @@ export const componentVariants = {
   'bubble--reactions': example('Reply with reactions', 'Use an end-aligned outline bubble with a reaction count.',
     () => <Bubble align="end" variant="outline" reactions={<Badge>✓ 2</Badge>}>Ready for review</Bubble>,
     '<div class="bubble" data-align="end"><div class="bubble-content" data-variant="outline">Ready for review</div><div class="bubble-reactions"><span class="badge">✓ 2</span></div></div>'),
+  'chart--range': example('Stream envelope', 'Inspect the high and low values retained within each time bucket.', () => {
+    const [stream] = useState(() => {
+      const source = createChartStream();
+      source.append(Array.from({ length: 1024 }, (_, time) => ({ time, value: 20 + Math.sin(time / 100) * 5 + Math.sin(time) })));
+      return source;
+    });
+    return <StreamChart label="Signal amplitude" stream={stream} variant="range" />;
+  }, '<figure><figcaption>Signal amplitude ? range 14 to 26</figcaption><meter min="0" max="30" value="20">20</meter></figure>'),
   'chart--line': example('Line trend', 'Show the shape of a short activity trend.',
     () => <Chart title="Daily builds" variant="line" data={chartData} />,
     '<figure><figcaption>Daily builds</figcaption><svg role="img" aria-label="Builds: Mon 12, Tue 18, Wed 14" width="160" height="64" viewBox="0 0 160 64"><path d="M6 48 80 12 154 36" fill="none" stroke="currentColor" stroke-width="3"/></svg></figure>'),

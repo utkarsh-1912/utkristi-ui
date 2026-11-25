@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Badge, Button, Checkbox, Dot, Icon, Input, Switch, Tabs, iconManifest, themes } from '@utkristi/ui';
 import { createTheme, toCSS, type ContrastLevel, type ThemeScheme } from '../../src/react/theme-engine/index.js';
+import { examples } from './examples';
 import { blocks } from './blocks';
 import efficiency from './efficiency.json';
 
@@ -23,6 +24,8 @@ export function useMarketingMotion() {
 }
 
 const featured = [
+  ['signal-monitor', 'Telemetry', 'Switch a rolling latency feed between a line, range envelope, and OHLC candles.'],
+  ['conversation-desk', 'Conversation', 'Try model selection, image attachments, and conversation history.'],
   ['execution-desk', 'Trading', 'An order blotter with compact icon controls and linked routes and fills.'],
   ['console-workspace', 'Terminal', 'A local command console with history and service status.'],
   ['creative-workspace', 'Studio', 'Visual asset selection and an editable inspector.'],
@@ -41,6 +44,39 @@ export function WorkflowSection() {
         <div><span className="label">{category}</span><strong>{blocks[slug].name}</strong><p>{description}</p></div>
         <Icon name="arrow-up-right" size={18} />
       </a>)}</div>
+  </section>;
+}
+
+const workstations = [
+  { slug: 'incident-board', task: 'Triage incidents', icon: 'signal-bars', parts: ['data-table', 'card', 'badge'] },
+  { slug: 'access-review', task: 'Review access', icon: 'key', parts: ['checkbox', 'button', 'badge'] },
+  { slug: 'billing-register', task: 'Reconcile invoices', icon: 'receipt', parts: ['table', 'card', 'badge'] },
+] as const;
+
+function BlockWorkbench() {
+  const [station, setStation] = useState<(typeof workstations)[number]>(workstations[0]);
+  const [part, setPart] = useState<keyof typeof examples>();
+  const block = blocks[station.slug];
+  const specimen = part ? examples[part] : block;
+  const BlockPreview = block.preview;
+  const ComponentPreview = part ? examples[part].preview : undefined;
+  return <section className="mk-bench" aria-label="Interactive block workbench">
+    <div className="mk-bench-head"><h2>Workbench</h2><a href="#/blocks">All blocks <Icon name="arrow-up-right" size={14} /></a></div>
+    <div className="mk-stations" role="group" aria-label="Choose a workflow">{workstations.map(item =>
+      <button type="button" key={item.slug} aria-pressed={item === station} onClick={() => {
+        setStation(item); setPart(undefined);
+      }}><Icon name={item.icon} size={16} />{item.task}</button>)}</div>
+    <div className="mk-bench-stage">
+      <div className="mk-bench-caption"><span className="label">{part ? 'Component' : 'Working block'}</span>
+        <a href={part ? '#/components/' + part : '#/blocks/' + station.slug}>{specimen.name} <Icon name="arrow-up-right" size={14} /></a></div>
+      <div key={station.slug} hidden={!!part} className="mk-bench-specimen"><BlockPreview /></div>
+      {ComponentPreview && <div key={part} className="mk-bench-specimen"><ComponentPreview /></div>}
+    </div>
+    <div className="mk-parts" role="group" aria-label="Inspect block components">
+      <button type="button" aria-pressed={!part} onClick={() => setPart(undefined)}>Whole block</button>
+      {station.parts.map(key => <button type="button" key={key} aria-pressed={part === key}
+        onClick={() => setPart(key)}>{examples[key].name}</button>)}
+    </div>
   </section>;
 }
 
@@ -75,24 +111,28 @@ function ThemeEngineDemo() {
       <h2 id="engine-title" className="display mk-h2">One colour.<br /><span className="faint">A whole theme.</span></h2>
       <p>Pick any brand colour. The engine solves every text, control and focus pair in OKLCH until it passes WCAG, so the theme can't ship unreadable text. It works the same from the CLI.</p>
       <div className="mk-engine-controls">
-        <label className="mk-color">
+        <div className="mk-setting">
           <span className="label">Brand</span>
-          <input type="color" value={brand} onChange={(event) => commit(event.target.value.toUpperCase())} aria-label="Brand colour picker" />
-          <Input value={draft} onChange={(event) => commit(event.target.value.trim())} aria-label="Brand colour hex" spellCheck={false} />
-        </label>
-        <div className="mk-swatches" role="group" aria-label="Example brand colours">
-          {presets.map((value) => <button key={value} type="button" style={{ background: value }} aria-label={`Use ${value}`} aria-pressed={brand === value} onClick={() => commit(value)} />)}
+          <div className="mk-brand-values"><div className="mk-color">
+            <input type="color" value={brand} onChange={(event) => commit(event.target.value.toUpperCase())} aria-label="Brand colour picker" />
+            <Input value={draft} onChange={(event) => commit(event.target.value.trim())} aria-label="Brand colour hex" spellCheck={false} />
+          </div>
+          <div className="mk-swatches" role="group" aria-label="Example brand colours">
+            {presets.map((value) => <button key={value} type="button" style={{ background: value }} aria-label={`Use ${value}`} aria-pressed={brand === value} onClick={() => commit(value)} />)}
+          </div></div>
         </div>
-        <div className="seg" role="radiogroup" aria-label="Scheme">
-          {(['dark', 'light'] as const).map((value) => <button key={value} type="button" role="radio" className="seg-item" aria-checked={scheme === value} onClick={() => setScheme(value)}>{value === 'dark' ? 'Dark' : 'Light'}</button>)}
-        </div>
-        <div className="seg" role="radiogroup" aria-label="Contrast level">
-          {(['AA', 'AAA'] as const).map((value) => <button key={value} type="button" role="radio" className="seg-item" aria-checked={level === value} onClick={() => setLevel(value)}>WCAG {value}</button>)}
-        </div>
+        <div className="mk-setting"><span className="label">Appearance</span><div className="mk-brand-values">
+          <div className="seg" role="radiogroup" aria-label="Scheme">
+            {(['dark', 'light'] as const).map((value) => <button key={value} type="button" role="radio" className="seg-item" aria-checked={scheme === value} onClick={() => setScheme(value)}>{value === 'dark' ? 'Dark' : 'Light'}</button>)}
+          </div>
+          <div className="seg" role="radiogroup" aria-label="Contrast level">
+            {(['AA', 'AAA'] as const).map((value) => <button key={value} type="button" role="radio" className="seg-item" aria-checked={level === value} onClick={() => setLevel(value)}>WCAG {value}</button>)}
+          </div>
+        </div></div>
       </div>
       <p className="mk-report" aria-live="polite">
         <Dot static tone={passing === theme.report.length ? 'ok' : 'bad'} />
-        <b>{passing}/{theme.report.length}</b> contrast checks pass · tightest: {lowest.pair} {lowest.ratio}:1 (needs {lowest.target})
+        <span><b>{passing}/{theme.report.length}</b> contrast checks pass. Lowest ratio is {lowest.ratio}:1 for {lowest.pair} (target {lowest.target}:1).</span>
       </p>
       <div className="mk-engine-actions">
         <Button variant="ghost" size="sm" href="#/theme-studio">Open Theme Studio</Button>
@@ -143,6 +183,8 @@ function EfficiencyMatrix() {
         {lighterThan.length > 0 && <> Utkristi ships styled components in less than {lighterThan.map((row) => row.name).join(', ')}.</>}</p>
     </div>
     <p className="mk-scroll-hint">Scroll across to compare individual components.</p>
+    {/* Keyboard users focus the scroll region to pan across the wide comparison. */}
+    {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
     <div className="table-wrap mk-matrix-wrap" role="region" aria-label="Bundle size comparison" tabIndex={0}>
       <table className="table mk-matrix" aria-describedby="efficiency-notes">
         <caption className="sr-only">Gzipped size for six components per library</caption>
@@ -192,7 +234,6 @@ import '@utkristi/ui/utkristi-ui.css';
 
 export function MarketingHome() {
   const motion = useMarketingMotion();
-  const ours = efficiency.results.find((row) => row.id === 'utkristi');
   return <article ref={motion} className="marketing-home mk">
     <section className="mk-hero" aria-labelledby="marketing-title">
       <span className="label"><Dot /> Utkristi UI · React · Tailwind 4 · Plain CSS</span>
@@ -205,12 +246,7 @@ export function MarketingHome() {
           <CopyInstall />
         </div>
       </div>
-      <dl className="mk-metrics" aria-label="Scope">
-        <div><dt>Components</dt><dd>110+</dd></div>
-        <div><dt>Themes</dt><dd>12<small>+ yours</small></dd></div>
-        <div><dt>Icons</dt><dd>{iconManifest.length}</dd></div>
-        <div><dt>Six components, gzipped</dt><dd>{ours ? ((ours.js.all + ours.css.all) / 1024).toFixed(0) : '—'}<small>KB</small></dd></div>
-      </dl>
+      <BlockWorkbench />
     </section>
 
     <ThemeEngineDemo />

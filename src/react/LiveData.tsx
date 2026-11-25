@@ -97,3 +97,5 @@ export function LogViewer({ lines, label = 'Log output', height = 320, lineHeigh
     <small>{filtered.length} lines</small>
   </section>;
 }
+export { StreamChart, type StreamChartVariant } from './StreamChart.js';
+export { createChartStream, type ChartTick, type ChartBucket } from './chart-stream.js';

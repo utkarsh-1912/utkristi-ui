@@ -185,6 +185,47 @@ async function captureEdge() {
         document.scripts.length === 0 && document.querySelectorAll('tbody tr').length === 3 &&
         getComputedStyle(document.body).getPropertyValue('--ut-bg').trim() !== ''`), 'standalone operations dashboard');
     }
+    if (process.argv.includes('--landing-alignment')) {
+      await load('/overview?theme=light', 'Interfaces for live, dense, shared work.');
+      await setMotion('reduce');
+      for (const width of [1920, 1440, 1024, 768, 375, 320]) {
+        await size(width, 900);
+        for (const offset of [0, 500]) {
+          await evaluate(`window.scrollTo({ top: ${offset}, behavior: 'instant' })`);
+          await retry(() => evaluate(`(() => {
+            const rect = selector => document.querySelector(selector).getBoundingClientRect();
+            const page = rect('.mk-engine'), nav = rect('.docs-navbar .navbar-left');
+            const end = rect('.docs-navbar .navbar-right').right;
+            const notes = rect('.mk-footnote p'), table = rect('.mk-matrix-wrap');
+            const inputs = [...document.querySelectorAll('.mk-brand-values')].map(node => node.getBoundingClientRect());
+            return document.documentElement.scrollWidth <= ${width} &&
+              Math.abs(page.left - nav.left) < 2 && Math.abs(page.right - end) < 2 &&
+              Math.abs(notes.width - table.width) < 2 && Math.abs(inputs[0].left - inputs[1].left) < 2;
+          })()`), 'navbar, controls and notes alignment at ' + width + ' / ' + offset);
+        }
+      }
+      console.log('Verified landing alignment at six viewport widths before and after scroll.');
+      return;
+    }
+    if (process.argv.includes('--charts-chat-only')) {
+      await size(390, 850);
+      await load('/blocks/signal-monitor', 'Signal monitor');
+      const preview = '.theme-preview';
+      const click = label => evaluate(`[...document.querySelectorAll('${preview} button')].find(node => node.textContent.trim() === ${JSON.stringify(label)}).click()`);
+      await click('Start feed');
+      await retry(() => evaluate("!!document.querySelector('.theme-preview polygon')"), 'stream range');
+      await evaluate(`const control=document.querySelector('.theme-preview select[aria-label="Chart view"]'); control.value='candlestick'; control.dispatchEvent(new Event('change',{bubbles:true}))`);
+      await retry(() => evaluate("document.querySelectorAll('.theme-preview svg g rect').length > 10"), 'candlestick aggregation');
+      await click('Pause feed');
+      await retry(() => evaluate("[...document.querySelectorAll('.theme-preview button')].some(node => node.textContent === 'Start feed')"), 'paused state');
+      const value = await evaluate("document.querySelector('.theme-preview figcaption').textContent");
+      await sleep(120);
+      if (value !== await evaluate("document.querySelector('.theme-preview figcaption').textContent")) throw new Error('Paused feed changed');
+      await load('/blocks/conversation-desk', 'Conversation desk');
+      await retry(() => evaluate("!!document.querySelector('.theme-preview textarea') && document.documentElement.scrollWidth <= 390"), 'mobile conversation composer');
+      console.log('Verified live chart switching, pause and mobile conversation layout.');
+      return;
+    }
     if (iconsOnly) {
       await size(1440, 900);
       await setMotion('reduce');
@@ -216,6 +257,17 @@ async function captureEdge() {
       await retry(() => evaluate('document.querySelector(".icons-cell picture[data-icon-raster-ready] img")?.naturalWidth > 0'), '3D icon catalog artwork');
 
       await load('/overview?theme=glass', 'Interfaces for live, dense, shared work.');
+      const inspect = (label) => evaluate(`[...document.querySelectorAll('.mk-bench button')].find(button => button.textContent.trim() === ${JSON.stringify(label)}).click()`);
+      await inspect('Review access');
+      await evaluate("document.querySelector('.mk-bench input[type=checkbox]').click()");
+      await inspect('Mark reviewed');
+      await retry(() => evaluate("document.querySelector('.mk-bench [role=status]')?.textContent.includes('1 requests reviewed')"), 'workbench access review');
+      await inspect('Checkbox');
+      await retry(() => evaluate("document.querySelector('.mk-bench-caption a')?.hash === '#/components/checkbox'"), 'component inspection');
+      await inspect('Whole block');
+      await retry(() => evaluate("document.querySelector('.mk-bench [role=status]')?.textContent.includes('1 requests reviewed')"), 'review state survives inspection');
+      await inspect('Reconcile invoices');
+      await retry(() => evaluate("!!document.querySelector('.mk-bench select')"), 'billing block');
       const database = '.marketing-icon-tile .icon-3d';
       await scrollToIcon(database);
       await retry(() => evaluate(`(() => {

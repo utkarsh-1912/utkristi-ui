@@ -34,6 +34,24 @@ for presence and comments. Transport adapters have separate entry points such as
 With this version installed, run `npx utkristi-ui add ticker` to copy the editable React component into
 `Ticker.tsx`, or pass `--out src/Ticker.tsx` for an existing directory. Import `@utkristi/ui/css` for the kit styles.
 
+### Streaming charts
+
+Import `createChartStream` and `StreamChart` from `@utkristi/ui/live-data`. Create the stream once and pass
+incoming batches to `stream.append([{ time: timestampInMilliseconds, value }])`. Select `line`, `range`,
+or `candlestick` with the chart's `variant` prop. Set `paused` to freeze the displayed frame while ingestion continues.
+
+The default ring retains 8,192 numeric samples. Later timestamps append, equal timestamps correct the
+latest value, and older or nonfinite samples are ignored. Each chart schedules at most one pending animation
+frame. It scans the retained window into at most 160 time buckets per frame. Line shows bucket closes,
+range adds bucket highs and lows, and candles represent the open, high, low, and close of each displayed
+bucket. Bucket duration follows the visible window. These candles summarize incoming measurements.
+
+AG Charts supports keyed transactions that add, update, or remove individual records. Lightweight Charts
+supports updating the latest point and appending new points. Utkristi uses ordered ingestion for telemetry
+and keeps memory bounded even while the display is paused.
+[AG Charts transactions](https://www.ag-grid.com/charts/javascript/high-frequency-data/) ?
+[Lightweight Charts realtime updates](https://tradingview.github.io/lightweight-charts/examples/data/realtime-updates)
+
 ## Motion, live interfaces and agent tools
 
 - [Theme Studio](https://utkristi-ui.vercel.app/#/theme-studio) previews, shares, and exports generated themes. Import `@utkristi/ui/tokens.json` for the built-in DTCG token sets.

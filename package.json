@@ -1,6 +1,6 @@
 {
   "name": "@utkristi/ui",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Live-data and collaborative workstation UI for React, Tailwind CSS and plain HTML.",
   "license": "MIT",
   "type": "module",

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import {
   Avatar, Badge, Button, StreamChart, createChartStream, type StreamChartVariant, Card, CardBody, CardHeader, Checkbox, DataTable, Icon,
-  Select, Stat, Table, Tabs, type DataColumn,
+  Select, SelectMenu, Stat, Table, Tabs, type DataColumn,
 } from '@utkristi/ui';
 import type { Example } from './examples';
 
@@ -168,7 +168,11 @@ function SignalMonitor() {
     </CardBody></Card>;
 }
 
-const deskModels = ['Relay', 'Analyst', 'Editor'] as const;
+const deskModels = [
+  { value: 'Relay', label: 'Relay', description: 'Echo a request for a handoff.' },
+  { value: 'Analyst', label: 'Analyst', description: 'Count words and characters in a signal report.' },
+  { value: 'Editor', label: 'Editor', description: 'Trim an update to its first twelve words.' },
+];
 const deskPrompts = [
   { model: 'Relay', label: 'Draft a handoff', prompt: 'Prepare a handoff for the team taking over the gateway incident.' },
   { model: 'Analyst', label: 'Inspect a signal', prompt: 'Gateway latency rose from 48 ms to 132 ms during the rollout.' },
@@ -177,7 +181,7 @@ const deskPrompts = [
 function ConversationDesk() {
   const [threads, setThreads] = useState([{ id: 1, title: 'New conversation', turns: [] as { prompt: string; answer: string; model: string; attachment: string; imageUrl: string }[] }]);
   const [active, setActive] = useState(1);
-  const [model, setModel] = useState<string>(deskModels[0]);
+  const [model, setModel] = useState(deskModels[0].value);
   const [draft, setDraft] = useState('');
   const [file, setFile] = useState<File>();
   const picker = useRef<HTMLInputElement>(null);
@@ -231,7 +235,11 @@ function ConversationDesk() {
       </Select>
     </aside>
     <div className="desk-chat-workspace">
-      <header className="desk-chat-header"><div><span className="label">Conversation desk</span><h3>{thread.title}</h3></div><Badge>Local model demo</Badge></header>
+      <header className="desk-chat-header"><div><span className="label">Conversation desk</span><h3>{thread.title}</h3></div>
+        <div className="desk-chat-model"><Badge>Local model demo</Badge>
+          <SelectMenu className="desk-chat-model-picker" label="Reply model" value={model} options={deskModels} onValueChange={setModel} />
+        </div>
+      </header>
       {/* A tab stop lets keyboard users scroll the transcript. */}
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
       <section ref={transcript} className="desk-chat-log" role="log" aria-label="Conversation transcript" tabIndex={0}>
@@ -254,7 +262,6 @@ function ConversationDesk() {
           setFile(undefined); if (picker.current) picker.current.value = '';
         }}>Remove attachment</Button></div>}
         <div className="desk-chat-actions">
-          <Select aria-label="Reply model" value={model} onChange={e => setModel(e.target.value)}>{deskModels.map(name => <option key={name}>{name}</option>)}</Select>
           <input ref={picker} hidden aria-label="Attach image" type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0])} />
           <Button variant="outlined" size="sm" iconLeft={<Icon name="image" />} onClick={() => picker.current?.click()}>Attach image</Button>
           <Button className="desk-chat-send" size="sm" type="submit" disabled={!draft.trim()} iconRight={<Icon name="send" />}>Send</Button>

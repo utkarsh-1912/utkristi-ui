@@ -1,4 +1,4 @@
-﻿.desk-chat {
+.desk-chat {
   display: grid;
   grid-template-columns: minmax(10rem, 13rem) minmax(0, 1fr);
   border: 1px solid var(--ut-line);
@@ -29,7 +29,9 @@
 .desk-chat-message img { display: block; max-inline-size: 100%; max-block-size: 10rem; object-fit: contain; margin-block-start: 6px; }
 .desk-chat-composer { min-inline-size: 0; display: grid; gap: 8px; border-block-start: 1px solid var(--ut-line); padding: 12px clamp(12px, 3vw, 24px); }
 .desk-chat-composer textarea { resize: vertical; min-block-size: 4.5rem; max-block-size: 12rem; }
-.desk-chat-actions .select { inline-size: auto; }
+.desk-chat-model { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.desk-chat-model-picker { inline-size: min(13rem, 100%); }
+.desk-chat-model-picker .select-menu-trigger { background: var(--ut-bg-2); }
 .desk-chat-send { margin-inline-start: auto; }
 .desk-chat-attachment { color: var(--ut-ink-2); font-size: .875rem; overflow-wrap: anywhere; }
 

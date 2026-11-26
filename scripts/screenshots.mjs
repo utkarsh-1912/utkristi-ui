@@ -204,13 +204,23 @@ async function captureEdge() {
       await size(1440, 900);
       await retry(() => evaluate(`document.querySelector('.desk-chat-thread-list')?.getBoundingClientRect().width > 0`), 'desktop conversation sidebar');
       await evaluate(`[...document.querySelectorAll('.desk-chat-prompts button')].find(button => button.textContent === 'Inspect a signal').click()`);
-      await retry(() => evaluate(`document.querySelector('.desk-chat-actions select').value === 'Analyst' &&
+      await retry(() => evaluate(`document.querySelector('[aria-label="Reply model"]').textContent.includes('Analyst') &&
         document.activeElement === document.querySelector('.desk-chat-composer textarea')`), 'starter sets model and focuses composer');
       await evaluate(`document.querySelector('.desk-chat-send').click()`);
       await retry(() => evaluate(`document.querySelector('.desk-chat-reply')?.textContent.includes('Analyst')`), 'reply renders');
       await size(320, 850);
       await retry(() => evaluate(`document.querySelector('.desk-chat-thread-select')?.getBoundingClientRect().width > 0 &&
         document.documentElement.scrollWidth <= 320`), 'mobile history and no overflow');
+      await evaluate(`document.querySelector('button[aria-label="Reply model"]').click()`);
+      await retry(() => evaluate(`(() => {
+        const option = [...document.querySelectorAll('[role=option]')].find(node => node.getAttribute('aria-label') === 'Editor');
+        if (!option) return false;
+        option.scrollIntoView({ block: 'nearest' });
+        const bounds = option.getBoundingClientRect();
+        return option.contains(document.elementFromPoint(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2));
+      })()`), 'mobile model menu remains clickable');
+      await evaluate(`document.querySelector('[role=option][aria-label=Editor]').click()`);
+      await retry(() => evaluate(`document.querySelector('button[aria-label="Reply model"]').textContent.includes('Editor')`), 'mobile model selection');
       console.log('Verified Conversation Desk and the Audit Explorer axe check in both RTL states across all three themes.');
       return;
     }

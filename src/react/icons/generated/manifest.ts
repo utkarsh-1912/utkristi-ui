@@ -7003,5 +7003,409 @@ export const iconManifest: readonly IconManifestEntry[] = [
       "rose",
       "graphite"
     ]
+  },
+  {
+    "name": "python",
+    "group": "Languages",
+    "keywords": [
+      "python",
+      "py",
+      "snake",
+      "scripting",
+      "language",
+      "code"
+    ],
+    "description": "Python programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "java",
+    "group": "Languages",
+    "keywords": [
+      "java",
+      "jvm",
+      "coffee",
+      "cup",
+      "language",
+      "code"
+    ],
+    "description": "Java programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "c",
+    "group": "Languages",
+    "keywords": [
+      "c",
+      "clang",
+      "gcc",
+      "systems",
+      "language",
+      "code"
+    ],
+    "description": "C programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "cpp",
+    "group": "Languages",
+    "keywords": [
+      "cpp",
+      "c++",
+      "cplusplus",
+      "systems",
+      "language",
+      "code"
+    ],
+    "description": "C++ programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "csharp",
+    "group": "Languages",
+    "keywords": [
+      "csharp",
+      "c#",
+      "cs",
+      "dotnet",
+      "language",
+      "code"
+    ],
+    "description": "C# programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "javascript",
+    "group": "Languages",
+    "keywords": [
+      "javascript",
+      "js",
+      "ecmascript",
+      "node",
+      "web",
+      "language"
+    ],
+    "description": "JavaScript programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "typescript",
+    "group": "Languages",
+    "keywords": [
+      "typescript",
+      "ts",
+      "typed",
+      "javascript",
+      "web",
+      "language"
+    ],
+    "description": "TypeScript programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "go",
+    "group": "Languages",
+    "keywords": [
+      "go",
+      "golang",
+      "gopher",
+      "concurrency",
+      "backend",
+      "language"
+    ],
+    "description": "Go programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "ruby",
+    "group": "Languages",
+    "keywords": [
+      "ruby",
+      "rb",
+      "rails",
+      "gem",
+      "language",
+      "code"
+    ],
+    "description": "Ruby programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "swift",
+    "group": "Languages",
+    "keywords": [
+      "swift",
+      "ios",
+      "macos",
+      "apple",
+      "language",
+      "code"
+    ],
+    "description": "Swift programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "kotlin",
+    "group": "Languages",
+    "keywords": [
+      "kotlin",
+      "kt",
+      "jvm",
+      "android",
+      "language",
+      "code"
+    ],
+    "description": "Kotlin programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "rust",
+    "group": "Languages",
+    "keywords": [
+      "rust",
+      "rs",
+      "cargo",
+      "systems",
+      "language",
+      "code"
+    ],
+    "description": "Rust programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "scala",
+    "group": "Languages",
+    "keywords": [
+      "scala",
+      "jvm",
+      "functional",
+      "language",
+      "code"
+    ],
+    "description": "Scala programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
+  },
+  {
+    "name": "dart",
+    "group": "Languages",
+    "keywords": [
+      "dart",
+      "flutter",
+      "mobile",
+      "language",
+      "code"
+    ],
+    "description": "Dart programming language mark.",
+    "styles": [
+      "line",
+      "filled",
+      "duotone"
+    ],
+    "has3d": true,
+    "hues3d": [
+      "blue",
+      "lime",
+      "violet",
+      "teal",
+      "amber",
+      "coral",
+      "rose",
+      "graphite"
+    ]
   }
 ] as const;

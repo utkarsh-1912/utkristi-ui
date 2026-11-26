@@ -42,7 +42,17 @@
 
 @media (max-width: 760px) {
   .desk-chat { grid-template-columns: minmax(0, 1fr); }
-  .desk-chat-history { border-inline-end: 0; border-block-end: 1px solid var(--ut-line); }
+  .desk-chat-history { border-inline-end: 0; border-block-end: 1px solid var(--ut-line); padding: 10px; gap: 6px; }
   .desk-chat-thread-list { display: none; }
   .desk-chat .desk-chat-thread-select { display: block; }
+  .desk-chat-log { block-size: clamp(8rem, 42vh, 20rem); block-size: clamp(8rem, 42dvh, 20rem); }
+  .desk-chat:focus-within .desk-chat-log { max-block-size: max(7rem, calc(var(--desk-chat-visible-height, 100dvh) - 11rem)); }
+  .desk-chat-composer textarea { font-size: 1rem; }
+  .desk-chat :is(.btn, .select, .search-option) { min-block-size: 44px; min-inline-size: 44px; }
+  .desk-chat-actions { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; }
+  .desk-chat-model-picker { inline-size: 100%; }
+  .desk-chat-model-picker .search-results-floating { min-inline-size: min(12rem, 68vw); }
+  .desk-chat-attach { padding-inline: 8px; }
+  .desk-chat-attach span { display: none; }
+  .desk-chat-send { margin-inline-start: 0; }
 }

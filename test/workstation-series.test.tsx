@@ -26,7 +26,7 @@ test('conversation model and attachment stay attributed when switching threads',
   fireEvent.click(modelPicker);
   fireEvent.click(screen.getByRole('option', { name: 'Analyst' }));
   expect(modelPicker).toHaveTextContent('Analyst');
-  fireEvent.change(screen.getByLabelText('Attach image'), { target: { files: [new File(['abc'], 'plot.png', { type: 'image/png' })] } });
+  fireEvent.change(screen.getByLabelText('Image file'), { target: { files: [new File(['abc'], 'plot.png', { type: 'image/png' })] } });
   fireEvent.change(screen.getByLabelText('Message'), { target: { value: 'Inspect feed' } });
   fireEvent.click(screen.getByRole('button', { name: 'Send' }));
   expect(screen.getByText(/Input summary: 2 words/)).toHaveTextContent('3 bytes');

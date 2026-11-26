@@ -185,6 +185,32 @@ async function captureEdge() {
         document.scripts.length === 0 && document.querySelectorAll('tbody tr').length === 3 &&
         getComputedStyle(document.body).getPropertyValue('--ut-bg').trim() !== ''`), 'standalone operations dashboard');
     }
+    if (process.argv.includes('--mobile-catalog')) {
+      const { entries } = JSON.parse(await readFile(join(root, 'docs/public/component-coverage.json'), 'utf8'));
+      await send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 1 });
+      await setMotion('reduce');
+      await size(320, 740);
+      await load('/blocks?theme=light', 'Blocks');
+      const blocks = await evaluate(`[...document.querySelectorAll('.block-link')].map(link => [link.hash.slice(1), link.querySelector('strong').textContent])`);
+      const routes = [...entries.map(({ slug, name }) => ['/components/' + slug, name]), ...blocks];
+      const failures = [];
+      for (const [path, title] of routes) {
+        await load(path + '?theme=light', title);
+        const width = await evaluate('document.documentElement.scrollWidth');
+        if (width > 320) failures.push(path + ' (' + width + 'px)');
+      }
+      await load('/blocks/conversation-desk?theme=light', 'Conversation desk');
+      const controls = await evaluate(`(() => {
+        const actions = document.querySelector('.desk-chat-actions');
+        const buttons = [...actions.querySelectorAll('button')].map(button => button.getBoundingClientRect());
+        return buttons.length === 3 && buttons.every(rect => rect.height >= 44 && rect.width >= 44 && rect.y === buttons[0].y) &&
+          getComputedStyle(document.querySelector('.desk-chat-composer textarea')).fontSize === '16px';
+      })()`);
+      if (!controls) failures.push('Conversation Desk composer sizing');
+      if (failures.length) throw new Error('Mobile catalog failures: ' + failures.join(', '));
+      console.log('Verified ' + routes.length + ' component and block pages at 320px with touch emulation.');
+      return;
+    }
     if (process.argv.includes('--conversation-audit')) {
       const axeSource = await readFile(require.resolve('axe-core/axe.min.js'), 'utf8');
       await setMotion('reduce');

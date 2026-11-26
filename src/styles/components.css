@@ -883,6 +883,15 @@ input.switch { display: inline-block; margin: 0; }
 :where(.ut-scrollbar, .scroll-area, .code, .table-wrap):is(:hover, :focus-within) {
   scrollbar-color: var(--ut-scroll-thumb-hover, var(--ut-scroll-thumb, color-mix(in srgb, var(--ut-ink) 42%, var(--ut-bg)))) var(--ut-scroll-track, transparent);
 }
+@media (pointer: coarse) {
+  /* Keep controls usable when compact sizes are selected on touch devices. */
+  :is(.btn, .icon-btn, .btn-circle, .seg-item, .tab, .search-option, .drawer-handle) {
+    min-block-size: 44px;
+    min-inline-size: 44px;
+  }
+  :is(.input, .textarea, .select) { font-size: max(1rem, 16px); }
+}
+
 @media (pointer: coarse), (forced-colors: active) {
   :is(.ut-scrollbar, .scroll-area, .code, .table-wrap) { scrollbar-width: auto; scrollbar-color: auto; }
 }

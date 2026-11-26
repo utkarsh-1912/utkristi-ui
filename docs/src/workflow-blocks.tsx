@@ -187,6 +187,31 @@ function ConversationDesk() {
   const picker = useRef<HTMLInputElement>(null);
   const composer = useRef<HTMLTextAreaElement>(null);
   const transcript = useRef<HTMLElement>(null);
+  const desk = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const root = desk.current;
+    const viewport = window.visualViewport;
+    if (!root || !viewport) return;
+    const clearHeight = () => root.style.removeProperty('--desk-chat-visible-height');
+    const fitComposer = () => {
+      const input = composer.current;
+      const form = input?.form;
+      const keyboardOpen = input === document.activeElement && viewport.scale === 1 &&
+        window.innerHeight - viewport.height > 120;
+      if (!keyboardOpen || !form) {
+        clearHeight();
+        return;
+      }
+      root.style.setProperty('--desk-chat-visible-height', viewport.height + 'px');
+      form.scrollIntoView({ block: 'nearest' });
+    };
+    viewport.addEventListener('resize', fitComposer);
+    root.addEventListener('focusout', clearHeight);
+    return () => {
+      viewport.removeEventListener('resize', fitComposer);
+      root.removeEventListener('focusout', clearHeight);
+    };
+  }, []);
   const images = useRef(new Set<string>());
   useEffect(() => {
     const urls = images.current;
@@ -223,7 +248,7 @@ function ConversationDesk() {
     switchThread(id);
     composer.current?.focus();
   }
-  return <div className="desk-chat">
+  return <div ref={desk} className="desk-chat">
     <aside className="desk-chat-history" aria-label="Conversations">
       <div className="desk-chat-history-head"><strong>Conversations</strong>
         <Button variant="quiet" size="sm" iconLeft={<Icon name="plus" />} onClick={newChat}>New chat</Button></div>
@@ -260,8 +285,9 @@ function ConversationDesk() {
         }}>Remove attachment</Button></div>}
         <div className="desk-chat-actions">
           <SelectMenu className="desk-chat-model-picker" label="Reply model" value={model} options={deskModels} onValueChange={setModel} />
-          <input ref={picker} hidden aria-label="Attach image" type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0])} />
-          <Button variant="outlined" size="sm" iconLeft={<Icon name="image" />} onClick={() => picker.current?.click()}>Attach image</Button>
+          <input ref={picker} hidden aria-label="Image file" type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0])} />
+          <Button className="desk-chat-attach" variant="outlined" size="sm" aria-label="Attach image" iconLeft={<Icon name="image" />}
+            onClick={() => picker.current?.click()}><span>Attach image</span></Button>
           <Button className="desk-chat-send" size="sm" type="submit" disabled={!draft.trim()} iconRight={<Icon name="send" />}>Send</Button>
         </div>
       </form>

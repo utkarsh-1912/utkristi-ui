@@ -1,6 +1,6 @@
 {
   "components": 113,
-  "variants": 141,
+  "variants": 209,
   "entries": [
     {
       "slug": "accessibility-preferences",
@@ -226,6 +226,278 @@
       "slug": "chart",
       "name": "Chart",
       "variants": [
+        {
+          "slug": "chart--area-interactive",
+          "name": "Area / Interactive"
+        },
+        {
+          "slug": "chart--area-default",
+          "name": "Area / Default"
+        },
+        {
+          "slug": "chart--area-linear",
+          "name": "Area / Linear"
+        },
+        {
+          "slug": "chart--area-step",
+          "name": "Area / Step"
+        },
+        {
+          "slug": "chart--area-legend",
+          "name": "Area / Legend"
+        },
+        {
+          "slug": "chart--area-stacked",
+          "name": "Area / Stacked"
+        },
+        {
+          "slug": "chart--area-stacked-expand",
+          "name": "Area / Stacked expand"
+        },
+        {
+          "slug": "chart--area-icons",
+          "name": "Area / Icons"
+        },
+        {
+          "slug": "chart--area-gradient",
+          "name": "Area / Gradient"
+        },
+        {
+          "slug": "chart--area-axes",
+          "name": "Area / Axes"
+        },
+        {
+          "slug": "chart--bar-interactive",
+          "name": "Bar / Interactive"
+        },
+        {
+          "slug": "chart--bar-default",
+          "name": "Bar / Default"
+        },
+        {
+          "slug": "chart--bar-horizontal",
+          "name": "Bar / Horizontal"
+        },
+        {
+          "slug": "chart--bar-multiple",
+          "name": "Bar / Multiple"
+        },
+        {
+          "slug": "chart--bar-stacked",
+          "name": "Bar / Stacked"
+        },
+        {
+          "slug": "chart--bar-label",
+          "name": "Bar / Label"
+        },
+        {
+          "slug": "chart--bar-label-custom",
+          "name": "Bar / Label custom"
+        },
+        {
+          "slug": "chart--bar-mixed",
+          "name": "Bar / Mixed"
+        },
+        {
+          "slug": "chart--bar-active",
+          "name": "Bar / Active"
+        },
+        {
+          "slug": "chart--bar-negative",
+          "name": "Bar / Negative"
+        },
+        {
+          "slug": "chart--line-interactive",
+          "name": "Line / Interactive"
+        },
+        {
+          "slug": "chart--line-default",
+          "name": "Line / Default"
+        },
+        {
+          "slug": "chart--line-linear",
+          "name": "Line / Linear"
+        },
+        {
+          "slug": "chart--line-step",
+          "name": "Line / Step"
+        },
+        {
+          "slug": "chart--line-multiple",
+          "name": "Line / Multiple"
+        },
+        {
+          "slug": "chart--line-dots",
+          "name": "Line / Dots"
+        },
+        {
+          "slug": "chart--line-dots-custom",
+          "name": "Line / Dots custom"
+        },
+        {
+          "slug": "chart--line-dots-colors",
+          "name": "Line / Dots colors"
+        },
+        {
+          "slug": "chart--line-label",
+          "name": "Line / Label"
+        },
+        {
+          "slug": "chart--line-label-custom",
+          "name": "Line / Label custom"
+        },
+        {
+          "slug": "chart--pie-simple",
+          "name": "Pie / Simple"
+        },
+        {
+          "slug": "chart--pie-separator-none",
+          "name": "Pie / Separator none"
+        },
+        {
+          "slug": "chart--pie-label",
+          "name": "Pie / Label"
+        },
+        {
+          "slug": "chart--pie-label-custom",
+          "name": "Pie / Label custom"
+        },
+        {
+          "slug": "chart--pie-label-list",
+          "name": "Pie / Label list"
+        },
+        {
+          "slug": "chart--pie-legend",
+          "name": "Pie / Legend"
+        },
+        {
+          "slug": "chart--pie-donut",
+          "name": "Pie / Donut"
+        },
+        {
+          "slug": "chart--pie-donut-active",
+          "name": "Pie / Donut active"
+        },
+        {
+          "slug": "chart--pie-donut-text",
+          "name": "Pie / Donut text"
+        },
+        {
+          "slug": "chart--pie-stacked",
+          "name": "Pie / Stacked"
+        },
+        {
+          "slug": "chart--pie-interactive",
+          "name": "Pie / Interactive"
+        },
+        {
+          "slug": "chart--radar-default",
+          "name": "Radar / Default"
+        },
+        {
+          "slug": "chart--radar-dots",
+          "name": "Radar / Dots"
+        },
+        {
+          "slug": "chart--radar-lines-only",
+          "name": "Radar / Lines only"
+        },
+        {
+          "slug": "chart--radar-label-custom",
+          "name": "Radar / Label custom"
+        },
+        {
+          "slug": "chart--radar-grid-custom",
+          "name": "Radar / Grid custom"
+        },
+        {
+          "slug": "chart--radar-grid-none",
+          "name": "Radar / Grid none"
+        },
+        {
+          "slug": "chart--radar-grid-circle",
+          "name": "Radar / Grid circle"
+        },
+        {
+          "slug": "chart--radar-grid-circle-no-lines",
+          "name": "Radar / Grid circle no lines"
+        },
+        {
+          "slug": "chart--radar-grid-circle-fill",
+          "name": "Radar / Grid circle fill"
+        },
+        {
+          "slug": "chart--radar-grid-fill",
+          "name": "Radar / Grid fill"
+        },
+        {
+          "slug": "chart--radar-multiple",
+          "name": "Radar / Multiple"
+        },
+        {
+          "slug": "chart--radar-legend",
+          "name": "Radar / Legend"
+        },
+        {
+          "slug": "chart--radial-simple",
+          "name": "Radial / Simple"
+        },
+        {
+          "slug": "chart--radial-label",
+          "name": "Radial / Label"
+        },
+        {
+          "slug": "chart--radial-grid",
+          "name": "Radial / Grid"
+        },
+        {
+          "slug": "chart--radial-text",
+          "name": "Radial / Text"
+        },
+        {
+          "slug": "chart--radial-shape",
+          "name": "Radial / Shape"
+        },
+        {
+          "slug": "chart--radial-stacked",
+          "name": "Radial / Stacked"
+        },
+        {
+          "slug": "chart--tooltip-default",
+          "name": "Tooltip / Default"
+        },
+        {
+          "slug": "chart--tooltip-indicator-line",
+          "name": "Tooltip / Indicator line"
+        },
+        {
+          "slug": "chart--tooltip-indicator-none",
+          "name": "Tooltip / Indicator none"
+        },
+        {
+          "slug": "chart--tooltip-label-custom",
+          "name": "Tooltip / Label custom"
+        },
+        {
+          "slug": "chart--tooltip-label-formatter",
+          "name": "Tooltip / Label formatter"
+        },
+        {
+          "slug": "chart--tooltip-label-none",
+          "name": "Tooltip / Label none"
+        },
+        {
+          "slug": "chart--tooltip-formatter",
+          "name": "Tooltip / Formatter"
+        },
+        {
+          "slug": "chart--tooltip-icons",
+          "name": "Tooltip / Icons"
+        },
+        {
+          "slug": "chart--tooltip-advanced",
+          "name": "Tooltip / Advanced"
+        },
         {
           "slug": "chart--range",
           "name": "Stream envelope"

@@ -55,3 +55,4 @@ export { Menu as DropdownMenu } from './Menu.js';
 export * from './Patterns.js';
 export * from './StreamChart.js';
 export * from './chart-stream.js';
+export * from './Plot.js';

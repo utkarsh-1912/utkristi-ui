@@ -185,6 +185,51 @@ async function captureEdge() {
         document.scripts.length === 0 && document.querySelectorAll('tbody tr').length === 3 &&
         getComputedStyle(document.body).getPropertyValue('--ut-bg').trim() !== ''`), 'standalone operations dashboard');
     }
+    if (process.argv.includes('--site-info')) {
+      await size(320, 780);
+      for (const [path, title, content] of [
+        ['about', 'About', 'Browse blocks'], ['privacy', 'Privacy', 'GitHub Privacy Statement'], ['terms', 'Terms', 'MIT License'],
+      ]) {
+        const response = await fetch(url + '/' + path + '/', { redirect: 'manual' });
+        if (response.status !== 308 || response.headers.get('location') !== '/#/' + path) {
+          throw new Error('Invalid redirect for /' + path);
+        }
+        await send('Page.navigate', { url: url + '/' + path });
+        await retry(() => evaluate(`(() => {
+          const page = document.querySelector('.site-info');
+          return page?.querySelector('h1')?.textContent === ${JSON.stringify(title)} &&
+            page.textContent.includes(${JSON.stringify(content)}) &&
+            document.querySelector('.docs-footer-links [aria-current=page]')?.textContent === ${JSON.stringify(title)} &&
+            document.documentElement.scrollWidth <= innerWidth;
+        })()`), title + ' direct navigation');
+      }
+      console.log('Verified direct navigation, footer selection and mobile layout for About, Privacy and Terms.');
+      return;
+    }
+    if (process.argv.includes('--plot-gallery')) {
+      await setMotion('reduce');
+      await size(320, 850);
+      await load('/components/chart?theme=light', 'Chart');
+      for (const [slug, mark] of [
+        ['area-stacked-expand', 'path'], ['bar-negative', 'rect'], ['line-dots-custom', 'rect'],
+        ['pie-donut-text', 'path'], ['radar-grid-circle', 'polygon'], ['radial-stacked', 'path'], ['tooltip-advanced', 'rect'],
+      ]) {
+        const panel = '#content-chart--' + slug;
+        await evaluate(`document.querySelector('button[aria-controls="content-chart--${slug}"]').click()`);
+        await retry(() => evaluate(`!!document.querySelector('${panel} .plot-svg ${mark}') && document.documentElement.scrollWidth <= 320`), slug);
+        if (slug === 'tooltip-advanced') {
+          await evaluate(`(() => {
+            const control = document.querySelector('${panel} .plot-inspect select');
+            control.value = '1';
+            control.dispatchEvent(new Event('change', { bubbles: true }));
+          })()`);
+          await retry(() => evaluate(`document.querySelector('${panel} .plot-tooltip')?.textContent.includes('63 ms observed')`), 'formatted tooltip');
+        }
+        await evaluate(`document.querySelector('button[aria-controls="content-chart--${slug}"]').click()`);
+      }
+      console.log('Verified all seven chart families at 320px, including tooltip selection.');
+      return;
+    }
     if (process.argv.includes('--glass-nav')) {
       await send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 1 });
       for (const width of [320, 360, 390]) {

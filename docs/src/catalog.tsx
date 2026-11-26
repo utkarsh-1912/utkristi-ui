@@ -1,7 +1,7 @@
 import { useId, useState } from 'react';
 import {
   A11yPanel, A11yPreferencesProvider, Accordion, Alert, AlertDialog, AspectRatio, Attachment, Avatar, Badge, Banner, BottomNavigation, Breadcrumb, Bubble, Button,
-  BulkActionBar, ButtonGroup, Calendar, Card, CardBody, Carousel, Chart, Checkbox, ClipboardButton, CodeBlock, Collapsible, ColumnChooser, Combobox,
+  BulkActionBar, ButtonGroup, Calendar, Card, CardBody, Carousel, Plot, Checkbox, ClipboardButton, CodeBlock, Collapsible, ColumnChooser, Combobox,
   Command, ContextMenu, DataTable, DatePicker, DateRangePicker, Dialog, Direction, Drawer, DropdownMenu, Empty, FilterBar,
   DeviceMockup, Field, FileInput, FloatingInput, Gallery, HoverCard, Icon, IconPalettePicker, IconTile, Input, InputGroup, InputOTP, Item, Jumbotron, Label, ListGroup, Loader, Marker, MegaMenu, Menubar, Message, NumberInput, PhoneInput,
   MessageScroller, NativeSelect, NavigationMenu, Pagination, Popover, Progress, Questionnaire, Radio,
@@ -379,9 +379,10 @@ document.querySelectorAll('.workspace').forEach(workspace => {
     () => <Carousel slides={slides} aria-label="Workspace collection" />,
     '<Carousel aria-label="Workspaces" slides={[{ id: "studio", content: <Card>Studio</Card> }, { id: "build", content: <Card>Build</Card> }]} />',
     '<section class="carousel" aria-label="Workspaces"><div class="carousel-viewport" id="workspace-slides" tabindex="0"><div class="carousel-slide"><div class="card"><div class="card-body"><strong>Studio</strong><p class="muted">Active design files and component tokens.</p></div></div></div><div class="carousel-slide"><div class="card"><div class="card-body"><strong>Build</strong><p class="muted">Verified releases and package checks.</p></div></div></div></div><div class="carousel-controls"><button class="btn btn-ghost carousel-arrow" type="button" data-ut-track="workspace-slides" data-ut-step="previous">Previous</button><button class="btn btn-ghost carousel-arrow" type="button" data-ut-track="workspace-slides">Next</button></div></section>'),
-  chart: demo('Chart', 'Bar and line views with visible values.',
-    () => <Chart title="Workspace activity" data={[{ label: 'Design', value: 24 }, { label: 'Build', value: 18 }, { label: 'Launch', value: 32 }]} />,
-    '<Chart title="Workspace activity" data={[{ label: "Design", value: 24 }, { label: "Build", value: 18 }]} />',
+  chart: demo('Chart', 'Area, bar, line, pie, radar and radial plots with accessible data and optional inspection.',
+    () => <Plot title="Workspace activity" kind="bar" rows={[{ label: 'Design', values: [24] }, { label: 'Build', values: [18] }, { label: 'Launch', values: [32] }]}
+      series={[{ label: 'Events' }]} axes interactive />,
+    '<Plot title="Workspace activity" kind="bar" rows={[{ label: "Design", values: [24] }, { label: "Build", values: [18] }]} series={[{ label: "Events" }]} />',
     '<figure class="chart"><figcaption>Workspace activity</figcaption><dl class="chart-values"><div class="chart-entry"><dt>Design</dt><dd>24</dd><dd class="chart-track" aria-hidden="true"><span style="--ut-bar-start:0%;--ut-bar-size:75%"></span></dd></div></dl></figure>'),
   checkbox: demo('Checkbox', 'Native checked and indeterminate states.',
     () => <div className="sample-stack"><Checkbox label="Notify teammates" defaultChecked /><Checkbox label="Select all" indeterminate /></div>,

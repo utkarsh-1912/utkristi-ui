@@ -14,6 +14,12 @@ function statusRoutes(server: ViteDevServer | PreviewServer, directory: string) 
   server.middlewares.use((request, response, next) => {
     if (request.method !== 'GET' && request.method !== 'HEAD') return next();
     const path = request.url?.split('?')[0];
+    const informationPage = path?.match(/^\/(about|privacy|terms)\/?$/)?.[1];
+    if (informationPage) {
+      response.writeHead(308, { Location: '/#/' + informationPage });
+      response.end();
+      return;
+    }
     if (path === '/404' || path === '/404/') return serve(404, request, response, next);
     if (path && /^\/(?:error(?:\.html)?|500)\/?$/.test(path)) return serve(500, request, response, next);
     next();

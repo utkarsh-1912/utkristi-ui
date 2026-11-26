@@ -10,6 +10,7 @@
     },
     { "src": "^/404/?$", "status": 404, "dest": "/404.html" },
     { "src": "^/(?:error(?:\\.html)?|500)/?$", "status": 500, "dest": "/500.html" },
+    { "src": "^/(about|privacy|terms)/?$", "status": 308, "headers": { "Location": "/#/$1" } },
     { "handle": "filesystem" },
     { "src": "/.*", "status": 404, "dest": "/404.html" }
   ]

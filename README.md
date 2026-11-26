@@ -8,9 +8,11 @@ Explore the [execution desk](https://utkristi-ui.vercel.app/#/blocks/execution-d
 [incident board](https://utkristi-ui.vercel.app/#/blocks/incident-board).
 
 [Docs](https://utkristi-ui.vercel.app/) · [Sandbox](https://utkristi-ui.vercel.app/#/sandbox) ·
-[Blocks](https://utkristi-ui.vercel.app/#/blocks) · [Changelog](CHANGELOG.md)
+[Blocks](https://utkristi-ui.vercel.app/#/blocks) · [Changelog](https://github.com/utkarsh-1912/utkristi-ui/blob/main/CHANGELOG.md)
 
-![Utkristi component studio](docs/screenshots/overview.png)
+[About](https://utkristi-ui.vercel.app/#/about) | [Privacy](https://utkristi-ui.vercel.app/#/privacy) | [Terms](https://utkristi-ui.vercel.app/#/terms)
+
+![Utkristi component studio](https://raw.githubusercontent.com/utkarsh-1912/utkristi-ui/main/docs/screenshots/overview.png)
 
 ## Three ways to use it
 
@@ -33,6 +35,13 @@ for presence and comments. Transport adapters have separate entry points such as
 
 With this version installed, run `npx utkristi-ui add ticker` to copy the editable React component into
 `Ticker.tsx`, or pass `--out src/Ticker.tsx` for an existing directory. Import `@utkristi/ui/css` for the kit styles.
+
+### Charts
+
+Import `Plot` from `@utkristi/ui` for area, bar, line, pie, radar, and radial charts.
+Pass category rows as `{ label, values }` and one series definition per value.
+Use `interactive` to enable point inspection by pointer, touch, and keyboard.
+Each plot also includes a data table. See all examples in the [Chart documentation](https://utkristi-ui.vercel.app/#/components/chart).
 
 ### Streaming charts
 
@@ -59,7 +68,7 @@ and keeps memory bounded even while the display is paused.
 - Tabs, segmented controls, steps, theme changes, and docs navigation use View Transitions where supported. The kit respects reduced motion and uses native popovers and dialogs with keyboard and placement fallbacks.
 - [Collaboration](https://utkristi-ui.vercel.app/#/components/collaboration), [live data](https://utkristi-ui.vercel.app/#/components/live-data), and [accessibility preferences](https://utkristi-ui.vercel.app/#/components/accessibility-preferences) have interactive examples.
 - Import `@utkristi/ui/elements` to register light-DOM custom elements, or install a block through its version-pinned registry item.
-- Run `npm run build:mcp` to build the local MCP server. The [MCP setup guide](packages/ui-mcp/README.md) describes its six tools. The docs build generates `llms.txt`, `llms-full.txt`, and per-component Markdown from the same catalog.
+- Run `npm run build:mcp` to build the local MCP server. The [MCP setup guide](https://github.com/utkarsh-1912/utkristi-ui/blob/main/packages/ui-mcp/README.md) describes its six tools. The docs build generates `llms.txt`, `llms-full.txt`, and per-component Markdown from the same catalog.
 
 ## Install
 
@@ -238,14 +247,14 @@ are on the docs overview. To reproduce, see `scripts/compare-competitors.mjs`.
   drop), overlays (Modal, Menu, Popover, Tooltip, Toast), navigation (Navbar, Sidebar, Tabs,
   Breadcrumb, Pagination), data (Table and DataTable with remote state, selection, editing and
   virtualisation), layout (Shell, Workspace, Resizable), conversation, questionnaire, video and
-  more. The [coverage inventory](docs/component-coverage.md) lists every example.
+  more. The [coverage inventory](https://github.com/utkarsh-1912/utkristi-ui/blob/main/docs/component-coverage.md) lists every example.
 - **Blocks:** complete screens, including a project worklist, audit explorer, roles and access,
   trading and terminal workspaces, a landing page and pricing.
 - **Icons:** about 256 glyphs in line, filled, duotone, 2.5D and 3D, with an icon colour palette
   for every theme (`@utkristi/ui/icons`).
 
-Known gaps are listed in the [design review](docs/component-design-review.md), and the roadmap is
-in [docs/planning/INNOVATION_PLAN.md](docs/planning/INNOVATION_PLAN.md).
+Known gaps are listed in the [design review](https://github.com/utkarsh-1912/utkristi-ui/blob/main/docs/component-design-review.md), and the roadmap is
+in [docs/planning/INNOVATION_PLAN.md](https://github.com/utkarsh-1912/utkristi-ui/blob/main/docs/planning/INNOVATION_PLAN.md).
 
 ## Development
 
@@ -274,9 +283,9 @@ routes, so any static host works.
 
 ## More
 
-- [Design tokens and class map](DESIGN_TOKENS.md)
-- [Migration guide](MIGRATION.md)
-- [Support and compatibility](SUPPORT.md)
-- [Changelog](CHANGELOG.md)
-- Planning briefs (build, icons, themes, enterprise, innovation) in [docs/planning](docs/planning)
-- [MIT license](LICENSE)
+- [Design tokens and class map](https://github.com/utkarsh-1912/utkristi-ui/blob/main/DESIGN_TOKENS.md)
+- [Migration guide](https://github.com/utkarsh-1912/utkristi-ui/blob/main/MIGRATION.md)
+- [Support and compatibility](https://github.com/utkarsh-1912/utkristi-ui/blob/main/SUPPORT.md)
+- [Changelog](https://github.com/utkarsh-1912/utkristi-ui/blob/main/CHANGELOG.md)
+- Planning briefs (build, icons, themes, enterprise, innovation) in [docs/planning](https://github.com/utkarsh-1912/utkristi-ui/tree/main/docs/planning)
+- [MIT license](https://github.com/utkarsh-1912/utkristi-ui/blob/main/LICENSE)

@@ -153,7 +153,7 @@ function apiFor(docs: string, source: string, examples: ReturnType<typeof sample
 
 const registries = [
   ['catalog', 'catalog', 'component'], ['examples', 'examples', 'component'], ['variants', 'variants', 'variant'],
-  ['navbar-variants', 'navbarVariants', 'variant'], ['component-variants', 'componentVariants', 'variant'],
+  ['navbar-variants', 'navbarVariants', 'variant'], ['component-variants', 'componentVariants', 'variant'], ['chart-variants', 'chartVariants', 'variant'],
   ['blocks', 'blocks', 'block'], ['workflow-blocks', 'workflowBlocks', 'block'], ['worklist-blocks', 'worklistBlocks', 'block'],
 ] as const;
 

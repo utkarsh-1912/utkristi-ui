@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Accordion, Alert, Button, Dialog, FileDropzone, Gallery, Icon, Progress } from '@utkristi/ui';
 import type { Example } from './examples';
 import { navbarVariants } from './navbar-variants';
+import { chartVariants } from './chart-variants';
 import { componentVariants } from './component-variants';
 
 function DropzoneExample() {
@@ -39,6 +40,7 @@ function GalleryLightbox() {
 export const variants = {
   ...navbarVariants,
   ...componentVariants,
+  ...chartVariants,
   'accordion-panel': { name: 'Panel with multiple sections', description: 'Give the accordion a surface and allow multiple sections to stay open.',
     preview: () => <Accordion appearance="panel" multiple defaultValue={['billing']} items={[
       { id: 'billing', label: 'Billing', content: 'Invoices are issued on the first of each month.' },
@@ -62,6 +64,7 @@ export const variants = {
 } satisfies Record<string, Example>;
 
 export const variantSets: Partial<Record<string, (keyof typeof variants)[]>> = {
+  chart: Object.keys(chartVariants) as (keyof typeof chartVariants)[],
   navbar: Object.keys(navbarVariants) as (keyof typeof navbarVariants)[],
   accordion: ['accordion-panel'], 'file-input': ['file-dropzone'], gallery: ['gallery-lightbox'],
   alert: ['alert-statuses'], button: ['button-states'], progress: ['progress-labelled'],

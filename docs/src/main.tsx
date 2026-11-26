@@ -146,11 +146,20 @@ function ComponentPage({ slug, initialVariant }: { slug: keyof typeof examples; 
   const example = examples[slug];
   const choices = variantSets[slug] ?? [];
   const [expanded, setExpanded] = useState(() => new Set<string>(initialVariant ? [initialVariant] : []));
+  const chartFamilies = new Map<string, typeof choices[number]>();
+  if (slug === 'chart') for (const key of choices) {
+    const family = /^chart--([a-z]+)-/.exec(key)?.[1];
+    if (family && !chartFamilies.has(family)) chartFamilies.set(family, key);
+  }
+  const index = chartFamilies.size
+    ? [...Array.from(chartFamilies, ([family, key]) => ({ key, label: family[0].toUpperCase() + family.slice(1) })),
+      ...choices.filter(key => !/^chart--[a-z]+-/.test(key)).map(key => ({ key, label: variants[key].name }))]
+    : choices.map(key => ({ key, label: variants[key].name }));
   return <article className="doc-article component-guide">
     <PageTitle kicker="Components" title={example.name} detail={example.description} />
     <nav className="component-example-index" aria-label="Examples on this page">
       <a href={'#/components/' + slug + '?section=default-example'}>Basic usage</a>
-      {choices.map(key => <a key={key} href={'#/components/' + slug + '?section=example-' + key} onClick={() => setExpanded(previous => new Set([...previous, key]))}>{variants[key].name}</a>)}
+      {index.map(({ key, label }) => <a key={key} href={'#/components/' + slug + '?section=example-' + key} onClick={() => setExpanded(previous => new Set([...previous, key]))}>{label}</a>)}
     </nav>
     <section className="component-example-section">
       <h2 id="default-example">Basic usage</h2>

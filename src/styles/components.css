@@ -1699,3 +1699,16 @@ input.switch { display: inline-block; margin: 0; }
 :dir(rtl) .step::after { transform-origin: right; }
 :dir(rtl) .link::after { transform-origin: left; }
 :dir(rtl) .link:hover::after, :dir(rtl) .link:is(.is-active, [aria-pressed="true"], [aria-checked="true"], [aria-selected="true"], [aria-current="true"], [aria-current="page"])::after { transform-origin: right; }
+.plot { display: grid; gap: 10px; margin: 0; min-inline-size: 0; }
+.plot figcaption { font-weight: 650; }
+.plot-svg { display: block; inline-size: 100%; max-inline-size: 38rem; margin-inline: auto; }
+.plot-legend { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.plot-legend li, .plot-tooltip > div { display: flex; align-items: center; gap: 7px; }
+.plot-legend i, .plot-tooltip i { inline-size: 9px; block-size: 9px; border-radius: 50%; flex: none; }
+.plot-inspect { display: grid; gap: 8px; }
+.plot-inspect label { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.plot-inspect .select { inline-size: auto; max-inline-size: 100%; }
+.plot-tooltip { display: grid; gap: 4px; padding: 10px; border: 1px solid var(--ut-line); color: var(--ut-ink); background: var(--ut-bg-2); border-radius: var(--ut-r-field); overflow-wrap: anywhere; }
+.plot-tooltip b { margin-inline-start: auto; text-align: end; }
+.plot-tooltip[data-indicator="line"] i { inline-size: 3px; block-size: 1rem; border-radius: 2px; }
+.plot-data summary { cursor: pointer; }

@@ -185,6 +185,31 @@ async function captureEdge() {
         document.scripts.length === 0 && document.querySelectorAll('tbody tr').length === 3 &&
         getComputedStyle(document.body).getPropertyValue('--ut-bg').trim() !== ''`), 'standalone operations dashboard');
     }
+    if (process.argv.includes('--glass-nav')) {
+      await send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 1 });
+      for (const width of [320, 360, 390]) {
+        await size(width, 740);
+        await load('/getting-started?theme=glass', 'Getting started');
+        await retry(() => evaluate(`getComputedStyle(document.querySelector('.docs-navbar .burger')).display !== 'none'`), 'Glass menu trigger');
+        await evaluate(`(() => {
+          const trigger = document.querySelector('.docs-navbar .burger');
+          trigger.focus();
+          trigger.click();
+        })()`);
+        await retry(() => evaluate(`(() => {
+          const sheet = document.querySelector('.sheet-dock');
+          if (!sheet || document.activeElement?.getAttribute('aria-label') !== 'Close menu') return false;
+          const style = getComputedStyle(sheet);
+          return style.backdropFilter === 'none' && style.backgroundColor === 'rgb(233, 230, 246)' &&
+            style.backgroundImage.startsWith('linear-gradient') &&
+            sheet.getBoundingClientRect().left >= 0 && sheet.getBoundingClientRect().right <= innerWidth;
+        })()`), 'Glass sheet surface and focus at ' + width + 'px');
+        await evaluate(`document.querySelector('.sheet-dock [aria-label="Close menu"]').click()`);
+        await retry(() => evaluate(`!document.querySelector('.sheet-dock') && document.activeElement === document.querySelector('.docs-navbar .burger')`), 'Glass menu closes and restores focus');
+      }
+      console.log('Verified Glass mobile navigation at 320, 360 and 390px.');
+      return;
+    }
     if (process.argv.includes('--mobile-catalog')) {
       const { entries } = JSON.parse(await readFile(join(root, 'docs/public/component-coverage.json'), 'utf8'));
       await send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 1 });

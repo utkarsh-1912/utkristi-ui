@@ -34,6 +34,6 @@ export function GitHubStars() {
   const label = 'Utkristi UI on GitHub' + (count === undefined ? '' : ', ' + count.toLocaleString() + (count === 1 ? ' star' : ' stars'));
   return <a className="docs-github" href={'https://github.com/' + repo} title={label} aria-label={label}>
     <Icon name="github" size={18} />
-    {count !== undefined && <span aria-hidden="true">★ {Intl.NumberFormat('en', { notation: 'compact' }).format(count)}</span>}
+    {count !== undefined && <span aria-hidden="true">{Intl.NumberFormat('en', { notation: 'compact' }).format(count)}</span>}
   </a>;
 }

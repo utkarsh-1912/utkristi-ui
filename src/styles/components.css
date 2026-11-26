@@ -364,6 +364,12 @@ a[aria-current="page"] > .navbar-link-icon { opacity: 1; color: var(--ut-nav-mar
   animation: ut-dock-menu .2s var(--ut-ease) both;
 }
 @keyframes ut-dock-menu { from { opacity: 0; transform: translateY(-5px); } }
+:where(.glass, [data-theme="glass"]) .sheet.sheet-dock {
+  /* A fixed, rounded scroll surface over a blurred navbar can show compositing seams on mobile Chromium. */
+  background: var(--ut-bg) var(--ut-surface-sheen, none);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
 .sheet-dock .sheet-top { flex: none; min-height: 44px; padding-inline: 8px 0; }
 .sheet-dock .sheet-top .icon-btn { border: 0; background: transparent; }
 .sheet-dock .sheet-search { flex: none; min-height: 44px; margin: 0; padding-inline: 12px; border: 0; border-radius: 9px; background: var(--ut-tint); color: var(--ut-ink); font-size: 14px; }

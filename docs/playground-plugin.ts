@@ -227,16 +227,18 @@ export function docsPlayground(docs: string, source: string): Plugin {
   const loadAgentAssets = () => agentAssets ??= loadReference().then(agentDocs);
   async function registryItems() {
     const { examples, version } = await loadReference();
-    const layout = await readFile(join(docs, 'src', 'enterprise.css'), 'utf8');
+    const enterpriseStyles = await readFile(join(docs, 'src', 'enterprise.css'), 'utf8');
+    const chatStyles = await readFile(join(docs, 'src', 'conversation-desk.css'), 'utf8');
     return Object.fromEntries(Object.entries(examples).filter(([, item]) => item.kind === 'block').map(([name, item]) => {
-      const template = ['enterprise-landing', 'execution-desk'].includes(name);
+      const styles = name === 'conversation-desk' ? { name: 'utkristi-conversation-desk.css', content: chatStyles }
+        : ['enterprise-landing', 'execution-desk'].includes(name) ? { name: 'utkristi-enterprise.css', content: enterpriseStyles } : undefined;
       const component = item.code.replace("\n\nimport '@utkristi/ui/utkristi-ui.css';", '');
-      const code = ['"use client";', template ? 'import "./utkristi-enterprise.css";' : '', component].filter(Boolean).join('\n\n');
+      const code = ['"use client";', styles ? 'import "./' + styles.name + '";' : '', component].filter(Boolean).join('\n\n');
       const files: { path: string; type: string; content: string; target?: string }[] = [
         { path: `registry/${name}.tsx`, type: 'registry:component', content: code + '\n' },
       ];
-      if (template) files.push({ path: 'registry/utkristi-enterprise.css', type: 'registry:file',
-        target: '@components/utkristi-enterprise.css', content: layout });
+      if (styles) files.push({ path: 'registry/' + styles.name, type: 'registry:file',
+        target: '@components/' + styles.name, content: styles.content });
       return [name, {
         $schema: 'https://ui.shadcn.com/schema/registry-item.json',
         name, type: 'registry:block', title: item.name, description: item.description,
@@ -308,7 +310,7 @@ export function docsPlayground(docs: string, source: string): Plugin {
         }), buildDom()]);
         for (const asset of [path, ...cssFiles]) this.addWatchFile(asset);
         const css = await loadKitStyles();
-        const demoFiles = ['styles.css', 'enterprise.css'].map((file) => join(docs, 'src', file));
+        const demoFiles = ['styles.css', 'enterprise.css', 'conversation-desk.css'].map((file) => join(docs, 'src', file));
         for (const file of demoFiles) this.addWatchFile(file);
         const demos = await Promise.all(demoFiles.map((file) => readFile(file, 'utf8')));
         const styles = [...css, ...demos].join('\n').replace(/^@tailwind .*$/gm, '');

@@ -169,6 +169,11 @@ function SignalMonitor() {
 }
 
 const deskModels = ['Relay', 'Analyst', 'Editor'] as const;
+const deskPrompts = [
+  { model: 'Relay', label: 'Draft a handoff', prompt: 'Prepare a handoff for the team taking over the gateway incident.' },
+  { model: 'Analyst', label: 'Inspect a signal', prompt: 'Gateway latency rose from 48 ms to 132 ms during the rollout.' },
+  { model: 'Editor', label: 'Shorten an update', prompt: 'The team is working on restoring service and will post another customer update in fifteen minutes.' },
+];
 function ConversationDesk() {
   const [threads, setThreads] = useState([{ id: 1, title: 'New conversation', turns: [] as { prompt: string; answer: string; model: string; attachment: string; imageUrl: string }[] }]);
   const [active, setActive] = useState(1);
@@ -176,12 +181,18 @@ function ConversationDesk() {
   const [draft, setDraft] = useState('');
   const [file, setFile] = useState<File>();
   const picker = useRef<HTMLInputElement>(null);
+  const composer = useRef<HTMLTextAreaElement>(null);
+  const transcript = useRef<HTMLElement>(null);
   const images = useRef(new Set<string>());
   useEffect(() => {
     const urls = images.current;
     return () => { urls.forEach(url => URL.revokeObjectURL(url)); urls.clear(); };
   }, []);
   const thread = threads.find(item => item.id === active)!;
+  useEffect(() => {
+    const log = transcript.current;
+    if (log) log.scrollTop = log.scrollHeight;
+  }, [active, thread.turns.length]);
   function switchThread(id: number) {
     setActive(id);
     setDraft('');
@@ -202,23 +213,55 @@ function ConversationDesk() {
     setThreads(current => current.map(item => item.id === active ? { ...item, title: item.turns.length ? item.title : prompt.slice(0, 36), turns: [...item.turns, turn] } : item));
     switchThread(active);
   }
-  return <Card><CardHeader style={row}><strong>Conversation desk</strong><Badge>Local model demo</Badge></CardHeader><CardBody style={flow}>
-    <div style={row}><Select aria-label="Conversation history" value={active} onChange={e => switchThread(Number(e.target.value))}>
-      {threads.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}</Select>
-      <Button variant="outlined" onClick={() => { const id = threads.length + 1; setThreads([...threads, { id, title: 'New conversation', turns: [] }]); switchThread(id); }}>New chat</Button></div>
-    <section role="log" aria-label="Conversation transcript" style={{ display: 'grid', gap: 12, maxHeight: 360, overflowY: 'auto', overflowWrap: 'anywhere' }}>
-      {!thread.turns.length && <p>Write a message or attach an image. Replies are generated locally for this preview.</p>}
-      {thread.turns.map((turn, i) => <article key={i}><strong>You</strong><p>{turn.prompt}</p>{turn.attachment && <small>{turn.attachment}</small>}
-        {turn.imageUrl && <img src={turn.imageUrl} alt={turn.attachment} style={{ maxWidth: '100%', maxHeight: 180, objectFit: 'contain' }} />}
-        <div className="card card-body"><strong>{turn.model}</strong><p>{turn.answer}</p></div></article>)}
-    </section>
-    <form style={flow} onSubmit={e => { e.preventDefault(); send(); }}>
-      <textarea className="input" aria-label="Message" rows={3} value={draft} placeholder="Message the desk?" onChange={e => setDraft(e.target.value)}
-        onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); send(); } }} />
-      <div style={row}><Select aria-label="Reply model" value={model} onChange={e => setModel(e.target.value)}>{deskModels.map(name => <option key={name}>{name}</option>)}</Select>
-        <label>Attach image <input ref={picker} type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0])} style={{ maxWidth: '100%' }} /></label>
-        <Button type="submit" disabled={!draft.trim()}>Send</Button></div>
-    </form></CardBody></Card>;
+  function newChat() {
+    const id = threads.length + 1;
+    setThreads(current => [...current, { id, title: 'New conversation', turns: [] }]);
+    switchThread(id);
+    composer.current?.focus();
+  }
+  return <div className="desk-chat">
+    <aside className="desk-chat-history" aria-label="Conversations">
+      <div className="desk-chat-history-head"><strong>Conversations</strong>
+        <Button variant="quiet" size="sm" iconLeft={<Icon name="plus" />} onClick={newChat}>New chat</Button></div>
+      <div className="desk-chat-thread-list">{threads.map(item =>
+        <Button key={item.id} size="sm" variant={item.id === active ? 'solid' : 'plain'} aria-current={item.id === active ? 'true' : undefined}
+          iconLeft={<Icon name="chat" />} onClick={() => switchThread(item.id)}><span>{item.title}</span></Button>)}</div>
+      <Select className="desk-chat-thread-select" aria-label="Conversation history" value={active} onChange={e => switchThread(Number(e.target.value))}>
+        {threads.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
+      </Select>
+    </aside>
+    <div className="desk-chat-workspace">
+      <header className="desk-chat-header"><div><span className="label">Conversation desk</span><h3>{thread.title}</h3></div><Badge>Local model demo</Badge></header>
+      {/* A tab stop lets keyboard users scroll the transcript. */}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+      <section ref={transcript} className="desk-chat-log" role="log" aria-label="Conversation transcript" tabIndex={0}>
+        {!thread.turns.length && <div className="desk-chat-empty"><Icon name="chat" size={30} />
+          <h4>What are you working on?</h4><p>Start with a prompt or attach an image. Replies are generated locally.</p>
+          <div className="desk-chat-prompts">{deskPrompts.map(item => <Button key={item.model} variant="outlined" size="sm" onClick={() => {
+            setModel(item.model); setDraft(item.prompt); composer.current?.focus();
+          }}>{item.label}</Button>)}</div></div>}
+        {thread.turns.map((turn, i) => <article key={i} className="desk-chat-turn">
+          <div className="desk-chat-message desk-chat-user"><strong>You</strong><p>{turn.prompt}</p>
+            {turn.attachment && <small>{turn.attachment}</small>}
+            {turn.imageUrl && <img src={turn.imageUrl} alt={turn.attachment} />}</div>
+          <div className="desk-chat-message desk-chat-reply"><strong>{turn.model}</strong><p>{turn.answer}</p></div>
+        </article>)}
+      </section>
+      <form className="desk-chat-composer" onSubmit={e => { e.preventDefault(); send(); composer.current?.focus(); }}>
+        <textarea ref={composer} className="input" aria-label="Message" rows={3} value={draft} placeholder="Message the desk" onChange={e => setDraft(e.target.value)}
+          onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); send(); } }} />
+        {file && <div className="desk-chat-attachment"><span>{file.name}</span><Button size="sm" variant="plain" onClick={() => {
+          setFile(undefined); if (picker.current) picker.current.value = '';
+        }}>Remove attachment</Button></div>}
+        <div className="desk-chat-actions">
+          <Select aria-label="Reply model" value={model} onChange={e => setModel(e.target.value)}>{deskModels.map(name => <option key={name}>{name}</option>)}</Select>
+          <input ref={picker} hidden aria-label="Attach image" type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0])} />
+          <Button variant="outlined" size="sm" iconLeft={<Icon name="image" />} onClick={() => picker.current?.click()}>Attach image</Button>
+          <Button className="desk-chat-send" size="sm" type="submit" disabled={!draft.trim()} iconRight={<Icon name="send" />}>Send</Button>
+        </div>
+      </form>
+    </div>
+  </div>;
 }
 
 export const workflowBlocks = {

@@ -102,6 +102,8 @@
 .docs-example-title { display: grid; gap: 2px; min-inline-size: 0; flex: 1 1 16rem; }
 .docs-example-title .muted { font-size: .875rem; }
 .docs-example-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; min-inline-size: 0; }
+.docs-example-controls .docs-direction-toggle { background: var(--ut-bg-2); color: var(--ut-ink); border-color: var(--ut-line-2); transition-property: transform; }
+.docs-example-controls .docs-direction-toggle[aria-pressed="true"] { background: var(--ut-solid); color: var(--ut-on-solid); border-color: var(--ut-solid); }
 .docs-example-controls .select { inline-size: auto; max-inline-size: 100%; }
 .docs-example .theme-preview { padding: clamp(14px, 3vw, 30px); }
 .docs-example .preview-content { margin-block-start: 16px; }

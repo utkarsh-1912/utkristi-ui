@@ -185,6 +185,35 @@ async function captureEdge() {
         document.scripts.length === 0 && document.querySelectorAll('tbody tr').length === 3 &&
         getComputedStyle(document.body).getPropertyValue('--ut-bg').trim() !== ''`), 'standalone operations dashboard');
     }
+    if (process.argv.includes('--conversation-audit')) {
+      const axeSource = await readFile(require.resolve('axe-core/axe.min.js'), 'utf8');
+      await setMotion('reduce');
+      for (const [theme] of themes) {
+        await load('/blocks/audit-explorer?theme=' + theme, 'Audit explorer');
+        await evaluate(axeSource);
+        for (const pressed of ['false', 'true']) {
+          await retry(() => evaluate(`document.querySelector('button[aria-label="RTL preview"]')?.getAttribute('aria-pressed') === '${pressed}'`), 'RTL toggle state');
+          const violations = await evaluate(`axe.run('.docs-example', { runOnly: { type: 'tag',
+            values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] } }).then(({ violations }) =>
+            violations.map(({ id, nodes }) => [id, nodes.map(({ target }) => target)]))`);
+          if (violations.length) throw new Error('Audit explorer (' + theme + ', RTL ' + pressed + '): ' + JSON.stringify(violations));
+          await evaluate(`document.querySelector('button[aria-label="RTL preview"]').click()`);
+        }
+      }
+      await load('/blocks/conversation-desk?theme=light', 'Conversation desk');
+      await size(1440, 900);
+      await retry(() => evaluate(`document.querySelector('.desk-chat-thread-list')?.getBoundingClientRect().width > 0`), 'desktop conversation sidebar');
+      await evaluate(`[...document.querySelectorAll('.desk-chat-prompts button')].find(button => button.textContent === 'Inspect a signal').click()`);
+      await retry(() => evaluate(`document.querySelector('.desk-chat-actions select').value === 'Analyst' &&
+        document.activeElement === document.querySelector('.desk-chat-composer textarea')`), 'starter sets model and focuses composer');
+      await evaluate(`document.querySelector('.desk-chat-send').click()`);
+      await retry(() => evaluate(`document.querySelector('.desk-chat-reply')?.textContent.includes('Analyst')`), 'reply renders');
+      await size(320, 850);
+      await retry(() => evaluate(`document.querySelector('.desk-chat-thread-select')?.getBoundingClientRect().width > 0 &&
+        document.documentElement.scrollWidth <= 320`), 'mobile history and no overflow');
+      console.log('Verified Conversation Desk and the Audit Explorer axe check in both RTL states across all three themes.');
+      return;
+    }
     if (process.argv.includes('--landing-alignment')) {
       await load('/overview?theme=light', 'Interfaces for live, dense, shared work.');
       await setMotion('reduce');

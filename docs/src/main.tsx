@@ -24,6 +24,7 @@ import tokenCSS from '../../src/styles/tokens.css?raw';
 import { transitionUI } from '../../src/react/utils/motion';
 import './styles.css';
 import './enterprise.css';
+import './conversation-desk.css';
 
 const Playground = lazy(() => import('./Playground'));
 const IconsPage = lazy(() => import('./IconsPage'));
@@ -131,7 +132,7 @@ function ExamplePreview({ example, initialTheme, motion, description, preserveSt
     </Select>}<Select aria-label="Preview theme" value={previewTheme}
         onChange={(event) => setPreviewTheme(event.target.value as PreviewTheme)}>
         {themes.map((theme) => <option key={theme} value={theme}>{themeLabel(theme)}</option>)}
-      </Select><Button size="sm" variant="ghost" aria-label="RTL preview" aria-pressed={direction === 'rtl'}
+      </Select><Button size="sm" className="docs-direction-toggle" aria-label="RTL preview" aria-pressed={direction === 'rtl'}
         onClick={() => setDirection((value) => (value ?? document.documentElement.dir) === 'rtl' ? 'ltr' : 'rtl')}>RTL</Button></div>
     </div>
     <Frame key={preserveState ? undefined : previewTheme} theme={previewTheme} fixedTheme={preserveState} motion={override ?? motion} direction={direction}>

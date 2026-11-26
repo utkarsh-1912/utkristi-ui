@@ -25,12 +25,18 @@
 .desk-chat-message { max-inline-size: min(100%, 44rem); padding: 10px 14px; border: 1px solid var(--ut-line); border-radius: var(--ut-r-field); }
 .desk-chat-message p { margin: 4px 0 0; white-space: pre-wrap; }
 .desk-chat-user { justify-self: end; background: var(--ut-bg-2); }
-.desk-chat-reply { justify-self: start; border-inline-start: 3px solid var(--ut-accent); }
+.desk-chat-reply { justify-self: start; }
 .desk-chat-message img { display: block; max-inline-size: 100%; max-block-size: 10rem; object-fit: contain; margin-block-start: 6px; }
 .desk-chat-composer { min-inline-size: 0; display: grid; gap: 8px; border-block-start: 1px solid var(--ut-line); padding: 12px clamp(12px, 3vw, 24px); }
 .desk-chat-composer textarea { resize: vertical; min-block-size: 4.5rem; max-block-size: 12rem; }
 .desk-chat-model-picker { inline-size: min(13rem, 100%); }
 .desk-chat-model-picker .select-menu-trigger { background: var(--ut-bg-2); }
+.desk-chat-model-picker .search-results-floating:not([data-ut-native-popover]) {
+  inset-block: auto calc(100% + 4px);
+}
+.desk-chat-model-picker .search-results-floating[data-ut-native-popover] {
+  position-area: block-start span-inline-end;
+}
 .desk-chat-send { margin-inline-start: auto; }
 .desk-chat-attachment { color: var(--ut-ink-2); font-size: .875rem; overflow-wrap: anywhere; }
 

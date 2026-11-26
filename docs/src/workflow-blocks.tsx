@@ -236,7 +236,6 @@ function ConversationDesk() {
     </aside>
     <div className="desk-chat-workspace">
       <header className="desk-chat-header"><div><span className="label">Conversation desk</span><h3>{thread.title}</h3></div>
-        <SelectMenu className="desk-chat-model-picker" label="Reply model" value={model} options={deskModels} onValueChange={setModel} />
       </header>
       {/* A tab stop lets keyboard users scroll the transcript. */}
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
@@ -260,6 +259,7 @@ function ConversationDesk() {
           setFile(undefined); if (picker.current) picker.current.value = '';
         }}>Remove attachment</Button></div>}
         <div className="desk-chat-actions">
+          <SelectMenu className="desk-chat-model-picker" label="Reply model" value={model} options={deskModels} onValueChange={setModel} />
           <input ref={picker} hidden aria-label="Attach image" type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0])} />
           <Button variant="outlined" size="sm" iconLeft={<Icon name="image" />} onClick={() => picker.current?.click()}>Attach image</Button>
           <Button className="desk-chat-send" size="sm" type="submit" disabled={!draft.trim()} iconRight={<Icon name="send" />}>Send</Button>

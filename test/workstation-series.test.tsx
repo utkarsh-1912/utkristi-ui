@@ -20,6 +20,7 @@ test('conversation model and attachment stay attributed when switching threads',
   const Desk = workflowBlocks['conversation-desk'].preview;
   render(<Desk />);
   const modelPicker = screen.getByRole('combobox', { name: 'Reply model' });
+  expect(modelPicker.closest('form')).toContainElement(screen.getByRole('textbox', { name: 'Message' }));
   expect(modelPicker).toHaveTextContent('Relay');
   expect(screen.queryByText('Local model demo')).toBeNull();
   fireEvent.click(modelPicker);

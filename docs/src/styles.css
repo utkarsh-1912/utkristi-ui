@@ -271,7 +271,12 @@
 }
 
 .docs-sheet-theme { display: flex; align-items: center; justify-content: space-between; gap: 12px; inline-size: 100%; }
-.docs-theme-select { inline-size: 108px; block-size: 40px; padding-inline: 12px 28px; font-size: .875rem; background-position: calc(100% - 15px) center, calc(100% - 10px) center; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); }
+.docs-theme-select { inline-size: 108px; }
+.docs-theme-select .select-menu-options { min-inline-size: 9rem; }
+.docs-theme-select .select-menu-options:not([data-ut-native-popover]) { inset-inline: auto 0; }
+.docs-theme-select .select-menu-options[data-ut-native-popover] { position-area: block-end span-inline-start; justify-self: end; }
+:is(.docs-sheet-theme, .docs-footer-appearance) .docs-theme-select .select-menu-options:not([data-ut-native-popover]) { inset-block: auto calc(100% + 4px); }
+:is(.docs-sheet-theme, .docs-footer-appearance) .docs-theme-select .select-menu-options[data-ut-native-popover] { position-area: block-start span-inline-start; }
 /* Match the page gutters in both floating and expanded dock states. */
 .docs-navbar.header-dock { --docs-dock-inset: min(12px, var(--ut-side)); padding-inline: calc(var(--ut-side) - var(--docs-dock-inset)); }
 .docs-navbar .navbar-dock { max-inline-size: calc(var(--ut-max) - 2 * var(--ut-side) + 2 * var(--docs-dock-inset)); }
@@ -283,11 +288,12 @@
 .docs-github span { font-size: .75rem; }
 .docs-github:hover { background: var(--ut-nav-hover); }
 .docs-navbar .navbar-link-icon { display: none; }
-:is(.docs-navbar, .docs-sheet-theme) .docs-theme-select { inline-size: var(--docs-theme-select-width, 91px); block-size: 42px; padding-inline: 10px 24px; background-color: transparent; box-shadow: none; border: 0; color: var(--ut-control-ink, var(--ut-ink)); border-radius: 9px; }
+:is(.docs-navbar, .docs-sheet-theme) .docs-theme-select { inline-size: var(--docs-theme-select-width, 100px); }
+:is(.docs-navbar, .docs-sheet-theme) .docs-theme-select .select-menu-trigger { block-size: 42px; padding-inline: 8px; border-radius: 9px; border-color: transparent; color: var(--ut-control-ink, var(--ut-ink)); }
+:is(.docs-navbar, .docs-sheet-theme) .docs-theme-select .select-menu-trigger:hover { background-color: var(--ut-nav-hover, var(--ut-tint)); }
+:is(.docs-navbar, .docs-sheet-theme) .docs-theme-select .select-menu-trigger[aria-expanded="true"] { border-color: var(--ut-focus, var(--ut-accent)); }
 :root[data-theme="high-contrast"] { --docs-theme-select-width: 140px; }
 :root[data-theme="terminal"] { --docs-theme-select-width: 110px; }
-:is(.docs-navbar, .docs-sheet-theme) .docs-theme-select:hover { background-color: var(--ut-nav-hover, var(--ut-tint)); }
-:is(.docs-navbar, .docs-sheet-theme) .docs-theme-select:focus-visible { outline: 2px solid var(--ut-focus, var(--ut-accent)); outline-offset: -2px; box-shadow: none; }
 .docs-navbar .navbar-search { padding-inline: 10px; gap: 7px; }
 @media (max-width: 1180px) {
   .docs-navbar .navbar-search { inline-size: 42px; padding: 0; justify-content: center; }

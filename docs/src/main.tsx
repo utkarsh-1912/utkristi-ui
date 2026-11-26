@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { ArrowUpRight } from 'lucide-react';
 import {
   Button, Card, CardBody, Code, Dot, Field, Icon, IconPaletteProvider, Input, Loader, Logo, SearchInput,
-  Select, Shell, Tabs, ThemeProvider, ThemeSelect, ToastProvider, useTheme, isResolvedTheme, themeIds as themes, themeLabel, type Theme,
+  Select, SelectMenu, Shell, Tabs, ThemeProvider, ToastProvider, useTheme, isResolvedTheme, themeIds as themes, themeLabel, type Theme,
 } from '@utkristi/ui';
 import { blockPages, componentPages, examples, type Example } from './examples';
 import { blocks } from './blocks';
@@ -126,13 +126,13 @@ function ExamplePreview({ example, initialTheme, motion, description, preserveSt
   }}>
     <div className="docs-example-toolbar">
       <div className="docs-example-title"><strong>Live preview</strong>{description && <span className="muted">{description}</span>}</div>
-    <div className="docs-example-controls">{children}{motion && <Select aria-label="Preview motion" value={override ?? motion}
-      onChange={(event) => setOverride(event.currentTarget.value as PreviewMotion)}>
-      {motionOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-    </Select>}<Select aria-label="Preview theme" value={previewTheme}
-        onChange={(event) => setPreviewTheme(event.target.value as PreviewTheme)}>
-        {themes.map((theme) => <option key={theme} value={theme}>{themeLabel(theme)}</option>)}
-      </Select><Button size="sm" className="docs-direction-toggle" aria-label="RTL preview" aria-pressed={direction === 'rtl'}
+    <div className="docs-example-controls">{children}{motion && <SelectMenu label="Preview motion" value={override ?? motion}
+      options={motionOptions.map(([value, label]) => ({ value, label }))}
+      onValueChange={(value) => setOverride(value as PreviewMotion)} />}
+      <SelectMenu label="Preview theme" value={previewTheme}
+        options={themes.map(value => ({ value, label: themeLabel(value) }))}
+        onValueChange={value => setPreviewTheme(value as PreviewTheme)} />
+      <Button size="sm" className="docs-direction-toggle" aria-label="RTL preview" aria-pressed={direction === 'rtl'}
         onClick={() => setDirection((value) => (value ?? document.documentElement.dir) === 'rtl' ? 'ltr' : 'rtl')}>RTL</Button></div>
     </div>
     <Frame key={preserveState ? undefined : previewTheme} theme={previewTheme} fixedTheme={preserveState} motion={override ?? motion} direction={direction}>
@@ -453,18 +453,20 @@ function DocsThemeSelect({ previewTheme, releasePreviewTheme, className }: {
   previewTheme?: PreviewTheme; releasePreviewTheme: () => void; className: string;
 }) {
   const [pending, setPending] = useState<Theme>();
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   useEffect(() => {
     if (previewTheme || !pending) return;
     setTheme(pending);
     setPending(undefined);
   }, [pending, previewTheme, setTheme]);
-  return <ThemeSelect className={className} onChange={(event) => {
-    if (!previewTheme) return;
-    event.preventDefault();
-    setPending(event.currentTarget.value as Theme);
-    releasePreviewTheme();
-  }} />;
+  return <SelectMenu className={className} label="Theme" value={theme}
+    options={[...themes.map(value => ({ value, label: themeLabel(value) })), { value: 'system', label: 'System' }]}
+    onValueChange={(value) => {
+      if (previewTheme) {
+        setPending(value as Theme);
+        releasePreviewTheme();
+      } else setTheme(value as Theme);
+    }} />;
 }
 
 function App() {

@@ -3,7 +3,10 @@
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState, type HTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
 import { Button } from './Button.js';
 import { Chip } from './Badge.js';
+import { ControlIcon } from './ControlIcon.js';
 import { Input, Select } from './Field.js';
+import { CheckIconData } from './icons/generated/CheckIcon.js';
+import { ChevronDownIconData } from './icons/generated/ChevronDownIcon.js';
 import { cx } from './utils/cx.js';
 import { useControllable } from './utils/useControllable.js';
 import { useId } from './utils/useId.js';
@@ -161,7 +164,7 @@ const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchLi
       return;
     }
     if (event.nativeEvent.isComposing || disabled) return;
-    if (event.key === 'Enter' && visible && (active || !popup)) {
+    if ((event.key === 'Enter' || (selectOnly && event.key === ' ')) && visible && (active || !popup)) {
       event.preventDefault();
       if (active) pick(active.value);
       return;
@@ -184,7 +187,7 @@ const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchLi
     {item.icon && <span className="search-option-icon" aria-hidden="true">{item.icon}</span>}
     <span className="search-option-copy"><span>{item.label}</span>
       {item.description && <small id={`${optionId(item)}-description`} className="search-option-description">{item.description}</small>}
-    </span>{selected.includes(item.value) && <span aria-hidden="true">✓</span>}
+    </span>{selected.includes(item.value) && <ControlIcon className="search-option-check" glyph={CheckIconData} />}
   </button>;
 
   return <div {...props} ref={ref} className={cx(popup ? 'combobox' : 'command', className)} onBlur={(event) => {
@@ -201,8 +204,12 @@ const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchLi
         aria-label={label ?? (field.id ? undefined : 'Choose an option')} aria-expanded={visible} aria-controls={visible ? id : undefined}
         aria-invalid={field['aria-invalid']} aria-describedby={field['aria-describedby']} aria-labelledby={props['aria-labelledby']}
         aria-activedescendant={activeId} disabled={disabled}
-        onClick={() => setOpen(!open)} onKeyDown={handleKey}>
-        <span>{selectedLabel || placeholder || 'Select an option'}</span><span aria-hidden="true">⌄</span>
+        onClick={() => {
+          setCursor(open ? -1 : available.findIndex(item => item.value === selected[0]));
+          setOpen(!open);
+        }} onKeyDown={handleKey}>
+        <span className="select-menu-value">{selectedLabel || placeholder || 'Select an option'}</span>
+        <ControlIcon className="select-menu-chevron" glyph={ChevronDownIconData} />
       </Button>
       : <div className={cx('search-list-input', inputIcon != null && 'search-list-input-icon')}>
         {inputIcon != null && <span className="search-list-leading" aria-hidden="true">{inputIcon}</span>}
@@ -214,7 +221,7 @@ const SearchList = forwardRef<HTMLDivElement, SearchListProps>(function SearchLi
         value={popup && !open ? selectedLabel : query} onFocus={() => setOpen(true)} onClick={() => setOpen(true)}
         onChange={(event) => { setQuery(event.target.value); setCursor(-1); setOpen(true); }} onKeyDown={handleKey} />
       </div>}
-    {visible && <div ref={results} className={cx('search-results', 'ut-scrollbar', popup && 'search-results-floating')}>
+    {visible && <div ref={results} className={cx('search-results', 'ut-scrollbar', popup && 'search-results-floating', selectOnly && 'select-menu-options')}>
       {matches.length === 0 && <p role="status" className="search-empty">{emptyText}</p>}
       <div role="listbox" id={id} aria-label={label ?? 'Options'} aria-multiselectable={multiple || undefined}>
         {[...groups].map(([group, items]) => group ? <div key={group} role="group" aria-label={group}>

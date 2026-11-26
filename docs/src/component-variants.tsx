@@ -250,6 +250,12 @@ export const componentVariants = {
   'combobox--multiple': example('Multiple team selection', 'Select several teams while keeping unavailable options visible.',
     () => <Combobox label="Teams" options={teamOptions} multiple defaultValue={['design']} />,
     '<label class="field">Teams<select class="select" multiple size="3"><option selected>Design</option><option>Engineering</option><option disabled>Operations</option></select></label>'),
+  'select--topics': example('Scrollable topic picker', 'A full custom menu with a highlighted selection and a scrollable list.',
+    () => <div style={{ maxWidth: 280 }}><SelectMenu label="Topic" defaultValue="All topics" options={[
+      'All topics', 'Arrays & Hashing', 'Two Pointers', 'Sliding Window', 'Stack', 'Binary Search',
+      'Linked List', 'Trees', 'Backtracking', 'Graphs', 'Dynamic Programming',
+    ].map(label => ({ value: label, label }))} /></div>,
+    '<label>Topic <select class="select"><option>All topics</option><option>Arrays &amp; Hashing</option><option>Two Pointers</option><option>Sliding Window</option><option>Stack</option><option>Binary Search</option><option>Linked List</option><option>Trees</option><option>Backtracking</option><option>Graphs</option><option>Dynamic Programming</option></select></label>'),
   'select--disabled-option': example('Role availability', 'Preselect an available role and keep restricted roles visible.',
     () => <SelectMenu label="Team" options={teamOptions} defaultValue="design" />,
     '<label class="field">Team<select class="select"><option>Design</option><option>Engineering</option><option disabled>Operations</option></select></label>'),

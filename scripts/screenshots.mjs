@@ -185,6 +185,38 @@ async function captureEdge() {
         document.scripts.length === 0 && document.querySelectorAll('tbody tr').length === 3 &&
         getComputedStyle(document.body).getPropertyValue('--ut-bg').trim() !== ''`), 'standalone operations dashboard');
     }
+    if (process.argv.includes('--custom-select')) {
+      await setMotion('reduce');
+      await size(375, 780);
+      await load('/components/select?theme=light', 'Select');
+      await evaluate(`document.querySelector('button[aria-controls="content-select--topics"]').click()`);
+      await retry(() => evaluate(`!!document.querySelector('[role=combobox][aria-label=Topic]')`), 'topic trigger');
+      await evaluate(`(() => {
+        const trigger = document.querySelector('[role=combobox][aria-label=Topic]');
+        trigger.scrollIntoView({ block: 'center' });
+        trigger.focus();
+        trigger.click();
+      })()`);
+      await retry(() => evaluate(`(() => {
+        const trigger = document.querySelector('[role=combobox][aria-label=Topic]');
+        const menu = document.getElementById(trigger.getAttribute('aria-controls'))?.parentElement;
+        return trigger.tagName === 'BUTTON' && menu?.scrollHeight > menu?.clientHeight &&
+          menu.scrollWidth === menu.clientWidth && !!menu.querySelector('[aria-selected=true] .search-option-check');
+      })()`), 'bounded topic list and selected checkmark');
+      await evaluate(`[...document.querySelectorAll('[role=listbox][aria-label=Topic] [role=option]')]
+        .find(option => option.textContent === 'Stack').click()`);
+      await retry(() => evaluate(`document.querySelector('[role=combobox][aria-label=Topic]').textContent === 'Stack' &&
+        !document.querySelector('[role=listbox][aria-label=Topic]')`), 'click selects and closes');
+      await load('/getting-started?theme=glass', 'Getting started');
+      await evaluate(`document.querySelector('.docs-navbar .burger').click()`);
+      await retry(() => evaluate(`!!document.querySelector('.sheet-dock [role=combobox][aria-label=Theme]')`), 'mobile appearance trigger');
+      await evaluate(`document.querySelector('.sheet-dock [role=combobox][aria-label=Theme]').click()`);
+      await retry(() => evaluate(`!!document.querySelector('.sheet-dock [role=listbox] [aria-selected=true]')`), 'mobile theme options');
+      await evaluate(`[...document.querySelectorAll('.sheet-dock [role=option]')].find(option => option.textContent === 'Paper').click()`);
+      await retry(() => evaluate(`document.documentElement.dataset.theme === 'light'`), 'custom theme selection');
+      console.log('Verified scrollable custom options and mobile theme selection.');
+      return;
+    }
     if (process.argv.includes('--site-info')) {
       await size(320, 780);
       for (const [path, title, content] of [
@@ -818,7 +850,8 @@ async function captureEdge() {
 
     await load('/blocks/enterprise-landing?theme=glass', 'Enterprise landing');
     await selectOption('.ut-template select[aria-label="Template preset"]', 'ledger');
-    await selectOption('.docs-example select[aria-label="Preview theme"]', 'light');
+    await evaluate(`document.querySelector('.docs-example [role=combobox][aria-label="Preview theme"]').click()`);
+    await evaluate(`[...document.querySelectorAll('.docs-example [role=option]')].find(option => option.textContent.trim() === 'Paper').click()`);
     await retry(() => evaluate('!!document.querySelector(\'.theme-preview[data-theme="light"] .ut-template[data-ut-preset="ledger"]\')'), 'appearance change preserves template preset');
     await evaluate(`(() => {
       document.querySelector('.ut-template').dataset.utRadius = 'square';

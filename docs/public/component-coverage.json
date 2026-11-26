@@ -1,6 +1,6 @@
 {
   "components": 113,
-  "variants": 209,
+  "variants": 210,
   "entries": [
     {
       "slug": "accessibility-preferences",
@@ -1212,6 +1212,10 @@
       "slug": "select",
       "name": "Select",
       "variants": [
+        {
+          "slug": "select--topics",
+          "name": "Scrollable topic picker"
+        },
         {
           "slug": "select--disabled-option",
           "name": "Role availability"

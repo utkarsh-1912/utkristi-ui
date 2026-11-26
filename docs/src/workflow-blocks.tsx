@@ -236,9 +236,7 @@ function ConversationDesk() {
     </aside>
     <div className="desk-chat-workspace">
       <header className="desk-chat-header"><div><span className="label">Conversation desk</span><h3>{thread.title}</h3></div>
-        <div className="desk-chat-model"><Badge>Local model demo</Badge>
-          <SelectMenu className="desk-chat-model-picker" label="Reply model" value={model} options={deskModels} onValueChange={setModel} />
-        </div>
+        <SelectMenu className="desk-chat-model-picker" label="Reply model" value={model} options={deskModels} onValueChange={setModel} />
       </header>
       {/* A tab stop lets keyboard users scroll the transcript. */}
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}

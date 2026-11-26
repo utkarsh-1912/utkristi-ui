@@ -19,8 +19,12 @@ test('a burst wraps the sample window and keeps extrema, corrections and chronol
 test('conversation model and attachment stay attributed when switching threads', () => {
   const Desk = workflowBlocks['conversation-desk'].preview;
   render(<Desk />);
-  fireEvent.click(screen.getByRole('combobox', { name: 'Reply model' }));
+  const modelPicker = screen.getByRole('combobox', { name: 'Reply model' });
+  expect(modelPicker).toHaveTextContent('Relay');
+  expect(screen.queryByText('Local model demo')).toBeNull();
+  fireEvent.click(modelPicker);
   fireEvent.click(screen.getByRole('option', { name: 'Analyst' }));
+  expect(modelPicker).toHaveTextContent('Analyst');
   fireEvent.change(screen.getByLabelText('Attach image'), { target: { files: [new File(['abc'], 'plot.png', { type: 'image/png' })] } });
   fireEvent.change(screen.getByLabelText('Message'), { target: { value: 'Inspect feed' } });
   fireEvent.click(screen.getByRole('button', { name: 'Send' }));

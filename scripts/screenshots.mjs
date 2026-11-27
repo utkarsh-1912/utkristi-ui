@@ -123,6 +123,17 @@ async function captureEdge() {
         throw error;
       }
     };
+    const verifyThemePicker = async () => {
+      await load('/showcase?theme=glass', 'Build together.');
+      await retry(() => evaluate(`document.querySelector('.docs-navbar .docs-theme-select .select-menu-value')?.textContent === 'Glass'`), 'theme dropdown reflects preview');
+      await evaluate(`document.querySelector('.docs-navbar [role=combobox][aria-label=Theme]').click()`);
+      await retry(() => evaluate(`document.querySelector('.docs-navbar [role=option][aria-selected=true]')?.textContent.trim() === 'Glass'`), 'theme dropdown marks the preview option selected');
+      await evaluate(`[...document.querySelectorAll('.docs-navbar [role=option]')].find(option => option.textContent.trim() === 'Paper').click()`);
+      await retry(() => evaluate(`document.documentElement.dataset.theme === 'light' &&
+        localStorage.getItem('utkristi-theme') === 'light' && !location.hash.includes('theme=') &&
+        document.querySelector('.docs-navbar .docs-theme-select .select-menu-value')?.textContent === 'Paper' &&
+        document.querySelector('.docs-footer .docs-theme-select .select-menu-value')?.textContent === 'Paper'`), 'theme dropdown persists and stays in sync');
+    };
     const fontsReady = () => evaluate('Promise.race([document.fonts.ready.then(() => true), new Promise(resolve => setTimeout(resolve, 4000))])');
     const screenshot = async (file, fullPage = false) => {
       if (verifyOnly) return;
@@ -214,6 +225,9 @@ async function captureEdge() {
       await retry(() => evaluate(`!!document.querySelector('.sheet-dock [role=listbox] [aria-selected=true]')`), 'mobile theme options');
       await evaluate(`[...document.querySelectorAll('.sheet-dock [role=option]')].find(option => option.textContent === 'Paper').click()`);
       await retry(() => evaluate(`document.documentElement.dataset.theme === 'light'`), 'custom theme selection');
+      await size(1440, 900);
+      await evaluate(`localStorage.removeItem('utkristi-theme')`);
+      await verifyThemePicker();
       console.log('Verified scrollable custom options and mobile theme selection.');
       return;
     }
@@ -930,14 +944,7 @@ async function captureEdge() {
     await retry(() => evaluate('document.querySelector(".doc-index-toggle").getAttribute("aria-expanded") === "false" && getComputedStyle(document.querySelector(".doc-index")).display === "none"'), 'desktop index collapses');
     await evaluate('document.querySelector(".doc-index-toggle").click()');
 
-    await load('/showcase?theme=glass', 'Build together.');
-    await retry(() => evaluate('document.querySelector(".docs-navbar select").value === "glass"'), 'theme dropdown reflects preview');
-    await evaluate(`(() => {
-      const select = document.querySelector('.docs-navbar select');
-      select.value = 'light';
-      select.dispatchEvent(new Event('change', { bubbles: true }));
-    })()`);
-    await retry(() => evaluate('document.documentElement.dataset.theme === "light" && localStorage.getItem("utkristi-theme") === "light" && !location.hash.includes("theme=") && document.querySelector(".docs-footer select").value === "light"'), 'theme dropdown persists and stays in sync');
+    await verifyThemePicker();
     await evaluate(`(() => {
       document.querySelector('.docs-navbar .navbar-search').focus();
       document.activeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true, cancelable: true }));

@@ -1,6 +1,9 @@
 import { expect } from '@playwright/test';
 import { nvdaTest as test } from '@guidepup/playwright';
 
+// The fixture defaults to capturing startup speech only. These actions run after startup.
+test.use({ nvdaStartOptions: { capture: true } });
+
 const cases = [
   { slug: 'modal', action: async ({ page, preview }) => {
     await preview.getByRole('button', { name: 'Open dialog' }).click();
@@ -37,7 +40,9 @@ for (const { slug, action, phrase } of cases) {
     await nvda.clearSpokenPhraseLog();
     try {
       await action({ page, preview });
-      await expect.poll(async () => (await nvda.spokenPhraseLog()).join(' ')).toMatch(phrase);
+      await expect.poll(async () => (await nvda.spokenPhraseLog()).join(' '), {
+        message: 'NVDA speech after the ' + slug + ' interaction',
+      }).toMatch(phrase);
     } finally {
       await info.attach(`${slug}-spoken-output.json`, {
         body: JSON.stringify(await nvda.spokenPhraseLog(), null, 2),
